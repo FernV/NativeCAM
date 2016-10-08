@@ -9,7 +9,6 @@ Clone or extract in a ~/sub-directory of your choice with read/write rights
 Open a terminal window in the same directory
 
 Make sure these files are executabbes :
-	ncam_setup
 	ncam.py
 	uninstall-features (to restore the modified files after you delete the old version)
 		
@@ -34,13 +33,13 @@ You need to install python-lxml if not allready installed, the command is :
 --------------------------------------------------------------------------------
 1.	Issue / copy then paste the following command
 	
-	./ncam_setup
+	sudo python setup.py
 	
-	This will create a link and modify 2 files.
+	This will create required links and modify files.
 	You do not do this more than once except maybe after lcnc updates
 	because it will replace the files and erase the link,
 	until NativeCAM is integrated in the distribution
-	To restore the system, simply issue the command : './ncam_setup c'
+	To restore the system, simply issue the command : 'sudo python setup.py c'
 
 2.	Start LinuxCNC with one of these commands (copy/paste) :
 
