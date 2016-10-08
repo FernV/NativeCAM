@@ -21,7 +21,7 @@ then
 else
 	if [ $cl = 'i' ]	
 	then
-		sudo ln $curdir/ncam.py /usr/lib/pymodules/python2.7/gladevcp/ -s
+		sudo ln $curdir/ncam.py $ncam/ -s
 	fi
 fi
 
