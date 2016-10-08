@@ -1,0 +1,29 @@
+For testing in linuxcnc-dev you will need do the following
+
+	Create a new branch named 'ncam', checkout that branch
+	
+	copy : ncam.py to ~/linuxcnc-dev/lib/python/gladevcp
+	
+	copy : hal_pythonplugin.py from dev/python/gladevcp  to  ~/linuxcnc-dev/lib/python/gladevcp
+		
+	copy : configs directory  to  ~/linuxcnc-dev/configs
+		
+	copy : *.glade  to  ~/linuxcnc-dev/share/ncam
+	
+	copy : README.md  to  ~/linuxcnc-dev/share/ncam
+	
+	copy directories : catalogs, cfg, graphics, lib, xml  to  ~/linuxcnc-dev/share/ncam
+	
+	no other files are necessary
+
+	issue commands :
+	cd ~/linuxcnc-dev
+	. scripts/rip-environment
+	
+	commands in README.md for stand alone and embedded should both work
+	However it is not meant to be usefull stand alone unless lcnc was/is loaded
+		with the right SUBROUTINE_PATH
+	
+	open a project in examples directory
+	Basic spacer.xml
+	Fun wheel demo.xml
