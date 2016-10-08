@@ -15,11 +15,13 @@ ncam=/usr/lib/pymodules/python2.7/gladevcp
 if [ -L $ncam/ncam.py ]
 then
 	if [ $cl = 'c' ]
+	then
 		sudo rm $ncam/ncam.py
 	fi
 else
-	if [ $cl = 'i' ]
-		then sudo ln $curdir/ncam.py /usr/lib/pymodules/python2.7/gladevcp/ -s
+	if [ $cl = 'i' ]	
+	then
+		sudo ln $curdir/ncam.py /usr/lib/pymodules/python2.7/gladevcp/ -s
 	fi
 fi
 
