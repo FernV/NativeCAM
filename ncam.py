@@ -1278,12 +1278,10 @@ class Feature():
         for s in parameters :
             if s in conf :
                 p = Parameter(ini = conf[s], ini_id = s.lower())
-                p.attr['name'] = _(p.get_name())
-                p.attr['tool_tip'] = _(p.get_attr('tool_tip') \
+                p.attr['name'] = p.get_name()
+                p.attr['tool_tip'] = (p.get_attr('tool_tip') \
                             if "tool_tip" in p.attr else p.get_attr('name'))
                 opt = p.attr["options"] if "options" in self.attr else None
-                if opt is not None and (opt != '') :
-                    p.attr['options'] = _(opt)
                 if p.get_type() == 'float' :
                     fmt = '{0:0.%sf}' % p.get_digits()
                     p.set_value(fmt.format(get_float(p.get_value())))
@@ -4101,7 +4099,7 @@ Notes:
 
     def get_col_name(self, column, cell, model, itr) :
         data_type = model.get_value(itr, 0).get_type()
-        val = model.get_value(itr, 0).get_name()
+        val = _(model.get_value(itr, 0).get_name())
         if data_type == 'header' :
             cell.set_property('markup', header_fmt_str % val)
         elif data_type == 'sub-header' :
