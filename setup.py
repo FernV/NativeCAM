@@ -21,11 +21,7 @@ from lxml import etree
 import sys
 import os
 
-
-if "c" in sys.argv[1:] :
-    cls = True
-else :
-    cls = False
+cls = ("c" in sys.argv[1:])
 
 find = os.popen("find /usr -name 'hal_pythonplugin.py'").read()
 found = find > ''
@@ -46,13 +42,21 @@ if found :
 
         head, fn = os.path.split(s)
         fn = os.path.join(head, 'ncam.py')
-        if os.path.isfile(fn) :
+        if os.path.islink(fn) :
             if cls :
-                os.remove(fn)
-                print 'removed link from ', head
-        elif not cls :
-            os.symlink(os.path.join(os.getcwd(), 'ncam.py'), fn)
-            print 'created link in ', head
+                try :
+                    os.remove(fn)
+                    print 'removed link from ', head
+                except :
+                    print 'could not remove link :', fn
+                    exit(1)
+        elif (not os.path.isfile(fn)) and (not cls) :
+            try :
+                os.symlink(os.path.join(os.getcwd(), 'ncam.py'), fn)
+                print 'created link in ', head
+            except :
+                print 'could not create link :', fn
+                exit(1)
 
 
 if not found :
