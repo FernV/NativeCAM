@@ -24,6 +24,7 @@ You need to install python-lxml if not allready installed, the command is :
 	./ncam.py -iconfigs/sim/axis/ncam_demo/mill-mm.ini
 	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/mill.ini
 	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/mill-mm.ini
+    ./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/gmoccapy_mm.ini
 
 	However it is not meant to be usefull stand alone unless LinuxCNC
 		was/is loaded with the right SUBROUTINE_PATH
@@ -47,6 +48,7 @@ You need to install python-lxml if not allready installed, the command is :
 	linuxcnc configs/sim/axis/ncam_demo/mill-mm.ini
 	linuxcnc configs/sim/gmoccapy/ncam_demo/mill.ini
 	linuxcnc configs/sim/gmoccapy/ncam_demo/mill-mm.ini
+    linuxcnc configs/sim/gmoccapy/ncam_demo/gmoccapy_mm.ini
 
 3.	Open a project in the examples directory
 	
