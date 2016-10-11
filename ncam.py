@@ -3301,33 +3301,35 @@ Notes:
         ts_itr = self.master_filter.convert_iter_to_child_iter(self.iter_next)
         pnext = self.treestore.get_string_from_iter(ts_itr)
         xml = self.treestore_to_xml()
-        src = xml.find(".//*[@path='%s']" % self.selected_feature_ts_path_s)
-        dst = xml.find(".//*[@path='%s']/param[@type='items']" % pnext)
-        if (dst is not None) and (src is not None) :
-            src.set("new-selected", "True")
-            dst.insert(0, src)
-            dst.set("expanded", "True")
-            dst = xml.find(".//*[@path='%s']" % pnext)
-            dst.set("expanded", "True")
-            self.treestore_from_xml(xml)
-            self.expand_and_select(self.path_to_new_selected)
-            self.action()
+        if xml is not None :
+            src = xml.find(".//*[@path='%s']" % self.selected_feature_ts_path_s)
+            dst = xml.find(".//*[@path='%s']/param[@type='items']" % pnext)
+            if (dst is not None) and (src is not None) :
+                src.set("new-selected", "True")
+                dst.insert(0, src)
+                dst.set("expanded", "True")
+                dst = xml.find(".//*[@path='%s']" % pnext)
+                dst.set("expanded", "True")
+                self.treestore_from_xml(xml)
+                self.expand_and_select(self.path_to_new_selected)
+                self.action()
 
     def remove_from_item_clicked(self, call) :
         xml = self.treestore_to_xml()
-        src = xml.find(".//*[@path='%s']" % self.selected_feature_ts_path_s)
-        src.set("new-selected", "True")
-        parent = src.getparent().getparent()
-        n = None
-        while parent != xml and not (parent.tag == "param" and parent.get("type") == "items") and parent is not None :
-            p = parent
-            parent = parent.getparent()
-            n = parent.index(p)
-        if parent is not None and n is not None:
-            parent.insert(n, src)
-            self.treestore_from_xml(xml)
-            self.expand_and_select(self.path_to_new_selected)
-            self.action()
+        if xml is not None :
+            src = xml.find(".//*[@path='%s']" % self.selected_feature_ts_path_s)
+            src.set("new-selected", "True")
+            parent = src.getparent().getparent()
+            n = None
+            while parent != xml and not (parent.tag == "param" and parent.get("type") == "items") and parent is not None :
+                p = parent
+                parent = parent.getparent()
+                n = parent.index(p)
+            if parent is not None and n is not None:
+                parent.insert(n, src)
+                self.treestore_from_xml(xml)
+                self.expand_and_select(self.path_to_new_selected)
+                self.action()
 
     def expand_and_select(self, path):
         if path is not None :
@@ -3692,7 +3694,8 @@ Notes:
 
 
         treestore = gtk.TreeStore(object, str, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN)
-        recursive(treestore, treestore.get_iter_root(), xml)
+        if xml is not None :
+            recursive(treestore, treestore.get_iter_root(), xml)
         self.treestore = treestore
         self.master_filter = self.treestore.filter_new()
         self.master_filter.set_visible_column(2)
@@ -3818,16 +3821,17 @@ Notes:
         self.focused_widget.grab_focus()
 
     def delete_clicked(self, *arg) :
-        if self.iter_next :
+        if self.iter_next is not None :
             next_path = self.master_filter.get_path(self.selected_feature_itr)
-        elif self.iter_previous :
+        elif self.iter_previous is not None :
             next_path = self.master_filter.get_path(self.iter_previous)
-        elif self.selected_feature_parent_itr :
+        elif self.selected_feature_parent_itr is not None :
             next_path = self.master_filter.get_path(self.selected_feature_parent_itr)
         else :
             next_path = None
 
-        self.treestore.remove(self.selected_feature_ts_itr)
+        if self.selected_feature_ts_itr is not None :
+            self.treestore.remove(self.selected_feature_ts_itr)
 
         if next_path is not None :
             self.treeview.set_cursor(next_path)
@@ -3862,48 +3866,49 @@ Notes:
 
         if xml_ is not None :
             xml = self.treestore_to_xml()
-            if self.iter_selected_type == tv_select.items :
-                # will append to items
-                dest = xml.find(".//*[@path='%s']/param[@type='items']" %
-                                self.items_ts_parent_s)
-                opt = 2
-                i = -1
-                next_path = self.items_lpath
-            elif self.iter_selected_type != tv_select.none :
-                # will append after parent of selected feature
-                dest = xml.find(".//*[@path='%s']" % self.selected_feature_ts_path_s)
-                parent = dest.getparent()
-                i = parent.index(dest)
-                opt = 1
-                l_path = len(self.selected_feature_path)
-                next_path = (self.selected_feature_path[0:l_path - 1] + \
-                        (self.selected_feature_path[l_path - 1] + 1,))
-            else :  # None selected
-                opt = 0
-                next_path = self.items_lpath
+            if xml is not None :
+                if self.iter_selected_type == tv_select.items :
+                    # will append to items
+                    dest = xml.find(".//*[@path='%s']/param[@type='items']" %
+                                    self.items_ts_parent_s)
+                    opt = 2
+                    i = -1
+                    next_path = self.items_lpath
+                elif self.iter_selected_type != tv_select.none :
+                    # will append after parent of selected feature
+                    dest = xml.find(".//*[@path='%s']" % self.selected_feature_ts_path_s)
+                    parent = dest.getparent()
+                    i = parent.index(dest)
+                    opt = 1
+                    l_path = len(self.selected_feature_path)
+                    next_path = (self.selected_feature_path[0:l_path - 1] + \
+                            (self.selected_feature_path[l_path - 1] + 1,))
+                else :  # None selected
+                    opt = 0
+                    next_path = self.items_lpath
 
-            for x in xml_ :
-                if opt == 1 :
-                    i += 1
-                    parent.insert(i, x)
-                elif opt == 2 :
-                    dest.append(x)
-                else :
-                    xml.append(x)
+                for x in xml_ :
+                    if opt == 1 :
+                        i += 1
+                        parent.insert(i, x)
+                    elif opt == 2 :
+                        dest.append(x)
+                    else :
+                        xml.append(x)
 
-                l = x.findall(".//feature")
-                if x.tag == "feature" :
-                    l = [x] + l
-                for xf in l :
-                    f = Feature(xml = xf)
-                    f.get_id(xml)
-                    xf.set("name", f.attr["name"])
-                    xf.set("id", f.attr["id"])
+                    l = x.findall(".//feature")
+                    if x.tag == "feature" :
+                        l = [x] + l
+                    for xf in l :
+                        f = Feature(xml = xf)
+                        f.get_id(xml)
+                        xf.set("name", f.attr["name"])
+                        xf.set("id", f.attr["id"])
 
-            self.treestore_from_xml(xml)
-            self.expand_and_select(next_path)
-            self.get_selected_feature(self)
-            self.action()
+                self.treestore_from_xml(xml)
+                self.expand_and_select(next_path)
+                self.get_selected_feature(self)
+                self.action()
 
     def add_feature_menu(self, widget, src):
         self.add_feature(src)
@@ -3966,17 +3971,23 @@ Notes:
         if xml is None :
             xml = self.treestore_to_xml()
 
-        self.undo_list = self.undo_list[:self.undo_pointer + 1]
-        self.undo_list = self.undo_list[max(0, len(self.undo_list) - UNDO_MAX_LEN):]
-        self.undo_list.append(etree.tostring(xml))
-        self.undo_pointer = len(self.undo_list) - 1
+        if xml is not None :
+            self.undo_list = self.undo_list[:self.undo_pointer + 1]
+            self.undo_list = self.undo_list[max(0, len(self.undo_list) - UNDO_MAX_LEN):]
+            self.undo_list.append(etree.tostring(xml))
+            self.undo_pointer = len(self.undo_list) - 1
+
         self.update_do_btns()
 
     def update_do_btns(self):
         self.set_do_buttons_state()
         if self.auto_refresh.get_active() :
             if self.timeout is not None :
-                gobject.source_remove(self.timeout)
+                try :
+                    gobject.source_remove(self.timeout)
+                except :
+                    # must be already removed
+                    pass
             self.timeout = gobject.timeout_add(int(self.pref.timeout_value * 1000),
                     self.autorefresh_call)
 
@@ -4027,7 +4038,8 @@ Notes:
 
     def save_default_template(self, *args):
         xml = self.treestore_to_xml()
-        etree.ElementTree(xml).write(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, \
+        if xml is not None :
+            etree.ElementTree(xml).write(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, \
                                                    DEFAULT_TEMPLATE), pretty_print = True)
 
     def menu_new_activate(self, *args):
@@ -4254,8 +4266,15 @@ Notes:
     def treestore_to_xml(self) :
         self.get_expand()
         xml = etree.Element(XML_TAG)
-        self.treestore_to_xml_recursion(self.treestore.get_iter_root(), xml)
-        return xml
+        itr = self.treestore.get_iter_root()
+        if itr is not None :
+            try :
+                self.treestore_to_xml_recursion(itr, xml)
+                return xml
+            except Exception, detail :
+                print('Error in treestore_to_xml\n%(err_details)s' % {'err_details':detail})
+                mess_dlg('Error in treestore_to_xml\n%(err_details)s' % {'err_details':detail})
+        return None
 
     def set_expand(self) :
         def treestore_set_expand(model, path, itr, self) :
@@ -4346,11 +4365,12 @@ Notes:
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 xml = self.treestore_to_xml()
-                self.current_filename = filechooserdialog.get_filename()
-                if self.current_filename[-4] != ".xml" not in self.current_filename :
-                    self.current_filename += ".xml"
-                etree.ElementTree(xml).write(self.current_filename, pretty_print = True)
-                self.file_changed = False
+                if xml is not None :
+                    self.current_filename = filechooserdialog.get_filename()
+                    if self.current_filename[-4] != ".xml" not in self.current_filename :
+                        self.current_filename += ".xml"
+                    etree.ElementTree(xml).write(self.current_filename, pretty_print = True)
+                    self.file_changed = False
         finally:
             filechooserdialog.destroy()
 
