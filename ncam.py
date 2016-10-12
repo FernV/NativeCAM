@@ -2599,7 +2599,7 @@ Notes:
                 icon.set_from_pixbuf(get_pixbuf(f.get_attr("icon"),
                         quick_access_icon_size))
                 button = gtk.ToolButton(icon, label = f.get_attr("name"))
-                button.set_tooltip_markup(f.get_attr("help"))
+                button.set_tooltip_markup(_(f.get_attr("help")))
                 button.connect("clicked", self.quick_access_tb_clicked, src_file)
                 self.quick_access_buttons[src_file] = button
 
@@ -2607,7 +2607,7 @@ Notes:
                 icon.set_from_pixbuf(get_pixbuf(f.get_attr("icon"),
                         quick_access_icon_size))
                 button1 = gtk.ToolButton(icon, label = f.get_attr("name"))
-                button1.set_tooltip_markup(f.get_attr("help"))
+                button1.set_tooltip_markup(_(f.get_attr("help")))
                 button1.connect("clicked", self.quick_access_tb_clicked, src_file)
                 self.quick_access_topbuttons[src_file] = button1
 
@@ -2911,6 +2911,7 @@ Notes:
         self.treeview2.append_column(col)
 
         self.treeview2.set_tooltip_column(1)
+        self.treeview2.set_model(self.treestore)
         self.treeview2.set_model(self.details_filter)
         self.params_scroll.add(self.treeview2)
         self.treeview2.connect('key-press-event', self.tv2_kp_event)
@@ -3291,6 +3292,7 @@ Notes:
                 a_filter.set_visible_column(3)
                 self.details_filter = a_filter
 
+                self.treeview2.set_model(self.treestore)
                 self.treeview2.set_model(self.details_filter)
                 self.treeview2.expand_all()
 
@@ -3697,6 +3699,7 @@ Notes:
         self.treestore = treestore
         self.master_filter = self.treestore.filter_new()
         self.master_filter.set_visible_column(2)
+        self.treeview.set_model(self.treestore)
         self.treeview.set_model(self.master_filter)
         self.set_expand()
 
@@ -3788,7 +3791,7 @@ Notes:
                         while children is not None :
                             ca = self.treestore.get_value(children, 0).get_attr('call')
                             if ca == '#param_' + opt[0] :
-                                renderer.set_tooltip(self.treestore.get_value(children, 0).get_tooltip())
+                                renderer.set_tooltip(_(self.treestore.get_value(children, 0).get_tooltip()))
                                 dt = self.treestore.get_value(children, 0).get_type()
                                 renderer.set_edit_datatype(dt)
                                 val = self.treestore.get_value(children, 0).get_value()
@@ -3980,12 +3983,6 @@ Notes:
     def update_do_btns(self):
         self.set_do_buttons_state()
         if self.auto_refresh.get_active() :
-#            if self.timeout is not None :
-#                try :
-#                    gobject.source_remove(self.timeout)
-#                except :
-                    # must be already removed
-#                    pass
             self.timeout = gobject.timeout_add(int(self.pref.timeout_value * 1000),
                     self.autorefresh_call)
 
@@ -4131,13 +4128,13 @@ Notes:
         cell.set_param_value(model.get_value(itr, 0).get_value())
 
         if data_type in ['combo', 'combo-user', 'list']:
-            cell.set_options(model.get_value(itr, 0).get_options())
+            cell.set_options(_(model.get_value(itr, 0).get_options()))
 
         elif data_type in NUMBER_TYPES:
             cell.set_max_value(get_float(model.get_value(itr, 0).get_max_value()))
             cell.set_min_value(get_float(model.get_value(itr, 0).get_min_value()))
             cell.set_digits(model.get_value(itr, 0).get_digits())
-            cell.set_tooltip(model.get_value(itr, 0).get_tooltip())
+            cell.set_tooltip(_(model.get_value(itr, 0).get_tooltip()))
             cell.set_not_zero(model.get_value(itr, 0).get_not_zero())
 
         elif data_type == 'tool' :
@@ -4164,7 +4161,7 @@ Notes:
             val = self.tools.get_text(val)
 
         if data_type == 'combo':
-            options = f.get_attr('options')
+            options = _(f.get_attr('options'))
             for option in options.split(":") :
                 opt = option.split('=')
                 if opt[1] == val :
@@ -4183,43 +4180,19 @@ Notes:
                         opt = dg.split('=')
                         if (opt[1] == val) :
                             try :
-#                                 itr_n = model.iter_parent(itr)
-#                                 itr_n = model.iter_children(itr_n)
-#                                 loop = True
-#                                 while loop and (itr_n is not None) :
-#                                     f = model.get_value(itr_n, 0)
-#                                     if f.get_attr('call') == '#param_' + opt[0] :
-#                                         found = True
-#                                         data_type = f.get_type()
-#                                         if data_type == 'list':
-#                                             link_val = f.get_value()
-#                                             options = f.get_attr('options')
-#                                             for option in options.split(":") :
-#                                                 opt = option.split('=')
-#                                                 if opt[1] == link_val :
-#                                                     val = opt[0]
-#                                                     loop = False
-#                                                     stop = True
-#                                                     break
-#                                         else :
-#                                             val = f.get_value()
-#
-#                                     itr_n = model.iter_next(itr_n)
-
-
                                 itr_n = model.convert_iter_to_child_iter(itr)
-#                                print itr_n
                                 itr_n = self.treestore.iter_parent(itr_n)
                                 itr_n = self.treestore.iter_children(itr_n)
                                 loop = True
                                 while loop and (itr_n is not None) :
                                     f = self.treestore.get_value(itr_n, 0)
-                                    if f.get_attr('call') == '#param_' + opt[0] :
+                                    ca = f.get_attr('call')
+                                    if ca == '#param_' + opt[0] :
                                         found = True
                                         data_type = f.get_type()
                                         if data_type == 'list':
                                             link_val = f.get_value()
-                                            options = f.get_attr('options')
+                                            options = _(f.get_attr('options'))
                                             for option in options.split(":") :
                                                 opt = option.split('=')
                                                 if opt[1] == link_val :
