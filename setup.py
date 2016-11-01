@@ -17,16 +17,25 @@ Created on 2016-10-08
 @author: Fernand Veilleux
 '''
 
-from lxml import etree
 import sys
 import os
 
-cls = ("c" in sys.argv[1:])
+try :
+    from lxml import etree
+except :
+    print('lxml required, do a search to find how to install to your distro')
+    exit(1)
+
+lcode = os.getenv('LANGUAGE', 'en')[0:2]
+# print lcode
+
+if "c" in sys.argv[1:] :
+    cls = True
+else :
+    cls = False
 
 find = os.popen("find /usr -name 'hal_pythonplugin.py'").read()
-found = find > ''
-
-if found :
+if find > '' :
     for s in find.split() :
         s = s.rstrip('\n')
         if not os.path.islink(s) :
@@ -39,36 +48,30 @@ if found :
                 if f.find('from ncam import NCam') == -1:
                     open(s, "w").write('from ncam import NCam\n' + f)
                     print('"from ncam import NCam" added to %s\n' % s)
+                else :
+                    print('"from ncam import NCam" already exists in %s\n' % s)
 
         head, fn = os.path.split(s)
         fn = os.path.join(head, 'ncam.py')
         if os.path.islink(fn) :
             if cls :
-                try :
-                    os.remove(fn)
-                    print 'removed link from ', head
-                except :
-                    print 'could not remove link :', fn
-                    exit(1)
-        elif (not os.path.isfile(fn)) and (not cls) :
-            try :
-                os.symlink(os.path.join(os.getcwd(), 'ncam.py'), fn)
-                print 'created link in ', head
-            except :
-                print 'could not create link :', fn
-                exit(1)
+                os.remove(fn)
+                print 'removed link from ', head, '\n'
+            else :
+                print 'link to ncam.py already exists in ', head, '\n'
+        elif not cls :
+            os.symlink(os.path.join(os.getcwd(), 'ncam.py'), fn)
+            print 'created link in ', head, '\n'
 
-
-if not found :
+else :
     print 'Directory of "hal_pythonplugin.py" not found - EXITING'
     print 'Contact Fern for help'
     exit(1)
 
 
+edited = False
 find = os.popen("find /usr -name 'hal_python.xml'").read()
-found = find > ''
-
-if found :
+if find > '' :
     for s in find.split() :
         s = s.rstrip('\n')
         if not os.path.islink(s) :
@@ -79,14 +82,15 @@ if found :
                 for n in dest.findall('glade-widget-class'):
                     if n.get('name') == 'NCam':
                         dest.remove(n)
-                        print('glade-widget-class named NCam removed from %s' % s)
+                        edited = True
+                        print('glade-widget-class named NCam removed from %s\n' % s)
                         break
             else :
                 classfounded = False
                 for n in dest.findall('glade-widget-class'):
                     if n.get('name') == 'NCam':
                         classfounded = True
-                        print('glade-widget-class named NCam removed from %s' % s)
+                        print('glade-widget-class named NCam already exists in %s\n' % s)
                         break
                 if not classfounded :
                     elem = etree.fromstring('''
@@ -100,7 +104,8 @@ if found :
 
 ''')
                     dest.insert(0, elem)
-                    print('glade-widget-class named NCam added to %s' % s)
+                    edited = True
+                    print('glade-widget-class named NCam added to %s\n' % s)
 
 
             dest = root.find('glade-widget-group')
@@ -108,21 +113,26 @@ if found :
                 for n in dest.findall('glade-widget-class-ref') :
                     if n.get('name') == 'NCam':
                         dest.remove(n)
-                        print('glade-widget-class-ref name NCam removed from %s' % s)
+                        edited = True
+                        print('glade-widget-class-ref name NCam removed from %s\n' % s)
                         break
             else :
                 classfounded = False
                 for n in dest.findall('glade-widget-class-ref'):
                     if n.get('name') == 'NCam':
                         classfounded = True
+                        print('glade-widget-class-ref named NCam already exists in %s' % s)
                         break
                 if not classfounded :
                     dest.insert(0, etree.fromstring('<glade-widget-class-ref name="NCam"/>'))
-                    print('glade-widget-class-ref named NCam added to %s' % s)
+                    edited = True
+                    print('glade-widget-class-ref named NCam added to %s\n' % s)
 
-            xml.write(s, pretty_print = True)
+            if edited :
+                xml.write(s, pretty_print = True)
+                print s, 'saved'
 
-if not found :
+else :
     print 'File "hal_python.xml" not found - EXITING'
     print 'Contact Fern for help'
     exit(1)

@@ -49,7 +49,7 @@ try :
     import linuxcnc
     SYS_DIR = linuxcnc.SHARE + '/ncam'
     if not os.path.isdir(SYS_DIR) :
-        SYS_DIR = os.path.dirname(os.path.realpath(__file__))
+        SYS_DIR = os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + '/ncam.py'))
 except :
     # linuxCNC not installed, must be my Windows pc for development and debugging
     SYS_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -119,7 +119,7 @@ DEFAULT_ICONS = {
 
 XML_TAG = "lcnc-ncam"
 
-HOME_PAGE = 'http://fernv.github.io/linuxcnc-features/'
+HOME_PAGE = 'https://github.com/FernV/NativeCAM'
 
 class tv_select :  # 'enum' items
     none, feature, items, header, param = range(5)
@@ -578,9 +578,9 @@ class CellRendererMx(gtk.CellRendererText):
         self.vkb.set_border_width(3)
 
         lbl = gtk.Label()
-        lbl.set_markup(self.tooltip)
         lbl.set_line_wrap(True)
         self.vkb.vbox.pack_start(lbl, expand = False)
+        lbl.set_markup(self.tooltip)
 
         tbl = gtk.Table(rows = 5, columns = 4, homogeneous = True)
         self.vkb.vbox.pack_start(tbl)
@@ -1426,13 +1426,24 @@ class Feature():
             if fname is not None :
                 return str(open(fname).read())
 
+        s = re.sub(r"#sub_name", "%s" % self.attr['name'], s)
         s = re.sub(r"%NCAM_DIR%", "%s" % NCAM_DIR, s)
 
         for p in self.param :
             if "call" in p.attr and "value" in p.attr :
-                s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
-                           (re.escape(p.attr["call"])), r"%s\1" %
-                           p.get_value(), s)
+                if p.attr['type'] == 'text' :
+                    note_lines = p.get_value().split('\n')
+                    lines = ''
+                    for line in note_lines :
+                        lines = lines + '( ' + line + ' )\n'
+                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
+                       (re.escape(p.attr["call"])), r"%s\1" %
+                       lines, s)
+
+                else :
+                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
+                       (re.escape(p.attr["call"])), r"%s\1" %
+                       p.get_value(), s)
 
         s = re.sub(r"%NCAM_DIR%", "%s" % NCAM_DIR, s)
         s = re.sub(r"(?i)(<import>(.*?)</import>)", import_callback, s)
@@ -2790,11 +2801,15 @@ Notes:
             pthinfo = tv.get_path_at_pos(int(event.x), int(event.y))
             if pthinfo is not None:
                 path, col, cellx, celly = pthinfo
+                self.click_y = int(event.y)
                 tv.grab_focus()
                 tv.set_cursor(path, col, 0)
                 if tv == self.treeview :
                     itr = self.master_filter.get_iter(path)
                     itr = self.master_filter.convert_iter_to_child_iter(itr)
+                    if self.iter_selected_type == tv_select.feature :
+                        self.pop_up.append(self.create_mi(self.actionRenameFeature))
+                        self.pop_up.append(gtk.SeparatorMenuItem())
                 else :
                     itr = self.details_filter.get_iter(path)
                     itr = self.details_filter.convert_iter_to_child_iter(itr)
@@ -2979,6 +2994,10 @@ Notes:
         self.actionSubHdrs = gtk.ToggleAction("actionSubHdrs",
                 _('Sub-Groups In Master Tree'), _('Sub-Groups In Master Tree'), '')
         self.actionSubHdrs.connect('activate', self.action_SubHdrs)
+
+        self.actionRenameFeature = gtk.Action("actionRenameFeature",
+                _('Rename'), _('Rename selected subroutine'), '')
+        self.actionRenameFeature.connect('activate', self.rename_selected_feature)
 
 
     def get_widgets(self):
@@ -3860,6 +3879,38 @@ Notes:
         self.pref.sub_hdrs_in_tv1 = self.actionSubHdrs.get_active()
         self.treestore_from_xml(self.treestore_to_xml())
         self.expand_and_select(self.path_to_old_selected)
+
+    def rename_selected_feature(self, *args):
+        self.newnamedlg = gtk.MessageDialog(parent = None,
+            flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+            type = gtk.MESSAGE_QUESTION,
+            buttons = gtk.BUTTONS_OK_CANCEL
+        )
+        self.newnamedlg.set_markup(_('Enter new name for'))
+        self.newnamedlg.format_secondary_markup(self.selected_feature.get_attr('name'))
+        self.newnamedlg.set_title('NativeCAM')
+        edit_entry = gtk.Entry()
+        edit_entry.set_editable(True)
+        edit_entry.set_text(self.selected_feature.get_attr('name'))
+        edit_entry.connect('key-press-event', self.rename_keyhandler)
+        self.newnamedlg.vbox.add(edit_entry)
+        self.newnamedlg.set_keep_above(True)
+
+        (tree_x, tree_y) = self.treeview.get_bin_window().get_origin()
+        self.newnamedlg.move(tree_x, tree_y + self.click_y)
+
+        self.newnamedlg.show_all()
+        response = self.newnamedlg.run()
+        if (response == gtk.RESPONSE_OK) :
+            newname = edit_entry.get_text().lstrip(' ')
+            if newname > '' :
+                self.selected_feature.attr['name'] = newname
+        self.newnamedlg.destroy()
+
+    def rename_keyhandler(self, widget, event):
+        keyname = gtk.gdk.keyval_name(event.keyval)
+        if keyname in ['Return', 'KP_Enter']:
+            self.newnamedlg.response(gtk.RESPONSE_OK)
 
     def import_xml(self, xml_) :
         if xml_.tag != XML_TAG:

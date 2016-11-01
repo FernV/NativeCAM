@@ -46,7 +46,7 @@
         <sub name='Irregular Circle' tool_tip='Create a hole circle of different angle spacing' icon="drill-circle-irregular.png" src="mill/drill-circle-irr.cfg"/>
     </group>
     <group name='Group, Offset And Rotation' icon="group.png">
-		<sub name='Standard Group' tool_tip='Group subroutines' icon="group.png" src="mill/group.cfg"/>
+		<sub name='Standard Group' tool_tip='Group subroutines' icon="group.png" src="group.cfg"/>
 		<sub name='Offset/Rotate' tool_tip='Group subroutines, offset and rotate' icon="group.png" src="mill/group-off.cfg"/>
         <separator/>
         <sub name='Radial Array' tool_tip='Define diameter or distance between groups' icon="circ-array-diam.png" src="mill/circular-array.cfg"/>
