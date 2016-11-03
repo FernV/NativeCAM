@@ -1,0 +1,53 @@
+(create a regular polygon of 3 or more edges)
+(author : Fernand Veilleux)
+o<polygon> sub
+(CALL [#cx] [#cy] [#n] [#radius] [#rot] [#opt] [#dir] [cut_start] [cut_stop] [preview] [final_dir] [final_step_over])
+
+(set local params value)
+	#<cx>          =  #1
+	#<cy>          =  #2
+	#<edges>       =  #3
+	#<radius>      =  #4
+	#<start_angle> =  #5
+	#<cut_opt>     =  #6 (Inside=0:On the line=2:Outside=3)
+	#<dir>         =  #7 (Clockwise=2:Counter-Clockwise=3)
+	#<cut_start>   = [#8 + #9]
+	#<surface>     =  #9
+	#<bottom>      = #10
+	#<preview>     = #11
+
+(change coords system to offset/rotate)
+	#<old_coord_system> = [#<_coord_system> / 10]
+	o<get_offsets> CALL
+	#<saved_offset_x> = #<_offsets_x>
+	#<saved_offset_y> = #<_offsets_y>
+	#<saved_offset_z> = #<_offsets_z>
+	#<saved_offset_r> = #<_offsets_r>
+
+	(calc new offsets and change coords system)
+	G#<_off_rot_coord_system>
+	o<rotate_xy> CALL [#<_offsets_x> + #<cx>] [#<_offsets_y> + #<cy>] [#<_offsets_x>] [#<_offsets_y>] [#<_offsets_r>]
+	G10 L2 P#5220 X#<_rotated_x> Y#<_rotated_y> Z#<_offsets_z> R[#<_offsets_r> + #<start_angle>]
+
+	o<polygon_create> CALL [#<_mill_data_start>] [#<radius> / [COS[180 / #<edges>]]] [#<edges>] [#<dir>]
+	o<entry> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>]
+	o<trace> CALL [#<_mill_data_start>] [-1]
+
+(draw reference lines)
+	/o<preview> if [#<_show_final_cuts> AND #<preview>]
+		/o<pv_b> if [#<_show_bottom_cut>]
+			/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<bottom>]
+			/o<trace> CALL [#<_mill_data_start>]
+		/o<pv_b> endif
+		/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<surface>]
+		/o<trace> CALL [#<_mill_data_start>]
+	/o<preview> endif
+
+(exit)
+	G0 Z#<_z_clear>
+	G40
+
+(restore previous coordinate system)
+	G#<old_coord_system>
+	G10 L2 P#5220 X#<saved_offset_x> Y#<saved_offset_y> Z#<saved_offset_z> R#<saved_offset_r>
+o<polygon> endsub

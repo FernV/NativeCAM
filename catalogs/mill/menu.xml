@@ -50,8 +50,7 @@
 		<sub name='Offset/Rotate' tool_tip='Group subroutines, offset and rotate' icon="group.png" src="mill/group-off.cfg"/>
         <separator/>
         <sub name='Radial Array' tool_tip='Define diameter or distance between groups' icon="circ-array-diam.png" src="mill/circular-array.cfg"/>
-        <sub name='Linear Array' tool_tip='Create a linear array' icon="array.png" src="mill/linear-array.cfg"/>
-        <sub name='Rectangular Array' tool_tip='Array of multiple rows and columns' icon="rect-array.png" src="mill/rectangular-array.cfg"/>
+        <sub name='Rectangular Array' tool_tip='Array of rows and columns' icon="rect-array.png" src="mill/rectangular-array.cfg"/>
     </group>
     <group name='Tools' icon="tool.png">
         <sub name='Change End Mill' tool_tip='Select end mill or similar tool and set parameters' icon="tool-change.png" src="mill/end-mill-change.cfg"/>

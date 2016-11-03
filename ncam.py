@@ -4,7 +4,7 @@
 # --  NO USER SETTINGS IN THIS FILE -- EDIT PREFERENCES INSTEAD  ---
 # ------------------------------------------------------------------
 
-APP_TITLE = "NativeCAM"  # formerly LinuxCNC-Features
+APP_TITLE = "NativeCAM for LinuxCNC"  # formerly LinuxCNC-Features
 APP_COMMENTS = 'A GUI to help create LinuxCNC NGC files.'
 
 APP_COPYRIGHT = '''Copyright © 2012 Nick Drobchenko aka Nick from cnc-club.ru
@@ -1487,6 +1487,7 @@ class Preferences():
         self.pref_file = None
         self.cfg_file = None
         self.ngc_init_str = None
+        self.cat_name = None
 
     def read(self, nc_dir, cat_name):
         global default_digits, default_metric, add_menu_icon_size, \
@@ -1519,6 +1520,9 @@ class Preferences():
         def read_int(cf, section, key, default):
             return int(read_float(cf, section, key, default))
 
+        if self.cat_name is None :
+            self.cat_name = cat_name
+            
         self.cfg_file = nc_dir + "/" + CONFIG_FILE
 
         if not os.path.exists(nc_dir + "/" + cat_name):
@@ -1951,47 +1955,49 @@ class Preferences():
         else :
             coord = '9.' + str(self.ngc_off_rot_coord_system - 4)
         self.default += ("\n\n#<_off_rot_coord_system>   = 5" + coord + "\n\n")
-        self.default += ("#<_spindle_speed_up_delay> = " + self.ngc_spindle_speedup_time + "\n\n")
+        
         self.default += ("#<_show_final_cuts>     = " + self.ngc_show_final_cut + "\n")
         self.default += ("#<_show_bottom_cut>     = " + self.ngc_show_bottom_cut + "\n\n")
-
-        self.default += ("#<_probe_func>          = 38." + self.ngc_probe_func + "\n")
-        self.default += ("#<_probe_feed>          = " + self.ngc_probe_feed + "\n")
-        self.default += ("#<_probe_latch>         = " + self.ngc_probe_latch + "\n")
-        self.default += ("#<_probe_latch_feed>    = " + self.ngc_probe_latch_feed + "\n")
-        self.default += ("#<_probe_safe>          = " + self.ngc_probe_safe + "\n")
-        self.default += ("#<_probe_tip_dia>       = " + self.ngc_probe_tip_dia + "\n\n")
-
-        self.default += ("#<_probe_tool_len_comp> = " + self.probe_tool_len_comp + "\n")
-        self.default += ("#<_tool_probe_z>        = 0\n\n")
-
-        self.default += ("#<center_drill_depth>   = " + self.drill_center_depth + "\n\n")
-
         self.default += ("#<_units_radius>        = 1  (factor for radius and diameter)\n")
         self.default += ("#<_units_width>         = 1  (factor for width, height, length)\n")
         self.default += ("#<_units_cut_depth>     = 1  (factor for depth)\n\n")
-
-        self.default += ("#<in_polyline>          = 0\n")
         self.default += ("#<_mill_data_start>     = 70\n\n")
+        self.default += ("#<in_polyline>          = 0\n\n")
+    
 
-        self.default += ("#<_pocket_expand_mode>  = " + self.pocket_mode + "\n\n")
+        if self.cat_name == 'mill' :
+            self.default += ("#<_spindle_speed_up_delay> = " + self.ngc_spindle_speedup_time + "\n\n")
+                
+            self.default += ("#<_probe_func>          = 38." + self.ngc_probe_func + "\n")
+            self.default += ("#<_probe_feed>          = " + self.ngc_probe_feed + "\n")
+            self.default += ("#<_probe_latch>         = " + self.ngc_probe_latch + "\n")
+            self.default += ("#<_probe_latch_feed>    = " + self.ngc_probe_latch_feed + "\n")
+            self.default += ("#<_probe_safe>          = " + self.ngc_probe_safe + "\n")
+            self.default += ("#<_probe_tip_dia>       = " + self.ngc_probe_tip_dia + "\n\n")
+    
+            self.default += ("#<_probe_tool_len_comp> = " + self.probe_tool_len_comp + "\n")
+            self.default += ("#<_tool_probe_z>        = 0\n\n")
+    
+            self.default += ("#<center_drill_depth>   = " + self.drill_center_depth + "\n\n")
 
-        self.default += ("(optimization values)\n")
-        self.default += ("#<_tool_eng1>           = " + self.opt_eng1 + "\n")
-        self.default += ("#<_tool_eng2>           = " + self.opt_eng2 + "\n")
-        self.default += ("#<_tool_eng3>           = " + self.opt_eng3 + "\n\n")
-
-        self.default += ("#<_feedfactor1>         = " + self.opt_ff1 + "\n")
-        self.default += ("#<_feedfactor2>         = " + self.opt_ff2 + "\n")
-        self.default += ("#<_feedfactor3>         = " + self.opt_ff3 + "\n")
-        self.default += ("#<_feedfactor4>         = " + self.opt_ff4 + "\n")
-        self.default += ("#<_feedfactor0>         = " + self.opt_ff0 + "\n\n")
-
-        self.default += ("#<_speedfactor1>        = " + self.opt_sf1 + "\n")
-        self.default += ("#<_speedfactor2>        = " + self.opt_sf2 + "\n")
-        self.default += ("#<_speedfactor3>        = " + self.opt_sf3 + "\n")
-        self.default += ("#<_speedfactor4>        = " + self.opt_sf4 + "\n")
-        self.default += ("#<_speedfactor0>        = " + self.opt_sf0 + "\n\n")
+            self.default += ("#<_pocket_expand_mode>  = " + self.pocket_mode + "\n\n")
+    
+            self.default += ("(optimization values)\n")
+            self.default += ("#<_tool_eng1>           = " + self.opt_eng1 + "\n")
+            self.default += ("#<_tool_eng2>           = " + self.opt_eng2 + "\n")
+            self.default += ("#<_tool_eng3>           = " + self.opt_eng3 + "\n\n")
+    
+            self.default += ("#<_feedfactor1>         = " + self.opt_ff1 + "\n")
+            self.default += ("#<_feedfactor2>         = " + self.opt_ff2 + "\n")
+            self.default += ("#<_feedfactor3>         = " + self.opt_ff3 + "\n")
+            self.default += ("#<_feedfactor4>         = " + self.opt_ff4 + "\n")
+            self.default += ("#<_feedfactor0>         = " + self.opt_ff0 + "\n\n")
+    
+            self.default += ("#<_speedfactor1>        = " + self.opt_sf1 + "\n")
+            self.default += ("#<_speedfactor2>        = " + self.opt_sf2 + "\n")
+            self.default += ("#<_speedfactor3>        = " + self.opt_sf3 + "\n")
+            self.default += ("#<_speedfactor4>        = " + self.opt_sf4 + "\n")
+            self.default += ("#<_speedfactor0>        = " + self.opt_sf0 + "\n\n")
 
         self.default += ("(end defaults)\n\n")
 
@@ -2053,10 +2059,11 @@ Notes:
             if platform.system() != 'Windows' :
                 SYS_DIR = os.path.expanduser('~/linuxcnc-dev/share/ncam')
 
+        do_translation = "-t" in optlist
+
         self.editor = DEFAULT_EDITOR
         self.pref = Preferences()
         self.tools = Tools()
-        self.catalog_dir = DEFAULT_CATALOG
 
         ini = os.getenv("INI_FILE_NAME")
         if "-i" in optlist :
@@ -2070,12 +2077,17 @@ Notes:
             inifilename = 'NA'
             NCAM_DIR = SYS_DIR
             NGC_DIR = os.path.expanduser('~')
+            if "--catalog" in optlist :
+                self.catalog_dir = optlist["--catalog"]
+            else :
+                self.catalog_dir = DEFAULT_CATALOG
+
         else :
             try :
                 inifilename = os.path.abspath(ini)
                 ini_instance = linuxcnc.ini(ini)
             except Exception, detail :
-                err_exit(_("Open fails for cfg file : %(inifilename)s\n\n%(detail)s") % \
+                err_exit(_("Open fails for ini file : %(inifilename)s\n\n%(detail)s") % \
                            {'inifilename':inifilename, 'detail':detail})
 
             require_ini_items(inifilename, ini_instance)
@@ -2090,12 +2102,16 @@ Notes:
                 sys.exit(-1)
 
             val = ini_instance.find('DISPLAY', 'LATHE')
-            if (val is not None) and (val != '0'):
+            if (val is not None) and (val != '0') :
                 self.catalog_dir = 'lathe'
+            else :
+                val = ini_instance.find('DISPLAY', 'NCAM_CATALOG')
+                if (val is not None) :
+                    self.catalog_dir = val
+                else :
+                    self.catalog_dir = DEFAULT_CATALOG
 
             self.pref.ngc_init_str = ini_instance.find('RS274NGC', 'RS274NGC_STARTUP_CODE')
-            if self.pref.ngc_init_str is None :
-                self.pref.ngc_init_str = ini_instance.find('HALUI', 'MDI_COMMAND')
 
             val = ini_instance.find('EMCIO', 'TOOL_TABLE')
             self.tools.set_file(os.path.join(os.path.dirname(ini), val))
@@ -2142,9 +2158,6 @@ Notes:
         self.undo_pointer = -1
         self.timeout = None
 
-        if "--catalog" in optlist :
-            self.catalog_dir = optlist["--catalog"]
-
         catname = 'menu-custom.xml'
         cat_dir_name = search_path(0, catname, CATALOGS_DIR, self.catalog_dir)
         if cat_dir_name is not None :
@@ -2169,7 +2182,7 @@ Notes:
 
         self.pref.read(NCAM_DIR + '/' + CATALOGS_DIR, self.catalog_dir)
 
-        if "-t" in optlist :
+        if do_translation :
             # do after self.pref.read()
             # get translations and exit
             self.get_translations()
@@ -4488,8 +4501,7 @@ Notes:
         self.actionCopy.set_sensitive(self.can_delete_duplicate)
 
 def main():
-    window = gtk.Dialog("NativeCAM for LinuxCNC", None, gtk.DIALOG_MODAL)
-    window.set_title(APP_TITLE)
+    window = gtk.Dialog(APP_TITLE, None, gtk.DIALOG_MODAL)
     ncam = NCam()
     ncam.embedded = False
     window.vbox.add(ncam)

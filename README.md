@@ -19,12 +19,19 @@ You need to install python-lxml if not allready installed, the command is :
 1.	Simple usage - Stand alone mode
 --------------------------------------------------------------------------------
 1.	 Copy then paste one of these commands :
-	
+
+	for mill :
 	./ncam.py -iconfigs/sim/axis/ncam_demo/mill.ini
 	./ncam.py -iconfigs/sim/axis/ncam_demo/mill-mm.ini
 	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/mill.ini
 	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/mill-mm.ini
     ./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/gmoccapy_mm.ini
+
+    for plasma :
+	./ncam.py -iconfigs/sim/axis/ncam_demo/plasma.ini
+	./ncam.py -iconfigs/sim/axis/ncam_demo/plasma-mm.ini
+	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/plasma.ini
+	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/plasma-mm.ini
 
 	However it is not meant to be usefull stand alone unless LinuxCNC
 		was/is loaded with the right SUBROUTINE_PATH
@@ -44,11 +51,18 @@ You need to install python-lxml if not allready installed, the command is :
 
 2.	Start LinuxCNC with one of these commands (copy/paste) :
 
+	for mill :
 	linuxcnc configs/sim/axis/ncam_demo/mill.ini
 	linuxcnc configs/sim/axis/ncam_demo/mill-mm.ini
 	linuxcnc configs/sim/gmoccapy/ncam_demo/mill.ini
 	linuxcnc configs/sim/gmoccapy/ncam_demo/mill-mm.ini
     linuxcnc configs/sim/gmoccapy/ncam_demo/gmoccapy_mm.ini
+
+    for plasma :
+	linuxcnc configs/sim/axis/ncam_demo/plasma.ini
+	linuxcnc configs/sim/axis/ncam_demo/plasma-mm.ini
+	linuxcnc configs/sim/gmoccapy/ncam_demo/plasma.ini
+	linuxcnc configs/sim/gmoccapy/ncam_demo/plasma-mm.ini
 
 3.	Open a project in the examples directory
 	
@@ -71,3 +85,8 @@ You need to install python-lxml if not allready installed, the command is :
 4.	Translation
 --------------------------------------------------------------------------------
 1.	Still needs some development. Will follow.
+	
+
+5.	Setting-up your own file
+--------------------------------------------------------------------------------
+1.	Read MY-SETUP.md
