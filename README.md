@@ -20,18 +20,18 @@ You need to install python-lxml if not allready installed, the command is :
 --------------------------------------------------------------------------------
 1.	 Copy then paste one of these commands :
 
-	for mill :
-	./ncam.py -iconfigs/sim/axis/ncam_demo/mill.ini
-	./ncam.py -iconfigs/sim/axis/ncam_demo/mill-mm.ini
-	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/mill.ini
-	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/mill-mm.ini
-    ./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/gmoccapy_mm.ini
+	for mill : 
+	./ncam.py -iconfigs/sim/axis/ncam_demo/mill.ini ; 
+	./ncam.py -iconfigs/sim/axis/ncam_demo/mill-mm.ini ; 
+	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/mill.ini ; 
+	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/mill-mm.ini ; 
+    ./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/gmoccapy_mm.ini ; 
 
-    for plasma :
-	./ncam.py -iconfigs/sim/axis/ncam_demo/plasma.ini
-	./ncam.py -iconfigs/sim/axis/ncam_demo/plasma-mm.ini
-	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/plasma.ini
-	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/plasma-mm.ini
+    for plasma : 
+	./ncam.py -iconfigs/sim/axis/ncam_demo/plasma.ini ; 
+	./ncam.py -iconfigs/sim/axis/ncam_demo/plasma-mm.ini ; 
+	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/plasma.ini ; 
+	./ncam.py -iconfigs/sim/gmoccapy/ncam_demo/plasma-mm.ini ; 
 
 	However it is not meant to be usefull stand alone unless LinuxCNC
 		was/is loaded with the right SUBROUTINE_PATH
@@ -51,23 +51,28 @@ You need to install python-lxml if not allready installed, the command is :
 
 2.	Start LinuxCNC with one of these commands (copy/paste) :
 
-	for mill :
-	linuxcnc configs/sim/axis/ncam_demo/mill.ini
-	linuxcnc configs/sim/axis/ncam_demo/mill-mm.ini
-	linuxcnc configs/sim/gmoccapy/ncam_demo/mill.ini
-	linuxcnc configs/sim/gmoccapy/ncam_demo/mill-mm.ini
-    linuxcnc configs/sim/gmoccapy/ncam_demo/gmoccapy_mm.ini
+	for mill : 
+	linuxcnc configs/sim/axis/ncam_demo/mill.ini ; 
+	linuxcnc configs/sim/axis/ncam_demo/mill-mm.ini ; 
+	linuxcnc configs/sim/gmoccapy/ncam_demo/mill.ini ; 
+	linuxcnc configs/sim/gmoccapy/ncam_demo/mill-mm.ini ; 
+    linuxcnc configs/sim/gmoccapy/ncam_demo/gmoccapy_mm.ini ; 
 
-    for plasma :
-	linuxcnc configs/sim/axis/ncam_demo/plasma.ini
-	linuxcnc configs/sim/axis/ncam_demo/plasma-mm.ini
-	linuxcnc configs/sim/gmoccapy/ncam_demo/plasma.ini
-	linuxcnc configs/sim/gmoccapy/ncam_demo/plasma-mm.ini
+    for plasma : 
+	linuxcnc configs/sim/axis/ncam_demo/plasma.ini ; 
+	linuxcnc configs/sim/axis/ncam_demo/plasma-mm.ini ; 
+	linuxcnc configs/sim/gmoccapy/ncam_demo/plasma.ini ; 
+	linuxcnc configs/sim/gmoccapy/ncam_demo/plasma-mm.ini ; 
 
 3.	Open a project in the examples directory
 	
-	Basic spacer.xml
-	Fun wheel demo.xml
+	for mill : 
+	Basic spacer.xml ; 
+	Fun wheel demo.xml ; 
+
+	for plasma :
+	plasma test.xml ;
+	plasma demo.xml ; 
 
 4.	Open one of those ini files to learn how to setup your own system
 	Note that you need ncam.ui in the same directory as the ini file
