@@ -131,7 +131,7 @@ o<slot_arc> sub
 	o<if_roughing> endif
 
 (finishing cut)
-	o<finishing_tool> if [#<fin_dir> AND [#<_tool_usage> NE 1]]
+	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<slot_arc_create> CALL [#<_mill_data_start>] [#<radius>] [#<final_w>] [#42] [#<fin_dir>] [#<end_style>]
 		o<set_feed_rate_and_speed> CALL [#41 * #5410]
 		o<entry> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
@@ -143,7 +143,7 @@ o<slot_arc> sub
 	o<finishing_tool> endif
 
 (draw reference lines)
-	/o<preview> if [#<_show_final_cuts> AND #<preview>]
+	/o<preview> if [#<_show_final_cuts> AND #<preview> AND [#<_tool_usage> LE 2]]
 		/o<slot_arc_create> CALL [#<_mill_data_start>] [#<radius>] [#<final_w>] [#42] [#<dir>] [#<end_style>]
 		/o<pv_b> if [#<_show_bottom_cut>]
 			/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_depth>]

@@ -53,6 +53,7 @@
         <sub name='Rectangular Array' tool_tip='Array of rows and columns' icon="rect-array.png" src="mill/rectangular-array.cfg"/>
     </group>
     <group name='Tools' icon="tool.png">
+        <sub name='Change Tool' tool_tip='Select end mill or drill and set parameters' icon="tool-change.png" src="mill/tool-change.cfg"/>
         <sub name='Change End Mill' tool_tip='Select end mill or similar tool and set parameters' icon="tool-change.png" src="mill/end-mill-change.cfg"/>
         <sub name='Change Drill' tool_tip='Select drill and set drilling parameters' icon="drill-change.png" src="mill/drill-change.cfg"/>
     </group>

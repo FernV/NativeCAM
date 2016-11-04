@@ -159,7 +159,7 @@ o<rectangle> sub
 	o<if_roughing> endif
 
 (finishing cut)
-	o<finishing_tool> if [#<fin_dir> AND [#<_tool_usage> NE 1]]
+	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<rectangle_create> CALL [#<_mill_data_start>] [#<width>] [#<height>] [#<corner_radius>] [#<corner_style>] [#<fin_dir>] [#<width>] [#<height>]
 		o<set_feed_rate_and_speed> CALL [#41 * #5410]
 		o<entry> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
@@ -171,7 +171,7 @@ o<rectangle> sub
 	o<finishing_tool> endif
 
 (draw reference lines)
-	/o<preview> if [#<_show_final_cuts> AND #<preview>]
+	/o<preview> if [#<_show_final_cuts> AND #<preview> AND [#<_tool_usage> LE 2]]
 		/o<pv_1> if [[#<corner_style> EQ 0] AND [#<cut_opt> LE 1] AND [#5410 GT 0]]
 			/#<corner_style>  = 1
 			/#<corner_radius> = [#5410 * 0.501]
