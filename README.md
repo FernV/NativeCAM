@@ -74,9 +74,6 @@ You need to install python-lxml if not allready installed, the command is :
 	plasma test.xml ;
 	plasma demo.xml ; 
 
-4.	Open one of those ini files to learn how to setup your own system
-	Note that you need ncam.ui in the same directory as the ini file
-	
 	
 3.	Tutorials
 --------------------------------------------------------------------------------

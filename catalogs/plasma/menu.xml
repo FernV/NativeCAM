@@ -33,10 +33,10 @@
     </group>
     <group name='Group, Offset And Rotation' icon="group.png">
 		<sub name='Standard Group' tool_tip='Group subroutines' icon="group.png" src="group.cfg"/>
-		<sub name='Offset/Rotate' tool_tip='Group subroutines, offset and rotate' icon="group.png" src="plasma/group-off.cfg"/>
+		<sub name='Offset/Rotate' tool_tip='Group subroutines, offset and rotate' icon="group.png" src="group-off.cfg"/>
         <separator/>
-        <sub name='Radial Array' tool_tip='Define diameter or distance between groups' icon="circ-array-diam.png" src="plasma/circular-array.cfg"/>
-        <sub name='Rectangular Array' tool_tip='Array of rows and columns' icon="rect-array.png" src="plasma/rectangular-array.cfg"/>
+        <sub name='Radial Array' tool_tip='Define diameter or distance between groups' icon="circ-array-diam.png" src="circular-array.cfg"/>
+        <sub name='Rectangular Array' tool_tip='Array of rows and columns' icon="rect-array.png" src="rectangular-array.cfg"/>
     </group>
     <sub name='Cutting Params' tool_tip='Set cutting parameters' icon="tool-change.png" src="plasma/cutting-params.cfg"/>
     <group name='Miscellaneous' icon='misc.png'>

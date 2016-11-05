@@ -93,7 +93,6 @@ LIB_DIR = 'lib'
 NGC_DIR = 'scripts'
 EXAMPLES_DIR = 'xml/examples'
 CATALOGS_DIR = 'catalogs'
-TEMPLATES_DIR = XML_DIR
 GRAPHICS_DIR = 'graphics'
 
 # files

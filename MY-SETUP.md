@@ -20,6 +20,7 @@ it is not required anymore
 Copy ncam.ui into the same directory as your ini file
 OR you can specify the relative path to that file like
 	../../ncam.ui
+	(be aware that gmoccapy does not support reference by ~/)
 or the absolute path
 
 NativeCAM will use the tool table specified in your ini file

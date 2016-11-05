@@ -47,16 +47,12 @@
     </group>
     <group name='Group, Offset And Rotation' icon="group.png">
 		<sub name='Standard Group' tool_tip='Group subroutines' icon="group.png" src="group.cfg"/>
-		<sub name='Offset/Rotate' tool_tip='Group subroutines, offset and rotate' icon="group.png" src="mill/group-off.cfg"/>
+		<sub name='Offset/Rotate' tool_tip='Group subroutines, offset and rotate' icon="group.png" src="group-off.cfg"/>
         <separator/>
-        <sub name='Radial Array' tool_tip='Define diameter or distance between groups' icon="circ-array-diam.png" src="mill/circular-array.cfg"/>
-        <sub name='Rectangular Array' tool_tip='Array of rows and columns' icon="rect-array.png" src="mill/rectangular-array.cfg"/>
+        <sub name='Radial Array' tool_tip='Define diameter or distance between groups' icon="circ-array-diam.png" src="circular-array.cfg"/>
+        <sub name='Rectangular Array' tool_tip='Array of rows and columns' icon="rect-array.png" src="rectangular-array.cfg"/>
     </group>
-    <group name='Tools' icon="tool.png">
-        <sub name='Change Tool' tool_tip='Select end mill or drill and set parameters' icon="tool-change.png" src="mill/tool-change.cfg"/>
-        <sub name='Change End Mill' tool_tip='Select end mill or similar tool and set parameters' icon="tool-change.png" src="mill/end-mill-change.cfg"/>
-        <sub name='Change Drill' tool_tip='Select drill and set drilling parameters' icon="drill-change.png" src="mill/drill-change.cfg"/>
-    </group>
+    <sub name='Change Tool' tool_tip='Select end mill or drill and set parameters' icon="tool-change.png" src="mill/tool-change.cfg"/>
     <group name='Probing' icon="probe.png">
 		<sub name='Probe Edges' tool_tip='Find workpiece edges' icon="probe.png" src="mill/probe-edge.cfg"/>
 		<sub name='Probe Stock' tool_tip='Find the center of a cube or cylinder' icon="probe.png" src="mill/probe-stock.cfg"/>
