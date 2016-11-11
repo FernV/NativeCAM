@@ -49,7 +49,11 @@ try :
     import linuxcnc
     SYS_DIR = linuxcnc.SHARE + '/ncam'
     if not os.path.isdir(SYS_DIR) :
-        SYS_DIR = os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + '/ncam.py'))
+        sd = os.path.join(os.path.dirname(__file__), "path2ncam")
+        if os.path.isfile(sd) :
+            SYS_DIR = open(sd).read()
+        else :
+            SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 except :
     # linuxCNC not installed, must be my Windows pc for development and debugging
     SYS_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -165,7 +169,7 @@ def search_path(warn, f, *args) :
         src = os.path.join(pa, f)
         if os.path.isfile(src) :
             return src
-
+            expanduser
     src = os.path.join(os.getcwd(), f)
     if os.path.isfile(src) :
         return src
@@ -1521,7 +1525,7 @@ class Preferences():
 
         if self.cat_name is None :
             self.cat_name = cat_name
-            
+
         self.cfg_file = nc_dir + "/" + CONFIG_FILE
 
         if not os.path.exists(nc_dir + "/" + cat_name):
@@ -1954,7 +1958,7 @@ class Preferences():
         else :
             coord = '9.' + str(self.ngc_off_rot_coord_system - 4)
         self.default += ("\n\n#<_off_rot_coord_system>   = 5" + coord + "\n\n")
-        
+
         self.default += ("#<_show_final_cuts>     = " + self.ngc_show_final_cut + "\n")
         self.default += ("#<_show_bottom_cut>     = " + self.ngc_show_bottom_cut + "\n\n")
         self.default += ("#<_units_radius>        = 1  (factor for radius and diameter)\n")
@@ -1962,36 +1966,36 @@ class Preferences():
         self.default += ("#<_units_cut_depth>     = 1  (factor for depth)\n\n")
         self.default += ("#<_mill_data_start>     = 70\n\n")
         self.default += ("#<in_polyline>          = 0\n\n")
-    
+
 
         if self.cat_name == 'mill' :
             self.default += ("#<_spindle_speed_up_delay> = " + self.ngc_spindle_speedup_time + "\n\n")
-                
+
             self.default += ("#<_probe_func>          = 38." + self.ngc_probe_func + "\n")
             self.default += ("#<_probe_feed>          = " + self.ngc_probe_feed + "\n")
             self.default += ("#<_probe_latch>         = " + self.ngc_probe_latch + "\n")
             self.default += ("#<_probe_latch_feed>    = " + self.ngc_probe_latch_feed + "\n")
             self.default += ("#<_probe_safe>          = " + self.ngc_probe_safe + "\n")
             self.default += ("#<_probe_tip_dia>       = " + self.ngc_probe_tip_dia + "\n\n")
-    
+
             self.default += ("#<_probe_tool_len_comp> = " + self.probe_tool_len_comp + "\n")
             self.default += ("#<_tool_probe_z>        = 0\n\n")
-    
+
             self.default += ("#<center_drill_depth>   = " + self.drill_center_depth + "\n\n")
 
             self.default += ("#<_pocket_expand_mode>  = " + self.pocket_mode + "\n\n")
-    
+
             self.default += ("(optimization values)\n")
             self.default += ("#<_tool_eng1>           = " + self.opt_eng1 + "\n")
             self.default += ("#<_tool_eng2>           = " + self.opt_eng2 + "\n")
             self.default += ("#<_tool_eng3>           = " + self.opt_eng3 + "\n\n")
-    
+
             self.default += ("#<_feedfactor1>         = " + self.opt_ff1 + "\n")
             self.default += ("#<_feedfactor2>         = " + self.opt_ff2 + "\n")
             self.default += ("#<_feedfactor3>         = " + self.opt_ff3 + "\n")
             self.default += ("#<_feedfactor4>         = " + self.opt_ff4 + "\n")
             self.default += ("#<_feedfactor0>         = " + self.opt_ff0 + "\n\n")
-    
+
             self.default += ("#<_speedfactor1>        = " + self.opt_sf1 + "\n")
             self.default += ("#<_speedfactor2>        = " + self.opt_sf2 + "\n")
             self.default += ("#<_speedfactor3>        = " + self.opt_sf3 + "\n")

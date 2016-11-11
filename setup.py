@@ -23,7 +23,7 @@ import os
 try :
     from lxml import etree
 except :
-    print('lxml required, do a search to find how to install to your distro')
+    print('python-lxml required, command is in README.md')
     exit(1)
 
 lcode = os.getenv('LANGUAGE', 'en')[0:2]
@@ -33,6 +33,8 @@ if "c" in sys.argv[1:] :
     cls = True
 else :
     cls = False
+
+print 'wait, processing...'
 
 find = os.popen("find /usr -name 'hal_pythonplugin.py'").read()
 if find > '' :
@@ -52,21 +54,29 @@ if find > '' :
                     print('"from ncam import NCam" already exists in %s\n' % s)
 
         head, fn = os.path.split(s)
+
         fn = os.path.join(head, 'ncam.py')
         if os.path.islink(fn) :
             if cls :
                 os.remove(fn)
-                print 'removed link from ', head, '\n'
+                print 'removed link to ncam.py from ', head, '\n'
             else :
                 print 'link to ncam.py already exists in ', head, '\n'
         elif not cls :
             os.symlink(os.path.join(os.getcwd(), 'ncam.py'), fn)
-            print 'created link in ', head, '\n'
+            print 'created link to ncam.py in ', head, '\n'
+
+        sd = os.path.join(head, 'path2ncam')
+        if os.path.isfile(sd) :
+            os.remove(sd)
+            print 'removed path2ncam file'
+        if not cls :
+            open(sd, "w").write(os.getcwd())
+            print 'created path2ncam file'
 
 else :
     print 'Directory of "hal_pythonplugin.py" not found - EXITING'
-    print 'Contact Fern for help'
-    exit(1)
+    exit(2)
 
 
 edited = False
@@ -134,7 +144,13 @@ if find > '' :
 
 else :
     print 'File "hal_python.xml" not found - EXITING'
-    print 'Contact Fern for help'
-    exit(1)
+    exit(3)
+
+if cls :
+    # remove link to translation file
+    pass
+else :
+    # add link to translation files
+    pass
 
 exit(0)
