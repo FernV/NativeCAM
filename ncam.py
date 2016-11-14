@@ -50,7 +50,7 @@ try :
     SYS_DIR = linuxcnc.SHARE + '/ncam'
     if not os.path.isdir(SYS_DIR) :
         SYS_DIR = os.path.dirname(os.path.realpath(__file__))
-        if os.path.isdir(SYS_DIR + '/catalogs') :
+        if not os.path.isdir(SYS_DIR + '/catalogs') :
             find = os.popen("find /home -name 'ncam.py'").read()
             print 'found ncam.py file(s) =', find
             if find > '' :
@@ -2231,7 +2231,7 @@ Notes:
         self.actionSideBySide.set_active(self.pref.side_by_side)
         self.actionSubHdrs.set_active(self.pref.sub_hdrs_in_tv1)
 
-        self.menu_new_activate(self, 1)
+        self.loadcurrentwork()
         self.get_selected_feature(self)
         self.show_all()
         self.addVBox.hide()
@@ -4112,18 +4112,33 @@ Notes:
         etree.ElementTree(xml).write(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, \
                                                DEFAULT_TEMPLATE), pretty_print = True)
 
+    def loadcurrentwork(self):
+        self.treestore.clear()
+        self.clear_undo()
+        fn = search_path(0, CURRENT_WORK, CATALOGS_DIR, self.catalog_dir)
+        if fn is not None :
+            xml = etree.parse(fn)
+            self.treestore_from_xml(xml.getroot())
+            self.expand_and_select((0,))
+            self.autorefresh_call()
+            self.auto_refresh.set_active(True)
+            self.current_filename = _('Untitle.xml')
+            self.file_changed = False
+            self.action()
+        else :
+            print (_('Previous work not saved as current work'))
+            self.menu_new_activate()
+
     def menu_new_activate(self, *args):
         global UNIQUE_ID
 
         UNIQUE_ID = 10
         self.treestore.clear()
         self.clear_undo()
-        fn = None
-        if (args.__len__() == 2) :
-            fn = search_path(1, CURRENT_WORK, CATALOGS_DIR, self.catalog_dir)
+        fn = search_path(0, DEFAULT_TEMPLATE, CATALOGS_DIR, self.catalog_dir)
         if fn is None :
-            fn = search_path(1, DEFAULT_TEMPLATE, CATALOGS_DIR, self.catalog_dir)
-        if fn is not None :
+            print (_('No default template saved'))
+        else :
             xml = etree.parse(fn)
             self.treestore_from_xml(xml.getroot())
             self.expand_and_select((0,))

@@ -5,16 +5,16 @@
   <object class="GtkActionGroup" id="actiongroup1">
     <child>
       <object class="GtkAction" id="actionSave">
-        <property name="label" translatable="yes">Save  project</property>
-        <property name="tooltip" translatable="yes">Save as xml file</property>
+        <property name="label" translatable="yes">Save project</property>
+        <property name="tooltip" translatable="yes">Save project as xml file</property>
         <property name="stock_id">gtk-save</property>
         <signal name="activate" handler="menu_save_xml_activate" swapped="no"/>
       </object>
     </child>
     <child>
       <object class="GtkAction" id="actionOpen">
-        <property name="label" translatable="yes">Open  project</property>
-        <property name="tooltip" translatable="yes">Open a saved xml file</property>
+        <property name="label" translatable="yes">Open project</property>
+        <property name="tooltip" translatable="yes">Open a saved project xml file</property>
         <property name="stock_id">gtk-open</property>
         <signal name="activate" handler="menu_open_activate" swapped="no"/>
       </object>
@@ -22,7 +22,7 @@
     <child>
       <object class="GtkAction" id="actionNew">
         <property name="label" translatable="yes">New project</property>
-        <property name="tooltip" translatable="yes">Create a new job</property>
+        <property name="tooltip" translatable="yes">Create a new project</property>
         <property name="stock_id">gtk-new</property>
         <signal name="activate" handler="menu_new_activate" swapped="no"/>
       </object>
