@@ -70,9 +70,9 @@ if find > '' :
         if os.path.isfile(sd) :
             os.remove(sd)
             print 'removed path2ncam file'
-        if not cls :
-            open(sd, "w").write(os.getcwd())
-            print 'created path2ncam file'
+#        if not cls :
+#            open(sd, "w").write(os.getcwd())
+#            print 'created path2ncam file'
 
 else :
     print 'Directory of "hal_pythonplugin.py" not found - EXITING'

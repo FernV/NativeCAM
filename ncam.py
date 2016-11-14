@@ -49,11 +49,20 @@ try :
     import linuxcnc
     SYS_DIR = linuxcnc.SHARE + '/ncam'
     if not os.path.isdir(SYS_DIR) :
-        sd = os.path.join(os.path.dirname(__file__), "path2ncam")
-        if os.path.isfile(sd) :
-            SYS_DIR = open(sd).read()
-        else :
-            SYS_DIR = os.path.dirname(os.path.realpath(__file__))
+        SYS_DIR = os.path.dirname(os.path.realpath(__file__))
+        if os.path.isdir(SYS_DIR + '/catalogs') :
+            find = os.popen("find /home -name 'ncam.py'").read()
+            print 'found ncam.py file(s) =', find
+            if find > '' :
+                if find.count('\n') > 1 :
+                    print 'too many versions of ncam.py in /home sub-directories'
+                    print 'delete or rename keeping only the right one'
+                    sys.exit(-2)
+                SYS_DIR = find.rstrip('\n')
+
+            else :
+                print 'ncam.py not found in /home sub-directories'
+                sys.exit(-1)
 except :
     # linuxCNC not installed, must be my Windows pc for development and debugging
     SYS_DIR = os.path.dirname(os.path.realpath(__file__))
