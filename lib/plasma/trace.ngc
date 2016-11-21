@@ -20,6 +20,5 @@ o<trace> sub
 		#<_cut_current_y> = #[#<pointer> + 1]
 		#<pointer> = [#<pointer> + 8]
 	o<loop01> endwhile
-	o<exit> CALL [#1] [#<counter> - 1] [#2]
 	M5
 o<trace> endsub

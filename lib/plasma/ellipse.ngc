@@ -34,17 +34,17 @@ o<ellipse> sub
 	G10 L2 P#5220 X[#<_rotated_x>] Y[#<_rotated_y>] Z#<_offsets_z> R[#<_offsets_r> + #<rotation>]
 
 	o<ellipse_create> CALL [#<_mill_data_start>] [#<xr>] [#<yr>] [#<dir>] [#<segments>]
-	o<entry> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>]
+	o<lead-in> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>]
 	o<trace> CALL [#<_mill_data_start>] [-3]
 
 (draw reference lines)
 	/o<preview> if [#<_show_final_cuts> AND #<preview>]
 		/o<ellipse_create> CALL [#<_mill_data_start>] [#<xr>] [#<yr>] [#<dir>] [15]
 		/o<pv_b> if [#<_show_bottom_cut>]
-			/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<bottom>]
+			/o<lead-in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<bottom>]
 			/o<trace> CALL [#<_mill_data_start>]
 		/o<pv_b> endif
-		/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<surface>]
+		/o<lead-in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<surface>]
 		/o<trace> CALL [#<_mill_data_start>]
 	/o<preview> endif
 
