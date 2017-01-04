@@ -1,0 +1,12 @@
+nativecam (0:0.0.9) UNRELEASED; urgency=medium
+
+  * v9 test
+  * note: this change log needs to be maintained for each release version
+
+ -- Dewey Garrett <dgarrett@panix.com>  Fri, 13 Jan 2017 07:00:25 -0700
+
+nativecam (0:0.0.0) UNRELEASED; urgency=medium
+
+  * initial: deb package for nativecam
+
+ -- Dewey Garrett <dgarrett@panix.com>  Wed, 04 Jan 2017 10:00:00 -0700

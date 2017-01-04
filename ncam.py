@@ -47,25 +47,15 @@ import locale
 
 try :
     import linuxcnc
-    SYS_DIR = linuxcnc.SHARE + '/ncam'
-    if not os.path.isdir(SYS_DIR) :
-        SYS_DIR = os.path.dirname(os.path.realpath(__file__))
-        if not os.path.isdir(SYS_DIR + '/catalogs') :
-            find = os.popen("find /home -name 'ncam.py'").read()
-            print 'found ncam.py file(s) =', find
-            if find > '' :
-                if find.count('\n') > 1 :
-                    print 'too many versions of ncam.py in /home sub-directories'
-                    print 'delete or rename keeping only the right one'
-                    sys.exit(-2)
-                SYS_DIR = find.rstrip('\n')
-
-            else :
-                print 'ncam.py not found in /home sub-directories'
-                sys.exit(-1)
-except :
-    # linuxCNC not installed, must be my Windows pc for development and debugging
+    #--------------------------------------------------------
+    # SYS_DIR is located from __file__ for two use cases:
+    # 1) from a deb (typically: /usr/share/NativeCAM/ncam.py)
+    # 2) local git  (typically: git_root/NativeCAM/ncam.py)
     SYS_DIR = os.path.dirname(os.path.realpath(__file__))
+    #--------------------------------------------------------
+except Exception, detail :
+    print ('\n\nFAIL\n%(detail)s\n\n' %  {'detail':detail})
+    sys.exit(1)
 
 locale.setlocale(locale.LC_NUMERIC, '')
 localeDICT = {}
@@ -2154,6 +2144,18 @@ Notes:
             if val is not None :
                 self.pref.has_Z_axis = val.find('Z') > -1
 
+        fromdirs = [CATALOGS_DIR, CFG_DIR, LIB_DIR,
+                    GRAPHICS_DIR, XML_DIR]
+        if ini is None :
+            NCAM_DIR = os.getcwd()
+            self.ask_to_create_standalone(fromdirs)
+
+        # first use:copy, subsequent: update
+        if SYS_DIR != NCAM_DIR :
+            self.update_user_tree(fromdirs, NCAM_DIR)
+        if ini is not None:
+            require_ncam_lib(inifilename, ini_instance)
+
         print ""
         print "NativeCAM info:"
         print "    inifile =", inifilename
@@ -2162,18 +2164,6 @@ Notes:
         print "    program =", __file__
         print "  real path =", os.path.realpath(__file__)
         print ""
-
-        fromdirs = [CATALOGS_DIR, CFG_DIR, LIB_DIR,
-                    GRAPHICS_DIR, XML_DIR]
-
-        if ini is None :
-            self.ask_to_create_standalone(fromdirs)
-
-        # first use:copy, subsequent: update
-        if ini is not None :
-            if SYS_DIR != NCAM_DIR :
-                self.update_user_tree(fromdirs, NCAM_DIR)
-            require_ncam_lib(inifilename, ini_instance)
 
         self.tools.load_table()
         self.LinuxCNC_connected = False
