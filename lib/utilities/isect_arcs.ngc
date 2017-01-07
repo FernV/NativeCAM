@@ -45,8 +45,12 @@ o<isect_arcs> sub
 
 		#<v1>      = [#3 * #3 + #<len_3> * #<len_3> - #6 * #6]
 		#<v2>      = [2 * #3 * #<len_3>]
-		#<angle_1> = ACOS[#<v1> / #<v2>]
-
+		o12 if [[#<v1> GT 0] AND [#<v2> GT 0]]
+			#<angle_1> = ACOS[#<v1> / #<v2>]
+		o12 else
+			#<angle_1> = 0
+		o12 endif
+		
 		o<rotate_xy> CALL [#1 + #3] [#2] [#1] [#2] [#<phi_3> - #<angle_1>] [0]
 		#<x1>   = #<_rotated_x>
 		#<y1>   = #<_rotated_y>

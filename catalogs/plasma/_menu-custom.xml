@@ -38,9 +38,9 @@
         <sub name='Radial Array' tool_tip='Define diameter or distance between groups' icon="circ-array-diam.png" src="circular-array.cfg"/>
         <sub name='Rectangular Array' tool_tip='Array of rows and columns' icon="rect-array.png" src="rectangular-array.cfg"/>
     </group>
-    <sub name='Cutting Params' tool_tip='Set cutting parameters' icon="tool-change.png" src="plasma/cutting-params2d.cfg"/>
+    <sub name='Cutting Params' tool_tip='Set cutting parameters' icon="tool-change.png" src="plasma/cutting-params3d.cfg"/>
     <group name='Miscellaneous' icon='misc.png'>
-        <sub name='Raw Material' tool_tip='Show a temporary image of rough material' icon="rect.png" src="plasma/material2d.cfg"/>
+        <sub name='Raw Material' tool_tip='Show a temporary image of rough material' icon="rect.png" src="plasma/material3d.cfg"/>
         <sub name='Custom G Code' tool_tip='Write custom gcode' icon="gcode.png" src="gcode.cfg"/>
         <sub name='Insert a G Code file' tool_tip='Include a custom gcode file' icon="gcode.png" src="i_gcode.cfg"/>
 		<sub name='Comment' tool_tip='Add comments' icon="gcode.png" src="comment.cfg"/>

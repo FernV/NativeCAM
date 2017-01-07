@@ -9,8 +9,6 @@ o<optimize> sub
 		o<optimize> return
 	o1 endif
 	
-	#<src>          = #1
-	
 	o16 if [#2 LE 1] (inside or pocket)
 		o17 if [#3 EQ 2]
 			#<comp> = 42
@@ -29,27 +27,36 @@ o<optimize> sub
 		o18 endif
 	o16 endif
 
-	#<rec_count>    = #[#1]
-	#<dest>         = [#1 + #<rec_count> * 11] (work destination; 11 = length of record to optimize)
+	#<src>       = #1
+	#<src_count> = #[#1]
+	#<dest>      = [#1 + #<src_count> * 8] (work destination; 8 = length of record)
+	#[#<dest>]   = 0
+	#<counter>   = 0 (loop counter)
 
-	#<tool_radius> = [#5410 / 2]
-
-	#<rec_counter>  = 0 (loop counter)
-	#<opt_counter>  = 0 (optimized record counter)
-
-	#<ramp_down_len> = [#5410 / #<_ramp_down_ratio>] 
+	#<tool_radius>   = [#5410 / 2]
+	#<ramp_down_len> = [#5410 / #<_ramp_down_ratio> * #<_depth_step>]
 	
 	o<get_min> CALL [42] [2] [#4] [#5410]
-;	#<step_ovr> = [#<_depth_step> / #<_ramp_down_ratio>]
-	#<sto_factor> = [#42 / #5410]
+	#<step_ovr>  = #4; [#<_depth_step> / #<_ramp_down_ratio>]
+	#<so_factor> = [#42 / #5410]
 	
-	
-;	(print,)
-;	(print,rec count = #<rec_count>)
-;	(print,ramp_down_len = #<ramp_down_len>  sto_factor = #<sto_factor>  step_ovr = #<step_ovr>  tool_rad = #<tool_radius>)
+	(print,)
+	(print,src count = #<src_count>)
+	(print,ramp_down_len = #<ramp_down_len>  so_factor = #<so_factor>  step_ovr = #<step_ovr>  tool_rad = #<tool_radius>)
+o<optimize> return
 
-	o10 while [0]; [#<src_counter> LE #<count>]
+	#<from_x> = 0
+	#<from_y> = 0
+	o10 while [#<counter> LE #<src_count>]
 		(optimizing)
+		#<to_x> = 1
+		#<to_y> = 0
+		#<to_dir> = 1
+		#<cx> = 0
+		#<cy> = 0
+		
+		
+		
 		o11 if [cur dir EQ 1]
 			o110 if [to_dir EQ 1]
 
@@ -68,16 +75,18 @@ o<optimize> sub
 		o11 endif
 
 		(copy to dest)
-
+		o<add_mill_data> CALL [#<dest>] [x2] [y3] [dir4] [c_x5] [cy6] [length7] [feed8] [speed9]
 
 		(add to counter)
 		#<src_counter> = [#<src_counter> + 1]
 	o10 endwhile
 
-	#<count> = 0
+	
 	(copy back to src)
-	o50 while [0];[#<count> LE #<opt_counter>]
-
+	#<count> = 0
+	#<opt_counter> = #[#<dest>]
+	o50 while [#<count> LE #<opt_counter>]
+;		o<add_mill_data> CALL [#<src>]
 
 		#<count> = [#<count> + 1]
 	o50 endwhile

@@ -44,8 +44,8 @@ o<angle> sub
 			(print,)
 		o10 endif
 		(print,summary :)
-		(print,  lines phi   = #<_angle_phi> deg)
-		(print,  angle       = #<_angle_angle>)
-		(print,  bisector at   #<_angle_bisector> deg)
+		(print,  _angle_phi      = #<_angle_phi> °)
+		(print,  _angle_angle    = #<_angle_angle> °  180 maximum)
+		(print,  _angle_bisector = #<_angle_bisector> ° absolute)
 	o<debug01> endif
 o<angle> endsub

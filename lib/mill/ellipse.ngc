@@ -90,7 +90,7 @@ o<ellipse> sub
 			#<step_over>   = [[#38 - #<start_radius>] / #<exp_cycles>]
 			
 			#<t> = [#<step_over> / #5410 * 100]
-			(print,ellipse stepover = #<t> %)
+			(print,ellipse pocket stepover = #<t> %)
 
 			(calc data and mill)
 			#<_cut_current_z> = #<cut_start>
@@ -124,7 +124,7 @@ o<ellipse> sub
 					o<ellipse_create> CALL [#<_mill_data_start>] [#<x_r>] [#<y_r>] [#<dir>] [#<l_seg>]
 					o12 if [#<exp_cycle> EQ 0]
 						o<set_feed_rate_and_speed> CALL [1.0]
-						o<entry> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<_cut_current_z>] [-1]
+						o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<_cut_current_z>] [-1]
 						o<set_next_cut_level> CALL [#<cut_depth>]
 					o12 else
 						o<g123> CALL [0] [#<_cut_current_y> + #<min_move>] [#<dir>] [0] [#<min_move> / 2] [0] [0] [0]; [1]
@@ -145,7 +145,7 @@ o<ellipse> sub
 		o<if_pocket> else
 			o<ellipse_create> CALL [#<_mill_data_start>] [#<x_rad>] [#<y_rad>] [#<dir>] [#<segments>]
 			o<set_feed_rate_and_speed> CALL [1]
-			o<entry> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>] [-1]
+			o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>] [-1]
 
 			o<wh010> while [#<_depth_reached> NE 0]
 				o<set_next_cut_level> CALL [#<cut_depth>]
@@ -159,7 +159,7 @@ o<ellipse> sub
 	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<ellipse_create> CALL [#<_mill_data_start>] [#<xr>] [#<yr>] [#<fin_dir>] [#<segments>]
 		o<set_feed_rate_and_speed> CALL [#41 * #5410]
-		o<entry> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-3] ;?
+		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-3] ;?
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>]
 			o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [3] (will force an arc to clear workpiece when completed)
@@ -171,10 +171,10 @@ o<ellipse> sub
 	/o<preview> if [#<_show_final_cuts> AND #<preview> AND [#<_tool_usage> LE 2]]
 		/o<ellipse_create> CALL [#<_mill_data_start>] [#<xr>] [#<yr>] [#<dir>] [15]
 		/o<pv_b> if [#<_show_bottom_cut>]
-			/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_depth>]
+			/o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_depth>]
 			/o<trace> CALL [#<_mill_data_start>] [#<cut_depth>]
 		/o<pv_b> endif
-		/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_start>]
+		/o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_start>]
 		/o<trace> CALL [#<_mill_data_start>] [#<cut_start>]
 	/o<preview> endif
 

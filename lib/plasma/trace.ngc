@@ -1,14 +1,14 @@
 o<trace> sub
 (author : Fernand Veilleux)
-(#1 is where data starts)
-(#2 is exit mode)
+(#1 is where data starts, #2 is dir, #3 is cut_opt, #4 is cut_start)
 (for data offsets, view add_cut_data.ngc)
 
-	#<pointer>   = [#1 + 1] (sequence pointer)
+	o<lead_in> CALL [#1] [#2] [#3] [#4]
+	
+	#<pointer>   = [#1 + 1] (item pointer)
 	#<rec_count> = #[#1] (record count)
 
 	#<counter> = 0
-	M3 S1000
 	o<loop01> while [#<counter> LT #<rec_count>]
 		#<counter> = [#<counter> + 1]
 		o10 if [#[#<pointer> + 2] EQ 1]
@@ -20,5 +20,7 @@ o<trace> sub
 		#<_cut_current_y> = #[#<pointer> + 1]
 		#<pointer> = [#<pointer> + 8]
 	o<loop01> endwhile
+	
+	o<lead_out> CALL [#1]
 	M5
 o<trace> endsub

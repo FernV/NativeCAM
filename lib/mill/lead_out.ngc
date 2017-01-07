@@ -1,6 +1,6 @@
 (will find exit point to avoid gouging or/and move away from the edge)
 (author : Fernand Veilleux)
-o<exit> sub
+o<lead_out> sub
 (CALL #1 = data ptr, #2 = rec_no, #3 = exit mode)
 (exit mode : -3 = exit at end force arc, -2 = exit at end w/ arc if possible, -1 = exit at end w/o arc)
 (      1 = exit before end w/o arc, 2 = exit before end w/ arc if possible, 3 = exit before end force arc)
@@ -8,13 +8,13 @@ o<exit> sub
 	#<debug> = 0
 	
 	o17 if [#<_ccomp> LT 410]
-		o<exit> return
+		o<lead_out> return
 	o17 endif
 
 	o15 if [#5410 EQ 0]
 		(print,)
 		(print,"exit" subroutine not executed : no tool selected or diameter not defined in tool table)
-		o<exit> return
+		o<lead_out> return
 	o15 endif
 	
 	#<cur>      = [#1 + #2 * 8 + 1] (ptr to line/arc just traced)
@@ -27,7 +27,7 @@ o<exit> sub
 	#<to_dir>   = #[#<nxt> + 2]
 
 	o16 if [#<to_dir> EQ 0] (last item dir 0 is not closed)
-		o<exit> return
+		o<lead_out> return
 	o16 endif
 
 	#<exit_mode> = ABS[#3]
@@ -257,4 +257,4 @@ o<exit> sub
 		o<dbg01> endif
 	o21 endif
 	
-o<exit> endsub
+o<lead_out> endsub

@@ -21,7 +21,7 @@ o<trace> sub
 		o<exit01> if [#3 GT 0]
 			o<if04> if [#<_depth_reached> EQ #<counter>]
 				#<_depth_reached> = 0
-				o<exit> CALL [#1] [#<counter> - 1] [#3]
+				o<lead_out> CALL [#1] [#<counter> - 1] [#3]
 				o<trace> return
 				
 			o<if04> elseif [[#<_depth_reached> EQ -1] AND [#<_cut_current_z> LE #2]]
@@ -35,6 +35,6 @@ o<trace> sub
 	o<loop01> endwhile
 
 	o<if02> if [[#<_depth_reached> EQ 0.0] AND [#3 LT 0]]
-		o<exit> CALL [#1] [#<counter> - 1] [#3]
+		o<lead_out> CALL [#1] [#<counter> - 1] [#3]
 	o<if02> endif
 o<trace> endsub

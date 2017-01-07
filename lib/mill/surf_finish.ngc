@@ -126,7 +126,7 @@ o<surf_finish> sub (CALL [left] [right] [front] [rear]  [dir] [mode] [start] [de
 		(add entry point)
 		o<add_mill_data> CALL [#<_mill_data_start>] [#<entry_x>] [#<entry_y>] [0]
 		
-		o<entry> CALL [#<_mill_data_start>] [2] [40] [#<cut_start>]
+		o<lead_in> CALL [#<_mill_data_start>] [2] [40] [#<cut_start>]
 		o<set_next_cut_level> CALL [#<cut_depth>]
 		G1 Z#<_cut_loop_final_z> F#<_feed_vertical>
 		F#<_selected_feed>
@@ -151,7 +151,7 @@ o<surf_finish> sub (CALL [left] [right] [front] [rear]  [dir] [mode] [start] [de
 				o<add_mill_data> CALL [#<_mill_data_start>] [#<xb>] [#<yb>] [0]
 			o04 endif
 
-			o<entry> CALL [#<_mill_data_start>] [2] [40] [#<cut_start>]
+			o<lead_in> CALL [#<_mill_data_start>] [2] [40] [#<cut_start>]
 			o<set_next_cut_level> CALL [#<cut_depth>]
 			G1 Z#<_cut_loop_final_z> F#<_feed_vertical>
 			F#<_selected_feed>

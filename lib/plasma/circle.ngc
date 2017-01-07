@@ -36,27 +36,34 @@ o<circle> sub
 	(calc new offsets and change coords system)
 	G#<_off_rot_coord_system>
 	o<rotate_xy> CALL [#<_offsets_x> + #<cx>] [#<_offsets_y> + #<cy>] [#<_offsets_x>] [#<_offsets_y>] [#<_offsets_r>]
-	G10 L2 P#5220 X#<_rotated_x> Y#<_rotated_y> Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
+	o13 if [#<_has_z_axis>]
+		G10 L2 P#5220 X#<_rotated_x> Y#<_rotated_y> Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
+	o13 else
+		G10 L2 P#5220 X#<_rotated_x> Y#<_rotated_y> R[#<_offsets_r> + #<rot>]
+	o13 endif
 
 	o<circle_create> CALL [#<_mill_data_start>] [#<final_rad>] [#<flat>] [#<dir>]
-	o<lead-in> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>]
-	o<trace> CALL [#<_mill_data_start>] [-1]
+	o<trace> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>]
 
 (draw reference lines)
 	/o<preview> if [#<_show_final_cuts> AND #<preview>]
-		/o<pv_b> if [#<_show_bottom_cut>]
-			/o<lead-in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<bottom>]
-			/o<trace> CALL [#<_mill_data_start>]
+		/o<pv_b> if [#<_has_Z_axis> AND #<_show_bottom_cut>]
+			/o<trace> CALL [#<_mill_data_start>] [#<dir>] [2] [#<bottom>]
 		/o<pv_b> endif
-		/o<lead-in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<surface>]
-		/o<trace> CALL [#<_mill_data_start>]
+		/o<trace> CALL [#<_mill_data_start>] [#<dir>] [2] [#<surface>]
 	/o<preview> endif
 
 (exit)
-	G0 Z#<_z_clear>
+	o12 if [#<_has_Z_axis>]
+		G0 Z#<_z_clear>
+	o12 endif
 	G40
 
 (restore coordinate system)
 	G#<old_coord_system>
-	G10 L2 P#5220 X#<saved_offset_x> Y#<saved_offset_y> Z#<saved_offset_z> R#<saved_offset_r>
+	o14 if [#<_has_z_axis>]
+		G10 L2 P#5220 X#<saved_offset_x> Y#<saved_offset_y> Z#<saved_offset_z> R#<saved_offset_r>
+	o14 else
+		G10 L2 P#5220 X#<saved_offset_x> Y#<saved_offset_y> R#<saved_offset_r>
+	o14 endif
 o<circle> endsub

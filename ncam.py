@@ -1343,12 +1343,12 @@ class Feature():
 
     def get_short_id(self):
         global UNIQUE_ID
-        id = self.attr['short_id'] if 'short_id' in self.attr else None
-        if id is None :
-            id = str(UNIQUE_ID)
-            self.attr["short_id"] = id
+        f_id = self.attr['short_id'] if 'short_id' in self.attr else None
+        if f_id is None :
+            f_id = str(UNIQUE_ID)
+            self.attr["short_id"] = f_id
             UNIQUE_ID += 1
-        return id
+        return f_id
 
     def get_definitions(self) :
         global DEFINITIONS
@@ -1464,12 +1464,12 @@ class Feature():
         s = re.sub(r"(?ims)(<subprocess>(.*?)</subprocess>)",
                    subprocess_callback, s)
 
-        id = self.get_attr("id")
-        s = re.sub(r"#self_id", "%s" % id, s)
+        f_id = self.get_attr("id")
+        s = re.sub(r"#self_id", "%s" % f_id, s)
 
         if s.find("#ID") > -1 :
-            id = self.get_short_id()
-            s = re.sub(r"#ID", "%s" % id, s)
+            f_id = self.get_short_id()
+            s = re.sub(r"#ID", "%s" % f_id, s)
 
         s = s.lstrip('\n').rstrip('\n\t')
         if s == '' :
@@ -1500,6 +1500,7 @@ class Preferences():
         self.cfg_file = None
         self.ngc_init_str = None
         self.cat_name = None
+        self.has_Z_axis = True
 
     def read(self, nc_dir, cat_name):
         global default_digits, default_metric, add_menu_icon_size, \
@@ -1613,6 +1614,8 @@ class Preferences():
         self.opt_sf4 = read_str(config, 'optimizing', 'speedfactor4', '1.00')
         self.opt_sf0 = read_str(config, 'optimizing', 'speedfactor0', '1.00')
 
+        self.plasma_test_mode = read_str(config, 'plasma', 'test_mode', '1')
+
         self.create_defaults()
 
     def save_layout(self):
@@ -1706,6 +1709,9 @@ class Preferences():
         config.set('optimizing', 'speedfactor3', self.opt_sf3)
         config.set('optimizing', 'speedfactor4', self.opt_sf4)
         config.set('optimizing', 'speedfactor0', self.opt_sf0)
+
+        config.add_section('plasma')
+        config.set('plasma', 'test_mode', self.plasma_test_mode)
 
         with open(self.pref_file, 'wb') as configfile:
             config.write(configfile)
@@ -1843,6 +1849,9 @@ class Preferences():
         self.adj_opt_sf0 = builder.get_object("adj_opt_sf0")
         self.adj_opt_sf0.set_value(get_float(self.opt_sf0))
 
+        self.plasma_tmode_chk = builder.get_object("plasma_tmode_chk")
+        self.plasma_tmode_chk.set_active(self.plasma_test_mode == '1')
+
         builder.get_object("buttonSave").connect('clicked', self.save_click)
         prefdlg.set_transient_for(parent)
         prefdlg.set_keep_above(True)
@@ -1944,6 +1953,8 @@ class Preferences():
         self.opt_sf4 = str(self.adj_opt_sf4.get_value())
         self.opt_sf0 = str(self.adj_opt_sf0.get_value())
 
+        self.plasma_test_mode = '1' if self.plasma_tmode_chk.get_active() else '0'
+
         self.save_layout()
         self.save_defaults()
         self.create_defaults()
@@ -1966,50 +1977,56 @@ class Preferences():
             coord = str(5 + self.ngc_off_rot_coord_system)
         else :
             coord = '9.' + str(self.ngc_off_rot_coord_system - 4)
-        self.default += ("\n\n#<_off_rot_coord_system>   = 5" + coord + "\n\n")
+        self.default += ("\n\n#<_off_rot_coord_system> = 5" + coord + "\n\n")
 
-        self.default += ("#<_show_final_cuts>     = " + self.ngc_show_final_cut + "\n")
-        self.default += ("#<_show_bottom_cut>     = " + self.ngc_show_bottom_cut + "\n\n")
-        self.default += ("#<_units_radius>        = 1  (factor for radius and diameter)\n")
-        self.default += ("#<_units_width>         = 1  (factor for width, height, length)\n")
-        self.default += ("#<_units_cut_depth>     = 1  (factor for depth)\n\n")
-        self.default += ("#<_mill_data_start>     = 70\n\n")
-        self.default += ("#<in_polyline>          = 0\n\n")
+        self.default += ("#<_show_final_cuts>      = " + self.ngc_show_final_cut + "\n")
+        self.default += ("#<_show_bottom_cut>      = " + self.ngc_show_bottom_cut + "\n\n")
+        self.default += ("#<_units_radius>         = 1  (factor for radius and diameter)\n")
+        self.default += ("#<_units_width>          = 1  (factor for width, height, length)\n")
+        self.default += ("#<_units_cut_depth>      = 1  (factor for depth)\n\n")
+        self.default += ("#<_mill_data_start>      = 70\n\n")
+        self.default += ("#<in_polyline>           = 0\n\n")
+        if self.has_Z_axis :
+            self.default += ("#<_has_z_axis>           = 1\n\n")
+        else :
+            self.default += ("#<_has_z_axis>           = 0\n\n")
 
+        self.default += ("#<_probe_func>           = 38." + self.ngc_probe_func + "\n")
+        self.default += ("#<_probe_feed>           = " + self.ngc_probe_feed + "\n")
+        self.default += ("#<_probe_latch>          = " + self.ngc_probe_latch + "\n")
+        self.default += ("#<_probe_latch_feed>     = " + self.ngc_probe_latch_feed + "\n")
+        self.default += ("#<_probe_safe>           = " + self.ngc_probe_safe + "\n")
+        self.default += ("#<_probe_tip_dia>        = " + self.ngc_probe_tip_dia + "\n\n")
+        self.default += ("#<_probe_tool_len_comp>  = " + self.probe_tool_len_comp + "\n")
+        self.default += ("#<_tool_probe_z>         = 0\n\n")
 
         if self.cat_name == 'mill' :
-            self.default += ("#<_spindle_speed_up_delay> = " + self.ngc_spindle_speedup_time + "\n\n")
+            self.default += ("#<_spindle_speed_up_delay>  = " + self.ngc_spindle_speedup_time + "\n\n")
 
-            self.default += ("#<_probe_func>          = 38." + self.ngc_probe_func + "\n")
-            self.default += ("#<_probe_feed>          = " + self.ngc_probe_feed + "\n")
-            self.default += ("#<_probe_latch>         = " + self.ngc_probe_latch + "\n")
-            self.default += ("#<_probe_latch_feed>    = " + self.ngc_probe_latch_feed + "\n")
-            self.default += ("#<_probe_safe>          = " + self.ngc_probe_safe + "\n")
-            self.default += ("#<_probe_tip_dia>       = " + self.ngc_probe_tip_dia + "\n\n")
+            self.default += ("#<center_drill_depth>    = " + self.drill_center_depth + "\n\n")
 
-            self.default += ("#<_probe_tool_len_comp> = " + self.probe_tool_len_comp + "\n")
-            self.default += ("#<_tool_probe_z>        = 0\n\n")
-
-            self.default += ("#<center_drill_depth>   = " + self.drill_center_depth + "\n\n")
-
-            self.default += ("#<_pocket_expand_mode>  = " + self.pocket_mode + "\n\n")
+            self.default += ("#<_pocket_expand_mode>   = " + self.pocket_mode + "\n\n")
 
             self.default += ("(optimization values)\n")
-            self.default += ("#<_tool_eng1>           = " + self.opt_eng1 + "\n")
-            self.default += ("#<_tool_eng2>           = " + self.opt_eng2 + "\n")
-            self.default += ("#<_tool_eng3>           = " + self.opt_eng3 + "\n\n")
+            self.default += ("#<_tool_eng1>            = " + self.opt_eng1 + "\n")
+            self.default += ("#<_tool_eng2>            = " + self.opt_eng2 + "\n")
+            self.default += ("#<_tool_eng3>            = " + self.opt_eng3 + "\n\n")
 
-            self.default += ("#<_feedfactor1>         = " + self.opt_ff1 + "\n")
-            self.default += ("#<_feedfactor2>         = " + self.opt_ff2 + "\n")
-            self.default += ("#<_feedfactor3>         = " + self.opt_ff3 + "\n")
-            self.default += ("#<_feedfactor4>         = " + self.opt_ff4 + "\n")
-            self.default += ("#<_feedfactor0>         = " + self.opt_ff0 + "\n\n")
+            self.default += ("#<_feedfactor1>          = " + self.opt_ff1 + "\n")
+            self.default += ("#<_feedfactor2>          = " + self.opt_ff2 + "\n")
+            self.default += ("#<_feedfactor3>          = " + self.opt_ff3 + "\n")
+            self.default += ("#<_feedfactor4>          = " + self.opt_ff4 + "\n")
+            self.default += ("#<_feedfactor0>          = " + self.opt_ff0 + "\n\n")
 
-            self.default += ("#<_speedfactor1>        = " + self.opt_sf1 + "\n")
-            self.default += ("#<_speedfactor2>        = " + self.opt_sf2 + "\n")
-            self.default += ("#<_speedfactor3>        = " + self.opt_sf3 + "\n")
-            self.default += ("#<_speedfactor4>        = " + self.opt_sf4 + "\n")
-            self.default += ("#<_speedfactor0>        = " + self.opt_sf0 + "\n\n")
+            self.default += ("#<_speedfactor1>         = " + self.opt_sf1 + "\n")
+            self.default += ("#<_speedfactor2>         = " + self.opt_sf2 + "\n")
+            self.default += ("#<_speedfactor3>         = " + self.opt_sf3 + "\n")
+            self.default += ("#<_speedfactor4>         = " + self.opt_sf4 + "\n")
+            self.default += ("#<_speedfactor0>         = " + self.opt_sf0 + "\n\n")
+
+        if self.cat_name == 'plasma' :
+            self.default += ("#<_plasma_test_mode>     = " + self.plasma_test_mode + "\n\n")
+
 
         self.default += ("(end defaults)\n\n")
 
@@ -2054,7 +2071,7 @@ Notes:
         # U needed for embedded
         # c also needed
 
-        opt, optl = 'U:h:i:t:c:d:x', ["help", "catalog=", "ini="]
+        opt, optl = 'U:h:i:c:d:x', ["help", "catalog=", "ini="]
         optlist, args = getopt.getopt(sys.argv[1:], opt, optl)
         optlist = dict(optlist)
 
@@ -2070,8 +2087,6 @@ Notes:
             import platform
             if platform.system() != 'Windows' :
                 SYS_DIR = os.path.expanduser('~/linuxcnc-dev/share/ncam')
-
-        do_translation = "-t" in optlist
 
         self.editor = DEFAULT_EDITOR
         self.pref = Preferences()
@@ -2134,6 +2149,10 @@ Notes:
             if val is not None :
                 self.editor = val
 
+            val = ini_instance.find('TRAJ', 'COORDINATES')
+            if val is not None :
+                self.pref.has_Z_axis = val.find('Z') > -1
+
         print ""
         print "NativeCAM info:"
         print "    inifile =", inifilename
@@ -2193,12 +2212,6 @@ Notes:
             raise IOError(_("Expected file not found : ncam.glade"))
 
         self.pref.read(NCAM_DIR + '/' + CATALOGS_DIR, self.catalog_dir)
-
-        if do_translation :
-            # do after self.pref.read()
-            # get translations and exit
-            self.get_translations()
-            sys.exit(0)
 
         self.get_widgets()
 
@@ -3105,109 +3118,6 @@ Notes:
         self.add_iconview = self.builder.get_object("add_iconview")
         self.hint_label = self.builder.get_object("hint_label")
 
-    def get_translations(self, callback = None) :
-
-        def get_menu_strings(path, f_name, trslatbl):
-            for ptr in range(len(path)) :
-                p = path[ptr]
-                if p.tag.lower() == "group":
-                    name = p.get("name") if "name" in p.keys() else None
-                    if name is not None :
-                        trslatbl.append((f_name, name))
-
-                    tooltip = p.get('tool_tip') if "tool_tip" in p.keys() else None
-                    if (tooltip is not None) and (tooltip != '') :
-                        trslatbl.append((f_name, tooltip))
-
-                    get_menu_strings(p, f_name, trslatbl)
-
-                elif p.tag.lower() == "sub":
-                    name = p.get("name") if "name" in p.keys() else None
-                    if name is not None :
-                        trslatbl.append((f_name, name))
-
-                    tooltip = p.get('tool_tip') if "tool_tip" in p.keys() else None
-                    if (tooltip is not None) and (tooltip != '') :
-                        trslatbl.append((f_name, tooltip))
-
-        def get_strings():
-            os.popen("xgettext --language=Python ./ncam.py -o ./ncam.po")
-            os.popen("xgettext --language=Glade ./ncam.glade ./ncam_pref.glade -o ./glade.po")
-            os.popen("sed --in-place ./*.po --expression=s/charset=CHARSET/charset=UTF-8/")
-            os.popen("msgcat ./ncam.po ./glade.po -o ./locale/ncam.tmp_po")
-            os.popen("rm ./ncam.po ./glade.po")
-
-            # catalogs
-            find = os.popen("find ./%s -name 'menu.xml'" % CATALOGS_DIR).read()
-            for s in find.split() :
-                translatable = []
-                d, splitname = os.path.split(s)
-                fname = s.lstrip('./')
-                destname = './locale/' + splitname
-
-                xml = etree.parse(s).getroot()
-                get_menu_strings(xml, fname, translatable)
-
-                out = []
-                for i in translatable :
-                    out.append("#: %s" % i[0])
-                    out.append(_("%s") % repr(i[1]))
-
-                out = "\n".join(out)
-                open(destname, "w").write(out)
-                translatable = []
-                os.popen("xgettext --language=Python --from-code=UTF-8 %s -o %s" % (destname, destname))
-                os.popen("sed --in-place %s --expression=s/charset=CHARSET/charset=UTF-8/" % destname)
-                os.popen("msgcat %s ./locale/ncam.tmp_po -o ./locale/ncam.tmp_po" % destname)
-                os.popen("rm %s" % destname)
-
-            # cfg files
-            find = os.popen("find ./%s -name '*.cfg'" % CFG_DIR).read()
-            print find
-            for s in find.split() :
-                translatable = []
-                d, splitname = os.path.split(s)
-                fname = s
-                destname = './locale/' + splitname
-                f = Feature(src = s)
-                for i in ["name", "help"] :
-                    if i in f.attr :
-                        translatable.append((fname, f.attr[i]))
-
-                for p in f.param :
-                    for i in ["name", "help", "tool_tip", "options"] :
-                        if i in p.attr :
-                            translatable.append((fname, p.attr[i]))
-
-                out = []
-                for i in translatable :
-                    out.append("#: %s" % i[0])
-                    out.append(_("%s") % repr(i[1]))
-
-                out = "\n".join(out)
-                open(destname, "w").write(out)
-
-            cmd_line = "find ./locale/ -name '*.cfg'"
-            find = os.popen(cmd_line).read()
-            for s in find.split() :
-                os.popen("xgettext --language=Python --from-code=UTF-8 %s -o %s" % (s, s))
-                os.popen("sed --in-place %s --expression=s/charset=CHARSET/charset=UTF-8/" % s)
-                os.popen("msgcat ./locale/ncam.tmp_po %s -o ./locale/ncam.tmp_po" % s)
-                os.popen("rm %s" % s)
-
-            if os.path.exists("./locale/ncam.po") :
-                os.popen("msgcat ./locale/ncam.tmp_po ./locale/ncam.po -o ./locale/ncam.po")
-                os.remove("./locale/ncam.tmp_po")
-            else :
-                os.rename("./locale/ncam.tmp_po", "./locale/ncam.po")
-
-        try :
-            get_strings()
-            mess_dlg('Done !\nFile : ./locale/ncam.po')
-        except Exception, detail :
-            mess_dlg('Error while getting data for translation :\n\n%(detail)s' % \
-                       {'detail':detail})
-
     def move(self, i) :
         itr = self.master_filter.convert_iter_to_child_iter(self.selected_feature_itr)
         if (i > 0) :
@@ -3943,7 +3853,10 @@ Notes:
 
         if xml_ is not None :
             xml = self.treestore_to_xml()
-            if self.iter_selected_type == tv_select.items :
+            if self.iter_selected_type == tv_select.none :
+                opt = 0
+                next_path = None
+            elif self.iter_selected_type == tv_select.items :
                 # will append to items
                 dest = xml.find(".//*[@path='%s']/param[@type='items']" %
                                 self.items_ts_parent_s)
@@ -3959,9 +3872,6 @@ Notes:
                 l_path = len(self.selected_feature_path)
                 next_path = (self.selected_feature_path[0:l_path - 1] + \
                         (self.selected_feature_path[l_path - 1] + 1,))
-            else :  # None selected
-                opt = 0
-                next_path = self.items_lpath
 
             for x in xml_ :
                 if opt == 1 :
@@ -4029,7 +3939,7 @@ Notes:
                             time.sleep(gmoccapy_time_out)
                             linuxCNC.mode(linuxcnc.MODE_AUTO)
                             linuxCNC.program_open(fname)
-                            time.sleep(1)
+                            time.sleep(0.05)
                         except :
                             self.LinuxCNC_connected = False
             except :
@@ -4365,6 +4275,7 @@ Notes:
                 print('Error in treestore_to_xml\n%(err_details)s' % {'err_details':detail})
                 mess_dlg('Error in treestore_to_xml\n%(err_details)s' % {'err_details':detail})
         else :
+            self.iter_selected_type = tv_select.none
             return xml
 
     def set_expand(self) :

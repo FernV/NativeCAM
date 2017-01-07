@@ -16,34 +16,41 @@ o<poly_cut> sub
 	(get and save current coords system offsets)
 	#<old_coord_system> = [#<_coord_system> / 10]
 	o<get_offsets> CALL
-	#<offset_x> = #<_offsets_x>
-	#<offset_y> = #<_offsets_y>
-	#<offset_z> = #<_offsets_z>
-	#<offset_r> = #<_offsets_r>
+	#<saved_offset_x> = #<_offsets_x>
+	#<saved_offset_y> = #<_offsets_y>
+	#<saved_offset_z> = #<_offsets_z>
+	#<saved_offset_r> = #<_offsets_r>
 
 	(change coords system)
 	G#<_off_rot_coord_system>
 
 	(apply to new offsets)
-	G10 L2 P#5220 X[#<offset_x> + #<x>] Y[#<offset_y> + #<y>] Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
+	o13 if [#<_has_z_axis>]
+		G10 L2 P#5220 X#<_rotated_x> Y#<_rotated_y> Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
+	o13 else
+		G10 L2 P#5220 X#<_rotated_x> Y#<_rotated_y> R[#<_offsets_r> + #<rot>]
+	o13 endif
 	
-	o<lead-in> CALL [#<pds>] [0] [#<comp>] [#<cut_start>]
-	o<trace> CALL [#<pds>]
+	o<trace> CALL [#<pds>] [0] [#<comp>] [#<cut_start>]
 
 	/o<if_01> if [#<_show_final_cuts> AND #<show_final>]
-		/o<if_02> if [#<_show_bottom_cut>]
-			/o<lead-in> CALL [#<pds>] [0] [40] [#<bottom>]
-			/o<trace> CALL [#<pds>]
+		/o<if_02> if [#<_has_Z_axis> AND #<_show_bottom_cut>]
+			/o<trace> CALL [#<pds>] [0] [40] [#<bottom>]
 		/o<if_02> endif
-		/o<lead-in> CALL [#<pds>] [0] [40] [#<surface>]
-		/o<trace> CALL [#<pds>]
+		/o<trace> CALL [#<pds>] [0] [40] [#<surface>]
 	/o<if_01> endif
 
-	G0 Z#<_z_clear>
+	o12 if [#<_has_Z_axis>]
+		G0 Z#<_z_clear>
+	o12 endif
 	G40
 
 	(restore coordinate system)
 	G#<old_coord_system>
-	G10 L2 P#5220 X#<offset_x> Y#<offset_y> Z#<offset_z> R#<offset_r>
+	o14 if [#<_has_z_axis>]
+		G10 L2 P#5220 X#<saved_offset_x> Y#<saved_offset_y> Z#<saved_offset_z> R#<saved_offset_r>
+	o14 else
+		G10 L2 P#5220 X#<saved_offset_x> Y#<saved_offset_y> R#<saved_offset_r>
+	o14 endif
 	
 o<poly_cut> endsub

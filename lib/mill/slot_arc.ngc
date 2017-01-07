@@ -80,7 +80,7 @@ o<slot_arc> sub
 			#<exp_cycles> = FUP[[#<rough_width> - #<init_w>] / [#5410 * #<_stepover_normal>] / 2]
 			#<step_over>  = [[#<rough_width> - #<init_w>] / #<exp_cycles>]
 			#<t> = [#<step_over> / #5410 * 100]
-			(print,radial slot stepover = #<t> %)
+			(print,radial slot pocket stepover = #<t> %)
 
 			(calc data)
 			#<exp_cycle> = 0
@@ -95,14 +95,14 @@ o<slot_arc> sub
 			o<while_pocket> while [#<_cut_current_z> GT #<cut_depth>]
 				#<data>     = #<_mill_data_start>
 				o<set_feed_rate_and_speed> CALL [1.0]
-				o<entry> CALL [#<data>] [#<dir>] [#<cut_opt>] [#<_cut_current_z>] [-1]
+				o<lead_in> CALL [#<data>] [#<dir>] [#<cut_opt>] [#<_cut_current_z>] [-1]
 				o<set_next_cut_level> CALL [#<cut_depth>]
 				o<wh010p> while [#<_depth_reached> NE 0]
 					o<trace> CALL [#<data>] [#<_cut_loop_final_z>] [1]
 				o<wh010p> endwhile
 				
 				o<set_feed_rate_and_speed> CALL [#<t> / 100]
-				o<entry> CALL [#<data>] [#<dir>] [#<cut_opt>] [#<_cut_current_z>] [-1]
+				o<lead_in> CALL [#<data>] [#<dir>] [#<cut_opt>] [#<_cut_current_z>] [-1]
 				#<exp_cycle> = 1
 				o<expand_loop> while [#<exp_cycle> LE #<exp_cycles>]
 					#<data>     = [#<data> + #[#<data>] * 8 + 1]
@@ -120,7 +120,7 @@ o<slot_arc> sub
 		o<if_pocket> else
 			o<slot_arc_create> CALL [#<_mill_data_start>] [#<radius>] [#<rough_width>] [#42] [#<dir>] [#<end_style>]
 			o<set_feed_rate_and_speed> CALL [1.0]
-			o<entry> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>] [-1]
+			o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>] [-1]
 			
 			o<wh010> while [#<_depth_reached> NE 0]
 				o<set_next_cut_level> CALL [#<cut_depth>]
@@ -134,7 +134,7 @@ o<slot_arc> sub
 	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<slot_arc_create> CALL [#<_mill_data_start>] [#<radius>] [#<final_w>] [#42] [#<fin_dir>] [#<end_style>]
 		o<set_feed_rate_and_speed> CALL [#41 * #5410]
-		o<entry> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
+		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
 
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>]
@@ -146,10 +146,10 @@ o<slot_arc> sub
 	/o<preview> if [#<_show_final_cuts> AND #<preview> AND [#<_tool_usage> LE 2]]
 		/o<slot_arc_create> CALL [#<_mill_data_start>] [#<radius>] [#<final_w>] [#42] [#<dir>] [#<end_style>]
 		/o<pv_b> if [#<_show_bottom_cut>]
-			/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_depth>]
+			/o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_depth>]
 			/o<trace> CALL [#<_mill_data_start>] [#<cut_depth>]
 		/o<pv_b> endif
-		/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_start>]
+		/o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_start>]
 		/o<trace> CALL [#<_mill_data_start>] [#<cut_start>]
 	/o<preview> endif
 

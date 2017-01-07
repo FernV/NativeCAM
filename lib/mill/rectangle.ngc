@@ -93,7 +93,7 @@ o<rectangle> sub
 			#<step_over>   = [[#<p_height> - #<init_height>] / #<exp_cycles>]
 			
 			#<t> = [#<step_over> / #5410 * 50]
-			(print,rectangle/slot stepover = #<t> %)
+			(print,rectangle/slot pocket stepover = #<t> %)
 
 			(calc data)
 			#<exp_cycle> = 0
@@ -115,14 +115,14 @@ o<rectangle> sub
 				#<data>   = #<_mill_data_start>
 				(rectangle pocket DOES NOT use compensation, opt is 2 here ...)
 				o<set_feed_rate_and_speed> CALL [1.0]
-				o<entry> CALL [#<data>] [#<dir>] [2] [#<_cut_current_z>] [-1]
+				o<lead_in> CALL [#<data>] [#<dir>] [2] [#<_cut_current_z>] [-1]
 				o<set_next_cut_level> CALL [#<cut_depth>]
 				o<wh010p> while [#<_depth_reached> NE 0]
 					o<trace> CALL [#<data>] [#<_cut_loop_final_z>] [1]
 				o<wh010p> endwhile
 
 				o<set_feed_rate_and_speed> CALL [#<t> / 100]
-				o<entry> CALL [#<data>] [#<dir>] [2] [#<_cut_current_z>] [-1]
+				o<lead_in> CALL [#<data>] [#<dir>] [2] [#<_cut_current_z>] [-1]
 				#<exp_cycle> = 1
 				o<expand_loop> while [#<exp_cycle> LE #<exp_cycles>]
 					#<data>    = [#<data> + #[#<data>] * 8 + 1]
@@ -148,7 +148,7 @@ o<rectangle> sub
 		o<if_pocket> else
 			o<rectangle_create> CALL [#<_mill_data_start>] [#<rg_width>] [#<rg_height>] [#<corner_radius>] [#<corner_style>] [#<dir>] [#<width>] [#<height>]
 			o<set_feed_rate_and_speed> CALL [1.0]
-			o<entry> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>] [-1]
+			o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>] [-1]
 			
 			o<wh010> while [#<_depth_reached> NE 0]
 				o<set_next_cut_level> CALL [#<cut_depth>]
@@ -162,7 +162,7 @@ o<rectangle> sub
 	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<rectangle_create> CALL [#<_mill_data_start>] [#<width>] [#<height>] [#<corner_radius>] [#<corner_style>] [#<fin_dir>] [#<width>] [#<height>]
 		o<set_feed_rate_and_speed> CALL [#41 * #5410]
-		o<entry> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
+		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
 
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>]
@@ -178,10 +178,10 @@ o<rectangle> sub
 		/o<pv_1> endif
 		/o<rectangle_create> CALL [#<_mill_data_start>] [#<width>] [#<height>] [#<corner_radius>] [#<corner_style>] [#<dir>] [#<width>] [#<height>]
 		/o<pv_b> if [#<_show_bottom_cut>]
-			/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_depth>]
+			/o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_depth>]
 			/o<trace> CALL [#<_mill_data_start>] [#<cut_depth>]
 		/o<pv_b> endif
-		/o<entry> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_start>]
+		/o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<cut_start>]
 		/o<trace> CALL [#<_mill_data_start>] [#<cut_start>]
 	/o<preview> endif
 
