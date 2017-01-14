@@ -10,7 +10,7 @@ APP_COMMENTS = 'A GUI to help create LinuxCNC NGC files.'
 APP_COPYRIGHT = '''Copyright © 2012 Nick Drobchenko aka Nick from cnc-club.ru
 Copyright © 2016 Fernand Veilleux : fernv at gmail dot com'''
 APP_AUTHORS = ['Fernand Veilleux, maintainer', 'Nick Drobchenko, initiator', 'Meison Kim', 'Alexander Wigen',
-               'Konstantin Navrockiy', 'Mit Zot', 'Dewey Garrett']
+               'Konstantin Navrockiy', 'Mit Zot', 'Dewey Garrett', 'Karl Jacobs', 'orpheus']
 
 APP_VERSION = "2.5"
 
@@ -1721,6 +1721,7 @@ class Preferences():
         self.ncam = ncam
 
         builder = gtk.Builder()
+        builder.set_translation_domain('ncam')
         try :
             builder.add_from_file(os.path.join(SYS_DIR, "ncam_pref.glade"))
         except :

@@ -236,7 +236,7 @@
                 <property name="related_action">actionAdd</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">toolbutton1</property>
+                <property name="label">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -401,7 +401,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">toolbutton</property>
+                <property name="label">toolbutton</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">gtk-zoom-out</property>
               </object>

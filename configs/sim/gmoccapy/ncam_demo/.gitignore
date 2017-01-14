@@ -1,3 +1,5 @@
 /ncam
 *.bak
 *.pref
+*.pos
+*.var

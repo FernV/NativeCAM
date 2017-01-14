@@ -40,9 +40,9 @@ o<optimize> sub
 	#<step_ovr>  = #4; [#<_depth_step> / #<_ramp_down_ratio>]
 	#<so_factor> = [#42 / #5410]
 	
-	(print,)
-	(print,src count = #<src_count>)
-	(print,ramp_down_len = #<ramp_down_len>  so_factor = #<so_factor>  step_ovr = #<step_ovr>  tool_rad = #<tool_radius>)
+;	(print,)
+;	(print,src count = #<src_count>)
+;	(print,ramp_down_len = #<ramp_down_len>  so_factor = #<so_factor>  step_ovr = #<step_ovr>  tool_rad = #<tool_radius>)
 o<optimize> return
 
 	#<from_x> = 0

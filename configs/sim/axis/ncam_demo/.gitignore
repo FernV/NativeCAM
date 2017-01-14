@@ -1,2 +1,4 @@
 /ncam
 *.bak
+*.pos
+*.var
