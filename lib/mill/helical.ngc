@@ -1,0 +1,162 @@
+(info: Helical moves)
+(author : Fernand Veilleux + orpheus)
+
+o<helical> sub
+
+(call cx cy maj_diam min_diam pitch starts teeth pass_depth rot option cut_dir cut_start cut_depth lead_clearance preview)
+
+    #<cx>                   = #1
+    #<cy>                   = #2
+    #<maj_diam>             = #3
+    #<min_diam>             = #4
+    #<pitch>                = #5
+    #<starts>               = #6
+    #<teeth_no>             = #7
+    #<pass_depth>           = #8
+    #<rot>                  = #9
+    #<option>               = #10
+    #<cut_dir>              = #11
+    #<cut_start>            = #12
+    #<cut_depth>            = #13
+    #<lead_clearance>       = #14
+    #<preview>              = #15
+    #<helix_debug>          = #16
+
+    #<tool_rad>             = [#5410 / 2]
+    #<tool_dia>             = #5410
+
+    #<old_coord_system> = [#<_coord_system> / 10]
+    o<get_offsets> CALL
+    #<saved_offset_x> = #<_offsets_x>
+    #<saved_offset_y> = #<_offsets_y>
+    #<saved_offset_z> = #<_offsets_z>
+    #<saved_offset_r> = #<_offsets_r>
+
+    #<pdist> = 0
+    #<current_step> = 0
+
+    G#<_off_rot_coord_system>
+    o<rotate_xy> CALL [#<_offsets_x> + #<cx>] [#<_offsets_y> + #<cy>] [#<_offsets_x>] [#<_offsets_y>] [#<_offsets_r>]
+    G10 L2 P#5220 X#<_rotated_x> Y#<_rotated_y> Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
+
+    o<set_spindle_rpm> CALL [#<_rpm_normal>]
+
+    o<tool_chk> if [[#<option> EQ 2] AND [#<tool_dia> GE #<min_diam>]]
+        o<helical> return
+    o<tool_chk> endif
+
+    o<cut_mode> if [#<option> EQ 2]
+        #<pdist> = [[#<min_diam> / 2] - #<tool_rad> - #<lead_clearance>]
+        #<cut_steps> = [[[#<maj_diam> - #<min_diam>] /2] / [#<pass_depth> / 2]]
+    o<cut_mode> else
+        #<pdist> = [[#<maj_diam> / 2] + #<tool_rad> + #<lead_clearance>]
+        #<cut_steps> = [[[#<maj_diam> - #<min_diam>] / 2] / #<pass_depth>]
+    o<cut_mode> endif
+
+    #<pangle> = [360 / #<starts>]
+    #<start_counter> = 0
+
+    #<total_turns> = [[[ABS[#<cut_depth>] + #<cut_start>] / #<pitch>] / #<teeth_no>]
+
+    o<threadmill_check> if [[#<total_turns> LT 1] AND [#<teeth_no> GT 1]]
+        #<total_turns> = 1
+    o<threadmill_check> endif
+
+    #<part_turns> = ABS[#<total_turns> - FIX[#<total_turns>]]
+    #<full_turns> = [#<total_turns> - #<part_turns>]
+    #<p_turn_height> = [#<part_turns> * #<pitch>]
+    #<f_turn_height> = [#<full_turns> * #<pitch>]
+
+    #<helix_f_bottom> = [#<cut_depth>]
+    #<helix_f_top> = [[#<helix_f_bottom>] + #<f_turn_height>]
+
+    o<full_turn_check> if [#<full_turns> GE 1]
+        #<helix_p_bottom> = #<helix_f_top>
+    o<full_turn_check> else
+        #<helix_p_bottom> = #<cut_depth>
+    o<full_turn_check> endif
+
+    #<helix_p_top> = [#<helix_p_bottom> + #<p_turn_height>]
+
+    G0 Z#<_z_clear>
+    G90.1
+
+    o<start_loop> while [#<start_counter> LT #<starts>]
+        #<current_step> = 0
+
+        o<cut_loop> while [#<current_step> LT #<cut_steps>]
+            #<cut_angle> = [#<pangle> * #<start_counter>]
+
+            G0 @#<pdist> ^#<cut_angle>
+
+            o<lvl_check> if [[[#<cut_steps> - #<current_step>] LT 1] AND [[#<cut_steps> - #<current_step>] GT 0]]
+                #<current_step> = [#<cut_steps>]
+            o<lvl_check> else
+                #<current_step> = [#<current_step> + 1]
+            o<lvl_check> endif
+
+            o<cut_side> if [#<option> EQ 2]
+                #<cut_offset> = [[[#<min_diam> / 2] - #<tool_rad>] + [#<current_step> * [#<pass_depth>]]]
+                    o<cut_side> else
+                #<cut_offset> = [[[#<maj_diam> / 2] + #<tool_rad>] - [#<current_step> * [#<pass_depth>]]]
+            o<cut_side> endif
+
+            #<finish_ang> = [[#<part_turns> * 360] + #<cut_angle>]
+
+            o<full_turn> if [#<full_turns> GE 1]
+                G0 Z[#<helix_f_bottom>]
+                G1 @[#<cut_offset>] ^#<cut_angle> F[#<_selected_feed>]
+                G[#<cut_dir>] Z[#<helix_f_top>] P[#<full_turns>] I0 J0
+            o<full_turn> else
+                G0 Z[#<helix_f_bottom>]
+                G1 @[#<cut_offset>] ^#<cut_angle> F[#<_selected_feed>]
+            o<full_turn> endif
+
+            o<partial_turn> if [#<part_turns> GT 0]
+                G#<cut_dir> @#<cut_offset> ^#<finish_ang> Z[#<helix_p_top>] I0 J0
+            o<partial_turn> endif
+
+            G1 @#<pdist> ^#<finish_ang> F#<_selected_feed>
+            G0 Z#<_rapid_z>
+        o<cut_loop> endwhile
+
+        /o<draw_preview_int> if [#<preview>]
+                /#<pre_total_turns> = [[[ABS[#<cut_depth>] + #<cut_start>] / #<pitch>]]
+                /#<pre_part_turns> = ABS[#<pre_total_turns> - FIX[#<pre_total_turns>]]
+
+                /o<pre_threadmill_check> if [[#<pre_total_turns> LT 1] AND [#<teeth_no> GT 1]]
+                        /#<pre_total_turns> = 1
+                /o<pre_threadmill_check> endif
+
+                /#<pre_full_turns> = [#<pre_total_turns> - #<pre_part_turns>]
+                /#<pre_p_turn_height> = [#<pre_part_turns> * #<pitch>]
+                /#<pre_f_turn_height> = [#<pre_full_turns> * #<pitch>]
+                /#<pre_helix_f_top> = [[#<helix_f_bottom>] + #<pre_f_turn_height>]
+                /#<pre_helix_p_top> = [#<pre_helix_f_top> + #<pre_p_turn_height>]
+
+                /o<pre_full_turn> if [#<full_turns> GE 1]
+                        /G0 Z[#<helix_f_bottom>]
+                        /G0 @[#<maj_diam> / 2] ^[#<pangle> * #<start_counter>]
+                        /G#<cut_dir> Z[#<pre_helix_f_top>] P#<pre_full_turns> I0 J0
+                /o<pre_full_turn> else
+                        /G0 Z[#<helix_f_bottom>]
+                        /G0 @[[#<maj_diam>] / 2] ^#<cut_angle> F[#<_selected_feed>]
+                /o<pre_full_turn> endif
+
+                /#<finish_ang> = [[#<part_turns> * 360] - #<cut_angle>]
+
+                /o<partial_turn_preview> if [#<part_turns> GT 0]
+                /G#<cut_dir> @[[#<maj_diam>] / 2] ^#<finish_ang> Z[#<pre_helix_p_top>]  I0 J0
+                /o<partial_turn_preview> endif
+        /o<draw_preview_int> endif
+
+        
+
+        #<start_counter> = [#<start_counter> + 1]
+    o<start_loop> endwhile
+    G91.1
+
+    G#<old_coord_system>
+    G10 L2 P#5220 X#<saved_offset_x> Y#<saved_offset_y> Z#<saved_offset_z> R#<saved_offset_r>
+
+o<helical> endsub
