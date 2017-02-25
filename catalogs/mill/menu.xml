@@ -38,6 +38,7 @@
 	        <sub name='Slot From 2 Points' tool_tip='Define 2 points' icon="slot-2.png" src="mill/SHCS_slot2.cfg"/>
 	        <sub name='Radial Slot' tool_tip='Create an radial slot' icon="radial-slot.png" src="mill/SHCS_slot-arc.cfg"/>
 	    </group>
+		<sub name='Thread Milling' tool_tip='True thread mill needed' icon="circle.png" src="mill/thread-milling.cfg"/>
     </group>
     <group name='Drilling' icon="drill.png">
         <sub name='Single Hole' tool_tip='Drill a single hole' icon="drill.png" src="mill/drill-single.cfg"/>

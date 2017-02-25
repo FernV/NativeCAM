@@ -47,25 +47,27 @@ import locale
 
 try :
     import linuxcnc
-    SYS_DIR = linuxcnc.SHARE + '/ncam'
-    if not os.path.isdir(SYS_DIR) :
-        SYS_DIR = os.path.dirname(os.path.realpath(__file__))
-        if not os.path.isdir(SYS_DIR + '/catalogs') :
-            find = os.popen("find /home -name 'ncam.py'").read()
-            print 'found ncam.py file(s) =', find
-            if find > '' :
-                if find.count('\n') > 1 :
-                    print 'too many versions of ncam.py in /home sub-directories'
-                    print 'delete or rename keeping only the right one'
-                    sys.exit(-2)
-                SYS_DIR = find.rstrip('\n')
-
-            else :
-                print 'ncam.py not found in /home sub-directories'
-                sys.exit(-1)
+#     SYS_DIR = linuxcnc.SHARE + '/ncam'
+#     if not os.path.isdir(SYS_DIR) :
+#         SYS_DIR = os.path.dirname(os.path.realpath(__file__))
+#         if not os.path.isdir(SYS_DIR + '/catalogs') :
+#             find = os.popen("find /home -name 'ncam.py'").read()
+#             print 'found ncam.py file(s) =', find
+#             if find > '' :
+#                 if find.count('\n') > 1 :
+#                     print 'too many versions of ncam.py in /home sub-directories'
+#                     print 'delete or rename keeping only the right one'
+#                     sys.exit(-2)
+#                 SYS_DIR = find.rstrip('\n')
+#
+#             else :
+#                 print 'ncam.py not found in /home sub-directories'
+#                 sys.exit(-1)
 except :
     # linuxCNC not installed, must be my Windows pc for development and debugging
-    SYS_DIR = os.path.dirname(os.path.realpath(__file__))
+    pass
+
+SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
 locale.setlocale(locale.LC_NUMERIC, '')
 localeDICT = {}
@@ -84,7 +86,6 @@ feature_fmt_str = '<b>%s</b>'
 items_fmt_str = '<span foreground="blue" style="oblique"><b>%s</b></span>'
 
 UNDO_MAX_LEN = 200
-QUICK_ACCESS_TOP_COUNT = 0
 gmoccapy_time_out = 0.0
 developer_menu = False
 
@@ -178,7 +179,6 @@ def search_path(warn, f, *args) :
         src = os.path.join(pa, f)
         if os.path.isfile(src) :
             return src
-            expanduser
     src = os.path.join(os.getcwd(), f)
     if os.path.isfile(src) :
         return src
@@ -368,31 +368,6 @@ def err_exit(errtxt):
     mess_dlg (errtxt)
     sys.exit(1)
 
-def exit_if_invalid_rip_standalone():
-    # This environmental variable exists if:
-    #    started by linuxcnc script
-    # or
-    #    set by sourcing rip-environment
-    if not os.environ.has_key('LINUXCNCVERSION') :
-        pname = os.path.realpath(__file__)
-        if pname.find("/usr/bin") != 0 :
-            etxt = (_('*** Detected Standalone, Run-In-Place\n'
-                      '*** without proper environment\n'
-                      '*** Setup Run-In-Place first :\n'
-                    ))
-            idx = pname.find("bin/ncam")
-            guess = ""
-
-            if idx >= 0:
-                guess = pname[0:idx]
-            else :
-                idx = pname.find("lib/python/gladevcp/ncam.py")
-                if idx >= 0:
-                    guess = pname[0:idx]
-            etxt = etxt + (_('   $ source %sscripts/rip-environment') % guess)
-            err_exit(etxt)
-        return
-
 def require_ini_items(fname, ini_instance):
     global NCAM_DIR, NGC_DIR
 
@@ -436,6 +411,7 @@ def require_ncam_lib(fname, ini_instance):
                        '[RS274NGC]SUBROUTINE_PATH'))
 
         print "[RS274NGC]SUBROUTINE_PATH =", subroutine_path
+        print "  real paths :"
 
         for i, d in enumerate(subroutine_path.split(":")):
             d = os.path.expanduser(d)
@@ -446,7 +422,7 @@ def require_ncam_lib(fname, ini_instance):
             if not os.path.isdir(thedir) :
                 continue
             else :
-                print ("   SUBROUTINE_PATH[%d] (realpath) = %s" % (i, thedir))
+                print ("   %s" % (thedir))
                 if not found_lib_dir :
                     found_lib_dir = thedir.find(require_lib) == 0
 
@@ -526,6 +502,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.new_dt = ''
         self.dt_change = '1'
         self.not_zero = '0'
+        self.parent = None
 
     def set_tooltip(self, value):
         self.tooltip = value
@@ -810,7 +787,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.list_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.list_window.set_border_width(0)
         self.list_window.set_decorated(False)
-        self.list_window.set_transient_for(None)
+        self.list_window.set_transient_for(self.parent)
         vp = gtk.Viewport()
         vp.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         self.list_window.vbox.add(vp)
@@ -876,7 +853,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.stringedit_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.stringedit_window.hide()
         self.stringedit_window.set_decorated(False)
-        self.stringedit_window.set_transient_for(None)
+        self.stringedit_window.set_transient_for(self.parent)
         self.stringedit_window.set_border_width(0)
         self.new_dt = ''
 
@@ -911,7 +888,7 @@ class CellRendererMx(gtk.CellRendererText):
             self.user_edited_fn(itr, new_val, self.new_dt)
         return new_val
 
-# a bug in pygtk makes it unavailable
+# a bug in pygtk makes it unavailable now
 # trying to find a workaround
 #     def str_popup(self, widget, menu):
 #         menu.prepend(gtk.SeparatorMenuItem())
@@ -1039,7 +1016,7 @@ class CellRendererMx(gtk.CellRendererText):
             self.textedit_window = gtk.Dialog(parent = treeview.get_toplevel())
 
             self.textedit_window.set_decorated(False)
-            self.textedit_window.set_transient_for(None)
+            self.textedit_window.set_transient_for(self.parent)
 
             self.textedit = gtk.TextView()
             self.textedit.set_editable(True)
@@ -2045,34 +2022,14 @@ class NCam(gtk.VBox):
     __gproperties__ = {}
     __gproperties = __gproperties__
 
-    def usage(self):
-        print """
-Standalone Usage:
-   ncam [Options]
-
-Options:
-   -h | --help                            this text
-   -i inifilename | --ini=inifilename     inifile for standalone
-
-Notes:
-  For standalone usage:
-     a) Specify an inifile name which specifies [DISPLAY]NCAM_DIR
-  or
-     b) Start in a working directory with pre-existing NativeCAM subdirs
-        or if NativeCAM subdirs are not present, they will be created
-"""
-
     def __init__(self, *a, **kw):
         global NCAM_DIR, default_metric, NGC_DIR, SYS_DIR
-
-#        exit_if_invalid_rip_standalone()
 
         # process passed args
         # x needed for gmoccapy
         # U needed for embedded
-        # c also needed
 
-        opt, optl = 'U:h:i:c:d:x', ["help", "catalog=", "ini="]
+        opt, optl = 'U:x:c:i', ["catalog=", "ini="]
         optlist, args = getopt.getopt(sys.argv[1:], opt, optl)
         optlist = dict(optlist)
 
@@ -2080,18 +2037,16 @@ Notes:
             optlist_, args = getopt.getopt(optlist["-U"].split(), opt, optl)
             optlist.update(optlist_)
 
-        if "-h" in optlist or "--help" in optlist:
-            self.usage()
-            sys.exit(0)
-
-        if "-d" in optlist :  # used when developping with Eclipse and pydev in rip mode
-            import platform
-            if platform.system() != 'Windows' :
-                SYS_DIR = os.path.expanduser('~/linuxcnc-dev/share/ncam')
-
         self.editor = DEFAULT_EDITOR
         self.pref = Preferences()
         self.tools = Tools()
+
+        if "-c" in optlist :
+            self.catalog_dir = optlist["-c"]
+        elif "--catalog" in optlist :
+            self.catalog_dir = optlist["--catalog"]
+        else :
+            self.catalog_dir = DEFAULT_CATALOG
 
         ini = os.getenv("INI_FILE_NAME")
         if "-i" in optlist :
@@ -2105,11 +2060,6 @@ Notes:
             inifilename = 'NA'
             NCAM_DIR = SYS_DIR
             NGC_DIR = os.path.expanduser('~')
-            if "--catalog" in optlist :
-                self.catalog_dir = optlist["--catalog"]
-            else :
-                self.catalog_dir = DEFAULT_CATALOG
-
         else :
             try :
                 inifilename = os.path.abspath(ini)
@@ -2121,23 +2071,13 @@ Notes:
             require_ini_items(inifilename, ini_instance)
 
             val = ini_instance.find('DISPLAY', 'DISPLAY')
-            if val is None :
-                msg = (_('Not found: [DISPLAY]DISPLAY]'))
-                print msg
-                mess_dlg (msg)
-            elif val not in ['axis', 'gmoccapy'] :
+            if val not in ['axis', 'gmoccapy'] :
                 mess_dlg(_('Display can only be "axis" or "gmoccapy"'))
                 sys.exit(-1)
 
             val = ini_instance.find('DISPLAY', 'LATHE')
             if (val is not None) and (val != '0') :
                 self.catalog_dir = 'lathe'
-            else :
-                val = ini_instance.find('DISPLAY', 'NCAM_CATALOG')
-                if (val is not None) :
-                    self.catalog_dir = val
-                else :
-                    self.catalog_dir = DEFAULT_CATALOG
 
             self.pref.ngc_init_str = ini_instance.find('RS274NGC', 'RS274NGC_STARTUP_CODE')
 
@@ -2156,11 +2096,10 @@ Notes:
 
         print ""
         print "NativeCAM info:"
-        print "    inifile =", inifilename
-        print "    SYS_DIR =", SYS_DIR
-        print "   NCAM_DIR =", NCAM_DIR
-        print "    program =", __file__
-        print "  real path =", os.path.realpath(__file__)
+        print "   inifile =", inifilename
+        print "   SYS_DIR =", SYS_DIR
+        print "  NCAM_DIR =", NCAM_DIR
+        print "   program =", __file__
         print ""
 
         fromdirs = [CATALOGS_DIR, CFG_DIR, LIB_DIR,
@@ -2193,11 +2132,12 @@ Notes:
         catname = 'menu-custom.xml'
         cat_dir_name = search_path(0, catname, CATALOGS_DIR, self.catalog_dir)
         if cat_dir_name is not None :
-            print(_('Using menu-custom.xml\n'))
+            print(_('Using %s/%s\n') % (self.catalog_dir, catname))
         else :
             catname = 'menu.xml'
             cat_dir_name = search_path(2, catname, CATALOGS_DIR, self.catalog_dir)
-            print(_('Using standard menu.xml, no menu-custom.xml found\n'))
+            print(_('Using standard %s/%s,  no %s/menu-custom.xml found\n') %
+                  (self.catalog_dir, catname, self.catalog_dir))
         if cat_dir_name is None :
             sys.exit(1)
 
@@ -2225,8 +2165,8 @@ Notes:
         self.details_filter = self.treestore.filter_new()
         self.details_filter.set_visible_column(3)
 
-        self.create_treeview()
         self.main_box.reparent(self)
+        self.create_treeview()
 
         self.quick_access_tb = gtk.Toolbar()
         self.main_box.pack_start(self.quick_access_tb, False, False, 0)
@@ -2286,7 +2226,8 @@ Notes:
             else :
                 fmt2 = _('Created %(qty)3d files in %(dir)s')
 
-            print (fmt2 % {'qty':update_ct, 'dir':NCAM_DIR.rstrip('/') + '/' + d.lstrip('/')})
+            if update_ct > 0 :
+                print (fmt2 % {'qty':update_ct, 'dir':NCAM_DIR.rstrip('/') + '/' + d.lstrip('/')})
         print('')
 
     def create_mi(self, _action):
@@ -2806,6 +2747,7 @@ Notes:
         self.col_value = col
 
         self.edit_cell = CellRendererMx()
+        self.edit_cell.parent = self.main_box.get_toplevel()
         self.edit_cell.set_property("editable", True)
         self.edit_cell.edited = self.edited
         self.edit_cell.set_preediting(self.get_editinfo)
@@ -2948,21 +2890,20 @@ Notes:
         self.treeview2.append_column(col)
 
         # value
-        col = gtk.TreeViewColumn(_("Value"))
-        cell = CellRendererMx()
-        cell.set_property("editable", True)
-        cell.edited = self.edited
-        cell.set_treeview(self.treeview2)
-        cell.set_preediting(self.get_editinfo)
-        cell.set_edited_user_fn(self.edited_user)
+        self.col_value2 = gtk.TreeViewColumn(_("Value"))
+        self.cell_value2 = CellRendererMx()
+        self.edit_cell.parent = self.main_box.get_toplevel()
+        self.cell_value2.set_property("editable", True)
+        self.cell_value2.edited = self.edited
+        self.cell_value2.set_treeview(self.treeview2)
+        self.cell_value2.set_preediting(self.get_editinfo)
+        self.cell_value2.set_edited_user_fn(self.edited_user)
 
-        col.pack_start(cell, expand = False)
-        col.set_cell_data_func(cell, self.get_col_value)
-        self.cell_value2 = cell
-        self.col_value2 = col
-        col.set_resizable(True)
-        col.set_min_width(int(self.col_width_adj.value))
-        self.treeview2.append_column(col)
+        self.col_value2.pack_start(self.cell_value2, expand = False)
+        self.col_value2.set_cell_data_func(self.cell_value2, self.get_col_value)
+        self.col_value2.set_resizable(True)
+        self.col_value2.set_min_width(int(self.col_width_adj.value))
+        self.treeview2.append_column(self.col_value2)
 
         self.treeview2.set_tooltip_column(1)
         self.treeview2.set_model(self.treestore)
@@ -4438,7 +4379,142 @@ Notes:
         self.actionCut.set_sensitive(self.can_delete_duplicate)
         self.actionCopy.set_sensitive(self.can_delete_duplicate)
 
-def main():
+def verify_ini(fname, catalog) :
+    path2ui = os.path.join(SYS_DIR, 'ncam.ui')
+    req = '# required NativeCAM item :\n'
+
+    txt = open(fname, 'r').read()
+    if txt.find(path2ui) == -1 :
+        if not os.path.exists(fname + '.bak') :
+            open(fname + '.bak', 'w').write(txt)
+        txt = re.sub(r"%s" % req, '', txt)
+
+        txt1 = ''
+        txt2 = txt.split('\n')
+        for line in txt2 :
+            txt1 += line.lstrip(' \t') + '\n'
+        open(fname + '.cvt', 'w').write(txt1)
+
+        parser = ConfigParser.RawConfigParser()
+        try :
+            parser.read(fname + '.cvt')
+            os.remove(fname + '.cvt')
+
+            dp = parser.get('DISPLAY', 'DISPLAY').lower()
+            if dp not in ['gmoccapy', 'axis'] :
+                mess_dlg(_('Display can only be "axis" or "gmoccapy"'))
+                sys.exit(-1)
+
+            try :
+                c = parser.get('DISPLAY', 'LATHE')
+                if c == '1' :
+                    catalog = 'lathe'
+            except :
+                pass
+
+            if dp == 'axis' :
+                newstr = '%sGLADEVCP = -U -c%s %s\n' % (req, catalog, path2ui)
+                try :
+                    oldstr = 'GLADEVCP = %s' % parser.get('DISPLAY', 'gladevcp')
+                    txt = re.sub(r"%s" % oldstr, newstr, txt)
+                except :
+                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+            else :
+                newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U -c%s %s\n' % (req, catalog, path2ui)
+                try :
+                    oldstr = 'EMBED_TAB_COMMAND = %s' % parser.get('DISPLAY', 'embed_tab_command')
+                    txt = re.sub(r"%s" % oldstr, newstr, txt)
+                except :
+                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+                newstr = '%sEMBED_TAB_LOCATION = box_right\n' % req
+                try :
+                    oldstr = 'EMBED_TAB_LOCATION = %s' % parser.get('DISPLAY', 'embed_tab_location')
+                    txt = re.sub(r"%s" % oldstr, newstr, txt)
+                except :
+                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+                newstr = '%sEMBED_TAB_NAME = right_side_panel\n' % req
+                try :
+                    oldstr = 'EMBED_TAB_NAME = %s' % parser.get('DISPLAY', 'embed_tab_name')
+                    txt = re.sub(r"%s" % oldstr, newstr, txt)
+                except :
+                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+            newstr = '%sPROGRAM_PREFIX = ncam/scripts/\n' % req
+            try :
+                oldstr = 'PROGRAM_PREFIX = ' + parser.get('DISPLAY', 'program_prefix')
+                txt = re.sub(r"%s" % oldstr, newstr, txt)
+            except :
+                txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+            newstr = '%sNCAM_DIR = ncam\n' % req
+            try :
+                oldstr = 'NCAM_DIR = ' + parser.get('DISPLAY', 'ncam_dir')
+                txt = re.sub(r"%s" % oldstr, newstr, txt)
+            except :
+                txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+            newstr = '%sSUBROUTINE_PATH = ncam/lib/%s:ncam/lib/utilities\n' % (req, catalog)
+            try :
+                oldstr = 'SUBROUTINE_PATH = ' + parser.get('RS274NGC', 'subroutine_path')
+                txt = re.sub(r"%s" % oldstr, newstr, txt)
+            except :
+                txt = re.sub(r"\[RS274NGC\]", "[RS274NGC]\n" + newstr, txt)
+
+            open(fname, 'w').write(txt)
+
+        except Exception, detail :
+            err_exit(_('Error modifying ini file\n%(err_details)s') % {'err_details':detail})
+
+def usage():
+    print """
+Standalone Usage:
+   ncam [Options]
+
+Options :
+   -h | --help                            this text
+   -i inifilename | --ini=inifilename     inifile for standalone
+   -c catalog     | --catalog=catalog     valid catalogs = mill, plasma, lathe
+
+To prepare your inifile to use NativeCAM embedded,
+   a) Start in a working directory with your LinuxCNC configuration ini file
+   b) Type this command : 
+     (path to ncam.py)/ncam.py -i(inifile you want to use) -c(valid catalog 
+       for this configuration)
+   A backup of your file will be created and the file will be modified,
+     then simply use : linuxcnc path_to_your_inifile
+        
+"""
+
+if __name__ == "__main__":
+    # process args
+    args = sys.argv[1:]
+    if "-h" in args or "--help" in args:
+        usage()
+        sys.exit(0)
+
+    opt, optl = 'c:i', ["catalog=", "ini="]
+    optlist, args = getopt.getopt(args, opt, optl)
+    optlist = dict(optlist)
+
+    if "-i" in optlist :
+        ini = optlist["-i"]
+    elif "--ini" in optlist :
+        ini = optlist["--ini"]
+    else :
+        ini = None
+
+    if (ini is not None) :
+        if "-c" in optlist :
+            catalog = optlist["-c"]
+        elif "--catalog" in optlist :
+            catalog = optlist["--catalog"]
+        else :
+            catalog = DEFAULT_CATALOG
+        verify_ini(os.path.abspath(ini), catalog)
+
     window = gtk.Dialog(APP_TITLE, None, gtk.DIALOG_MODAL)
     ncam = NCam()
     ncam.embedded = False
@@ -4446,7 +4522,4 @@ def main():
     window.add_accel_group(ncam.accelGroup)
     window.connect("destroy", gtk.main_quit)
     window.set_default_size(400, 800)
-    return window.run()
-
-if __name__ == "__main__":
-    exit(main())
+    exit(window.run())
