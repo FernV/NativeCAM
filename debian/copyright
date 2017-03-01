@@ -1,0 +1,22 @@
+Copyright: 2017 Fernand Veilleux <fernveilleux@gmail.com>
+
+NativeCAM is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+*****************************************************************
+
+Notice : NativeCAM is covered by the GNU General Public License
+version 2 as published by the Free Software Foundation.
+
+Much of NativeCAM is derived from LinuxCNC-Features, a work of 
+Nick Drobchenko and others.  It was used as the basis of NativeCAM,
+but received extensive modifications.  NativeCAM is NOT public domain.
+Anyone wishing to use the public domain code in a way that is not
+compatible with the (L)GPL must locate the original LinuxCNC-Features
+code - they may NOT use NativeCAM.
+
+*****************************************************************
+
+The complete text of GPL version 2 can be found in the file
+/usr/share/common-licenses/GPL-2 on Debian systems.
