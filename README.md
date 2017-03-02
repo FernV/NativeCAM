@@ -32,13 +32,13 @@ You need to install python-lxml if not allready installed, the command is :
 --------------------------------------------------------------------------------
 1.	Issue / copy then paste the following command
 	
-	sudo python setup.py
+	sudo python nondeb_setup.py
 	
 	This will create required links and modify files.
 	You do not do this more than once except maybe after lcnc updates
 	because it will replace the files and erase the link,
 	until NativeCAM is integrated in the distribution
-	To restore the system, simply issue the command : 'sudo python setup.py c'
+	To restore the system, simply issue the command : 'sudo python nondeb_setup.py c'
 
 2.	Start LinuxCNC with one of these commands (copy/paste) :
 
