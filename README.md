@@ -40,6 +40,8 @@ You need to install python-lxml if not allready installed, the command is :
 	until NativeCAM is integrated in the distribution
 	To restore the system, simply issue the command : 'sudo python nondeb_setup.py c'
 
+	Run first with : ./ncam.py -h
+
 2.	Start LinuxCNC with one of these commands (copy/paste) :
 
 	for mill : 
@@ -87,7 +89,7 @@ You need to install python-lxml if not allready installed, the command is :
 
 5.	Setting-up your own file
 --------------------------------------------------------------------------------
-1.	Open a terminal in ncam directory
-2.	Type : ./ncam.py --ini=path_to_your_ini_file --catalog=(mill | plasma | lathe)
+1.	Open a terminal in your inifile directory
+2.	Type : path_to_prog/ncam.py --ini=inifilename --catalog=(mill | plasma | lathe)
 3.	Your .ini file will be modified and necessary files copied
-4.	Start LCNC with : linuxcnc path_to_your_ini_file
+4.	Start LCNC with : linuxcnc inifilename

@@ -5,24 +5,13 @@
 # ------------------------------------------------------------------
 
 APP_TITLE = "NativeCAM for LinuxCNC"  # formerly LinuxCNC-Features
-APP_COMMENTS = 'A GUI to help create LinuxCNC NGC files.'
 
-APP_COPYRIGHT = '''Copyright © 2012 Nick Drobchenko aka Nick from cnc-club.ru
-Copyright © 2016 Fernand Veilleux : fernv at gmail dot com'''
+APP_COPYRIGHT = '''Copyright © 2017 Fernand Veilleux : fernveilleux@gmail.com
+Copyright © 2012 Nick Drobchenko'''
 APP_AUTHORS = ['Fernand Veilleux, maintainer', 'Nick Drobchenko, initiator', 'Meison Kim', 'Alexander Wigen',
                'Konstantin Navrockiy', 'Mit Zot', 'Dewey Garrett', 'Karl Jacobs', 'orpheus']
 
-APP_VERSION = "2.5"
-
-APP_LICENCE = '''This program is free software: you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation, either version 2 of
-the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.'''
+APP_VERSION = "(non deb)"
 
 import gtk
 import sys
@@ -44,28 +33,7 @@ from cStringIO import StringIO
 import gettext
 import time
 import locale
-
-try :
-    import linuxcnc
-#     SYS_DIR = linuxcnc.SHARE + '/ncam'
-#     if not os.path.isdir(SYS_DIR) :
-#         SYS_DIR = os.path.dirname(os.path.realpath(__file__))
-#         if not os.path.isdir(SYS_DIR + '/catalogs') :
-#             find = os.popen("find /home -name 'ncam.py'").read()
-#             print 'found ncam.py file(s) =', find
-#             if find > '' :
-#                 if find.count('\n') > 1 :
-#                     print 'too many versions of ncam.py in /home sub-directories'
-#                     print 'delete or rename keeping only the right one'
-#                     sys.exit(-2)
-#                 SYS_DIR = find.rstrip('\n')
-#
-#             else :
-#                 print 'ncam.py not found in /home sub-directories'
-#                 sys.exit(-1)
-except :
-    # linuxCNC not installed, must be my Windows pc for development and debugging
-    pass
+import platform
 
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -95,8 +63,17 @@ try :
 except :
     gettext.install('ncam', None, unicode = True)
 
+APP_COMMENTS = _('A GUI to help create LinuxCNC NGC files.')
+APP_LICENCE = _('''This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+It is recommended you use the deb package
+''')
+
 MAX_QUICK_ACCESS_BTN = 15
 
+VALID_CATALOGS = ['mill', 'plasma', 'lathe']
 DEFAULT_CATALOG = "mill"
 DEFAULT_METRIC = False
 
@@ -132,7 +109,7 @@ DEFAULT_ICONS = {
 
 XML_TAG = "lcnc-ncam"
 
-HOME_PAGE = 'https://github.com/FernV/NativeCAM'
+HOME_PAGE = ''  # 'https://github.com/FernV/NativeCAM'
 
 class tv_select :  # 'enum' items
     none, feature, items, header, param = range(5)
@@ -367,6 +344,12 @@ def err_exit(errtxt):
     print errtxt
     mess_dlg (errtxt)
     sys.exit(1)
+
+if platform.system() <> 'Windows' :
+    try :
+        import linuxcnc
+    except Exception, detail :
+        err_exit(_('Error importing linuxcnc\n%(err_details)s') % {'err_details':detail})
 
 def require_ini_items(fname, ini_instance):
     global NCAM_DIR, NGC_DIR
@@ -2025,17 +2008,13 @@ class NCam(gtk.VBox):
     def __init__(self, *a, **kw):
         global NCAM_DIR, default_metric, NGC_DIR, SYS_DIR
 
-        # process passed args
-        # x needed for gmoccapy
-        # U needed for embedded
-
-        opt, optl = 'U:x:c:i', ["catalog=", "ini="]
-        optlist, args = getopt.getopt(sys.argv[1:], opt, optl)
-        optlist = dict(optlist)
-
-        if "-U" in optlist :
-            optlist_, args = getopt.getopt(optlist["-U"].split(), opt, optl)
-            optlist.update(optlist_)
+        arg_start = (sys.argv[0:].index('-U') + 1) if "-U" in sys.argv[0:] else 1
+        opt, optl = 'U:x:c:i:', ["catalog=", "ini="]
+        try :
+            optlist, arg = getopt.getopt(sys.argv[arg_start:], opt, optl)
+            optlist = dict(optlist)
+        except getopt.GetoptError as err:
+            err_exit(err)
 
         self.editor = DEFAULT_EDITOR
         self.pref = Preferences()
@@ -2055,11 +2034,11 @@ class NCam(gtk.VBox):
             ini = optlist["--ini"]
 
         if (ini is None) :
-            # standalone with no -i:
-            # beware, files expected/created in this dir
+            # standalone with no --ini:
             inifilename = 'NA'
-            NCAM_DIR = SYS_DIR
-            NGC_DIR = os.path.expanduser('~')
+            # beware, files expected/created in this dir
+            NCAM_DIR = os.path.expanduser('~/nativecam')
+            NGC_DIR = NCAM_DIR + '/' + NGC_DIR
         else :
             try :
                 inifilename = os.path.abspath(ini)
@@ -2109,9 +2088,9 @@ class NCam(gtk.VBox):
             self.ask_to_create_standalone(fromdirs)
 
         # first use:copy, subsequent: update
+        if SYS_DIR != NCAM_DIR :
+            self.update_user_tree(fromdirs, NCAM_DIR)
         if ini is not None :
-            if SYS_DIR != NCAM_DIR :
-                self.update_user_tree(fromdirs, NCAM_DIR)
             require_ncam_lib(inifilename, ini_instance)
 
         self.tools.load_table()
@@ -2129,15 +2108,15 @@ class NCam(gtk.VBox):
         self.undo_pointer = -1
         self.timeout = None
 
-        catname = 'menu-custom.xml'
-        cat_dir_name = search_path(0, catname, CATALOGS_DIR, self.catalog_dir)
+        catname = self.catalog_dir + '/menu-custom.xml'
+        cat_dir_name = search_path(0, catname, CATALOGS_DIR)
         if cat_dir_name is not None :
-            print(_('Using %s/%s\n') % (self.catalog_dir, catname))
+            print(_('Using %s\n') % (catname))
         else :
-            catname = 'menu.xml'
-            cat_dir_name = search_path(2, catname, CATALOGS_DIR, self.catalog_dir)
-            print(_('Using standard %s/%s,  no %s/menu-custom.xml found\n') %
-                  (self.catalog_dir, catname, self.catalog_dir))
+            catname = self.catalog_dir + '/menu.xml'
+            cat_dir_name = search_path(2, catname, CATALOGS_DIR)
+            print(_('Using standard %s,  no %s/menu-custom.xml found\n') %
+                  (catname, self.catalog_dir))
         if cat_dir_name is None :
             sys.exit(1)
 
@@ -3940,25 +3919,36 @@ class NCam(gtk.VBox):
         self.undo_pointer = -1
         self.set_do_buttons_state()
 
-    def menu_file_activate(self, *args):
+    def menu_file_activate(self, *arg):
         self.actionBuild.set_sensitive(self.treestore.get_iter_root() is not None)
         self.actionSave.set_sensitive(self.treestore.get_iter_root() is not None)
         self.actionSaveTemplate.set_sensitive(self.treestore.get_iter_root() is not None)
         self.actionSaveNGC.set_sensitive(self.treestore.get_iter_root() is not None)
 
-    def menu_about_activate(self, *args):
+    def menu_about_activate(self, *arg):
         dialog = gtk.AboutDialog()
         dialog.set_name(APP_TITLE)
-        dialog.set_version(APP_VERSION)
-        dialog.set_copyright(APP_COPYRIGHT)
+
+        try :
+            ver = subprocess.check_output(["dpkg-query", "--show", "--showformat='${Version}'", "nativecam"])
+            dialog.set_version(ver.strip("'"))
+        except :
+            dialog.set_version(APP_VERSION)
+
+        try :
+            data = open('/usr/share/doc/nativecam/copyright', 'r').read()
+            dialog.set_license(data)
+        except :
+            dialog.set_license(APP_LICENCE)
+
         dialog.set_authors(APP_AUTHORS)
-        dialog.set_comments(_(APP_COMMENTS))
-        dialog.set_license(_(APP_LICENCE))
+        dialog.set_comments(APP_COMMENTS)
+        dialog.set_copyright(APP_COPYRIGHT)
         dialog.set_website(HOME_PAGE)
         dialog.run()
         dialog.destroy()
 
-    def save_default_template(self, *args):
+    def save_default_template(self, *arg):
         xml = self.treestore_to_xml()
         etree.ElementTree(xml).write(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, \
                                                DEFAULT_TEMPLATE), pretty_print = True)
@@ -4413,7 +4403,7 @@ def verify_ini(fname, catalog) :
                 pass
 
             if dp == 'axis' :
-                newstr = '%sGLADEVCP = -U -c%s %s\n' % (req, catalog, path2ui)
+                newstr = '%sGLADEVCP = -U --catalog=%s %s\n' % (req, catalog, path2ui)
                 try :
                     oldstr = 'GLADEVCP = %s' % parser.get('DISPLAY', 'gladevcp')
                     txt = re.sub(r"%s" % oldstr, newstr, txt)
@@ -4421,7 +4411,7 @@ def verify_ini(fname, catalog) :
                     txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
             else :
-                newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U -c%s %s\n' % (req, catalog, path2ui)
+                newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=%s %s\n' % (req, catalog, path2ui)
                 try :
                     oldstr = 'EMBED_TAB_COMMAND = %s' % parser.get('DISPLAY', 'embed_tab_command')
                     txt = re.sub(r"%s" % oldstr, newstr, txt)
@@ -4474,18 +4464,20 @@ Standalone Usage:
    ncam [Options]
 
 Options :
-   -h | --help                            this text
-   -i inifilename | --ini=inifilename     inifile for standalone
-   -c catalog     | --catalog=catalog     valid catalogs = mill, plasma, lathe
+   -h | --help                 this text
+   (-i | --ini=) inifilename   inifile used
+   (-c | --catalog=) catalog   valid catalogs = mill, plasma, lathe
 
 To prepare your inifile to use NativeCAM embedded,
    a) Start in a working directory with your LinuxCNC configuration ini file
-   b) Type this command : 
-     (path to ncam.py)/ncam.py -i(inifile you want to use) -c(valid catalog 
-       for this configuration)
-   A backup of your file will be created and the file will be modified,
-     then simply use : linuxcnc path_to_your_inifile
-        
+   b) Type this command :
+     ncam (-i | --ini=)inifilename (-c | --catalog=)(valid catalog for this configuration)
+
+   A backup of your inifile will be created before it is modified.
+
+   After success, you can use it embedded  :
+     linuxcnc inifilename
+
 """
 
 if __name__ == "__main__":
@@ -4495,8 +4487,14 @@ if __name__ == "__main__":
         usage()
         sys.exit(0)
 
-    opt, optl = 'c:i', ["catalog=", "ini="]
-    optlist, args = getopt.getopt(args, opt, optl)
+    try :
+        optlist, args = getopt.getopt(sys.argv[1:], 'c:i:', ["catalog=", "ini="])
+    except getopt.GetoptError as err:
+        # print help information and exit:
+        print(err)  # will print something like "option -a not recognized"
+        usage()
+        sys.exit(2)
+
     optlist = dict(optlist)
 
     if "-i" in optlist :
@@ -4513,6 +4511,10 @@ if __name__ == "__main__":
             catalog = optlist["--catalog"]
         else :
             catalog = DEFAULT_CATALOG
+        if not catalog in VALID_CATALOGS :
+            usage()
+            sys.exit(3)
+
         verify_ini(os.path.abspath(ini), catalog)
 
     window = gtk.Dialog(APP_TITLE, None, gtk.DIALOG_MODAL)

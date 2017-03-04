@@ -4,8 +4,6 @@ available for metric or imperial equipment
 
 mill or mill-mm
 
-plasma-2d and plasma-2d-mm for control of only X an Y axes
-
 plasma and plasma-mm for control of X, Y and Z axes
 
 lathe not supported yet
