@@ -1,9 +1,23 @@
 nativecam (0:0.0.10) UNRELEASED; urgency=medium
 
-  * new test
-  * note: this change log needs to be maintained for each release version
+  setup.py renamed to nondeb_setup.py
+  added man pages
+  modified copyright and version
+  change order of some functions in file
+  made some text translatable
+  list valid catalogs
+  remove homepage
+  correct getopt
+  when no ini, change NCAM_DIR and no checking of required libs
+  display catalog/menu used on startup terminal screen
+  about dialog shows new copyright and version no
+  write --catalog= instead of -c in inifiles
+  check if a valid catalog is passed as argument
+  update usage message
+  update README.md
+  update all demo files
 
- -- Fernand Veilleux <fernveilleux@gmail.com> Tue, 28 Feb 2017 05:56:10 -0700
+ -- Fernand Veilleux <fernveilleux@gmail.com> Sat, 04 Mar 2017 14:01:00 -0500
 
 nativecam (0:0.0.9) UNRELEASED; urgency=medium
 
