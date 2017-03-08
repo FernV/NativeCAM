@@ -34,6 +34,7 @@ import gettext
 import time
 import locale
 import platform
+import pref_edit
 
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -1462,11 +1463,11 @@ class Preferences():
         self.cat_name = None
         self.has_Z_axis = True
 
-    def read(self, nc_dir, cat_name):
+    def read(self, cat_name):
         global default_digits, default_metric, add_menu_icon_size, \
             add_dlg_icon_size, quick_access_icon_size, menu_icon_size, \
             treeview_icon_size, vkb_width, vkb_height, vkb_cancel_on_out, \
-            toolbar_icon_size, gmoccapy_time_out, developer_menu
+            toolbar_icon_size, gmoccapy_time_out, developer_menu, NCAM_DIR
 
         def read_float(cf, section, key, default):
             try :
@@ -1479,6 +1480,12 @@ class Preferences():
                 return cf.getboolean(section, key)
             except :
                 return default
+
+        def read_sbool(cf, section, key, default):
+            if read_boolean(cf, section, key, default):
+                return '1'
+            else :
+                return '0'
 
         def read_str(cf, section, key, default):
             try :
@@ -1496,11 +1503,12 @@ class Preferences():
         if self.cat_name is None :
             self.cat_name = cat_name
 
-        self.cfg_file = nc_dir + "/" + CONFIG_FILE
+        if self.cfg_file is None :
+            self.cfg_file = os.path.join(NCAM_DIR, CATALOGS_DIR, CONFIG_FILE)
 
-        if not os.path.exists(nc_dir + "/" + cat_name):
-            os.makedirs(nc_dir + "/" + cat_name)
-        self.pref_file = nc_dir + "/" + cat_name + '/' + PREFERENCES_FILE
+        if not os.path.exists(os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name)) :
+            os.makedirs(os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name))
+        self.pref_file = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, PREFERENCES_FILE)
 
         if self.ngc_init_str is None :
             self.ngc_init_str = 'G17 G40 G49 G90 G92.1 G94 G54 G64 p0.001'
@@ -1528,9 +1536,9 @@ class Preferences():
 
         config.read(self.pref_file)
         self.timeout_value = read_float(config, 'general', 'time_out', 0.300)
-        default_digits = read_str(config, 'general', 'digits', '3')
-        self.ngc_show_final_cut = read_str(config, 'general', 'show_final_cut', '1')
-        self.ngc_show_bottom_cut = read_str(config, 'general', 'show_bottom_cut', '1')
+        default_digits = str(read_int(config, 'general', 'digits', 3))
+        self.ngc_show_final_cut = read_sbool(config, 'general', 'show_final_cut', True)
+        self.ngc_show_bottom_cut = read_sbool(config, 'general', 'show_bottom_cut', True)
         self.ngc_init_str = read_str(config, 'ngc', 'init_str', self.ngc_init_str)
         self.ngc_post_amble = read_str(config, 'ngc', 'post_amble', " ")
         self.ngc_off_rot_coord_system = read_int(config, 'ngc', 'off_rot_coord_system', 2)
@@ -1538,7 +1546,7 @@ class Preferences():
         gmoccapy_time_out = read_float(config, 'general', 'gmoccapy_time_out', 0.15)
 
         self.ngc_probe_func = read_str(config, 'probe', 'probe_func', "4")
-        self.probe_tool_len_comp = read_str(config, 'probe', 'probe_tool_len_comp', '1')
+        self.probe_tool_len_comp = read_sbool(config, 'probe', 'probe_tool_len_comp', True)
         if default_metric :
             self.ngc_probe_feed = read_str(config, 'probe_mm', 'probe_feed', '200')
             self.ngc_probe_latch = read_str(config, 'probe_mm', 'probe_latch', '-1')
@@ -1574,352 +1582,16 @@ class Preferences():
         self.opt_sf4 = read_str(config, 'optimizing', 'speedfactor4', '1.00')
         self.opt_sf0 = read_str(config, 'optimizing', 'speedfactor0', '1.00')
 
-        self.plasma_test_mode = read_str(config, 'plasma', 'test_mode', '1')
+        self.plasma_test_mode = read_sbool(config, 'plasma', 'test_mode', True)
 
         self.create_defaults()
-
-    def save_layout(self):
-        config = ConfigParser.ConfigParser()
-        config.add_section('INFO')
-        config.set('INFO', 'display and layout',
-            'You can edit these values directly or\n'
-            'by using Utilities->Preferences to do it.')
-        config.add_section('display')
-        config.set('display', 'width', self.w_adj_value)
-        config.set('display', 'col_width', self.col_width_adj_value)
-        config.set('display', 'master_tv_width', self.tv_w_adj_value)
-        config.set('display', 'subheaders_in_master', self.sub_hdrs_in_tv1)
-        config.set('display', 'restore_expand_state', self.restore_expand_state)
-        config.set('display', 'developer_menu', developer_menu)
-        config.add_section('layout')
-        config.set('layout', 'dual_view', self.use_dual_views)
-        config.set('layout', 'side_by_side', self.side_by_side)
-        config.add_section('icons_size')
-        config.set('icons_size', 'treeview', treeview_icon_size)
-        config.set('icons_size', 'add_menu', add_menu_icon_size)
-        config.set('icons_size', 'menu', menu_icon_size)
-        config.set('icons_size', 'toolbar', toolbar_icon_size)
-        config.set('icons_size', 'add_dlg', add_dlg_icon_size)
-        config.set('icons_size', 'quick_access_tb', quick_access_icon_size)
-        config.add_section('virtual_kb')
-        config.set('virtual_kb', 'minimum_width', vkb_width)
-        config.set('virtual_kb', 'height', vkb_height)
-        config.set('virtual_kb', 'cancel_on_focus_out', vkb_cancel_on_out)
-
-        with open(self.cfg_file, 'wb') as configfile:
-            config.write(configfile)
-
-    def save_defaults(self):
-        config = ConfigParser.ConfigParser()
-        config.add_section('INFO')
-        config.set('INFO', 'Default values and usefull params',
-            'You can edit these values directly or\n'
-            'by using Utilities->Preferences to do it.')
-
-        config.add_section('general')
-        config.set('general', 'time_out', self.timeout_value)
-        config.set('general', 'digits', default_digits)
-        config.set('general', 'show_final_cut', self.ngc_show_final_cut)
-        config.set('general', 'show_bottom_cut', self.ngc_show_bottom_cut)
-        config.set('general', 'gmoccapy_time_out', gmoccapy_time_out)
-
-        config.add_section('ngc')
-        config.set('ngc', 'init_str', self.ngc_init_str)
-        config.set('ngc', 'post_amble', self.ngc_post_amble)
-        config.set('ngc', 'off_rot_coord_system', self.ngc_off_rot_coord_system)
-        config.set('ngc', 'spindle_acc_time', self.ngc_spindle_speedup_time)
-
-        config.add_section('probe')
-        config.set('probe', 'probe_func', self.ngc_probe_func)
-        config.set('probe', 'probe_tool_len_comp', self.probe_tool_len_comp)
-
-        if default_metric :
-            probe_section = 'probe_mm'
-            config.add_section(probe_section)
-            drill_section = 'drill_mm'
-        else :
-            probe_section = 'probe'
-            drill_section = 'drill'
-        config.add_section(drill_section)
-
-        config.set(probe_section, 'probe_feed', self.ngc_probe_feed)
-        config.set(probe_section, 'probe_latch', self.ngc_probe_latch)
-        config.set(probe_section, 'probe_latch_feed', self.ngc_probe_latch_feed)
-        config.set(probe_section, 'probe_tip_dia', self.ngc_probe_tip_dia)
-        config.set(probe_section, 'probe_safe', self.ngc_probe_safe)
-
-        config.set(drill_section, 'center_drill_depth', self.drill_center_depth)
-
-        config.add_section('pocket')
-        config.set('pocket', 'mode', self.pocket_mode)
-
-        config.add_section('optimizing')
-        config.set('optimizing', 'engagement1', self.opt_eng1)
-        config.set('optimizing', 'engagement2', self.opt_eng2)
-        config.set('optimizing', 'engagement3', self.opt_eng3)
-
-        config.set('optimizing', 'feedfactor1', self.opt_ff1)
-        config.set('optimizing', 'feedfactor2', self.opt_ff2)
-        config.set('optimizing', 'feedfactor3', self.opt_ff3)
-        config.set('optimizing', 'feedfactor4', self.opt_ff4)
-        config.set('optimizing', 'feedfactor0', self.opt_ff0)
-
-        config.set('optimizing', 'speedfactor1', self.opt_sf1)
-        config.set('optimizing', 'speedfactor2', self.opt_sf2)
-        config.set('optimizing', 'speedfactor3', self.opt_sf3)
-        config.set('optimizing', 'speedfactor4', self.opt_sf4)
-        config.set('optimizing', 'speedfactor0', self.opt_sf0)
-
-        config.add_section('plasma')
-        config.set('plasma', 'test_mode', self.plasma_test_mode)
-
-        with open(self.pref_file, 'wb') as configfile:
-            config.write(configfile)
 
     def edit(self, ncam):
-        parent = ncam.main_box.get_toplevel()
-        self.ncam = ncam
+        global NCAM_DIR
+        if pref_edit.edit_preferences(ncam, default_metric, self.cat_name, NCAM_DIR, self.ngc_init_str, self.ngc_post_amble, SYS_DIR) :
+            self.read(None)
+            ncam.autorefresh_call()
 
-        builder = gtk.Builder()
-        builder.set_translation_domain('ncam')
-        try :
-            builder.add_from_file(os.path.join(SYS_DIR, "ncam_pref.glade"))
-        except :
-            raise IOError(_("Expected file not found : ncam_pref.glade"))
-
-        prefdlg = builder.get_object("prefdlg")
-        builder.get_object("hscaleWindowWidth").set_adjustment(ncam.w_adj)
-        builder.get_object("hscaleTVWidth").set_adjustment(ncam.tv_w_adj)
-        builder.get_object("hscaleNameColWidth").set_adjustment(ncam.col_width_adj)
-
-        self.adj_vkbwidth = builder.get_object("adj_vkbwidth")
-        self.adj_vkbwidth.set_value(vkb_width)
-        self.adj_vkbheight = builder.get_object("adj_vkbheight")
-        self.adj_vkbheight.set_value(vkb_height)
-        self.vkb_cancel = builder.get_object("vkb_cancel")
-        self.vkb_cancel.set_active(vkb_cancel_on_out)
-
-        self.restore_tvstate = builder.get_object("restore_tvstate")
-        self.restore_tvstate.set_active(self.restore_expand_state)
-
-        self.imgMenu = builder.get_object("imgMenu")
-        self.adj_menuiconsize = builder.get_object("adj_menuiconsize")
-        self.adj_menuiconsize.set_value(menu_icon_size)
-        self.adj_menuiconsize.connect("value-changed", self.menu_isize)
-
-        self.imgAddMenu = builder.get_object("imgAddMenu")
-        self.adj_addmenuiconsize = builder.get_object("adj_addmenuiconsize")
-        self.adj_addmenuiconsize.set_value(add_menu_icon_size)
-        self.adj_addmenuiconsize.connect("value-changed", self.addmenu_isize)
-
-        self.imgToolbar = builder.get_object("imgMToolBar")
-        self.adj_tbIconSize = builder.get_object("adj_tbIconSize")
-        self.adj_tbIconSize.set_value(toolbar_icon_size)
-        self.adj_tbIconSize.connect("value-changed", self.toolbar_isize)
-
-        self.imgHistTB = builder.get_object("imgHistTB")
-        self.adj_histiconsize = builder.get_object("adj_histiconsize")
-        self.adj_histiconsize.set_value(quick_access_icon_size)
-        self.adj_histiconsize.connect("value-changed", self.imgHist_isize)
-
-        self.imgTV = builder.get_object("imgTV")
-        self.adj_tviconsize = builder.get_object("adj_tviconsize")
-        self.adj_tviconsize.set_value(treeview_icon_size)
-        self.adj_tviconsize.connect("value-changed", self.tv_isize)
-
-        self.imgAddDlg = builder.get_object("imgAddDlg")
-        self.adj_adddlgimgsize = builder.get_object("adj_adddlgimgsize")
-        self.adj_adddlgimgsize.set_value(add_dlg_icon_size)
-        self.adj_adddlgimgsize.connect("value-changed", self.adddlg_isize)
-
-        self.comboProbe = builder.get_object("comboProbe")
-        self.comboProbe.set_active(get_int(self.ngc_probe_func) - 2)
-        self.adj_probelatch = builder.get_object("adj_probelatch")
-        self.adj_probelatch.set_value(get_float(self.ngc_probe_latch))
-        self.adj_probelatchfeed = builder.get_object("adj_probelatchfeed")
-        self.adj_probelatchfeed.set_value(get_float(self.ngc_probe_latch_feed))
-        self.adj_probefeed = builder.get_object("adj_probefeed")
-        self.adj_probefeed.set_value(get_float(self.ngc_probe_feed))
-        self.adj_probesafe = builder.get_object("adj_probesafe")
-        self.adj_probesafe.set_value(get_float(self.ngc_probe_safe))
-        self.adj_probedia = builder.get_object("adj_probedia")
-        self.adj_probedia.set_value(get_float(self.ngc_probe_tip_dia))
-
-        self.adj_centerdrill_depth = builder.get_object("adj_centerdrill_depth")
-        self.adj_centerdrill_depth.set_value(get_float(self.drill_center_depth))
-
-        self.finalcut_chk = builder.get_object("finalcut_chk")
-        self.finalcut_chk.set_active(self.ngc_show_final_cut == '1')
-        self.finalbottom_chk = builder.get_object("finalbottom_chk")
-        self.finalbottom_chk.set_active(self.ngc_show_bottom_cut == '1')
-        self.finalcut_chk.connect("toggled", self.ref_clicked)
-        self.finalbottom_lbl = builder.get_object("label29")
-
-        self.comboCoords = builder.get_object("comboCoords")
-        self.comboCoords.set_active(self.ngc_off_rot_coord_system)
-
-        self.adj_timeout_value = builder.get_object("adj_timeout_value")
-        self.adj_timeout_value.set_value(self.timeout_value)
-        self.adj_digits = builder.get_object("adj_digits")
-        self.adj_digits.set_value(get_float(default_digits))
-        self.adj_spindledelay = builder.get_object("adj_spindledelay")
-        self.adj_spindledelay.set_value(get_float(self.ngc_spindle_speedup_time))
-
-        self.adj_gmoccapy = builder.get_object("adj_gmoccapy")
-        self.adj_gmoccapy.set_value(gmoccapy_time_out)
-
-        self.dev_chk = builder.get_object("dev_chk")
-        self.dev_chk.set_active(developer_menu)
-        self.tlo_chk = builder.get_object("tlo_chk")
-        self.tlo_chk.set_active(self.probe_tool_len_comp == '1')
-
-        self.entryInit = builder.get_object("entryInit")
-        self.entryInit.set_text(self.ngc_init_str)
-        self.entryPost = builder.get_object("entryPost")
-        self.entryPost.set_text(self.ngc_post_amble)
-
-        self.combo_pck = builder.get_object("combo_pck")
-        self.combo_pck.set_active(get_int(self.pocket_mode))
-
-        self.adj_opt_eng1 = builder.get_object("adj_opt_eng1")
-        self.adj_opt_eng1.set_value(get_float(self.opt_eng1))
-        self.adj_opt_eng2 = builder.get_object("adj_opt_eng2")
-        self.adj_opt_eng2.set_value(get_float(self.opt_eng2))
-        self.adj_opt_eng3 = builder.get_object("adj_opt_eng3")
-        self.adj_opt_eng3.set_value(get_float(self.opt_eng3))
-
-        self.adj_opt_ff1 = builder.get_object("adj_opt_ff1")
-        self.adj_opt_ff1.set_value(get_float(self.opt_ff1))
-        self.adj_opt_ff2 = builder.get_object("adj_opt_ff2")
-        self.adj_opt_ff2.set_value(get_float(self.opt_ff2))
-        self.adj_opt_ff3 = builder.get_object("adj_opt_ff3")
-        self.adj_opt_ff3.set_value(get_float(self.opt_ff3))
-        self.adj_opt_ff4 = builder.get_object("adj_opt_ff4")
-        self.adj_opt_ff4.set_value(get_float(self.opt_ff4))
-        self.adj_opt_ff0 = builder.get_object("adj_opt_ff0")
-        self.adj_opt_ff0.set_value(get_float(self.opt_ff0))
-
-        self.adj_opt_sf1 = builder.get_object("adj_opt_sf1")
-        self.adj_opt_sf1.set_value(get_float(self.opt_sf1))
-        self.adj_opt_sf2 = builder.get_object("adj_opt_sf2")
-        self.adj_opt_sf2.set_value(get_float(self.opt_sf2))
-        self.adj_opt_sf3 = builder.get_object("adj_opt_sf3")
-        self.adj_opt_sf3.set_value(get_float(self.opt_sf3))
-        self.adj_opt_sf4 = builder.get_object("adj_opt_sf4")
-        self.adj_opt_sf4.set_value(get_float(self.opt_sf4))
-        self.adj_opt_sf0 = builder.get_object("adj_opt_sf0")
-        self.adj_opt_sf0.set_value(get_float(self.opt_sf0))
-
-        self.plasma_tmode_chk = builder.get_object("plasma_tmode_chk")
-        self.plasma_tmode_chk.set_active(self.plasma_test_mode == '1')
-
-        builder.get_object("buttonSave").connect('clicked', self.save_click)
-        prefdlg.set_transient_for(parent)
-        prefdlg.set_keep_above(True)
-        prefdlg.show_all()
-        self.ref_clicked()
-        self.menu_isize()
-        self.tv_isize()
-        self.adddlg_isize()
-        self.imgHist_isize()
-        self.addmenu_isize()
-        self.toolbar_isize()
-        prefdlg.run()
-        prefdlg.destroy()
-
-    def tv_isize(self, *args):
-        self.imgTV.set_from_pixbuf(get_pixbuf('circle.png', int(self.adj_tviconsize.get_value())))
-
-    def adddlg_isize(self, *args):
-        self.imgAddDlg.set_from_pixbuf(get_pixbuf('circle.png', int(self.adj_adddlgimgsize.get_value())))
-
-    def imgHist_isize(self, *args):
-        self.imgHistTB.set_from_pixbuf(get_pixbuf('circle.png', int(self.adj_histiconsize.get_value())))
-
-    def addmenu_isize(self, *args):
-        self.imgAddMenu.set_from_pixbuf(get_pixbuf('circle.png', int(self.adj_addmenuiconsize.get_value())))
-
-    def toolbar_isize(self, *args):
-        self.imgToolbar.set_from_stock('gtk-save', int(self.adj_tbIconSize.get_value()))
-
-    def menu_isize(self, *args):
-        self.imgMenu.set_from_stock('gtk-new', int(self.adj_menuiconsize.get_value()))
-
-    def ref_clicked(self, *args):
-        self.finalbottom_chk.set_sensitive(self.finalcut_chk.get_active())
-        self.finalbottom_lbl.set_sensitive(self.finalcut_chk.get_active())
-
-    def save_click(self, *args):
-        global default_digits, default_metric, add_menu_icon_size, \
-            add_dlg_icon_size, quick_access_icon_size, menu_icon_size, \
-            treeview_icon_size, vkb_width, vkb_height, vkb_cancel_on_out, \
-            toolbar_icon_size, gmoccapy_time_out, developer_menu
-
-        self.w_adj_value = self.ncam.w_adj.get_value()
-        self.col_width_adj_value = self.ncam.col_width_adj.get_value()
-        self.tv_w_adj_value = self.ncam.tv_w_adj.get_value()
-
-        vkb_width = int(self.adj_vkbwidth.get_value())
-        vkb_height = int(self.adj_vkbheight.get_value())
-        vkb_cancel_on_out = self.vkb_cancel.get_active()
-
-        self.restore_expand_state = self.restore_tvstate.get_active()
-        menu_icon_size = int(self.adj_menuiconsize.get_value())
-        toolbar_icon_size = int(self.adj_tbIconSize.get_value())
-        add_menu_icon_size = int(self.adj_addmenuiconsize.get_value())
-        quick_access_icon_size = int(self.adj_histiconsize.get_value())
-        treeview_icon_size = int(self.adj_tviconsize.get_value())
-        add_dlg_icon_size = int(self.adj_adddlgimgsize.get_value())
-
-        gmoccapy_time_out = self.adj_gmoccapy.get_value()
-        developer_menu = self.dev_chk.get_active()
-
-        self.ngc_probe_func = str(self.comboProbe.get_active() + 2)
-        self.ngc_probe_latch = str(self.adj_probelatch.get_value())
-        self.ngc_probe_latch_feed = str(self.adj_probelatchfeed.get_value())
-        self.ngc_probe_feed = str(self.adj_probefeed.get_value())
-        self.ngc_probe_safe = str(self.adj_probesafe.get_value())
-        self.ngc_probe_tip_dia = str(self.adj_probedia.get_value())
-        self.probe_tool_len_comp = '1' if self.tlo_chk.get_active() else '0'
-
-        self.drill_center_depth = str(self.adj_centerdrill_depth.get_value())
-
-        self.ngc_show_final_cut = '1' if self.finalcut_chk.get_active() else '0'
-        self.ngc_show_bottom_cut = '1' if self.finalbottom_chk.get_active() else '0'
-
-        self.ngc_off_rot_coord_system = self.comboCoords.get_active()
-
-        self.timeout_value = self.adj_timeout_value.get_value()
-        default_digits = str(int(self.adj_digits.get_value()))
-        self.ngc_spindle_speedup_time = str(self.adj_spindledelay.get_value())
-
-        self.ngc_init_str = self.entryInit.get_text()
-        self.ngc_post_amble = self.entryPost.get_text()
-
-        self.pocket_mode = str(self.combo_pck.get_active())
-
-        self.opt_eng1 = str(self.adj_opt_eng1.get_value())
-        self.opt_eng2 = str(self.adj_opt_eng2.get_value())
-        self.opt_eng3 = str(self.adj_opt_eng3.get_value())
-
-        self.opt_ff1 = str(self.adj_opt_ff1.get_value())
-        self.opt_ff2 = str(self.adj_opt_ff2.get_value())
-        self.opt_ff3 = str(self.adj_opt_ff3.get_value())
-        self.opt_ff4 = str(self.adj_opt_ff4.get_value())
-        self.opt_ff0 = str(self.adj_opt_ff0.get_value())
-
-        self.opt_sf1 = str(self.adj_opt_sf1.get_value())
-        self.opt_sf2 = str(self.adj_opt_sf2.get_value())
-        self.opt_sf3 = str(self.adj_opt_sf3.get_value())
-        self.opt_sf4 = str(self.adj_opt_sf4.get_value())
-        self.opt_sf0 = str(self.adj_opt_sf0.get_value())
-
-        self.plasma_test_mode = '1' if self.plasma_tmode_chk.get_active() else '0'
-
-        self.save_layout()
-        self.save_defaults()
-        self.create_defaults()
-        self.ncam.autorefresh_call()
 
     def create_defaults(self):
         s = _('''(*** GCode generated by NativeCAM for LinuxCNC ***)\n
@@ -1992,9 +1664,11 @@ class Preferences():
         self.default += _("(end defaults)\n\n")
 
         self.default += _('(This is a built-in safety to help avoid gouging into your work piece)\n')
-        self.default += ("/ o<safety_999> repeat [1000]\n")
-        self.default += ("/     M0\n")
-        self.default += ("/ o<safety_999> endrepeat\n\n")
+        self.default += ("/ o<safety_999> if [#<_show_final_cuts>]\n")
+        self.default += ("/    o<safety_9999> repeat [1000]\n")
+        self.default += ("/       M0\n")
+        self.default += ("/    o<safety_9999> endrepeat\n")
+        self.default += ("/ o<safety_999> endif\n\n")
 
         self.default += _('(sub definitions)\n')
 
@@ -2131,7 +1805,7 @@ class NCam(gtk.VBox):
         except :
             raise IOError(_("Expected file not found : ncam.glade"))
 
-        self.pref.read(NCAM_DIR + '/' + CATALOGS_DIR, self.catalog_dir)
+        self.pref.read(self.catalog_dir)
 
         self.get_widgets()
 
@@ -2377,13 +2051,13 @@ class NCam(gtk.VBox):
         menu_linuxcnc_forum.connect("activate", self.menu_html_forum_activate)
         menu_help.append(menu_linuxcnc_forum)
 
-        menu_cnc_russia = gtk.ImageMenuItem(_('CNC-Club Russia'))
-        img = gtk.Image()
-        img.set_from_pixbuf(get_pixbuf("cnc-ru.png", add_menu_icon_size))
-        menu_cnc_russia.set_image(img)
-        menu_cnc_russia.connect("activate", self.menu_html_ru_activate)
-        menu_help.append(menu_cnc_russia)
-        menu_help.append(gtk.SeparatorMenuItem())
+#        menu_cnc_russia = gtk.ImageMenuItem(_('CNC-Club Russia'))
+#        img = gtk.Image()
+#        img.set_from_pixbuf(get_pixbuf("cnc-ru.png", add_menu_icon_size))
+#        menu_cnc_russia.set_image(img)
+#        menu_cnc_russia.connect("activate", self.menu_html_ru_activate)
+#        menu_help.append(menu_cnc_russia)
+#        menu_help.append(gtk.SeparatorMenuItem())
 
         menu_about = gtk.ImageMenuItem(_('_About'))
         img = gtk.Image()
@@ -2932,6 +2606,7 @@ class NCam(gtk.VBox):
 
         self.actionSaveLayout = gtk.Action("actionSaveLayout", _('Save As Default Layout'),
                 _('Save As Default Layout'), 'gtk-save')
+        self.actionSaveLayout.connect('activate', self.save_default_layout)
 
         self.actionSaveNGC = gtk.Action("actionSaveNGC", _('Export gcode as RS274NGC'),
                 _('Export gcode as RS274NGC'), 'gtk-save')
@@ -2958,6 +2633,22 @@ class NCam(gtk.VBox):
                 _('Rename'), _('Rename selected subroutine'), '')
         self.actionRenameFeature.connect('activate', self.rename_selected_feature)
 
+    def save_default_layout(self, *arg) :
+        cfg_file = os.path.join(NCAM_DIR, 'catalogs', 'ncam.conf')
+        parser = ConfigParser.ConfigParser()
+        parser.read(cfg_file)
+
+        if not parser.has_section('display') :
+            parser.add_section('display')
+        parser.set('display', 'subheaders_in_master', self.pref.sub_hdrs_in_tv1)
+
+        if not parser.has_section('layout') :
+            parser.add_section('layout')
+        parser.set('layout', 'dual_view', self.pref.use_dual_views)
+        parser.set('layout', 'side_by_side', self.pref.side_by_side)
+
+        with open(cfg_file, 'wb') as configfile:
+            parser.write(configfile)
 
     def get_widgets(self):
         self.main_box = self.builder.get_object("MainBox")
