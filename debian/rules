@@ -27,13 +27,19 @@ override_dh_install:
 	       ncam_pref.glade \
 	       debian/tmp/$(AUX_DIR)
 	# Examples for Configuration Selector:
-	# Future: add examples for 2.8 (joints_axes)
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/axis
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/gmoccapy
 	cp -pr configs/sim/axis/ncam_demo/*\
 	       debian/tmp/$(EXAMPLES_DIR)/2.7/axis
 	cp -pr configs/sim/gmoccapy/ncam_demo/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.7/gmoccapy
+	# Examples for 2.8 (joints_axes)
+	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.8/axis
+	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.8/gmoccapy
+	cp -pr configs/sim/axis/ncam_demo.2.8/*\
+	       debian/tmp/$(EXAMPLES_DIR)/2.8/axis
+	cp -pr configs/sim/gmoccapy/ncam_demo.2.8/* \
+	       debian/tmp/$(EXAMPLES_DIR)/2.8/gmoccapy
 	# Manpage:
 	$ mkdir -p debian/tmp/usr/share/man/man1/
 	cp -pr man/man1/* debian/tmp/usr/share/man/man1/
