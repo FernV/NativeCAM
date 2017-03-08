@@ -312,7 +312,7 @@ class PrefEditor():
         if not self.config_def.has_section('general') :
             self.config_def.add_section('general')
         self.config_def.set('general', 'time_out', self.adj_timeout_value.get_value())
-        self.config_def.set('general', 'digits', self.adj_digits.get_value())
+        self.config_def.set('general', 'digits', int(self.adj_digits.get_value()))
         self.config_def.set('general', 'show_final_cut', self.finalcut_chk.get_active())
         self.config_def.set('general', 'show_bottom_cut', self.finalbottom_chk.get_active())
         self.config_def.set('general', 'gmoccapy_time_out', self.adj_gmoccapy.get_value())

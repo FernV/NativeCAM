@@ -136,7 +136,7 @@ def get_float(s10) :
     except :
         return 0.0
 
-def search_path(warn, f, *args) :
+def search_path(warn, f, *argsl) :
     if f[0] == "" :
         return None
 
@@ -145,9 +145,9 @@ def search_path(warn, f, *args) :
 
     src = NCAM_DIR
     i = 0
-    j = args.__len__()
+    j = argsl.__len__()
     while i < j :
-        src = os.path.join(src, args[i])
+        src = os.path.join(src, argsl[i])
         i += 1
     src = os.path.join(src, f)
     if os.path.isfile(src) :
@@ -315,7 +315,7 @@ def copy_dir_recursive(fromdir, todir,
                         'Cancel  -> Keep all local files (don\'t ask again)\n') \
                         % {'frompath':frompath})
                     ans = mess_with_buttons(msg, buttons,
-                                            title = "NEW file version available")
+                                            title = _("NEW file version available"))
 
                     # set copymode
                     if ans == gtk.RESPONSE_YES :
@@ -486,7 +486,6 @@ class CellRendererMx(gtk.CellRendererText):
         self.new_dt = ''
         self.dt_change = '1'
         self.not_zero = '0'
-        self.parent = None
 
     def set_tooltip(self, value):
         self.tooltip = value
@@ -547,7 +546,6 @@ class CellRendererMx(gtk.CellRendererText):
     def create_VKB(self, cell_area):
         self.vkb = gtk.Dialog(parent = self.tv.get_toplevel())
         self.vkb.set_decorated(False)
-        self.vkb.set_transient_for(None)
         self.vkb.set_border_width(3)
 
         lbl = gtk.Label()
@@ -771,7 +769,6 @@ class CellRendererMx(gtk.CellRendererText):
         self.list_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.list_window.set_border_width(0)
         self.list_window.set_decorated(False)
-        self.list_window.set_transient_for(self.parent)
         vp = gtk.Viewport()
         vp.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         self.list_window.vbox.add(vp)
@@ -837,7 +834,6 @@ class CellRendererMx(gtk.CellRendererText):
         self.stringedit_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.stringedit_window.hide()
         self.stringedit_window.set_decorated(False)
-        self.stringedit_window.set_transient_for(self.parent)
         self.stringedit_window.set_border_width(0)
         self.new_dt = ''
 
@@ -998,9 +994,7 @@ class CellRendererMx(gtk.CellRendererText):
             self.treestore, self.treeiter = self.selection.get_selected()
 
             self.textedit_window = gtk.Dialog(parent = treeview.get_toplevel())
-
             self.textedit_window.set_decorated(False)
-            self.textedit_window.set_transient_for(self.parent)
 
             self.textedit = gtk.TextView()
             self.textedit.set_editable(True)
@@ -1444,7 +1438,7 @@ class Feature():
             return '\n' + s + '\n\n'
 
     def getindent(self) :
-        count = get_int(self.attr['indent'] if 'indent' in self.attr else '0')
+        count = get_int(self.attr['indent']) if 'indent' in self.attr else 0
         return('\t' * count)
 
     def get_unique_id(self) :
@@ -1506,14 +1500,8 @@ class Preferences():
         if self.cfg_file is None :
             self.cfg_file = os.path.join(NCAM_DIR, CATALOGS_DIR, CONFIG_FILE)
 
-        if not os.path.exists(os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name)) :
-            os.makedirs(os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name))
-        self.pref_file = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, PREFERENCES_FILE)
-
-        if self.ngc_init_str is None :
-            self.ngc_init_str = 'G17 G40 G49 G90 G92.1 G94 G54 G64 p0.001'
-
         config = ConfigParser.ConfigParser()
+
         config.read(self.cfg_file)
 
         self.w_adj_value = read_float(config, 'display', 'width', 550)
@@ -1534,7 +1522,15 @@ class Preferences():
         vkb_height = read_int(config, 'virtual_kb', 'height', 260)
         vkb_cancel_on_out = read_boolean(config, 'virtual_kb', 'cancel_on_focus_out', True)
 
+        self.pref_file = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, PREFERENCES_FILE)
         config.read(self.pref_file)
+
+        if self.ngc_init_str is None :
+            if self.cat_name in ['mill', 'plasma'] :
+                self.ngc_init_str = 'G17 G40 G49 G90 G92.1 G94 G54 G64 p0.001'
+            elif self.cat_name == 'lathe' :
+                self.ngc_init_str = 'G17 G40 G49 G90 G92.1 G94 G54 G64 p0.001'
+
         self.timeout_value = read_float(config, 'general', 'time_out', 0.300)
         default_digits = str(read_int(config, 'general', 'digits', 3))
         self.ngc_show_final_cut = read_sbool(config, 'general', 'show_final_cut', True)
@@ -1586,9 +1582,9 @@ class Preferences():
 
         self.create_defaults()
 
-    def edit(self, ncam):
+    def edit(self, natcam):
         global NCAM_DIR
-        if pref_edit.edit_preferences(ncam, default_metric, self.cat_name, NCAM_DIR, self.ngc_init_str, self.ngc_post_amble, SYS_DIR) :
+        if pref_edit.edit_preferences(natcam, default_metric, self.cat_name, NCAM_DIR, self.ngc_init_str, self.ngc_post_amble, SYS_DIR) :
             self.read(None)
             ncam.autorefresh_call()
 
@@ -1610,55 +1606,53 @@ class Preferences():
             coord = str(5 + self.ngc_off_rot_coord_system)
         else :
             coord = '9.' + str(self.ngc_off_rot_coord_system - 4)
-        self.default += ("\n\n#<_off_rot_coord_system> = 5" + coord + "\n\n")
+        self.default += ("\n\n#<_off_rot_coord_system>    = 5" + coord + "\n\n")
 
-        self.default += ("#<_show_final_cuts>      = " + self.ngc_show_final_cut + "\n")
-        self.default += ("#<_show_bottom_cut>      = " + self.ngc_show_bottom_cut + "\n\n")
-        self.default += ("#<_units_radius>         = 1  (factor for radius and diameter)\n")
-        self.default += ("#<_units_width>          = 1  (factor for width, height, length)\n")
-        self.default += ("#<_units_cut_depth>      = 1  (factor for depth)\n\n")
-        self.default += ("#<_mill_data_start>      = 70\n\n")
-        self.default += ("#<in_polyline>           = 0\n\n")
+        self.default += ("#<_show_final_cuts>         = " + self.ngc_show_final_cut + "\n")
+        self.default += ("#<_show_bottom_cut>         = " + self.ngc_show_bottom_cut + "\n\n")
+        self.default += ("#<_units_radius>            = 1  (factor for radius and diameter)\n")
+        self.default += ("#<_units_width>             = 1  (factor for width, height, length)\n")
+        self.default += ("#<_units_cut_depth>         = 1  (factor for depth)\n\n")
+        self.default += ("#<_mill_data_start>         = 70\n\n")
+        self.default += ("#<in_polyline>              = 0\n\n")
         if self.has_Z_axis :
-            self.default += ("#<_has_z_axis>           = 1\n\n")
+            self.default += ("#<_has_z_axis>              = 1\n\n")
         else :
-            self.default += ("#<_has_z_axis>           = 0\n\n")
+            self.default += ("#<_has_z_axis>              = 0\n\n")
 
-        self.default += ("#<_probe_func>           = 38." + self.ngc_probe_func + "\n")
-        self.default += ("#<_probe_feed>           = " + self.ngc_probe_feed + "\n")
-        self.default += ("#<_probe_latch>          = " + self.ngc_probe_latch + "\n")
-        self.default += ("#<_probe_latch_feed>     = " + self.ngc_probe_latch_feed + "\n")
-        self.default += ("#<_probe_safe>           = " + self.ngc_probe_safe + "\n")
-        self.default += ("#<_probe_tip_dia>        = " + self.ngc_probe_tip_dia + "\n\n")
-        self.default += ("#<_probe_tool_len_comp>  = " + self.probe_tool_len_comp + "\n")
-        self.default += ("#<_tool_probe_z>         = 0\n\n")
+        self.default += ("#<_probe_func>              = 38." + self.ngc_probe_func + "\n")
+        self.default += ("#<_probe_feed>              = " + self.ngc_probe_feed + "\n")
+        self.default += ("#<_probe_latch>             = " + self.ngc_probe_latch + "\n")
+        self.default += ("#<_probe_latch_feed>        = " + self.ngc_probe_latch_feed + "\n")
+        self.default += ("#<_probe_safe>              = " + self.ngc_probe_safe + "\n")
+        self.default += ("#<_probe_tip_dia>           = " + self.ngc_probe_tip_dia + "\n\n")
+        self.default += ("#<_probe_tool_len_comp>     = " + self.probe_tool_len_comp + "\n")
+        self.default += ("#<_tool_probe_z>            = 0\n\n")
 
         if self.cat_name == 'mill' :
             self.default += ("#<_spindle_speed_up_delay>  = " + self.ngc_spindle_speedup_time + "\n\n")
-
-            self.default += ("#<center_drill_depth>    = " + self.drill_center_depth + "\n\n")
-
-            self.default += ("#<_pocket_expand_mode>   = " + self.pocket_mode + "\n\n")
+            self.default += ("#<center_drill_depth>       = " + self.drill_center_depth + "\n\n")
+            self.default += ("#<_pocket_expand_mode>      = " + self.pocket_mode + "\n\n")
 
             self.default += _("(optimization values)\n")
-            self.default += ("#<_tool_eng1>            = " + self.opt_eng1 + "\n")
-            self.default += ("#<_tool_eng2>            = " + self.opt_eng2 + "\n")
-            self.default += ("#<_tool_eng3>            = " + self.opt_eng3 + "\n\n")
+            self.default += ("#<_tool_eng1>               = " + self.opt_eng1 + "\n")
+            self.default += ("#<_tool_eng2>               = " + self.opt_eng2 + "\n")
+            self.default += ("#<_tool_eng3>               = " + self.opt_eng3 + "\n\n")
 
-            self.default += ("#<_feedfactor1>          = " + self.opt_ff1 + "\n")
-            self.default += ("#<_feedfactor2>          = " + self.opt_ff2 + "\n")
-            self.default += ("#<_feedfactor3>          = " + self.opt_ff3 + "\n")
-            self.default += ("#<_feedfactor4>          = " + self.opt_ff4 + "\n")
-            self.default += ("#<_feedfactor0>          = " + self.opt_ff0 + "\n\n")
+            self.default += ("#<_feedfactor1>             = " + self.opt_ff1 + "\n")
+            self.default += ("#<_feedfactor2>             = " + self.opt_ff2 + "\n")
+            self.default += ("#<_feedfactor3>             = " + self.opt_ff3 + "\n")
+            self.default += ("#<_feedfactor4>             = " + self.opt_ff4 + "\n")
+            self.default += ("#<_feedfactor0>             = " + self.opt_ff0 + "\n\n")
 
-            self.default += ("#<_speedfactor1>         = " + self.opt_sf1 + "\n")
-            self.default += ("#<_speedfactor2>         = " + self.opt_sf2 + "\n")
-            self.default += ("#<_speedfactor3>         = " + self.opt_sf3 + "\n")
-            self.default += ("#<_speedfactor4>         = " + self.opt_sf4 + "\n")
-            self.default += ("#<_speedfactor0>         = " + self.opt_sf0 + "\n\n")
+            self.default += ("#<_speedfactor1>            = " + self.opt_sf1 + "\n")
+            self.default += ("#<_speedfactor2>            = " + self.opt_sf2 + "\n")
+            self.default += ("#<_speedfactor3>            = " + self.opt_sf3 + "\n")
+            self.default += ("#<_speedfactor4>            = " + self.opt_sf4 + "\n")
+            self.default += ("#<_speedfactor0>            = " + self.opt_sf0 + "\n\n")
 
         if self.cat_name == 'plasma' :
-            self.default += ("#<_plasma_test_mode>     = " + self.plasma_test_mode + "\n\n")
+            self.default += ("#<_plasma_test_mode>        = " + self.plasma_test_mode + "\n\n")
 
 
         self.default += _("(end defaults)\n\n")
@@ -2400,7 +2394,6 @@ class NCam(gtk.VBox):
         self.col_value = col
 
         self.edit_cell = CellRendererMx()
-        self.edit_cell.parent = self.main_box.get_toplevel()
         self.edit_cell.set_property("editable", True)
         self.edit_cell.edited = self.edited
         self.edit_cell.set_preediting(self.get_editinfo)
@@ -2545,7 +2538,6 @@ class NCam(gtk.VBox):
         # value
         self.col_value2 = gtk.TreeViewColumn(_("Value"))
         self.cell_value2 = CellRendererMx()
-        self.edit_cell.parent = self.main_box.get_toplevel()
         self.cell_value2.set_property("editable", True)
         self.cell_value2.edited = self.edited
         self.cell_value2.set_treeview(self.treeview2)
@@ -4181,7 +4173,6 @@ if __name__ == "__main__":
     try :
         optlist, args = getopt.getopt(sys.argv[1:], 'c:i:', ["catalog=", "ini="])
     except getopt.GetoptError as err:
-        # print help information and exit:
         print(err)  # will print something like "option -a not recognized"
         usage()
         sys.exit(2)
