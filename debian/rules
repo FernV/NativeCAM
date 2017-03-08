@@ -25,6 +25,7 @@ override_dh_install:
 	       ncam.ui \
 	       ncam.glade \
 	       ncam_pref.glade \
+	       pref_edit.py \
 	       debian/tmp/$(AUX_DIR)
 	# Examples for Configuration Selector:
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/axis
