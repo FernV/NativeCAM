@@ -3,6 +3,7 @@ Section: misc
 Maintainer: Fernand Veilleux <fernveilleux@gmail.com>
 Priority: extra
 Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.6
 
 Package: nativecam
 #Note: omitting Depends: for linuxcnc|linuxcnc-uspace
