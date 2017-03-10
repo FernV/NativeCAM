@@ -3,7 +3,7 @@ nativecam (0.0.11) UNRELEASED; urgency=medium
   change debian/rules for LCNC 2.8-pre
   make dirs and sim examples for LCNC 2.8-pre
   change demo files to not use VERSION=1.0
-  code-clean-up and some string formating
+  code-clean-up and some string formatting
   move preference editing code to pref_edit.py
 
  -- Fernand Veilleux <fernveilleux@gmail.com>  Wed, 08 Mar 2017 17:59:00 -0500
