@@ -7,7 +7,7 @@ Build-Depends: debhelper (>=9)
 Package: nativecam
 #Note: omitting Depends: for linuxcnc|linuxcnc-uspace
 #      allows install for RIP-only systems
-Depends: python (>=2.7), python-lxml
+Depends: python (>=2.7), python-lxml, ${misc:Depends}
 Recommends: linuxcnc | linuxcnc-uspace
 Architecture: all
 Description: Conversational programming for LinuxCNC
