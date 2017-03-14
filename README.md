@@ -38,6 +38,6 @@ Open a terminal window and type : ncam -h
 	
 4.	Translation
 --------------------------------------------------------------------------------
-1.	Under development
+	Available French (fr) and German (de)
 	
 

@@ -1,1 +1,8 @@
 *.pyc
+catalogs/*/current_work.xml
+catalogs/*/quick_access.lst
+debian/nativecam/
+debian/tmp/
+debian/nativecam.debhelper.log
+debian/nativecam.substvars
+debian/files

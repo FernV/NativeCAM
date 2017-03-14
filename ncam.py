@@ -2227,11 +2227,11 @@ class NCam(gtk.VBox):
         for path in range(len(self.catalog_path)) :
             p = self.catalog_path[path]
             if p.tag.lower() in ["group", "sub", "import"] :
-                name = _(p.get('name') if "name" in p.keys() else 'Un-named')
+                name = p.get('name') if "name" in p.keys() else 'Un-named'
                 src = p.get("src") if "src" in p.keys() else None
                 tooltip = _(p.get('tool_tip')) if "tool_tip" in p.keys() else None
                 self.icon_store.append([get_pixbuf(p.get("icon"),
-                    add_dlg_icon_size), p.tag.lower(), name, src, path, tooltip])
+                    add_dlg_icon_size), p.tag.lower(), _(name), src, path, tooltip])
 
     def add_button_clicked(self, *arg) :
         self.feature_Hpane.hide()

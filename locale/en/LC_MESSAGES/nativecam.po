@@ -1,23 +1,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nativecam\n"
-"POT-Creation-Date: 2017-03-13 14:07-0400\n"
-"PO-Revision-Date: 2017-03-13 14:08-0400\n"
+"POT-Creation-Date: 2017-03-14 11:43-0400\n"
+"PO-Revision-Date: 2017-03-14 17:54-0500\n"
 "Last-Translator: Fernand Veilleux <fernveilleux@gmail.com>\n"
 "Language-Team: \n"
-"Language: en_CA\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.12\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: configs\n"
 "X-Poedit-SearchPathExcluded-1: graphics\n"
 "X-Poedit-SearchPathExcluded-2: lib\n"
 "X-Poedit-SearchPathExcluded-3: man\n"
 "X-Poedit-SearchPathExcluded-4: xml\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: ncam.glade:8
 msgid "Save project"
@@ -27,7 +28,8 @@ msgstr ""
 msgid "Save project as xml file"
 msgstr ""
 
-#: ncam.glade:16 ncam.py:4020
+#: ncam.glade:16
+#: ncam.py:4031
 msgid "Open project"
 msgstr ""
 
@@ -59,7 +61,8 @@ msgstr ""
 msgid "Copy selected subroutine to clipboard"
 msgstr ""
 
-#: ncam.glade:48 cfg/plasma/cutting-params2d.cfg:16
+#: ncam.glade:48
+#: cfg/plasma/cutting-params2d.cfg:16
 #: cfg/plasma/cutting-params3d.cfg:16
 msgid "Cut"
 msgstr ""
@@ -68,7 +71,8 @@ msgstr ""
 msgid "Cut selected subroutine to clipboard"
 msgstr ""
 
-#: ncam.glade:56 ncam.glade:380
+#: ncam.glade:56
+#: ncam.glade:380
 msgid "Remove from items"
 msgstr ""
 
@@ -76,7 +80,8 @@ msgstr ""
 msgid "Remove from Group"
 msgstr ""
 
-#: ncam.glade:65 ncam.glade:366
+#: ncam.glade:65
+#: ncam.glade:366
 msgid "Add to items"
 msgstr ""
 
@@ -100,7 +105,8 @@ msgstr ""
 msgid "Move up one row"
 msgstr ""
 
-#: ncam.glade:92 ncam.glade:304
+#: ncam.glade:92
+#: ncam.glade:304
 msgid "Redo"
 msgstr ""
 
@@ -108,7 +114,8 @@ msgstr ""
 msgid "Cancel last Undo"
 msgstr ""
 
-#: ncam.glade:101 ncam.glade:290
+#: ncam.glade:101
+#: ncam.glade:290
 msgid "Undo"
 msgstr ""
 
@@ -116,15 +123,20 @@ msgstr ""
 msgid "Undo last operation"
 msgstr ""
 
-#: ncam.glade:110 ncam.glade:111 ncam.glade:266
+#: ncam.glade:110
+#: ncam.glade:111
+#: ncam.glade:266
 msgid "Remove selected subroutine"
 msgstr ""
 
-#: ncam.glade:119 ncam.glade:120 ncam.glade:252
+#: ncam.glade:119
+#: ncam.glade:120
+#: ncam.glade:252
 msgid "Duplicate selected subroutine"
 msgstr ""
 
-#: ncam.glade:128 ncam.glade:129
+#: ncam.glade:128
+#: ncam.glade:129
 msgid "Collapse all other nodes"
 msgstr ""
 
@@ -136,7 +148,8 @@ msgstr ""
 msgid "NativeCAM"
 msgstr ""
 
-#: ncam.glade:199 ncam.glade:200
+#: ncam.glade:199
+#: ncam.glade:200
 msgid "Save current work"
 msgstr ""
 
@@ -152,15 +165,18 @@ msgstr ""
 msgid "Move Down"
 msgstr ""
 
-#: ncam.glade:537 ncam.glade:538
+#: ncam.glade:537
+#: ncam.glade:538
 msgid "Cancel add"
 msgstr ""
 
-#: ncam.glade:553 ncam.glade:554
+#: ncam.glade:553
+#: ncam.glade:554
 msgid "Add cfg file"
 msgstr ""
 
-#: ncam.glade:570 ncam.glade:571
+#: ncam.glade:570
+#: ncam.glade:571
 msgid "Import XML file"
 msgstr ""
 
@@ -192,8 +208,11 @@ msgstr ""
 msgid "Imperial"
 msgstr ""
 
-#: ncam_pref.glade:304 cfg/mill/SHCS.cfg:67 cfg/mill/SHCS_slot-arc.cfg:102
-#: cfg/mill/SHCS_slot.cfg:77 cfg/mill/SHCS_slot2.cfg:79
+#: ncam_pref.glade:304
+#: cfg/mill/SHCS.cfg:67
+#: cfg/mill/SHCS_slot-arc.cfg:102
+#: cfg/mill/SHCS_slot.cfg:77
+#: cfg/mill/SHCS_slot2.cfg:79
 msgid "Metric"
 msgstr ""
 
@@ -217,7 +236,8 @@ msgstr ""
 msgid "Spindle full speed delay"
 msgstr ""
 
-#: ncam_pref.glade:448 ncam_pref.glade:491
+#: ncam_pref.glade:448
+#: ncam_pref.glade:491
 msgid "Units are auto-detected"
 msgstr ""
 
@@ -234,9 +254,7 @@ msgid "Coordinates for offsetting and rotation"
 msgstr ""
 
 #: ncam_pref.glade:548
-msgid ""
-"Increase if gmoccapy auto-refresh is intermittent or some input windows do "
-"not show"
+msgid "Increase if gmoccapy auto-refresh is intermittent or some input windows do not show"
 msgstr ""
 
 #: ncam_pref.glade:550
@@ -327,7 +345,9 @@ msgstr ""
 msgid "Minimum width"
 msgstr ""
 
-#: ncam_pref.glade:1243 cfg/mill/rectangle.cfg:91 cfg/plasma/rectangle.cfg:73
+#: ncam_pref.glade:1243
+#: cfg/mill/rectangle.cfg:91
+#: cfg/plasma/rectangle.cfg:73
 msgid "Height"
 msgstr ""
 
@@ -363,11 +383,9 @@ msgstr ""
 msgid "Function"
 msgstr ""
 
-#: ncam_pref.glade:1755 ncam_pref.glade:1770
-msgid ""
-"If Latch Distance is greater than 0 then probe will go back and Latch in the "
-"same direction, else Latch will be done in opposite direction (stop on loss "
-"of contact)."
+#: ncam_pref.glade:1755
+#: ncam_pref.glade:1770
+msgid "If Latch Distance is greater than 0 then probe will go back and Latch in the same direction, else Latch will be done in opposite direction (stop on loss of contact)."
 msgstr ""
 
 #: ncam_pref.glade:1757
@@ -382,11 +400,16 @@ msgstr ""
 msgid "Probe tip diameter"
 msgstr ""
 
-#: ncam_pref.glade:1863 cfg/lathe/cutting-params.cfg:73
-#: cfg/lathe/cutting-params.cfg:76 cfg/lathe/thread-adv.cfg:102
-#: cfg/lathe/thread-adv.cfg:105 cfg/lathe/threading-params.cfg:67
-#: cfg/lathe/threading-params.cfg:70 cfg/mill/tool-change.cfg:160
-#: cfg/plasma/cutting-params2d.cfg:57 cfg/plasma/cutting-params3d.cfg:55
+#: ncam_pref.glade:1863
+#: cfg/lathe/cutting-params.cfg:73
+#: cfg/lathe/cutting-params.cfg:76
+#: cfg/lathe/thread-adv.cfg:102
+#: cfg/lathe/thread-adv.cfg:105
+#: cfg/lathe/threading-params.cfg:67
+#: cfg/lathe/threading-params.cfg:70
+#: cfg/mill/tool-change.cfg:160
+#: cfg/plasma/cutting-params2d.cfg:57
+#: cfg/plasma/cutting-params3d.cfg:55
 msgid "Feed"
 msgstr ""
 
@@ -402,7 +425,8 @@ msgstr ""
 msgid "Probe tool length"
 msgstr ""
 
-#: ncam_pref.glade:1970 catalogs/mill/menu.xml:57
+#: ncam_pref.glade:1970
+#: catalogs/mill/menu.xml:57
 msgid "Probing"
 msgstr ""
 
@@ -414,8 +438,11 @@ msgstr ""
 msgid "Relative to drill start"
 msgstr ""
 
-#: ncam_pref.glade:2072 catalogs/mill/menu.xml:43 cfg/mill/drill-array.cfg:32
-#: cfg/mill/drill-circle.cfg:29 cfg/mill/drill-single.cfg:42
+#: ncam_pref.glade:2072
+#: catalogs/mill/menu.xml:43
+#: cfg/mill/drill-array.cfg:32
+#: cfg/mill/drill-circle.cfg:29
+#: cfg/mill/drill-single.cfg:42
 #: cfg/mill/tool-change.cfg:43
 msgid "Drilling"
 msgstr ""
@@ -444,7 +471,9 @@ msgstr ""
 msgid "Icon"
 msgstr ""
 
-#: qa_setup.glade:120 ncam.py:2403 ncam.py:2548
+#: qa_setup.glade:120
+#: ncam.py:2414
+#: ncam.py:2559
 msgid "Name"
 msgstr ""
 
@@ -452,7 +481,8 @@ msgstr ""
 msgid "Tooltip"
 msgstr ""
 
-#: qa_setup.glade:130 cfg/mill/tool-change.cfg:56
+#: qa_setup.glade:130
+#: cfg/mill/tool-change.cfg:56
 msgid "Usage"
 msgstr ""
 
@@ -477,7 +507,8 @@ msgid ""
 "It is recommended you use the deb package\n"
 msgstr ""
 
-#: ncam.py:174 ncam.py:177
+#: ncam.py:174
+#: ncam.py:177
 #, python-format
 msgid "Can not find file %(filename)s"
 msgstr ""
@@ -487,7 +518,8 @@ msgstr ""
 msgid "Image file not found : %(filename)s"
 msgstr ""
 
-#: ncam.py:216 pref_edit.py:265
+#: ncam.py:216
+#: pref_edit.py:265
 #, python-format
 msgid "Image file not valid : %(filename)s"
 msgstr ""
@@ -569,7 +601,8 @@ msgstr ""
 msgid "no description"
 msgstr ""
 
-#: ncam.py:465 ncam.py:477
+#: ncam.py:465
+#: ncam.py:477
 msgid "None"
 msgstr ""
 
@@ -589,11 +622,12 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-#: ncam.py:988 ncam.py:3976
+#: ncam.py:988
+#: ncam.py:3987
 msgid "All files"
 msgstr ""
 
-#: ncam.py:1398
+#: ncam.py:1399
 #, python-format
 msgid ""
 "Error with subprocess: returncode = %(errcode)s\n"
@@ -601,44 +635,43 @@ msgid ""
 "e= %(e)s\n"
 msgstr ""
 
-#: ncam.py:1610
+#: ncam.py:1611
 msgid ""
 "(*** GCode generated by NativeCAM for LinuxCNC ***)\n"
 "\n"
 msgstr ""
 
-#: ncam.py:1611
+#: ncam.py:1612
 msgid "(*.ngc files are best viewed with Syntax Highlighting)\n"
 msgstr ""
 
-#: ncam.py:1617
+#: ncam.py:1618
 msgid "G21  (metric)"
 msgstr ""
 
-#: ncam.py:1619
+#: ncam.py:1620
 msgid "G20  (imperial/inches)"
 msgstr ""
 
-#: ncam.py:1653
+#: ncam.py:1654
 msgid "(optimization values)\n"
 msgstr ""
 
-#: ncam.py:1674
+#: ncam.py:1675
 msgid ""
 "(end defaults)\n"
 "\n"
 msgstr ""
 
-#: ncam.py:1676
-msgid ""
-"(This is a built-in safety to help avoid gouging into your work piece)\n"
+#: ncam.py:1677
+msgid "(This is a built-in safety to help avoid gouging into your work piece)\n"
 msgstr ""
 
-#: ncam.py:1683
+#: ncam.py:1684
 msgid "(sub definitions)\n"
 msgstr ""
 
-#: ncam.py:1731
+#: ncam.py:1732
 #, python-format
 msgid ""
 "Open fails for ini file : %(inifilename)s\n"
@@ -646,26 +679,28 @@ msgid ""
 "%(detail)s"
 msgstr ""
 
-#: ncam.py:1738 ncam.py:4103
+#: ncam.py:1739
+#: ncam.py:4114
 msgid "DISPLAY can only be 'axis' or 'gmoccapy'"
 msgstr ""
 
-#: ncam.py:1798
+#: ncam.py:1799
 #, python-format
 msgid "Using %s\n"
 msgstr ""
 
-#: ncam.py:1802
+#: ncam.py:1803
 #, python-format
 msgid "Using standard %(mnu)s,  no %(dir)s/menu-custom.xml found\n"
 msgstr ""
 
-#: ncam.py:1818 pref_edit.py:67
+#: ncam.py:1819
+#: pref_edit.py:67
 #, python-format
 msgid "Expected file not found : %s"
 msgstr ""
 
-#: ncam.py:1877
+#: ncam.py:1878
 #, python-format
 msgid ""
 "Standalone Directory :\n"
@@ -675,192 +710,195 @@ msgid ""
 "Continue?"
 msgstr ""
 
-#: ncam.py:1878
+#: ncam.py:1879
 msgid "NativeCAM CREATE"
 msgstr ""
 
-#: ncam.py:1897
+#: ncam.py:1898
 #, python-format
 msgid "Updated %(qty)3d files in %(dir)s"
 msgstr ""
 
-#: ncam.py:1899
+#: ncam.py:1900
 #, python-format
 msgid "Created %(qty)3d files in %(dir)s"
 msgstr ""
 
-#: ncam.py:1914
+#: ncam.py:1915
 msgid "_File"
 msgstr ""
 
-#: ncam.py:1928
+#: ncam.py:1929
 msgid "_Edit"
 msgstr ""
 
-#: ncam.py:1956 ncam.py:2471
+#: ncam.py:1957
+#: ncam.py:2482
 msgid "Set digits"
 msgstr ""
 
-#: ncam.py:1977
+#: ncam.py:1978
 msgid "_View"
 msgstr ""
 
-#: ncam.py:2017
+#: ncam.py:2018
 msgid "_Add"
 msgstr ""
 
-#: ncam.py:2024
+#: ncam.py:2025
 msgid "_Utilities"
 msgstr ""
 
-#: ncam.py:2027
+#: ncam.py:2028
 msgid "_Auto-Refresh"
 msgstr ""
 
-#: ncam.py:2032
+#: ncam.py:2033
 msgid "_Reload tools table"
 msgstr ""
 
-#: ncam.py:2039
+#: ncam.py:2040
 msgid "_Preferences"
 msgstr ""
 
-#: ncam.py:2049
+#: ncam.py:2050
 msgid "_Help"
 msgstr ""
 
-#: ncam.py:2052
+#: ncam.py:2053
 msgid "NativeCAM on YouTube"
-msgstr ""
-
-#: ncam.py:2059
-msgid "LinuxCNC Home"
-msgstr ""
-
-#: ncam.py:2066
-msgid "LinuxCNC Forum"
-msgstr ""
-
-#: ncam.py:2081
-msgid "_About"
-msgstr ""
-
-#: ncam.py:2213
-msgid "Back..."
-msgstr ""
-
-#: ncam.py:2218
-msgid "name"
 msgstr ""
 
 #: ncam.py:2060
 msgid "How to translate NativeCAM"
 msgstr ""
 
-#: ncam.py:2319
+#: ncam.py:2067
+msgid "LinuxCNC Home"
+msgstr ""
+
+#: ncam.py:2074
+msgid "LinuxCNC Forum"
+msgstr ""
+
+#: ncam.py:2089
+msgid "_About"
+msgstr ""
+
+#: ncam.py:2225
+msgid "Back..."
+msgstr ""
+
+#: ncam.py:2330
 #, python-format
 msgid ""
 "WARNING:\n"
 "Cannot write to quick_access file %(filename)s"
 msgstr ""
 
-#: ncam.py:2370
+#: ncam.py:2381
 msgid "Problem adding catalog to menu"
 msgstr ""
 
-#: ncam.py:2374
+#: ncam.py:2385
 msgid "Import _XML file"
 msgstr ""
 
-#: ncam.py:2381
+#: ncam.py:2392
 msgid "_Open cfg file"
 msgstr ""
 
-#: ncam.py:2386
+#: ncam.py:2397
 msgid "Select a valid or prototype cfg file"
 msgstr ""
 
-#: ncam.py:2418 ncam.py:2564
+#: ncam.py:2429
+#: ncam.py:2575
 msgid "Value"
 msgstr ""
 
-#: ncam.py:2599
+#: ncam.py:2610
 #, python-format
 msgid "Create %(filename)s"
 msgstr ""
 
-#: ncam.py:2600
+#: ncam.py:2611
 #, python-format
 msgid "Build gcode and save to %(filename)s"
 msgstr ""
 
-#: ncam.py:2603 ncam.py:2604
+#: ncam.py:2614
+#: ncam.py:2615
 msgid "Dual Views"
 msgstr ""
 
-#: ncam.py:2607 ncam.py:2608
+#: ncam.py:2618
+#: ncam.py:2619
 msgid "Single View"
 msgstr ""
 
-#: ncam.py:2612 ncam.py:2613
+#: ncam.py:2623
+#: ncam.py:2624
 msgid "Edit Current Subroutine"
 msgstr ""
 
-#: ncam.py:2617
+#: ncam.py:2628
 msgid "Hide Master Tree Value Column"
 msgstr ""
 
-#: ncam.py:2621
+#: ncam.py:2632
 msgid "Reload Current Subroutine"
 msgstr ""
 
-#: ncam.py:2624 ncam.py:2625
+#: ncam.py:2635
+#: ncam.py:2636
 msgid "Save As Default Layout"
 msgstr ""
 
-#: ncam.py:2628 ncam.py:2629
+#: ncam.py:2639
+#: ncam.py:2640
 msgid "Export gcode as RS274NGC"
 msgstr ""
 
-#: ncam.py:2633
+#: ncam.py:2644
 msgid "Save as Default Template"
 msgstr ""
 
-#: ncam.py:2637
+#: ncam.py:2648
 msgid "Side By Side Layout"
 msgstr ""
 
-#: ncam.py:2641
+#: ncam.py:2652
 msgid "Top / Bottom Layout"
 msgstr ""
 
-#: ncam.py:2646
+#: ncam.py:2657
 msgid "Sub-Groups In Master Tree"
 msgstr ""
 
-#: ncam.py:2650
+#: ncam.py:2661
 msgid "Rename"
 msgstr ""
 
-#: ncam.py:2650
+#: ncam.py:2661
 msgid "Rename selected subroutine"
 msgstr ""
 
-#: ncam.py:3086
+#: ncam.py:3097
 msgid "Parameters treeview focused"
 msgstr ""
 
-#: ncam.py:3183
+#: ncam.py:3194
 msgid "Master treeview focused"
 msgstr ""
 
-#: ncam.py:3324
+#: ncam.py:3335
 msgid ""
 "(end sub definitions)\n"
 "\n"
 msgstr ""
 
-#: ncam.py:3329
+#: ncam.py:3340
 msgid ""
 "LinuxCNC not running\n"
 "\n"
@@ -868,44 +906,45 @@ msgid ""
 "press Build button again"
 msgstr ""
 
-#: ncam.py:3333
+#: ncam.py:3344
 msgid "Save as ngc..."
 msgstr ""
 
-#: ncam.py:3452
+#: ncam.py:3463
 msgid "Enter new name for"
 msgstr ""
 
-#: ncam.py:3543
+#: ncam.py:3554
 #, python-format
 msgid "'%(source_file)s' is not a valid cfg or xml file"
 msgstr ""
 
-#: ncam.py:3674 ncam.py:3696
+#: ncam.py:3685
+#: ncam.py:3707
 msgid "Untitle.xml"
 msgstr ""
 
-#: ncam.py:3678
+#: ncam.py:3689
 msgid "Previous work not saved as current work"
 msgstr ""
 
-#: ncam.py:3689
+#: ncam.py:3700
 msgid "No default template saved"
 msgstr ""
 
-#: ncam.py:3966
+#: ncam.py:3977
 msgid "Import project"
 msgstr ""
 
-#: ncam.py:3991
+#: ncam.py:4002
 msgid "Save project as..."
 msgstr ""
 
-#: ncam.py:4047
+#: ncam.py:4058
 msgid "Open a cfg file"
 msgstr ""
 
-#: ncam.py:4167
+#: ncam.py:4178
 #, python-format
 msgid ""
 "Error modifying ini file\n"
@@ -916,13 +955,16 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:4 catalogs/plasma/_menu-custom.xml:41
-#: catalogs/plasma/menu.xml:41 cfg/plasma/cutting-params2d.cfg:3
+#: catalogs/lathe/menu.xml:4
+#: catalogs/plasma/_menu-custom.xml:41
+#: catalogs/plasma/menu.xml:41
+#: cfg/plasma/cutting-params2d.cfg:3
 #: cfg/plasma/cutting-params3d.cfg:3
 msgid "Cutting Params"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:4 catalogs/plasma/_menu-custom.xml:41
+#: catalogs/lathe/menu.xml:4
+#: catalogs/plasma/_menu-custom.xml:41
 #: catalogs/plasma/menu.xml:41
 msgid "Set cutting parameters"
 msgstr ""
@@ -939,7 +981,8 @@ msgstr ""
 msgid "Tool"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:8 catalogs/mill/menu.xml:56
+#: catalogs/lathe/menu.xml:8
+#: catalogs/mill/menu.xml:56
 msgid "Change Tool"
 msgstr ""
 
@@ -947,11 +990,17 @@ msgstr ""
 msgid "Change cutter"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:10 cfg/plasma/circle-2.cfg:84
-#: cfg/plasma/circle.cfg:93 cfg/plasma/ellipse.cfg:104
-#: cfg/plasma/polygon.cfg:77 cfg/plasma/polyline-mirror-p.cfg:19
-#: cfg/plasma/polyline.cfg:24 cfg/plasma/rectangle.cfg:117
-#: cfg/plasma/slot-2.cfg:71 cfg/plasma/slot-arc.cfg:99 cfg/plasma/slot.cfg:86
+#: catalogs/lathe/menu.xml:10
+#: cfg/plasma/circle-2.cfg:84
+#: cfg/plasma/circle.cfg:93
+#: cfg/plasma/ellipse.cfg:104
+#: cfg/plasma/polygon.cfg:77
+#: cfg/plasma/polyline-mirror-p.cfg:19
+#: cfg/plasma/polyline.cfg:24
+#: cfg/plasma/rectangle.cfg:117
+#: cfg/plasma/slot-2.cfg:71
+#: cfg/plasma/slot-arc.cfg:99
+#: cfg/plasma/slot.cfg:86
 msgid "Cutting"
 msgstr ""
 
@@ -971,33 +1020,45 @@ msgstr ""
 msgid "Cut face"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:14 catalogs/mill/menu.xml:62
-#: catalogs/plasma/_menu-custom.xml:42 catalogs/plasma/menu.xml:42
+#: catalogs/lathe/menu.xml:14
+#: catalogs/mill/menu.xml:62
+#: catalogs/plasma/_menu-custom.xml:42
+#: catalogs/plasma/menu.xml:42
 msgid "Miscellaneous"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:15 catalogs/mill/menu.xml:65
-#: catalogs/plasma/_menu-custom.xml:45 catalogs/plasma/menu.xml:45
+#: catalogs/lathe/menu.xml:15
+#: catalogs/mill/menu.xml:65
+#: catalogs/plasma/_menu-custom.xml:45
+#: catalogs/plasma/menu.xml:45
 msgid "Insert a G Code File"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:15 catalogs/mill/menu.xml:65
-#: catalogs/plasma/_menu-custom.xml:45 catalogs/plasma/menu.xml:45
+#: catalogs/lathe/menu.xml:15
+#: catalogs/mill/menu.xml:65
+#: catalogs/plasma/_menu-custom.xml:45
+#: catalogs/plasma/menu.xml:45
 msgid "Include a custom gcode file"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:16 catalogs/mill/menu.xml:64
-#: catalogs/plasma/_menu-custom.xml:44 catalogs/plasma/menu.xml:44
+#: catalogs/lathe/menu.xml:16
+#: catalogs/mill/menu.xml:64
+#: catalogs/plasma/_menu-custom.xml:44
+#: catalogs/plasma/menu.xml:44
 msgid "Custom G Code"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:16 catalogs/mill/menu.xml:64
-#: catalogs/plasma/_menu-custom.xml:44 catalogs/plasma/menu.xml:44
+#: catalogs/lathe/menu.xml:16
+#: catalogs/mill/menu.xml:64
+#: catalogs/plasma/_menu-custom.xml:44
+#: catalogs/plasma/menu.xml:44
 msgid "Write custom gcode"
 msgstr ""
 
-#: catalogs/lathe/menu.xml:17 catalogs/mill/menu.xml:67
-#: catalogs/plasma/_menu-custom.xml:47 catalogs/plasma/menu.xml:47
+#: catalogs/lathe/menu.xml:17
+#: catalogs/mill/menu.xml:67
+#: catalogs/plasma/_menu-custom.xml:47
+#: catalogs/plasma/menu.xml:47
 #: cfg/change-units.cfg:3
 msgid "Change Units"
 msgstr ""
@@ -1006,89 +1067,115 @@ msgstr ""
 msgid "Change from inch to metric or inverse"
 msgstr ""
 
-#: catalogs/mill/menu.xml:2 catalogs/plasma/_menu-custom.xml:2
+#: catalogs/mill/menu.xml:2
+#: catalogs/plasma/_menu-custom.xml:2
 #: catalogs/plasma/menu.xml:2
 msgid "Basic Shapes"
 msgstr ""
 
-#: catalogs/mill/menu.xml:3 catalogs/plasma/_menu-custom.xml:3
-#: catalogs/plasma/menu.xml:3 cfg/mill/rectangle.cfg:3
+#: catalogs/mill/menu.xml:3
+#: catalogs/plasma/_menu-custom.xml:3
+#: catalogs/plasma/menu.xml:3
+#: cfg/mill/rectangle.cfg:3
 #: cfg/plasma/rectangle.cfg:3
 msgid "Rectangle"
 msgstr ""
 
-#: catalogs/mill/menu.xml:3 catalogs/plasma/_menu-custom.xml:3
+#: catalogs/mill/menu.xml:3
+#: catalogs/plasma/_menu-custom.xml:3
 #: catalogs/plasma/menu.xml:3
 msgid "Create a rectangle with optional corner types"
 msgstr ""
 
-#: catalogs/mill/menu.xml:5 catalogs/plasma/_menu-custom.xml:5
+#: catalogs/mill/menu.xml:5
+#: catalogs/plasma/_menu-custom.xml:5
 #: catalogs/plasma/menu.xml:5
 msgid "Circle"
 msgstr ""
 
-#: catalogs/mill/menu.xml:5 catalogs/plasma/_menu-custom.xml:5
+#: catalogs/mill/menu.xml:5
+#: catalogs/plasma/_menu-custom.xml:5
 #: catalogs/plasma/menu.xml:5
 msgid "Create a circle with optional D flat"
 msgstr ""
 
-#: catalogs/mill/menu.xml:6 catalogs/plasma/_menu-custom.xml:6
+#: catalogs/mill/menu.xml:6
+#: catalogs/plasma/_menu-custom.xml:6
 #: catalogs/plasma/menu.xml:6
 msgid "Circle From 2 Points"
 msgstr ""
 
-#: catalogs/mill/menu.xml:6 catalogs/plasma/_menu-custom.xml:6
+#: catalogs/mill/menu.xml:6
+#: catalogs/plasma/_menu-custom.xml:6
 #: catalogs/plasma/menu.xml:6
 msgid "Define ends of diameter"
 msgstr ""
 
-#: catalogs/mill/menu.xml:8 catalogs/plasma/_menu-custom.xml:8
+#: catalogs/mill/menu.xml:8
+#: catalogs/plasma/_menu-custom.xml:8
 #: catalogs/plasma/menu.xml:8
 msgid "Slot/Oval From 1 Point"
 msgstr ""
 
-#: catalogs/mill/menu.xml:8 catalogs/mill/menu.xml:37
-#: catalogs/plasma/_menu-custom.xml:8 catalogs/plasma/menu.xml:8
+#: catalogs/mill/menu.xml:8
+#: catalogs/mill/menu.xml:37
+#: catalogs/plasma/_menu-custom.xml:8
+#: catalogs/plasma/menu.xml:8
 msgid "Define a point, angle and length"
 msgstr ""
 
-#: catalogs/mill/menu.xml:9 catalogs/plasma/_menu-custom.xml:9
+#: catalogs/mill/menu.xml:9
+#: catalogs/plasma/_menu-custom.xml:9
 #: catalogs/plasma/menu.xml:9
 msgid "Slot/Oval From 2 Points"
 msgstr ""
 
-#: catalogs/mill/menu.xml:9 catalogs/plasma/_menu-custom.xml:9
+#: catalogs/mill/menu.xml:9
+#: catalogs/plasma/_menu-custom.xml:9
 #: catalogs/plasma/menu.xml:9
 msgid "Define center of ends"
 msgstr ""
 
-#: catalogs/mill/menu.xml:10 catalogs/mill/menu.xml:39
-#: catalogs/plasma/_menu-custom.xml:10 catalogs/plasma/menu.xml:10
-#: cfg/mill/slot-arc.cfg:3 cfg/plasma/slot-arc.cfg:3
+#: catalogs/mill/menu.xml:10
+#: catalogs/mill/menu.xml:39
+#: catalogs/plasma/_menu-custom.xml:10
+#: catalogs/plasma/menu.xml:10
+#: cfg/mill/slot-arc.cfg:3
+#: cfg/plasma/slot-arc.cfg:3
 msgid "Radial Slot"
 msgstr ""
 
-#: catalogs/mill/menu.xml:10 catalogs/mill/menu.xml:39
-#: catalogs/plasma/_menu-custom.xml:10 catalogs/plasma/menu.xml:10
+#: catalogs/mill/menu.xml:10
+#: catalogs/mill/menu.xml:39
+#: catalogs/plasma/_menu-custom.xml:10
+#: catalogs/plasma/menu.xml:10
 msgid "Create a radial slot"
 msgstr ""
 
-#: catalogs/mill/menu.xml:12 catalogs/plasma/_menu-custom.xml:12
-#: catalogs/plasma/menu.xml:12 cfg/mill/ellipse.cfg:3 cfg/plasma/ellipse.cfg:3
+#: catalogs/mill/menu.xml:12
+#: catalogs/plasma/_menu-custom.xml:12
+#: catalogs/plasma/menu.xml:12
+#: cfg/mill/ellipse.cfg:3
+#: cfg/plasma/ellipse.cfg:3
 msgid "Ellipse"
 msgstr ""
 
-#: catalogs/mill/menu.xml:12 catalogs/plasma/_menu-custom.xml:12
+#: catalogs/mill/menu.xml:12
+#: catalogs/plasma/_menu-custom.xml:12
 #: catalogs/plasma/menu.xml:12
 msgid "Create an ellipse"
 msgstr ""
 
-#: catalogs/mill/menu.xml:13 catalogs/plasma/_menu-custom.xml:13
-#: catalogs/plasma/menu.xml:13 cfg/mill/polygon.cfg:3 cfg/plasma/polygon.cfg:3
+#: catalogs/mill/menu.xml:13
+#: catalogs/plasma/_menu-custom.xml:13
+#: catalogs/plasma/menu.xml:13
+#: cfg/mill/polygon.cfg:3
+#: cfg/plasma/polygon.cfg:3
 msgid "Polygon"
 msgstr ""
 
-#: catalogs/mill/menu.xml:13 catalogs/plasma/_menu-custom.xml:13
+#: catalogs/mill/menu.xml:13
+#: catalogs/plasma/_menu-custom.xml:13
 #: catalogs/plasma/menu.xml:13
 msgid "Polygon of N edges"
 msgstr ""
@@ -1101,128 +1188,163 @@ msgstr ""
 msgid "Uni or Bi-directional"
 msgstr ""
 
-#: catalogs/mill/menu.xml:17 catalogs/plasma/_menu-custom.xml:15
+#: catalogs/mill/menu.xml:17
+#: catalogs/plasma/_menu-custom.xml:15
 #: catalogs/plasma/menu.xml:15
 msgid "Advanced"
 msgstr ""
 
-#: catalogs/mill/menu.xml:18 catalogs/plasma/_menu-custom.xml:16
-#: catalogs/plasma/menu.xml:16 cfg/mill/polyline.cfg:3
+#: catalogs/mill/menu.xml:18
+#: catalogs/plasma/_menu-custom.xml:16
+#: catalogs/plasma/menu.xml:16
+#: cfg/mill/polyline.cfg:3
 #: cfg/plasma/polyline.cfg:3
 msgid "Polyline"
 msgstr ""
 
-#: catalogs/mill/menu.xml:19 cfg/circular-array.cfg:69
+#: catalogs/mill/menu.xml:19
+#: cfg/circular-array.cfg:69
 #: cfg/mill/drill-circle.cfg:79
 msgid "Start"
 msgstr ""
 
-#: catalogs/mill/menu.xml:19 catalogs/plasma/_menu-custom.xml:17
+#: catalogs/mill/menu.xml:19
+#: catalogs/plasma/_menu-custom.xml:17
 #: catalogs/plasma/menu.xml:17
 msgid "Starts a polyline"
 msgstr ""
 
-#: catalogs/mill/menu.xml:21 catalogs/plasma/_menu-custom.xml:19
-#: catalogs/plasma/menu.xml:19 cfg/mill/polyline-to.cfg:3
+#: catalogs/mill/menu.xml:21
+#: catalogs/plasma/_menu-custom.xml:19
+#: catalogs/plasma/menu.xml:19
+#: cfg/mill/polyline-to.cfg:3
 #: cfg/plasma/polyline-to.cfg:3
 msgid "Line To"
 msgstr ""
 
-#: catalogs/mill/menu.xml:21 catalogs/plasma/_menu-custom.xml:19
-#: catalogs/plasma/menu.xml:19 cfg/mill/polyline-arc-to.cfg:72
-#: cfg/mill/polyline-to.cfg:17 cfg/plasma/polyline-arc-to.cfg:48
+#: catalogs/mill/menu.xml:21
+#: catalogs/plasma/_menu-custom.xml:19
+#: catalogs/plasma/menu.xml:19
+#: cfg/mill/polyline-arc-to.cfg:72
+#: cfg/mill/polyline-to.cfg:17
+#: cfg/plasma/polyline-arc-to.cfg:48
 #: cfg/plasma/polyline-to.cfg:17
 msgid "Relative or absolute position"
 msgstr ""
 
-#: catalogs/mill/menu.xml:22 catalogs/plasma/_menu-custom.xml:20
-#: catalogs/plasma/menu.xml:20 cfg/mill/polyline-polar.cfg:3
+#: catalogs/mill/menu.xml:22
+#: catalogs/plasma/_menu-custom.xml:20
+#: catalogs/plasma/menu.xml:20
+#: cfg/mill/polyline-polar.cfg:3
 #: cfg/plasma/polyline-polar.cfg:3
 msgid "Line Polar"
 msgstr ""
 
-#: catalogs/mill/menu.xml:22 catalogs/plasma/_menu-custom.xml:20
+#: catalogs/mill/menu.xml:22
+#: catalogs/plasma/_menu-custom.xml:20
 #: catalogs/plasma/menu.xml:20
 msgid "Define angle and length"
 msgstr ""
 
-#: catalogs/mill/menu.xml:24 catalogs/plasma/_menu-custom.xml:22
-#: catalogs/plasma/menu.xml:22 cfg/mill/polyline-arc-ij.cfg:3
+#: catalogs/mill/menu.xml:24
+#: catalogs/plasma/_menu-custom.xml:22
+#: catalogs/plasma/menu.xml:22
+#: cfg/mill/polyline-arc-ij.cfg:3
 #: cfg/plasma/polyline-arc-ij.cfg:3
 msgid "Arc I,J"
 msgstr ""
 
-#: catalogs/mill/menu.xml:24 catalogs/plasma/_menu-custom.xml:22
+#: catalogs/mill/menu.xml:24
+#: catalogs/plasma/_menu-custom.xml:22
 #: catalogs/plasma/menu.xml:22
 msgid "Defined center by offsets or absolute position"
 msgstr ""
 
-#: catalogs/mill/menu.xml:25 catalogs/plasma/_menu-custom.xml:23
+#: catalogs/mill/menu.xml:25
+#: catalogs/plasma/_menu-custom.xml:23
 #: catalogs/plasma/menu.xml:23
 msgid "Arc Polar Center"
 msgstr ""
 
-#: catalogs/mill/menu.xml:25 catalogs/plasma/_menu-custom.xml:23
+#: catalogs/mill/menu.xml:25
+#: catalogs/plasma/_menu-custom.xml:23
 #: catalogs/plasma/menu.xml:23
 msgid "Define center at angle and distance"
 msgstr ""
 
-#: catalogs/mill/menu.xml:26 catalogs/plasma/_menu-custom.xml:24
-#: catalogs/plasma/menu.xml:24 cfg/mill/polyline-arc-to.cfg:3
+#: catalogs/mill/menu.xml:26
+#: catalogs/plasma/_menu-custom.xml:24
+#: catalogs/plasma/menu.xml:24
+#: cfg/mill/polyline-arc-to.cfg:3
 #: cfg/plasma/polyline-arc-to.cfg:3
 msgid "Arc To Coords"
 msgstr ""
 
-#: catalogs/mill/menu.xml:26 catalogs/mill/menu.xml:27
-#: catalogs/plasma/_menu-custom.xml:24 catalogs/plasma/_menu-custom.xml:25
-#: catalogs/plasma/menu.xml:24 catalogs/plasma/menu.xml:25
+#: catalogs/mill/menu.xml:26
+#: catalogs/mill/menu.xml:27
+#: catalogs/plasma/_menu-custom.xml:24
+#: catalogs/plasma/_menu-custom.xml:25
+#: catalogs/plasma/menu.xml:24
+#: catalogs/plasma/menu.xml:25
 msgid "Define end point, arc height or radius"
 msgstr ""
 
-#: catalogs/mill/menu.xml:27 catalogs/plasma/_menu-custom.xml:25
-#: catalogs/plasma/menu.xml:25 cfg/mill/polyline-arc-top.cfg:3
+#: catalogs/mill/menu.xml:27
+#: catalogs/plasma/_menu-custom.xml:25
+#: catalogs/plasma/menu.xml:25
+#: cfg/mill/polyline-arc-top.cfg:3
 #: cfg/plasma/polyline-arc-top.cfg:3
 msgid "Arc To Polar"
 msgstr ""
 
-#: catalogs/mill/menu.xml:28 catalogs/plasma/_menu-custom.xml:26
+#: catalogs/mill/menu.xml:28
+#: catalogs/plasma/_menu-custom.xml:26
 #: catalogs/plasma/menu.xml:26
 msgid "Arc Mirror End"
 msgstr ""
 
-#: catalogs/mill/menu.xml:28 catalogs/plasma/_menu-custom.xml:26
+#: catalogs/mill/menu.xml:28
+#: catalogs/plasma/_menu-custom.xml:26
 #: catalogs/plasma/menu.xml:26
 msgid "Define I,J and mirror line"
 msgstr ""
 
-#: catalogs/mill/menu.xml:30 catalogs/plasma/_menu-custom.xml:28
+#: catalogs/mill/menu.xml:30
+#: catalogs/plasma/_menu-custom.xml:28
 #: catalogs/plasma/menu.xml:28
 msgid "Repeat Items"
 msgstr ""
 
-#: catalogs/mill/menu.xml:30 catalogs/plasma/_menu-custom.xml:28
+#: catalogs/mill/menu.xml:30
+#: catalogs/plasma/_menu-custom.xml:28
 #: catalogs/plasma/menu.xml:28
 msgid "Repeat a group of polyline items"
 msgstr ""
 
-#: catalogs/mill/menu.xml:31 catalogs/plasma/_menu-custom.xml:29
-#: catalogs/plasma/menu.xml:29 cfg/mill/polyline-mirror-i.cfg:3
+#: catalogs/mill/menu.xml:31
+#: catalogs/plasma/_menu-custom.xml:29
+#: catalogs/plasma/menu.xml:29
+#: cfg/mill/polyline-mirror-i.cfg:3
 #: cfg/plasma/polyline-mirror-i.cfg:3
 msgid "Mirror Items"
 msgstr ""
 
-#: catalogs/mill/menu.xml:31 catalogs/plasma/_menu-custom.xml:29
+#: catalogs/mill/menu.xml:31
+#: catalogs/plasma/_menu-custom.xml:29
 #: catalogs/plasma/menu.xml:29
 msgid "Duplicate and reverse polyline items"
 msgstr ""
 
-#: catalogs/mill/menu.xml:33 catalogs/plasma/_menu-custom.xml:31
-#: catalogs/plasma/menu.xml:31 cfg/mill/polyline-mirror-p.cfg:3
+#: catalogs/mill/menu.xml:33
+#: catalogs/plasma/_menu-custom.xml:31
+#: catalogs/plasma/menu.xml:31
+#: cfg/mill/polyline-mirror-p.cfg:3
 #: cfg/plasma/polyline-mirror-p.cfg:3
 msgid "Mirror Polyline"
 msgstr ""
 
-#: catalogs/mill/menu.xml:33 catalogs/plasma/_menu-custom.xml:31
+#: catalogs/mill/menu.xml:33
+#: catalogs/plasma/_menu-custom.xml:31
 #: catalogs/plasma/menu.xml:31
 msgid "Create a reversed polyline from previous one"
 msgstr ""
@@ -1235,7 +1357,8 @@ msgstr ""
 msgid "For Socket Head Cap Screw"
 msgstr ""
 
-#: catalogs/mill/menu.xml:36 catalogs/mill/menu.xml:44
+#: catalogs/mill/menu.xml:36
+#: catalogs/mill/menu.xml:44
 msgid "Single Hole"
 msgstr ""
 
@@ -1255,7 +1378,8 @@ msgstr ""
 msgid "Define 2 points"
 msgstr ""
 
-#: catalogs/mill/menu.xml:41 cfg/mill/thread-milling.cfg:3
+#: catalogs/mill/menu.xml:41
+#: cfg/mill/thread-milling.cfg:3
 msgid "Thread Milling"
 msgstr ""
 
@@ -1291,47 +1415,58 @@ msgstr ""
 msgid "Create a hole circle of different angle spacing"
 msgstr ""
 
-#: catalogs/mill/menu.xml:49 catalogs/plasma/_menu-custom.xml:34
+#: catalogs/mill/menu.xml:49
+#: catalogs/plasma/_menu-custom.xml:34
 #: catalogs/plasma/menu.xml:34
 msgid "Group, Offset And Rotation"
 msgstr ""
 
-#: catalogs/mill/menu.xml:50 catalogs/plasma/_menu-custom.xml:35
+#: catalogs/mill/menu.xml:50
+#: catalogs/plasma/_menu-custom.xml:35
 #: catalogs/plasma/menu.xml:35
 msgid "Standard Group"
 msgstr ""
 
-#: catalogs/mill/menu.xml:50 catalogs/plasma/_menu-custom.xml:35
+#: catalogs/mill/menu.xml:50
+#: catalogs/plasma/_menu-custom.xml:35
 #: catalogs/plasma/menu.xml:35
 msgid "Group subroutines"
 msgstr ""
 
-#: catalogs/mill/menu.xml:51 catalogs/plasma/_menu-custom.xml:36
+#: catalogs/mill/menu.xml:51
+#: catalogs/plasma/_menu-custom.xml:36
 #: catalogs/plasma/menu.xml:36
 msgid "Offset/Rotate"
 msgstr ""
 
-#: catalogs/mill/menu.xml:51 catalogs/plasma/_menu-custom.xml:36
+#: catalogs/mill/menu.xml:51
+#: catalogs/plasma/_menu-custom.xml:36
 #: catalogs/plasma/menu.xml:36
 msgid "Group subroutines, offset and rotate"
 msgstr ""
 
-#: catalogs/mill/menu.xml:53 catalogs/plasma/_menu-custom.xml:38
-#: catalogs/plasma/menu.xml:38 cfg/circular-array.cfg:3
+#: catalogs/mill/menu.xml:53
+#: catalogs/plasma/_menu-custom.xml:38
+#: catalogs/plasma/menu.xml:38
+#: cfg/circular-array.cfg:3
 msgid "Radial Array"
 msgstr ""
 
-#: catalogs/mill/menu.xml:53 catalogs/plasma/_menu-custom.xml:38
+#: catalogs/mill/menu.xml:53
+#: catalogs/plasma/_menu-custom.xml:38
 #: catalogs/plasma/menu.xml:38
 msgid "Define diameter or distance between groups"
 msgstr ""
 
-#: catalogs/mill/menu.xml:54 catalogs/plasma/_menu-custom.xml:39
-#: catalogs/plasma/menu.xml:39 cfg/rectangular-array.cfg:3
+#: catalogs/mill/menu.xml:54
+#: catalogs/plasma/_menu-custom.xml:39
+#: catalogs/plasma/menu.xml:39
+#: cfg/rectangular-array.cfg:3
 msgid "Rectangular Array"
 msgstr ""
 
-#: catalogs/mill/menu.xml:54 catalogs/plasma/_menu-custom.xml:39
+#: catalogs/mill/menu.xml:54
+#: catalogs/plasma/_menu-custom.xml:39
 #: catalogs/plasma/menu.xml:39
 msgid "Array of rows and columns"
 msgstr ""
@@ -1340,7 +1475,8 @@ msgstr ""
 msgid "Select end mill or drill and set parameters"
 msgstr ""
 
-#: catalogs/mill/menu.xml:58 cfg/mill/probe-edge.cfg:3
+#: catalogs/mill/menu.xml:58
+#: cfg/mill/probe-edge.cfg:3
 msgid "Probe Edges"
 msgstr ""
 
@@ -1364,32 +1500,39 @@ msgstr ""
 msgid "Probe a array of points and save to file"
 msgstr ""
 
-#: catalogs/mill/menu.xml:63 catalogs/plasma/_menu-custom.xml:43
+#: catalogs/mill/menu.xml:63
+#: catalogs/plasma/_menu-custom.xml:43
 #: catalogs/plasma/menu.xml:43
 msgid "Raw Material"
 msgstr ""
 
-#: catalogs/mill/menu.xml:63 catalogs/plasma/_menu-custom.xml:43
+#: catalogs/mill/menu.xml:63
+#: catalogs/plasma/_menu-custom.xml:43
 #: catalogs/plasma/menu.xml:43
 msgid "Show a temporary image of rough material"
 msgstr ""
 
-#: catalogs/mill/menu.xml:66 catalogs/plasma/_menu-custom.xml:46
-#: catalogs/plasma/menu.xml:46 cfg/comment.cfg:4
+#: catalogs/mill/menu.xml:66
+#: catalogs/plasma/_menu-custom.xml:46
+#: catalogs/plasma/menu.xml:46
+#: cfg/comment.cfg:4
 msgid "Comment"
 msgstr ""
 
-#: catalogs/mill/menu.xml:66 catalogs/plasma/_menu-custom.xml:46
+#: catalogs/mill/menu.xml:66
+#: catalogs/plasma/_menu-custom.xml:46
 #: catalogs/plasma/menu.xml:46
 msgid "Add comments"
 msgstr ""
 
-#: catalogs/mill/menu.xml:67 catalogs/plasma/_menu-custom.xml:47
+#: catalogs/mill/menu.xml:67
+#: catalogs/plasma/_menu-custom.xml:47
 #: catalogs/plasma/menu.xml:47
 msgid "Temporarily change units"
 msgstr ""
 
-#: catalogs/plasma/_menu-custom.xml:17 catalogs/plasma/menu.xml:17
+#: catalogs/plasma/_menu-custom.xml:17
+#: catalogs/plasma/menu.xml:17
 msgid "Begin"
 msgstr ""
 
@@ -1397,33 +1540,66 @@ msgstr ""
 msgid "<b>Change Units for items only and revert back after</b>"
 msgstr ""
 
-#: cfg/change-units.cfg:10 cfg/circular-array.cfg:10 cfg/gcode.cfg:10
-#: cfg/group-off.cfg:16 cfg/group.cfg:16 cfg/i_gcode.cfg:10
-#: cfg/mill/SHCS.cfg:10 cfg/mill/SHCS_slot-arc.cfg:10 cfg/mill/SHCS_slot.cfg:10
-#: cfg/mill/SHCS_slot2.cfg:10 cfg/mill/circle-2.cfg:10 cfg/mill/circle.cfg:10
-#: cfg/mill/drill-array.cfg:10 cfg/mill/drill-circle-irr.cfg:10
-#: cfg/mill/drill-circle.cfg:10 cfg/mill/drill-single.cfg:10
-#: cfg/mill/ellipse.cfg:10 cfg/mill/polygon.cfg:10
-#: cfg/mill/polyline-arc-ij.cfg:65 cfg/mill/polyline-arc-m.cfg:87
-#: cfg/mill/polyline-arc-polar.cfg:65 cfg/mill/polyline-arc-to.cfg:65
-#: cfg/mill/polyline-arc-top.cfg:65 cfg/mill/polyline-mirror-i.cfg:10
-#: cfg/mill/polyline-mirror-p.cfg:10 cfg/mill/polyline-polar.cfg:10
-#: cfg/mill/polyline-repeat.cfg:24 cfg/mill/polyline-to.cfg:10
-#: cfg/mill/polyline.cfg:33 cfg/mill/probe-array.cfg:10
-#: cfg/mill/probe-edge.cfg:10 cfg/mill/probe-stock.cfg:10
-#: cfg/mill/rectangle.cfg:10 cfg/mill/slot-2.cfg:10 cfg/mill/slot-arc.cfg:10
-#: cfg/mill/slot.cfg:10 cfg/mill/surf_finish.cfg:10
-#: cfg/mill/thread-milling.cfg:10 cfg/mill/tool-change.cfg:10
-#: cfg/plasma/circle-2.cfg:10 cfg/plasma/circle.cfg:10
-#: cfg/plasma/cutting-params2d.cfg:10 cfg/plasma/cutting-params3d.cfg:10
-#: cfg/plasma/ellipse.cfg:10 cfg/plasma/polygon.cfg:10
-#: cfg/plasma/polyline-arc-ij.cfg:41 cfg/plasma/polyline-arc-m.cfg:69
-#: cfg/plasma/polyline-arc-polar.cfg:41 cfg/plasma/polyline-arc-to.cfg:41
-#: cfg/plasma/polyline-arc-top.cfg:41 cfg/plasma/polyline-mirror-i.cfg:10
-#: cfg/plasma/polyline-mirror-p.cfg:10 cfg/plasma/polyline-polar.cfg:10
-#: cfg/plasma/polyline-repeat.cfg:24 cfg/plasma/polyline-to.cfg:10
-#: cfg/plasma/polyline.cfg:33 cfg/plasma/rectangle.cfg:10
-#: cfg/plasma/slot-2.cfg:10 cfg/plasma/slot-arc.cfg:10 cfg/plasma/slot.cfg:10
+#: cfg/change-units.cfg:10
+#: cfg/circular-array.cfg:10
+#: cfg/gcode.cfg:10
+#: cfg/group-off.cfg:16
+#: cfg/group.cfg:16
+#: cfg/i_gcode.cfg:10
+#: cfg/mill/SHCS.cfg:10
+#: cfg/mill/SHCS_slot-arc.cfg:10
+#: cfg/mill/SHCS_slot.cfg:10
+#: cfg/mill/SHCS_slot2.cfg:10
+#: cfg/mill/circle-2.cfg:10
+#: cfg/mill/circle.cfg:10
+#: cfg/mill/drill-array.cfg:10
+#: cfg/mill/drill-circle-irr.cfg:10
+#: cfg/mill/drill-circle.cfg:10
+#: cfg/mill/drill-single.cfg:10
+#: cfg/mill/ellipse.cfg:10
+#: cfg/mill/polygon.cfg:10
+#: cfg/mill/polyline-arc-ij.cfg:65
+#: cfg/mill/polyline-arc-m.cfg:87
+#: cfg/mill/polyline-arc-polar.cfg:65
+#: cfg/mill/polyline-arc-to.cfg:65
+#: cfg/mill/polyline-arc-top.cfg:65
+#: cfg/mill/polyline-mirror-i.cfg:10
+#: cfg/mill/polyline-mirror-p.cfg:10
+#: cfg/mill/polyline-polar.cfg:10
+#: cfg/mill/polyline-repeat.cfg:24
+#: cfg/mill/polyline-to.cfg:10
+#: cfg/mill/polyline.cfg:33
+#: cfg/mill/probe-array.cfg:10
+#: cfg/mill/probe-edge.cfg:10
+#: cfg/mill/probe-stock.cfg:10
+#: cfg/mill/rectangle.cfg:10
+#: cfg/mill/slot-2.cfg:10
+#: cfg/mill/slot-arc.cfg:10
+#: cfg/mill/slot.cfg:10
+#: cfg/mill/surf_finish.cfg:10
+#: cfg/mill/thread-milling.cfg:10
+#: cfg/mill/tool-change.cfg:10
+#: cfg/plasma/circle-2.cfg:10
+#: cfg/plasma/circle.cfg:10
+#: cfg/plasma/cutting-params2d.cfg:10
+#: cfg/plasma/cutting-params3d.cfg:10
+#: cfg/plasma/ellipse.cfg:10
+#: cfg/plasma/polygon.cfg:10
+#: cfg/plasma/polyline-arc-ij.cfg:41
+#: cfg/plasma/polyline-arc-m.cfg:69
+#: cfg/plasma/polyline-arc-polar.cfg:41
+#: cfg/plasma/polyline-arc-to.cfg:41
+#: cfg/plasma/polyline-arc-top.cfg:41
+#: cfg/plasma/polyline-mirror-i.cfg:10
+#: cfg/plasma/polyline-mirror-p.cfg:10
+#: cfg/plasma/polyline-polar.cfg:10
+#: cfg/plasma/polyline-repeat.cfg:24
+#: cfg/plasma/polyline-to.cfg:10
+#: cfg/plasma/polyline.cfg:33
+#: cfg/plasma/rectangle.cfg:10
+#: cfg/plasma/slot-2.cfg:10
+#: cfg/plasma/slot-arc.cfg:10
+#: cfg/plasma/slot.cfg:10
 #: cfg/rectangular-array.cfg:11
 msgid "Active"
 msgstr ""
@@ -1452,9 +1628,14 @@ msgstr ""
 msgid "Change units for cut depth"
 msgstr ""
 
-#: cfg/change-units.cfg:39 cfg/circular-array.cfg:96 cfg/group-off.cfg:10
-#: cfg/group.cfg:10 cfg/mill/polyline-repeat.cfg:10 cfg/mill/polyline.cfg:164
-#: cfg/plasma/polyline-repeat.cfg:10 cfg/plasma/polyline.cfg:128
+#: cfg/change-units.cfg:39
+#: cfg/circular-array.cfg:96
+#: cfg/group-off.cfg:10
+#: cfg/group.cfg:10
+#: cfg/mill/polyline-repeat.cfg:10
+#: cfg/mill/polyline.cfg:164
+#: cfg/plasma/polyline-repeat.cfg:10
+#: cfg/plasma/polyline.cfg:128
 #: cfg/rectangular-array.cfg:138
 msgid "Items"
 msgstr ""
@@ -1467,16 +1648,23 @@ msgstr ""
 msgid "<b>Create a Radial Array of items</b>"
 msgstr ""
 
-#: cfg/circular-array.cfg:13 cfg/group-off.cfg:19 cfg/group.cfg:19
+#: cfg/circular-array.cfg:13
+#: cfg/group-off.cfg:19
+#: cfg/group.cfg:19
 #: cfg/rectangular-array.cfg:14
 msgid "Disabling will disable ALL items"
 msgstr ""
 
-#: cfg/circular-array.cfg:17 cfg/mill/SHCS_slot-arc.cfg:28
-#: cfg/mill/SHCS_slot.cfg:28 cfg/mill/circle.cfg:20
-#: cfg/mill/drill-circle-irr.cfg:20 cfg/mill/drill-circle.cfg:21
-#: cfg/mill/slot-2.cfg:20 cfg/mill/thread-milling.cfg:20
-#: cfg/plasma/circle.cfg:20 cfg/plasma/slot-2.cfg:20
+#: cfg/circular-array.cfg:17
+#: cfg/mill/SHCS_slot-arc.cfg:28
+#: cfg/mill/SHCS_slot.cfg:28
+#: cfg/mill/circle.cfg:20
+#: cfg/mill/drill-circle-irr.cfg:20
+#: cfg/mill/drill-circle.cfg:21
+#: cfg/mill/slot-2.cfg:20
+#: cfg/mill/thread-milling.cfg:20
+#: cfg/plasma/circle.cfg:20
+#: cfg/plasma/slot-2.cfg:20
 msgid "Coords, size"
 msgstr ""
 
@@ -1484,30 +1672,47 @@ msgstr ""
 msgid "Rotation and ends"
 msgstr ""
 
-#: cfg/circular-array.cfg:24 cfg/circular-array.cfg:28
-#: cfg/rectangular-array.cfg:50 cfg/rectangular-array.cfg:59
+#: cfg/circular-array.cfg:24
+#: cfg/circular-array.cfg:28
+#: cfg/rectangular-array.cfg:50
+#: cfg/rectangular-array.cfg:59
 msgid "Number of copies"
 msgstr ""
 
-#: cfg/circular-array.cfg:33 cfg/group-off.cfg:26 cfg/mill/SHCS.cfg:30
-#: cfg/mill/SHCS_slot-arc.cfg:37 cfg/mill/circle.cfg:46
-#: cfg/mill/drill-circle-irr.cfg:32 cfg/mill/drill-circle.cfg:32
-#: cfg/mill/polygon.cfg:28 cfg/mill/slot-arc.cfg:32
-#: cfg/mill/thread-milling.cfg:24 cfg/plasma/circle.cfg:24
-#: cfg/plasma/polygon.cfg:28 cfg/plasma/slot-arc.cfg:32
+#: cfg/circular-array.cfg:33
+#: cfg/group-off.cfg:26
+#: cfg/mill/SHCS.cfg:30
+#: cfg/mill/SHCS_slot-arc.cfg:37
+#: cfg/mill/circle.cfg:46
+#: cfg/mill/drill-circle-irr.cfg:32
+#: cfg/mill/drill-circle.cfg:32
+#: cfg/mill/polygon.cfg:28
+#: cfg/mill/slot-arc.cfg:32
+#: cfg/mill/thread-milling.cfg:24
+#: cfg/plasma/circle.cfg:24
+#: cfg/plasma/polygon.cfg:28
+#: cfg/plasma/slot-arc.cfg:32
 msgid "cX"
 msgstr ""
 
-#: cfg/circular-array.cfg:36 cfg/circular-array.cfg:45
+#: cfg/circular-array.cfg:36
+#: cfg/circular-array.cfg:45
 msgid "Array center"
 msgstr ""
 
-#: cfg/circular-array.cfg:42 cfg/group-off.cfg:35 cfg/mill/SHCS.cfg:39
-#: cfg/mill/SHCS_slot-arc.cfg:46 cfg/mill/circle.cfg:63
-#: cfg/mill/drill-circle-irr.cfg:41 cfg/mill/drill-circle.cfg:41
-#: cfg/mill/polygon.cfg:37 cfg/mill/slot-arc.cfg:41
-#: cfg/mill/thread-milling.cfg:41 cfg/plasma/circle.cfg:41
-#: cfg/plasma/polygon.cfg:37 cfg/plasma/slot-arc.cfg:41
+#: cfg/circular-array.cfg:42
+#: cfg/group-off.cfg:35
+#: cfg/mill/SHCS.cfg:39
+#: cfg/mill/SHCS_slot-arc.cfg:46
+#: cfg/mill/circle.cfg:63
+#: cfg/mill/drill-circle-irr.cfg:41
+#: cfg/mill/drill-circle.cfg:41
+#: cfg/mill/polygon.cfg:37
+#: cfg/mill/slot-arc.cfg:41
+#: cfg/mill/thread-milling.cfg:41
+#: cfg/plasma/circle.cfg:41
+#: cfg/plasma/polygon.cfg:37
+#: cfg/plasma/slot-arc.cfg:41
 msgid "cY"
 msgstr ""
 
@@ -1523,12 +1728,18 @@ msgstr ""
 msgid "Select what dimension means"
 msgstr ""
 
-#: cfg/circular-array.cfg:60 cfg/mill/material.cfg:17
-#: cfg/mill/polyline-arc-to.cfg:114 cfg/mill/polyline-arc-top.cfg:108
-#: cfg/mill/polyline.cfg:198 cfg/mill/slot-arc.cfg:24
-#: cfg/mill/thread-milling.cfg:130 cfg/plasma/material2d.cfg:17
-#: cfg/plasma/material3d.cfg:17 cfg/plasma/polyline-arc-to.cfg:90
-#: cfg/plasma/polyline-arc-top.cfg:84 cfg/plasma/polyline.cfg:162
+#: cfg/circular-array.cfg:60
+#: cfg/mill/material.cfg:17
+#: cfg/mill/polyline-arc-to.cfg:114
+#: cfg/mill/polyline-arc-top.cfg:108
+#: cfg/mill/polyline.cfg:198
+#: cfg/mill/slot-arc.cfg:24
+#: cfg/mill/thread-milling.cfg:130
+#: cfg/plasma/material2d.cfg:17
+#: cfg/plasma/material3d.cfg:17
+#: cfg/plasma/polyline-arc-to.cfg:90
+#: cfg/plasma/polyline-arc-top.cfg:84
+#: cfg/plasma/polyline.cfg:162
 #: cfg/plasma/slot-arc.cfg:24
 msgid "Size"
 msgstr ""
@@ -1557,7 +1768,8 @@ msgstr ""
 msgid "Rotate each group of items"
 msgstr ""
 
-#: cfg/circular-array.cfg:99 cfg/rectangular-array.cfg:141
+#: cfg/circular-array.cfg:99
+#: cfg/rectangular-array.cfg:141
 msgid "Items to copy"
 msgstr ""
 
@@ -1565,7 +1777,8 @@ msgstr ""
 msgid "<b>Add a comment</b>"
 msgstr ""
 
-#: cfg/comment.cfg:11 cfg/group.cfg:22
+#: cfg/comment.cfg:11
+#: cfg/group.cfg:22
 msgid "Note"
 msgstr ""
 
@@ -1575,8 +1788,8 @@ msgstr ""
 
 #: cfg/gcode.cfg:6
 msgid ""
-"<b>Add gcode</b>&#10;lines will be parsed as usual so you can use &lt;"
-"eval>&lt;/eval>, '\\n'"
+"<b>Add gcode</b>&#10;lines will be parsed as usual so you can use &lt;eval>&lt;/eval>, '\\n"
+"'"
 msgstr ""
 
 #: cfg/gcode.cfg:13
@@ -1591,7 +1804,10 @@ msgstr ""
 msgid "Line 1"
 msgstr ""
 
-#: cfg/gcode.cfg:23 cfg/gcode.cfg:30 cfg/gcode.cfg:37 cfg/gcode.cfg:44
+#: cfg/gcode.cfg:23
+#: cfg/gcode.cfg:30
+#: cfg/gcode.cfg:37
+#: cfg/gcode.cfg:44
 #: cfg/gcode.cfg:51
 msgid "Gcode line"
 msgstr ""
@@ -1620,7 +1836,8 @@ msgstr ""
 msgid "<b>Offset and/or Rotate a Group of items</b>"
 msgstr ""
 
-#: cfg/group-off.cfg:13 cfg/group.cfg:13
+#: cfg/group-off.cfg:13
+#: cfg/group.cfg:13
 msgid "Items to group"
 msgstr ""
 
@@ -1628,7 +1845,8 @@ msgstr ""
 msgid "Coords and rotation"
 msgstr ""
 
-#: cfg/group-off.cfg:29 cfg/group-off.cfg:38
+#: cfg/group-off.cfg:29
+#: cfg/group-off.cfg:38
 msgid "Rotation center"
 msgstr ""
 
@@ -1636,25 +1854,36 @@ msgstr ""
 msgid "Items offsets"
 msgstr ""
 
-#: cfg/group-off.cfg:48 cfg/mill/drill-array.cfg:88
-#: cfg/mill/polyline-mirror-p.cfg:28 cfg/mill/polyline.cfg:56
-#: cfg/mill/probe-array.cfg:26 cfg/plasma/polyline-mirror-p.cfg:28
-#: cfg/plasma/polyline.cfg:56 cfg/rectangular-array.cfg:100
+#: cfg/group-off.cfg:48
+#: cfg/mill/drill-array.cfg:88
+#: cfg/mill/polyline-mirror-p.cfg:28
+#: cfg/mill/polyline.cfg:56
+#: cfg/mill/probe-array.cfg:26
+#: cfg/plasma/polyline-mirror-p.cfg:28
+#: cfg/plasma/polyline.cfg:56
+#: cfg/rectangular-array.cfg:100
 msgid "dX"
 msgstr ""
 
-#: cfg/group-off.cfg:51 cfg/mill/drill-array.cfg:91 cfg/mill/probe-array.cfg:29
+#: cfg/group-off.cfg:51
+#: cfg/mill/drill-array.cfg:91
+#: cfg/mill/probe-array.cfg:29
 msgid "X offset"
 msgstr ""
 
-#: cfg/group-off.cfg:57 cfg/mill/drill-array.cfg:113
-#: cfg/mill/polyline-mirror-p.cfg:37 cfg/mill/polyline.cfg:65
-#: cfg/mill/probe-array.cfg:36 cfg/plasma/polyline-mirror-p.cfg:37
-#: cfg/plasma/polyline.cfg:65 cfg/rectangular-array.cfg:119
+#: cfg/group-off.cfg:57
+#: cfg/mill/drill-array.cfg:113
+#: cfg/mill/polyline-mirror-p.cfg:37
+#: cfg/mill/polyline.cfg:65
+#: cfg/mill/probe-array.cfg:36
+#: cfg/plasma/polyline-mirror-p.cfg:37
+#: cfg/plasma/polyline.cfg:65
+#: cfg/rectangular-array.cfg:119
 msgid "dY"
 msgstr ""
 
-#: cfg/group-off.cfg:60 cfg/mill/drill-array.cfg:116
+#: cfg/group-off.cfg:60
+#: cfg/mill/drill-array.cfg:116
 #: cfg/mill/probe-array.cfg:39
 msgid "Y offset"
 msgstr ""
@@ -1663,16 +1892,26 @@ msgstr ""
 msgid "Rotate"
 msgstr ""
 
-#: cfg/group-off.cfg:70 cfg/mill/SHCS_slot-arc.cfg:69
-#: cfg/mill/drill-array.cfg:122 cfg/mill/drill-circle-irr.cfg:82
-#: cfg/mill/drill-circle-irr.cfg:92 cfg/mill/drill-circle-irr.cfg:102
-#: cfg/mill/drill-circle-irr.cfg:112 cfg/mill/drill-circle-irr.cfg:122
-#: cfg/mill/drill-circle-irr.cfg:132 cfg/mill/polyline-arc-ij.cfg:100
-#: cfg/mill/polyline-arc-polar.cfg:85 cfg/mill/polyline-arc-polar.cfg:95
-#: cfg/mill/polyline-arc-top.cfg:85 cfg/mill/polyline-polar.cfg:30
-#: cfg/mill/polyline-polar.cfg:35 cfg/plasma/polyline-arc-ij.cfg:76
-#: cfg/plasma/polyline-arc-polar.cfg:61 cfg/plasma/polyline-arc-polar.cfg:71
-#: cfg/plasma/polyline-arc-top.cfg:61 cfg/plasma/polyline-polar.cfg:30
+#: cfg/group-off.cfg:70
+#: cfg/mill/SHCS_slot-arc.cfg:69
+#: cfg/mill/drill-array.cfg:122
+#: cfg/mill/drill-circle-irr.cfg:82
+#: cfg/mill/drill-circle-irr.cfg:92
+#: cfg/mill/drill-circle-irr.cfg:102
+#: cfg/mill/drill-circle-irr.cfg:112
+#: cfg/mill/drill-circle-irr.cfg:122
+#: cfg/mill/drill-circle-irr.cfg:132
+#: cfg/mill/polyline-arc-ij.cfg:100
+#: cfg/mill/polyline-arc-polar.cfg:85
+#: cfg/mill/polyline-arc-polar.cfg:95
+#: cfg/mill/polyline-arc-top.cfg:85
+#: cfg/mill/polyline-polar.cfg:30
+#: cfg/mill/polyline-polar.cfg:35
+#: cfg/plasma/polyline-arc-ij.cfg:76
+#: cfg/plasma/polyline-arc-polar.cfg:61
+#: cfg/plasma/polyline-arc-polar.cfg:71
+#: cfg/plasma/polyline-arc-top.cfg:61
+#: cfg/plasma/polyline-polar.cfg:30
 #: cfg/plasma/polyline-polar.cfg:35
 msgid "Angle"
 msgstr ""
@@ -1710,13 +1949,13 @@ msgid "Lathe cutting parameters"
 msgstr ""
 
 #: cfg/lathe/cutting-params.cfg:6
-msgid ""
-"<b>Sets global cutting depth, depth step, surface origin, and rappid "
-"distance.</b>"
+msgid "<b>Sets global cutting depth, depth step, surface origin, and rappid distance.</b>"
 msgstr ""
 
-#: cfg/lathe/cutting-params.cfg:10 cfg/lathe/cutting-params.cfg:13
-#: cfg/mill/material.cfg:49 cfg/plasma/material2d.cfg:45
+#: cfg/lathe/cutting-params.cfg:10
+#: cfg/lathe/cutting-params.cfg:13
+#: cfg/mill/material.cfg:49
+#: cfg/plasma/material2d.cfg:45
 #: cfg/plasma/material3d.cfg:45
 msgid "Surface"
 msgstr ""
@@ -1729,7 +1968,8 @@ msgstr ""
 msgid "Surface for ID cutting"
 msgstr ""
 
-#: cfg/lathe/cutting-params.cfg:24 cfg/lathe/cutting-params.cfg:27
+#: cfg/lathe/cutting-params.cfg:24
+#: cfg/lathe/cutting-params.cfg:27
 msgid "Depth step"
 msgstr ""
 
@@ -1765,7 +2005,8 @@ msgstr ""
 msgid "Final cut depth step"
 msgstr ""
 
-#: cfg/lathe/cutting-params.cfg:59 cfg/lathe/cutting-params.cfg:62
+#: cfg/lathe/cutting-params.cfg:59
+#: cfg/lathe/cutting-params.cfg:62
 msgid "Num of final cuts"
 msgstr ""
 
@@ -1781,8 +2022,10 @@ msgstr ""
 msgid "Spindle"
 msgstr ""
 
-#: cfg/lathe/cutting-params.cfg:83 cfg/lathe/cutting-params.cfg:90
-#: cfg/lathe/thread-adv.cfg:112 cfg/mill/tool-change.cfg:134
+#: cfg/lathe/cutting-params.cfg:83
+#: cfg/lathe/cutting-params.cfg:90
+#: cfg/lathe/thread-adv.cfg:112
+#: cfg/mill/tool-change.cfg:134
 msgid "Spindle speed"
 msgstr ""
 
@@ -1806,7 +2049,8 @@ msgstr ""
 msgid "Use mist or not"
 msgstr ""
 
-#: cfg/lathe/face.cfg:3 cfg/mill/surf_finish.cfg:3
+#: cfg/lathe/face.cfg:3
+#: cfg/mill/surf_finish.cfg:3
 msgid "Facing"
 msgstr ""
 
@@ -1814,8 +2058,11 @@ msgstr ""
 msgid "<b>OD/OD tapper</b>"
 msgstr ""
 
-#: cfg/lathe/face.cfg:10 cfg/mill/material.cfg:46 cfg/plasma/material2d.cfg:42
-#: cfg/plasma/material3d.cfg:42 cfg/rectangular-array.cfg:82
+#: cfg/lathe/face.cfg:10
+#: cfg/mill/material.cfg:46
+#: cfg/plasma/material2d.cfg:42
+#: cfg/plasma/material3d.cfg:42
+#: cfg/rectangular-array.cfg:82
 msgid "Z"
 msgstr ""
 
@@ -1835,7 +2082,8 @@ msgstr ""
 msgid "Lathe thread"
 msgstr ""
 
-#: cfg/lathe/thread-adv.cfg:6 cfg/lathe/threading-params.cfg:6
+#: cfg/lathe/thread-adv.cfg:6
+#: cfg/lathe/threading-params.cfg:6
 msgid "<b>Create thread</b>"
 msgstr ""
 
@@ -1867,7 +2115,8 @@ msgstr ""
 msgid "Inital cut (J)"
 msgstr ""
 
-#: cfg/lathe/thread-adv.cfg:52 cfg/lathe/threading-params.cfg:17
+#: cfg/lathe/thread-adv.cfg:52
+#: cfg/lathe/threading-params.cfg:17
 msgid " depth degression (R)"
 msgstr ""
 
@@ -1875,23 +2124,28 @@ msgstr ""
 msgid "Full thread depth (K)"
 msgstr ""
 
-#: cfg/lathe/thread-adv.cfg:70 cfg/lathe/threading-params.cfg:35
+#: cfg/lathe/thread-adv.cfg:70
+#: cfg/lathe/threading-params.cfg:35
 msgid "Compound slide angle (Q)"
 msgstr ""
 
-#: cfg/lathe/thread-adv.cfg:78 cfg/lathe/threading-params.cfg:43
+#: cfg/lathe/thread-adv.cfg:78
+#: cfg/lathe/threading-params.cfg:43
 msgid "# spring passes (H)"
 msgstr ""
 
-#: cfg/lathe/thread-adv.cfg:80 cfg/lathe/threading-params.cfg:45
+#: cfg/lathe/thread-adv.cfg:80
+#: cfg/lathe/threading-params.cfg:45
 msgid "Number of final cuts"
 msgstr ""
 
-#: cfg/lathe/thread-adv.cfg:84 cfg/lathe/threading-params.cfg:49
+#: cfg/lathe/thread-adv.cfg:84
+#: cfg/lathe/threading-params.cfg:49
 msgid "Tapper (E)"
 msgstr ""
 
-#: cfg/lathe/thread-adv.cfg:93 cfg/lathe/threading-params.cfg:58
+#: cfg/lathe/thread-adv.cfg:93
+#: cfg/lathe/threading-params.cfg:58
 msgid "Tapper (L)"
 msgstr ""
 
@@ -1911,7 +2165,8 @@ msgstr ""
 msgid "<b>Change tool</b>"
 msgstr ""
 
-#: cfg/lathe/tool-change.cfg:10 cfg/lathe/tool-change.cfg:13
+#: cfg/lathe/tool-change.cfg:10
+#: cfg/lathe/tool-change.cfg:13
 #: cfg/mill/tool-change.cfg:48
 msgid "Tool number"
 msgstr ""
@@ -1929,46 +2184,75 @@ msgid "SHCS CBore"
 msgstr ""
 
 #: cfg/mill/SHCS.cfg:6
-msgid ""
-"<b>Creates a counterbore for a socket head cap screw</b>&#10;Will mill the "
-"screw hole if tool is small enough&#10;<span foreground='blue' "
-"style='oblique'><b>Message possible in terminal window</b></span>"
+msgid "<b>Creates a counterbore for a socket head cap screw</b>&#10;Will mill the screw hole if tool is small enough&#10;<span foreground='blue' style='oblique'><b>Message possible in terminal window</b></span>"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:15 cfg/mill/SHCS_slot-arc.cfg:15 cfg/mill/SHCS_slot.cfg:15
-#: cfg/mill/SHCS_slot2.cfg:15 cfg/mill/circle-2.cfg:15 cfg/mill/circle.cfg:15
-#: cfg/mill/drill-array.cfg:15 cfg/mill/drill-circle-irr.cfg:15
-#: cfg/mill/drill-circle.cfg:15 cfg/mill/drill-single.cfg:15
-#: cfg/mill/ellipse.cfg:15 cfg/mill/polygon.cfg:15
-#: cfg/mill/polyline-mirror-p.cfg:118 cfg/mill/polyline.cfg:170
-#: cfg/mill/rectangle.cfg:15 cfg/mill/slot-2.cfg:15 cfg/mill/slot-arc.cfg:15
-#: cfg/mill/slot.cfg:15 cfg/mill/thread-milling.cfg:15
-#: cfg/plasma/circle-2.cfg:15 cfg/plasma/circle.cfg:15
-#: cfg/plasma/ellipse.cfg:15 cfg/plasma/polygon.cfg:15
-#: cfg/plasma/polyline-mirror-p.cfg:82 cfg/plasma/polyline.cfg:134
-#: cfg/plasma/rectangle.cfg:15 cfg/plasma/slot-2.cfg:15
-#: cfg/plasma/slot-arc.cfg:15 cfg/plasma/slot.cfg:15
+#: cfg/mill/SHCS.cfg:15
+#: cfg/mill/SHCS_slot-arc.cfg:15
+#: cfg/mill/SHCS_slot.cfg:15
+#: cfg/mill/SHCS_slot2.cfg:15
+#: cfg/mill/circle-2.cfg:15
+#: cfg/mill/circle.cfg:15
+#: cfg/mill/drill-array.cfg:15
+#: cfg/mill/drill-circle-irr.cfg:15
+#: cfg/mill/drill-circle.cfg:15
+#: cfg/mill/drill-single.cfg:15
+#: cfg/mill/ellipse.cfg:15
+#: cfg/mill/polygon.cfg:15
+#: cfg/mill/polyline-mirror-p.cfg:118
+#: cfg/mill/polyline.cfg:170
+#: cfg/mill/rectangle.cfg:15
+#: cfg/mill/slot-2.cfg:15
+#: cfg/mill/slot-arc.cfg:15
+#: cfg/mill/slot.cfg:15
+#: cfg/mill/thread-milling.cfg:15
+#: cfg/plasma/circle-2.cfg:15
+#: cfg/plasma/circle.cfg:15
+#: cfg/plasma/ellipse.cfg:15
+#: cfg/plasma/polygon.cfg:15
+#: cfg/plasma/polyline-mirror-p.cfg:82
+#: cfg/plasma/polyline.cfg:134
+#: cfg/plasma/rectangle.cfg:15
+#: cfg/plasma/slot-2.cfg:15
+#: cfg/plasma/slot-arc.cfg:15
+#: cfg/plasma/slot.cfg:15
 msgid "Show design"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:20 cfg/mill/SHCS_slot2.cfg:20 cfg/mill/circle-2.cfg:20
-#: cfg/mill/drill-array.cfg:20 cfg/mill/drill-single.cfg:20
-#: cfg/mill/ellipse.cfg:20 cfg/mill/material.cfg:21 cfg/mill/polygon.cfg:20
-#: cfg/mill/polyline-to.cfg:15 cfg/mill/rectangle.cfg:20
-#: cfg/mill/slot-arc.cfg:20 cfg/mill/slot.cfg:20 cfg/plasma/circle-2.cfg:20
-#: cfg/plasma/ellipse.cfg:20 cfg/plasma/material2d.cfg:21
-#: cfg/plasma/material3d.cfg:21 cfg/plasma/polygon.cfg:20
-#: cfg/plasma/polyline-to.cfg:15 cfg/plasma/rectangle.cfg:20
-#: cfg/plasma/slot-arc.cfg:20 cfg/plasma/slot.cfg:20
+#: cfg/mill/SHCS.cfg:20
+#: cfg/mill/SHCS_slot2.cfg:20
+#: cfg/mill/circle-2.cfg:20
+#: cfg/mill/drill-array.cfg:20
+#: cfg/mill/drill-single.cfg:20
+#: cfg/mill/ellipse.cfg:20
+#: cfg/mill/material.cfg:21
+#: cfg/mill/polygon.cfg:20
+#: cfg/mill/polyline-to.cfg:15
+#: cfg/mill/rectangle.cfg:20
+#: cfg/mill/slot-arc.cfg:20
+#: cfg/mill/slot.cfg:20
+#: cfg/plasma/circle-2.cfg:20
+#: cfg/plasma/ellipse.cfg:20
+#: cfg/plasma/material2d.cfg:21
+#: cfg/plasma/material3d.cfg:21
+#: cfg/plasma/polygon.cfg:20
+#: cfg/plasma/polyline-to.cfg:15
+#: cfg/plasma/rectangle.cfg:20
+#: cfg/plasma/slot-arc.cfg:20
+#: cfg/plasma/slot.cfg:20
 #: cfg/rectangular-array.cfg:18
 msgid "Coords"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:22 cfg/mill/SHCS.cfg:33 cfg/mill/SHCS.cfg:42
+#: cfg/mill/SHCS.cfg:22
+#: cfg/mill/SHCS.cfg:33
+#: cfg/mill/SHCS.cfg:42
 msgid "Center of hole"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:25 cfg/mill/SHCS_slot-arc.cfg:20 cfg/mill/SHCS_slot.cfg:24
+#: cfg/mill/SHCS.cfg:25
+#: cfg/mill/SHCS_slot-arc.cfg:20
+#: cfg/mill/SHCS_slot.cfg:24
 #: cfg/mill/SHCS_slot2.cfg:119
 msgid "Washer"
 msgstr ""
@@ -1977,217 +2261,370 @@ msgstr ""
 msgid "Only if used"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:48 cfg/mill/SHCS_slot-arc.cfg:83 cfg/mill/SHCS_slot.cfg:58
+#: cfg/mill/SHCS.cfg:48
+#: cfg/mill/SHCS_slot-arc.cfg:83
+#: cfg/mill/SHCS_slot.cfg:58
 #: cfg/mill/SHCS_slot2.cfg:60
 msgid "Select size"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:50 cfg/mill/SHCS_slot-arc.cfg:85 cfg/mill/SHCS_slot.cfg:60
+#: cfg/mill/SHCS.cfg:50
+#: cfg/mill/SHCS_slot-arc.cfg:85
+#: cfg/mill/SHCS_slot.cfg:60
 #: cfg/mill/SHCS_slot2.cfg:62
 msgid "Fractional=1:Metric=2:Number=3"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:52 cfg/mill/SHCS_slot-arc.cfg:87 cfg/mill/SHCS_slot.cfg:62
+#: cfg/mill/SHCS.cfg:52
+#: cfg/mill/SHCS_slot-arc.cfg:87
+#: cfg/mill/SHCS_slot.cfg:62
 #: cfg/mill/SHCS_slot2.cfg:64
 msgid "Select metric, fractional or numbered"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:58 cfg/mill/SHCS_slot-arc.cfg:93 cfg/mill/SHCS_slot.cfg:68
+#: cfg/mill/SHCS.cfg:58
+#: cfg/mill/SHCS_slot-arc.cfg:93
+#: cfg/mill/SHCS_slot.cfg:68
 #: cfg/mill/SHCS_slot2.cfg:70
 msgid "Fractional"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:64 cfg/mill/SHCS_slot-arc.cfg:99 cfg/mill/SHCS_slot.cfg:74
-#: cfg/mill/SHCS_slot2.cfg:76 cfg/mill/tool-change.cfg:105
+#: cfg/mill/SHCS.cfg:64
+#: cfg/mill/SHCS_slot-arc.cfg:99
+#: cfg/mill/SHCS_slot.cfg:74
+#: cfg/mill/SHCS_slot2.cfg:76
+#: cfg/mill/tool-change.cfg:105
 msgid "inch"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:73 cfg/mill/SHCS_slot-arc.cfg:108
-#: cfg/mill/SHCS_slot.cfg:83 cfg/mill/SHCS_slot2.cfg:85
+#: cfg/mill/SHCS.cfg:73
+#: cfg/mill/SHCS_slot-arc.cfg:108
+#: cfg/mill/SHCS_slot.cfg:83
+#: cfg/mill/SHCS_slot2.cfg:85
 #: cfg/mill/tool-change.cfg:114
 msgid "mm"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:76 cfg/mill/SHCS_slot-arc.cfg:111
-#: cfg/mill/SHCS_slot.cfg:86 cfg/mill/SHCS_slot2.cfg:88
+#: cfg/mill/SHCS.cfg:76
+#: cfg/mill/SHCS_slot-arc.cfg:111
+#: cfg/mill/SHCS_slot.cfg:86
+#: cfg/mill/SHCS_slot2.cfg:88
 msgid "Numbered screw"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:85 cfg/mill/SHCS_slot-arc.cfg:120
-#: cfg/mill/SHCS_slot.cfg:95 cfg/mill/SHCS_slot2.cfg:97
+#: cfg/mill/SHCS.cfg:85
+#: cfg/mill/SHCS_slot-arc.cfg:120
+#: cfg/mill/SHCS_slot.cfg:95
+#: cfg/mill/SHCS_slot2.cfg:97
 msgid "Counterbore depth"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:87 cfg/mill/SHCS_slot-arc.cfg:122
-#: cfg/mill/SHCS_slot.cfg:97 cfg/mill/SHCS_slot2.cfg:99
+#: cfg/mill/SHCS.cfg:87
+#: cfg/mill/SHCS_slot-arc.cfg:122
+#: cfg/mill/SHCS_slot.cfg:97
+#: cfg/mill/SHCS_slot2.cfg:99
 msgid "User defined=0:Head clears surface=1:Maximum depth=2"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:90 cfg/mill/SHCS_slot-arc.cfg:125
-#: cfg/mill/SHCS_slot.cfg:100 cfg/mill/SHCS_slot2.cfg:102
+#: cfg/mill/SHCS.cfg:90
+#: cfg/mill/SHCS_slot-arc.cfg:125
+#: cfg/mill/SHCS_slot.cfg:100
+#: cfg/mill/SHCS_slot2.cfg:102
 msgid "Or head under surface or&#10;leave material equal to screw diameter"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:95 cfg/mill/SHCS_slot-arc.cfg:130
-#: cfg/mill/SHCS_slot.cfg:105 cfg/mill/SHCS_slot2.cfg:107
+#: cfg/mill/SHCS.cfg:95
+#: cfg/mill/SHCS_slot-arc.cfg:130
+#: cfg/mill/SHCS_slot.cfg:105
+#: cfg/mill/SHCS_slot2.cfg:107
 msgid "User defined depth"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:103 cfg/mill/SHCS_slot-arc.cfg:24
-#: cfg/mill/SHCS_slot.cfg:20 cfg/mill/SHCS_slot2.cfg:115
+#: cfg/mill/SHCS.cfg:103
+#: cfg/mill/SHCS_slot-arc.cfg:24
+#: cfg/mill/SHCS_slot.cfg:20
+#: cfg/mill/SHCS_slot2.cfg:115
 msgid "Screw"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:108 cfg/mill/SHCS_slot-arc.cfg:138
-#: cfg/mill/SHCS_slot.cfg:131 cfg/mill/SHCS_slot2.cfg:123
-#: cfg/mill/circle.cfg:80 cfg/mill/circle.cfg:84
-#: cfg/mill/drill-circle-irr.cfg:50 cfg/plasma/circle.cfg:58
+#: cfg/mill/SHCS.cfg:108
+#: cfg/mill/SHCS_slot-arc.cfg:138
+#: cfg/mill/SHCS_slot.cfg:131
+#: cfg/mill/SHCS_slot2.cfg:123
+#: cfg/mill/circle.cfg:80
+#: cfg/mill/circle.cfg:84
+#: cfg/mill/drill-circle-irr.cfg:50
+#: cfg/plasma/circle.cfg:58
 #: cfg/plasma/circle.cfg:62
 msgid "Diameter"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:114 cfg/mill/SHCS_slot-arc.cfg:144
+#: cfg/mill/SHCS.cfg:114
+#: cfg/mill/SHCS_slot-arc.cfg:144
 #: cfg/mill/SHCS_slot2.cfg:129
-msgid ""
-"Diameter of washer used if any in usual units (specify a little larger to "
-"clear)"
+msgid "Diameter of washer used if any in usual units (specify a little larger to clear)"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:118 cfg/mill/SHCS_slot-arc.cfg:148
-#: cfg/mill/SHCS_slot.cfg:142 cfg/mill/SHCS_slot2.cfg:133
+#: cfg/mill/SHCS.cfg:118
+#: cfg/mill/SHCS_slot-arc.cfg:148
+#: cfg/mill/SHCS_slot.cfg:142
+#: cfg/mill/SHCS_slot2.cfg:133
 msgid "Thickness"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:124 cfg/mill/SHCS_slot-arc.cfg:154
+#: cfg/mill/SHCS.cfg:124
+#: cfg/mill/SHCS_slot-arc.cfg:154
 #: cfg/mill/SHCS_slot2.cfg:139
 msgid "Thickness of washer used if any in usual units"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:128 cfg/mill/SHCS_slot-arc.cfg:158
-#: cfg/mill/SHCS_slot.cfg:153 cfg/mill/SHCS_slot2.cfg:143
-#: cfg/mill/circle-2.cfg:84 cfg/mill/circle.cfg:115 cfg/mill/ellipse.cfg:104
-#: cfg/mill/polygon.cfg:77 cfg/mill/polyline-arc-ij.cfg:41
-#: cfg/mill/polyline-arc-m.cfg:63 cfg/mill/polyline-arc-polar.cfg:41
-#: cfg/mill/polyline-arc-to.cfg:41 cfg/mill/polyline-arc-top.cfg:41
-#: cfg/mill/polyline-mirror-p.cfg:19 cfg/mill/polyline-polar.cfg:80
-#: cfg/mill/polyline-to.cfg:78 cfg/mill/polyline.cfg:24
-#: cfg/mill/polyline.cfg:214 cfg/mill/rectangle.cfg:135 cfg/mill/slot-2.cfg:71
-#: cfg/mill/slot-arc.cfg:99 cfg/mill/slot.cfg:86 cfg/mill/surf_finish.cfg:16
+#: cfg/mill/SHCS.cfg:128
+#: cfg/mill/SHCS_slot-arc.cfg:158
+#: cfg/mill/SHCS_slot.cfg:153
+#: cfg/mill/SHCS_slot2.cfg:143
+#: cfg/mill/circle-2.cfg:84
+#: cfg/mill/circle.cfg:115
+#: cfg/mill/ellipse.cfg:104
+#: cfg/mill/polygon.cfg:77
+#: cfg/mill/polyline-arc-ij.cfg:41
+#: cfg/mill/polyline-arc-m.cfg:63
+#: cfg/mill/polyline-arc-polar.cfg:41
+#: cfg/mill/polyline-arc-to.cfg:41
+#: cfg/mill/polyline-arc-top.cfg:41
+#: cfg/mill/polyline-mirror-p.cfg:19
+#: cfg/mill/polyline-polar.cfg:80
+#: cfg/mill/polyline-to.cfg:78
+#: cfg/mill/polyline.cfg:24
+#: cfg/mill/polyline.cfg:214
+#: cfg/mill/rectangle.cfg:135
+#: cfg/mill/slot-2.cfg:71
+#: cfg/mill/slot-arc.cfg:99
+#: cfg/mill/slot.cfg:86
+#: cfg/mill/surf_finish.cfg:16
 #: cfg/mill/thread-milling.cfg:58
 msgid "Milling"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:132 cfg/mill/SHCS_slot-arc.cfg:162
-#: cfg/mill/SHCS_slot.cfg:157 cfg/mill/SHCS_slot2.cfg:147
-#: cfg/mill/circle-2.cfg:97 cfg/mill/circle.cfg:128 cfg/mill/ellipse.cfg:117
-#: cfg/mill/polygon.cfg:90 cfg/mill/polyline-arc-ij.cfg:110
-#: cfg/mill/polyline-arc-m.cfg:122 cfg/mill/polyline-arc-polar.cfg:105
-#: cfg/mill/polyline-arc-to.cfg:123 cfg/mill/polyline-arc-top.cfg:117
-#: cfg/mill/polyline-mirror-p.cfg:73 cfg/mill/polyline.cfg:119
-#: cfg/mill/probe-edge.cfg:29 cfg/mill/rectangle.cfg:148 cfg/mill/slot-2.cfg:84
-#: cfg/mill/slot-arc.cfg:112 cfg/mill/slot.cfg:99
-#: cfg/mill/thread-milling.cfg:71 cfg/plasma/circle-2.cfg:97
-#: cfg/plasma/circle.cfg:106 cfg/plasma/ellipse.cfg:117
-#: cfg/plasma/polygon.cfg:90 cfg/plasma/polyline-arc-ij.cfg:86
-#: cfg/plasma/polyline-arc-m.cfg:104 cfg/plasma/polyline-arc-polar.cfg:81
-#: cfg/plasma/polyline-arc-to.cfg:99 cfg/plasma/polyline-arc-top.cfg:93
-#: cfg/plasma/polyline-mirror-p.cfg:73 cfg/plasma/polyline.cfg:119
-#: cfg/plasma/rectangle.cfg:130 cfg/plasma/slot-2.cfg:84
-#: cfg/plasma/slot-arc.cfg:112 cfg/plasma/slot.cfg:99
+#: cfg/mill/SHCS.cfg:132
+#: cfg/mill/SHCS_slot-arc.cfg:162
+#: cfg/mill/SHCS_slot.cfg:157
+#: cfg/mill/SHCS_slot2.cfg:147
+#: cfg/mill/circle-2.cfg:97
+#: cfg/mill/circle.cfg:128
+#: cfg/mill/ellipse.cfg:117
+#: cfg/mill/polygon.cfg:90
+#: cfg/mill/polyline-arc-ij.cfg:110
+#: cfg/mill/polyline-arc-m.cfg:122
+#: cfg/mill/polyline-arc-polar.cfg:105
+#: cfg/mill/polyline-arc-to.cfg:123
+#: cfg/mill/polyline-arc-top.cfg:117
+#: cfg/mill/polyline-mirror-p.cfg:73
+#: cfg/mill/polyline.cfg:119
+#: cfg/mill/probe-edge.cfg:29
+#: cfg/mill/rectangle.cfg:148
+#: cfg/mill/slot-2.cfg:84
+#: cfg/mill/slot-arc.cfg:112
+#: cfg/mill/slot.cfg:99
+#: cfg/mill/thread-milling.cfg:71
+#: cfg/plasma/circle-2.cfg:97
+#: cfg/plasma/circle.cfg:106
+#: cfg/plasma/ellipse.cfg:117
+#: cfg/plasma/polygon.cfg:90
+#: cfg/plasma/polyline-arc-ij.cfg:86
+#: cfg/plasma/polyline-arc-m.cfg:104
+#: cfg/plasma/polyline-arc-polar.cfg:81
+#: cfg/plasma/polyline-arc-to.cfg:99
+#: cfg/plasma/polyline-arc-top.cfg:93
+#: cfg/plasma/polyline-mirror-p.cfg:73
+#: cfg/plasma/polyline.cfg:119
+#: cfg/plasma/rectangle.cfg:130
+#: cfg/plasma/slot-2.cfg:84
+#: cfg/plasma/slot-arc.cfg:112
+#: cfg/plasma/slot.cfg:99
 msgid "Direction"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:134 cfg/mill/SHCS_slot-arc.cfg:164
-#: cfg/mill/SHCS_slot.cfg:160 cfg/mill/SHCS_slot2.cfg:149
-#: cfg/mill/circle-2.cfg:99 cfg/mill/circle.cfg:130 cfg/mill/ellipse.cfg:119
-#: cfg/mill/polygon.cfg:92 cfg/mill/polyline-arc-ij.cfg:113
-#: cfg/mill/polyline-arc-m.cfg:125 cfg/mill/polyline-arc-polar.cfg:108
-#: cfg/mill/polyline-arc-to.cfg:126 cfg/mill/polyline-arc-top.cfg:120
-#: cfg/mill/rectangle.cfg:151 cfg/mill/slot-2.cfg:87 cfg/mill/slot-arc.cfg:114
-#: cfg/mill/slot.cfg:102 cfg/plasma/circle-2.cfg:99 cfg/plasma/circle.cfg:108
-#: cfg/plasma/ellipse.cfg:119 cfg/plasma/polygon.cfg:92
-#: cfg/plasma/polyline-arc-ij.cfg:89 cfg/plasma/polyline-arc-m.cfg:107
-#: cfg/plasma/polyline-arc-polar.cfg:84 cfg/plasma/polyline-arc-to.cfg:102
-#: cfg/plasma/polyline-arc-top.cfg:96 cfg/plasma/rectangle.cfg:133
-#: cfg/plasma/slot-2.cfg:87 cfg/plasma/slot-arc.cfg:114 cfg/plasma/slot.cfg:102
+#: cfg/mill/SHCS.cfg:134
+#: cfg/mill/SHCS_slot-arc.cfg:164
+#: cfg/mill/SHCS_slot.cfg:160
+#: cfg/mill/SHCS_slot2.cfg:149
+#: cfg/mill/circle-2.cfg:99
+#: cfg/mill/circle.cfg:130
+#: cfg/mill/ellipse.cfg:119
+#: cfg/mill/polygon.cfg:92
+#: cfg/mill/polyline-arc-ij.cfg:113
+#: cfg/mill/polyline-arc-m.cfg:125
+#: cfg/mill/polyline-arc-polar.cfg:108
+#: cfg/mill/polyline-arc-to.cfg:126
+#: cfg/mill/polyline-arc-top.cfg:120
+#: cfg/mill/rectangle.cfg:151
+#: cfg/mill/slot-2.cfg:87
+#: cfg/mill/slot-arc.cfg:114
+#: cfg/mill/slot.cfg:102
+#: cfg/plasma/circle-2.cfg:99
+#: cfg/plasma/circle.cfg:108
+#: cfg/plasma/ellipse.cfg:119
+#: cfg/plasma/polygon.cfg:92
+#: cfg/plasma/polyline-arc-ij.cfg:89
+#: cfg/plasma/polyline-arc-m.cfg:107
+#: cfg/plasma/polyline-arc-polar.cfg:84
+#: cfg/plasma/polyline-arc-to.cfg:102
+#: cfg/plasma/polyline-arc-top.cfg:96
+#: cfg/plasma/rectangle.cfg:133
+#: cfg/plasma/slot-2.cfg:87
+#: cfg/plasma/slot-arc.cfg:114
+#: cfg/plasma/slot.cfg:102
 msgid "Clockwise=2:Counter-Clockwise=3"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:136 cfg/mill/SHCS_slot-arc.cfg:166
-#: cfg/mill/SHCS_slot.cfg:162 cfg/mill/SHCS_slot2.cfg:151
-#: cfg/mill/circle-2.cfg:101 cfg/mill/circle.cfg:132 cfg/mill/ellipse.cfg:121
-#: cfg/mill/polygon.cfg:94 cfg/mill/polyline-arc-ij.cfg:115
-#: cfg/mill/polyline-arc-m.cfg:127 cfg/mill/polyline-arc-polar.cfg:110
-#: cfg/mill/polyline-arc-to.cfg:128 cfg/mill/polyline-arc-top.cfg:122
-#: cfg/mill/rectangle.cfg:153 cfg/mill/slot-2.cfg:89 cfg/mill/slot-arc.cfg:116
-#: cfg/mill/thread-milling.cfg:75 cfg/plasma/circle-2.cfg:101
-#: cfg/plasma/circle.cfg:110 cfg/plasma/ellipse.cfg:121
-#: cfg/plasma/polygon.cfg:94 cfg/plasma/polyline-arc-ij.cfg:91
-#: cfg/plasma/polyline-arc-m.cfg:109 cfg/plasma/polyline-arc-polar.cfg:86
-#: cfg/plasma/polyline-arc-to.cfg:104 cfg/plasma/polyline-arc-top.cfg:98
-#: cfg/plasma/rectangle.cfg:135 cfg/plasma/slot-2.cfg:89
+#: cfg/mill/SHCS.cfg:136
+#: cfg/mill/SHCS_slot-arc.cfg:166
+#: cfg/mill/SHCS_slot.cfg:162
+#: cfg/mill/SHCS_slot2.cfg:151
+#: cfg/mill/circle-2.cfg:101
+#: cfg/mill/circle.cfg:132
+#: cfg/mill/ellipse.cfg:121
+#: cfg/mill/polygon.cfg:94
+#: cfg/mill/polyline-arc-ij.cfg:115
+#: cfg/mill/polyline-arc-m.cfg:127
+#: cfg/mill/polyline-arc-polar.cfg:110
+#: cfg/mill/polyline-arc-to.cfg:128
+#: cfg/mill/polyline-arc-top.cfg:122
+#: cfg/mill/rectangle.cfg:153
+#: cfg/mill/slot-2.cfg:89
+#: cfg/mill/slot-arc.cfg:116
+#: cfg/mill/thread-milling.cfg:75
+#: cfg/plasma/circle-2.cfg:101
+#: cfg/plasma/circle.cfg:110
+#: cfg/plasma/ellipse.cfg:121
+#: cfg/plasma/polygon.cfg:94
+#: cfg/plasma/polyline-arc-ij.cfg:91
+#: cfg/plasma/polyline-arc-m.cfg:109
+#: cfg/plasma/polyline-arc-polar.cfg:86
+#: cfg/plasma/polyline-arc-to.cfg:104
+#: cfg/plasma/polyline-arc-top.cfg:98
+#: cfg/plasma/rectangle.cfg:135
+#: cfg/plasma/slot-2.cfg:89
 #: cfg/plasma/slot-arc.cfg:116
 msgid "Direction of path"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:141 cfg/mill/SHCS_slot-arc.cfg:171
-#: cfg/mill/SHCS_slot.cfg:166 cfg/mill/SHCS_slot2.cfg:156
-#: cfg/mill/circle-2.cfg:106 cfg/mill/circle.cfg:137 cfg/mill/ellipse.cfg:126
-#: cfg/mill/polygon.cfg:99 cfg/mill/polyline-mirror-p.cfg:82
-#: cfg/mill/polyline.cfg:128 cfg/mill/rectangle.cfg:157 cfg/mill/slot-2.cfg:93
-#: cfg/mill/slot-arc.cfg:121 cfg/mill/slot.cfg:108 cfg/mill/surf_finish.cfg:61
+#: cfg/mill/SHCS.cfg:141
+#: cfg/mill/SHCS_slot-arc.cfg:171
+#: cfg/mill/SHCS_slot.cfg:166
+#: cfg/mill/SHCS_slot2.cfg:156
+#: cfg/mill/circle-2.cfg:106
+#: cfg/mill/circle.cfg:137
+#: cfg/mill/ellipse.cfg:126
+#: cfg/mill/polygon.cfg:99
+#: cfg/mill/polyline-mirror-p.cfg:82
+#: cfg/mill/polyline.cfg:128
+#: cfg/mill/rectangle.cfg:157
+#: cfg/mill/slot-2.cfg:93
+#: cfg/mill/slot-arc.cfg:121
+#: cfg/mill/slot.cfg:108
+#: cfg/mill/surf_finish.cfg:61
 msgid "Cut start"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:143 cfg/mill/SHCS_slot-arc.cfg:173
-#: cfg/mill/SHCS_slot.cfg:168 cfg/mill/SHCS_slot2.cfg:158
-#: cfg/mill/circle-2.cfg:108 cfg/mill/circle.cfg:139
-#: cfg/mill/drill-array.cfg:141 cfg/mill/drill-circle-irr.cfg:147
-#: cfg/mill/drill-circle.cfg:114 cfg/mill/drill-single.cfg:55
-#: cfg/mill/ellipse.cfg:128 cfg/mill/polygon.cfg:101
-#: cfg/mill/polyline-mirror-p.cfg:84 cfg/mill/polyline.cfg:130
-#: cfg/mill/rectangle.cfg:159 cfg/mill/slot-2.cfg:95 cfg/mill/slot-arc.cfg:123
-#: cfg/mill/slot.cfg:110 cfg/mill/thread-milling.cfg:92
+#: cfg/mill/SHCS.cfg:143
+#: cfg/mill/SHCS_slot-arc.cfg:173
+#: cfg/mill/SHCS_slot.cfg:168
+#: cfg/mill/SHCS_slot2.cfg:158
+#: cfg/mill/circle-2.cfg:108
+#: cfg/mill/circle.cfg:139
+#: cfg/mill/drill-array.cfg:141
+#: cfg/mill/drill-circle-irr.cfg:147
+#: cfg/mill/drill-circle.cfg:114
+#: cfg/mill/drill-single.cfg:55
+#: cfg/mill/ellipse.cfg:128
+#: cfg/mill/polygon.cfg:101
+#: cfg/mill/polyline-mirror-p.cfg:84
+#: cfg/mill/polyline.cfg:130
+#: cfg/mill/rectangle.cfg:159
+#: cfg/mill/slot-2.cfg:95
+#: cfg/mill/slot-arc.cfg:123
+#: cfg/mill/slot.cfg:110
+#: cfg/mill/thread-milling.cfg:92
 msgid "User defined=0:Surface=1:Half=2:One quarter=3:Three quarter=4"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:145 cfg/mill/SHCS_slot-arc.cfg:175
-#: cfg/mill/SHCS_slot.cfg:170 cfg/mill/SHCS_slot2.cfg:160
-#: cfg/mill/circle-2.cfg:110 cfg/mill/circle-2.cfg:128 cfg/mill/circle.cfg:141
-#: cfg/mill/circle.cfg:159 cfg/mill/drill-array.cfg:143
-#: cfg/mill/drill-array.cfg:161 cfg/mill/drill-circle-irr.cfg:149
-#: cfg/mill/drill-circle-irr.cfg:167 cfg/mill/drill-circle.cfg:116
-#: cfg/mill/drill-circle.cfg:134 cfg/mill/drill-single.cfg:57
-#: cfg/mill/drill-single.cfg:75 cfg/mill/ellipse.cfg:130
-#: cfg/mill/ellipse.cfg:148 cfg/mill/polygon.cfg:103 cfg/mill/polygon.cfg:121
-#: cfg/mill/polyline-mirror-p.cfg:86 cfg/mill/polyline-mirror-p.cfg:104
-#: cfg/mill/polyline.cfg:132 cfg/mill/polyline.cfg:150
-#: cfg/mill/rectangle.cfg:161 cfg/mill/rectangle.cfg:179 cfg/mill/slot-2.cfg:97
-#: cfg/mill/slot-2.cfg:115 cfg/mill/slot-arc.cfg:125 cfg/mill/slot-arc.cfg:143
-#: cfg/mill/slot.cfg:112 cfg/mill/slot.cfg:130 cfg/mill/surf_finish.cfg:65
-#: cfg/mill/thread-milling.cfg:94 cfg/mill/thread-milling.cfg:112
+#: cfg/mill/SHCS.cfg:145
+#: cfg/mill/SHCS_slot-arc.cfg:175
+#: cfg/mill/SHCS_slot.cfg:170
+#: cfg/mill/SHCS_slot2.cfg:160
+#: cfg/mill/circle-2.cfg:110
+#: cfg/mill/circle-2.cfg:128
+#: cfg/mill/circle.cfg:141
+#: cfg/mill/circle.cfg:159
+#: cfg/mill/drill-array.cfg:143
+#: cfg/mill/drill-array.cfg:161
+#: cfg/mill/drill-circle-irr.cfg:149
+#: cfg/mill/drill-circle-irr.cfg:167
+#: cfg/mill/drill-circle.cfg:116
+#: cfg/mill/drill-circle.cfg:134
+#: cfg/mill/drill-single.cfg:57
+#: cfg/mill/drill-single.cfg:75
+#: cfg/mill/ellipse.cfg:130
+#: cfg/mill/ellipse.cfg:148
+#: cfg/mill/polygon.cfg:103
+#: cfg/mill/polygon.cfg:121
+#: cfg/mill/polyline-mirror-p.cfg:86
+#: cfg/mill/polyline-mirror-p.cfg:104
+#: cfg/mill/polyline.cfg:132
+#: cfg/mill/polyline.cfg:150
+#: cfg/mill/rectangle.cfg:161
+#: cfg/mill/rectangle.cfg:179
+#: cfg/mill/slot-2.cfg:97
+#: cfg/mill/slot-2.cfg:115
+#: cfg/mill/slot-arc.cfg:125
+#: cfg/mill/slot-arc.cfg:143
+#: cfg/mill/slot.cfg:112
+#: cfg/mill/slot.cfg:130
+#: cfg/mill/surf_finish.cfg:65
+#: cfg/mill/thread-milling.cfg:94
+#: cfg/mill/thread-milling.cfg:112
 msgid "Pre or user defined"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:151 cfg/mill/SHCS_slot-arc.cfg:181
-#: cfg/mill/SHCS_slot.cfg:176 cfg/mill/SHCS_slot2.cfg:166
-#: cfg/mill/circle-2.cfg:116 cfg/mill/circle.cfg:147
-#: cfg/mill/drill-array.cfg:149 cfg/mill/drill-circle-irr.cfg:155
-#: cfg/mill/drill-circle.cfg:122 cfg/mill/drill-single.cfg:63
-#: cfg/mill/ellipse.cfg:136 cfg/mill/polygon.cfg:109
-#: cfg/mill/polyline-mirror-p.cfg:92 cfg/mill/polyline.cfg:138
-#: cfg/mill/rectangle.cfg:167 cfg/mill/slot-2.cfg:103 cfg/mill/slot-arc.cfg:131
-#: cfg/mill/slot.cfg:118 cfg/mill/surf_finish.cfg:71
+#: cfg/mill/SHCS.cfg:151
+#: cfg/mill/SHCS_slot-arc.cfg:181
+#: cfg/mill/SHCS_slot.cfg:176
+#: cfg/mill/SHCS_slot2.cfg:166
+#: cfg/mill/circle-2.cfg:116
+#: cfg/mill/circle.cfg:147
+#: cfg/mill/drill-array.cfg:149
+#: cfg/mill/drill-circle-irr.cfg:155
+#: cfg/mill/drill-circle.cfg:122
+#: cfg/mill/drill-single.cfg:63
+#: cfg/mill/ellipse.cfg:136
+#: cfg/mill/polygon.cfg:109
+#: cfg/mill/polyline-mirror-p.cfg:92
+#: cfg/mill/polyline.cfg:138
+#: cfg/mill/rectangle.cfg:167
+#: cfg/mill/slot-2.cfg:103
+#: cfg/mill/slot-arc.cfg:131
+#: cfg/mill/slot.cfg:118
+#: cfg/mill/surf_finish.cfg:71
 msgid "User start"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:159 cfg/mill/SHCS_slot-arc.cfg:189
-#: cfg/mill/SHCS_slot.cfg:184 cfg/mill/SHCS_slot2.cfg:174
-#: cfg/mill/circle-2.cfg:124 cfg/mill/circle.cfg:155
-#: cfg/mill/drill-circle-irr.cfg:163 cfg/mill/ellipse.cfg:144
-#: cfg/mill/polygon.cfg:117 cfg/mill/polyline-mirror-p.cfg:100
-#: cfg/mill/polyline.cfg:146 cfg/mill/rectangle.cfg:175 cfg/mill/slot-2.cfg:111
-#: cfg/mill/slot-arc.cfg:139 cfg/mill/slot.cfg:126 cfg/mill/surf_finish.cfg:43
+#: cfg/mill/SHCS.cfg:159
+#: cfg/mill/SHCS_slot-arc.cfg:189
+#: cfg/mill/SHCS_slot.cfg:184
+#: cfg/mill/SHCS_slot2.cfg:174
+#: cfg/mill/circle-2.cfg:124
+#: cfg/mill/circle.cfg:155
+#: cfg/mill/drill-circle-irr.cfg:163
+#: cfg/mill/ellipse.cfg:144
+#: cfg/mill/polygon.cfg:117
+#: cfg/mill/polyline-mirror-p.cfg:100
+#: cfg/mill/polyline.cfg:146
+#: cfg/mill/rectangle.cfg:175
+#: cfg/mill/slot-2.cfg:111
+#: cfg/mill/slot-arc.cfg:139
+#: cfg/mill/slot.cfg:126
+#: cfg/mill/surf_finish.cfg:43
 msgid "Cut down to"
 msgstr ""
 
@@ -2195,8 +2632,10 @@ msgstr ""
 msgid "Through=0:Bottom=1"
 msgstr ""
 
-#: cfg/mill/SHCS.cfg:163 cfg/mill/SHCS_slot-arc.cfg:193
-#: cfg/mill/SHCS_slot.cfg:188 cfg/mill/SHCS_slot2.cfg:178
+#: cfg/mill/SHCS.cfg:163
+#: cfg/mill/SHCS_slot-arc.cfg:193
+#: cfg/mill/SHCS_slot.cfg:188
+#: cfg/mill/SHCS_slot2.cfg:178
 msgid "Pre defined"
 msgstr ""
 
@@ -2205,35 +2644,47 @@ msgid "SHCS CBore Radial"
 msgstr ""
 
 #: cfg/mill/SHCS_slot-arc.cfg:6
-msgid ""
-"<b>Creates a counterbore arc for a socket head cap screw</b>&#10;Will mill "
-"the screw slot&#10;<span foreground='blue' style='oblique'><b>Message "
-"possible in terminal window</b></span>"
+msgid "<b>Creates a counterbore arc for a socket head cap screw</b>&#10;Will mill the screw slot&#10;<span foreground='blue' style='oblique'><b>Message possible in terminal window</b></span>"
 msgstr ""
 
-#: cfg/mill/SHCS_slot-arc.cfg:30 cfg/mill/SHCS_slot-arc.cfg:40
+#: cfg/mill/SHCS_slot-arc.cfg:30
+#: cfg/mill/SHCS_slot-arc.cfg:40
 #: cfg/mill/SHCS_slot-arc.cfg:49
 msgid "Center of arc"
 msgstr ""
 
-#: cfg/mill/SHCS_slot-arc.cfg:33 cfg/mill/slot-arc.cfg:28
+#: cfg/mill/SHCS_slot-arc.cfg:33
+#: cfg/mill/slot-arc.cfg:28
 #: cfg/plasma/slot-arc.cfg:28
 msgid "Start, extend"
 msgstr ""
 
-#: cfg/mill/SHCS_slot-arc.cfg:55 cfg/mill/polygon.cfg:56
-#: cfg/mill/polygon.cfg:60 cfg/mill/polyline-arc-ij.cfg:24
-#: cfg/mill/polyline-arc-m.cfg:24 cfg/mill/polyline-arc-polar.cfg:24
-#: cfg/mill/polyline-arc-to.cfg:24 cfg/mill/polyline-arc-top.cfg:24
-#: cfg/mill/polyline-mirror-i.cfg:37 cfg/mill/polyline-polar.cfg:63
-#: cfg/mill/polyline-to.cfg:61 cfg/mill/polyline.cfg:93
-#: cfg/mill/rectangle.cfg:125 cfg/mill/slot-arc.cfg:57
-#: cfg/plasma/polygon.cfg:56 cfg/plasma/polygon.cfg:60
-#: cfg/plasma/polyline-arc-ij.cfg:24 cfg/plasma/polyline-arc-m.cfg:24
-#: cfg/plasma/polyline-arc-polar.cfg:24 cfg/plasma/polyline-arc-to.cfg:24
-#: cfg/plasma/polyline-arc-top.cfg:24 cfg/plasma/polyline-mirror-i.cfg:37
-#: cfg/plasma/polyline-polar.cfg:63 cfg/plasma/polyline-to.cfg:61
-#: cfg/plasma/polyline.cfg:93 cfg/plasma/rectangle.cfg:107
+#: cfg/mill/SHCS_slot-arc.cfg:55
+#: cfg/mill/polygon.cfg:56
+#: cfg/mill/polygon.cfg:60
+#: cfg/mill/polyline-arc-ij.cfg:24
+#: cfg/mill/polyline-arc-m.cfg:24
+#: cfg/mill/polyline-arc-polar.cfg:24
+#: cfg/mill/polyline-arc-to.cfg:24
+#: cfg/mill/polyline-arc-top.cfg:24
+#: cfg/mill/polyline-mirror-i.cfg:37
+#: cfg/mill/polyline-polar.cfg:63
+#: cfg/mill/polyline-to.cfg:61
+#: cfg/mill/polyline.cfg:93
+#: cfg/mill/rectangle.cfg:125
+#: cfg/mill/slot-arc.cfg:57
+#: cfg/plasma/polygon.cfg:56
+#: cfg/plasma/polygon.cfg:60
+#: cfg/plasma/polyline-arc-ij.cfg:24
+#: cfg/plasma/polyline-arc-m.cfg:24
+#: cfg/plasma/polyline-arc-polar.cfg:24
+#: cfg/plasma/polyline-arc-to.cfg:24
+#: cfg/plasma/polyline-arc-top.cfg:24
+#: cfg/plasma/polyline-mirror-i.cfg:37
+#: cfg/plasma/polyline-polar.cfg:63
+#: cfg/plasma/polyline-to.cfg:61
+#: cfg/plasma/polyline.cfg:93
+#: cfg/plasma/rectangle.cfg:107
 #: cfg/plasma/slot-arc.cfg:57
 msgid "Radius"
 msgstr ""
@@ -2242,23 +2693,28 @@ msgstr ""
 msgid "Distance from X,Y"
 msgstr ""
 
-#: cfg/mill/SHCS_slot-arc.cfg:65 cfg/mill/polygon.cfg:71
-#: cfg/mill/slot-arc.cfg:68 cfg/plasma/polygon.cfg:71
+#: cfg/mill/SHCS_slot-arc.cfg:65
+#: cfg/mill/polygon.cfg:71
+#: cfg/mill/slot-arc.cfg:68
+#: cfg/plasma/polygon.cfg:71
 #: cfg/plasma/slot-arc.cfg:68
 msgid "Start angle"
 msgstr ""
 
-#: cfg/mill/SHCS_slot-arc.cfg:74 cfg/mill/slot-arc.cfg:78
+#: cfg/mill/SHCS_slot-arc.cfg:74
+#: cfg/mill/slot-arc.cfg:78
 #: cfg/plasma/slot-arc.cfg:78
 msgid "Extend angle"
 msgstr ""
 
-#: cfg/mill/SHCS_slot-arc.cfg:78 cfg/mill/slot-arc.cfg:82
+#: cfg/mill/SHCS_slot-arc.cfg:78
+#: cfg/mill/slot-arc.cfg:82
 #: cfg/plasma/slot-arc.cfg:82
 msgid "Relative length of arc in degrees"
 msgstr ""
 
-#: cfg/mill/SHCS_slot-arc.cfg:191 cfg/mill/SHCS_slot.cfg:186
+#: cfg/mill/SHCS_slot-arc.cfg:191
+#: cfg/mill/SHCS_slot.cfg:186
 #: cfg/mill/SHCS_slot2.cfg:176
 msgid "Through=1:Bottom=2"
 msgstr ""
@@ -2268,43 +2724,64 @@ msgid "SHCS CBore Slot"
 msgstr ""
 
 #: cfg/mill/SHCS_slot.cfg:6
-msgid ""
-"<b>Creates a counterbore slot from a single point for a socket head cap "
-"screw</b>&#10;Will mill the screw slot&#10;<span foreground='blue' "
-"style='oblique'><b>Message possible in terminal window</b></span>"
+msgid "<b>Creates a counterbore slot from a single point for a socket head cap screw</b>&#10;Will mill the screw slot&#10;<span foreground='blue' style='oblique'><b>Message possible in terminal window</b></span>"
 msgstr ""
 
-#: cfg/mill/SHCS_slot.cfg:32 cfg/mill/drill-array.cfg:36
-#: cfg/mill/drill-single.cfg:24 cfg/mill/ellipse.cfg:28
-#: cfg/mill/material.cfg:28 cfg/mill/polyline-arc-m.cfg:45
-#: cfg/mill/polyline-arc-to.cfg:75 cfg/mill/polyline-to.cfg:20
-#: cfg/mill/polyline.cfg:38 cfg/mill/rectangle.cfg:46 cfg/mill/slot.cfg:36
-#: cfg/plasma/ellipse.cfg:28 cfg/plasma/material2d.cfg:24
-#: cfg/plasma/material3d.cfg:24 cfg/plasma/polyline-arc-m.cfg:45
-#: cfg/plasma/polyline-arc-to.cfg:51 cfg/plasma/polyline-to.cfg:20
-#: cfg/plasma/polyline.cfg:38 cfg/plasma/rectangle.cfg:28
-#: cfg/plasma/slot.cfg:36 cfg/rectangular-array.cfg:64
+#: cfg/mill/SHCS_slot.cfg:32
+#: cfg/mill/drill-array.cfg:36
+#: cfg/mill/drill-single.cfg:24
+#: cfg/mill/ellipse.cfg:28
+#: cfg/mill/material.cfg:28
+#: cfg/mill/polyline-arc-m.cfg:45
+#: cfg/mill/polyline-arc-to.cfg:75
+#: cfg/mill/polyline-to.cfg:20
+#: cfg/mill/polyline.cfg:38
+#: cfg/mill/rectangle.cfg:46
+#: cfg/mill/slot.cfg:36
+#: cfg/plasma/ellipse.cfg:28
+#: cfg/plasma/material2d.cfg:24
+#: cfg/plasma/material3d.cfg:24
+#: cfg/plasma/polyline-arc-m.cfg:45
+#: cfg/plasma/polyline-arc-to.cfg:51
+#: cfg/plasma/polyline-to.cfg:20
+#: cfg/plasma/polyline.cfg:38
+#: cfg/plasma/rectangle.cfg:28
+#: cfg/plasma/slot.cfg:36
+#: cfg/rectangular-array.cfg:64
 msgid "X"
 msgstr ""
 
-#: cfg/mill/SHCS_slot.cfg:36 cfg/mill/drill-array.cfg:39
+#: cfg/mill/SHCS_slot.cfg:36
+#: cfg/mill/drill-array.cfg:39
 msgid "X reference"
 msgstr ""
 
-#: cfg/mill/SHCS_slot.cfg:41 cfg/mill/drill-array.cfg:62
-#: cfg/mill/drill-single.cfg:33 cfg/mill/ellipse.cfg:45
-#: cfg/mill/material.cfg:37 cfg/mill/polyline-arc-m.cfg:54
-#: cfg/mill/polyline-arc-to.cfg:84 cfg/mill/polyline-to.cfg:29
-#: cfg/mill/polyline.cfg:47 cfg/mill/rectangle.cfg:63 cfg/mill/slot.cfg:45
-#: cfg/plasma/ellipse.cfg:45 cfg/plasma/material2d.cfg:33
-#: cfg/plasma/material3d.cfg:33 cfg/plasma/polyline-arc-m.cfg:54
-#: cfg/plasma/polyline-arc-to.cfg:60 cfg/plasma/polyline-to.cfg:29
-#: cfg/plasma/polyline.cfg:47 cfg/plasma/rectangle.cfg:45
-#: cfg/plasma/slot.cfg:45 cfg/rectangular-array.cfg:73
+#: cfg/mill/SHCS_slot.cfg:41
+#: cfg/mill/drill-array.cfg:62
+#: cfg/mill/drill-single.cfg:33
+#: cfg/mill/ellipse.cfg:45
+#: cfg/mill/material.cfg:37
+#: cfg/mill/polyline-arc-m.cfg:54
+#: cfg/mill/polyline-arc-to.cfg:84
+#: cfg/mill/polyline-to.cfg:29
+#: cfg/mill/polyline.cfg:47
+#: cfg/mill/rectangle.cfg:63
+#: cfg/mill/slot.cfg:45
+#: cfg/plasma/ellipse.cfg:45
+#: cfg/plasma/material2d.cfg:33
+#: cfg/plasma/material3d.cfg:33
+#: cfg/plasma/polyline-arc-m.cfg:54
+#: cfg/plasma/polyline-arc-to.cfg:60
+#: cfg/plasma/polyline-to.cfg:29
+#: cfg/plasma/polyline.cfg:47
+#: cfg/plasma/rectangle.cfg:45
+#: cfg/plasma/slot.cfg:45
+#: cfg/rectangular-array.cfg:73
 msgid "Y"
 msgstr ""
 
-#: cfg/mill/SHCS_slot.cfg:45 cfg/mill/drill-array.cfg:65
+#: cfg/mill/SHCS_slot.cfg:45
+#: cfg/mill/drill-array.cfg:65
 msgid "Y reference"
 msgstr ""
 
@@ -2320,7 +2797,8 @@ msgstr ""
 msgid "Define what X,Y is"
 msgstr ""
 
-#: cfg/mill/SHCS_slot.cfg:113 cfg/mill/polyline-polar.cfg:19
+#: cfg/mill/SHCS_slot.cfg:113
+#: cfg/mill/polyline-polar.cfg:19
 #: cfg/plasma/polyline-polar.cfg:19
 msgid "Length"
 msgstr ""
@@ -2329,21 +2807,36 @@ msgstr ""
 msgid "Distance between centers"
 msgstr ""
 
-#: cfg/mill/SHCS_slot.cfg:122 cfg/mill/circle-2.cfg:74 cfg/mill/circle.cfg:105
-#: cfg/mill/drill-array.cfg:28 cfg/mill/ellipse.cfg:84 cfg/mill/polygon.cfg:67
-#: cfg/mill/polyline-mirror-p.cfg:54 cfg/mill/polyline.cfg:74
-#: cfg/mill/rectangle.cfg:102 cfg/mill/slot.cfg:76
-#: cfg/mill/thread-milling.cfg:80 cfg/plasma/circle-2.cfg:74
-#: cfg/plasma/circle.cfg:83 cfg/plasma/ellipse.cfg:84 cfg/plasma/polygon.cfg:67
-#: cfg/plasma/polyline-mirror-p.cfg:54 cfg/plasma/polyline.cfg:74
-#: cfg/plasma/rectangle.cfg:84 cfg/plasma/slot.cfg:76
+#: cfg/mill/SHCS_slot.cfg:122
+#: cfg/mill/circle-2.cfg:74
+#: cfg/mill/circle.cfg:105
+#: cfg/mill/drill-array.cfg:28
+#: cfg/mill/ellipse.cfg:84
+#: cfg/mill/polygon.cfg:67
+#: cfg/mill/polyline-mirror-p.cfg:54
+#: cfg/mill/polyline.cfg:74
+#: cfg/mill/rectangle.cfg:102
+#: cfg/mill/slot.cfg:76
+#: cfg/mill/thread-milling.cfg:80
+#: cfg/plasma/circle-2.cfg:74
+#: cfg/plasma/circle.cfg:83
+#: cfg/plasma/ellipse.cfg:84
+#: cfg/plasma/polygon.cfg:67
+#: cfg/plasma/polyline-mirror-p.cfg:54
+#: cfg/plasma/polyline.cfg:74
+#: cfg/plasma/rectangle.cfg:84
+#: cfg/plasma/slot.cfg:76
 #: cfg/rectangular-array.cfg:43
 msgid "Rotation"
 msgstr ""
 
-#: cfg/mill/SHCS_slot.cfg:127 cfg/mill/ellipse.cfg:88
-#: cfg/mill/rectangle.cfg:107 cfg/mill/slot.cfg:81 cfg/plasma/ellipse.cfg:88
-#: cfg/plasma/rectangle.cfg:89 cfg/plasma/slot.cfg:81
+#: cfg/mill/SHCS_slot.cfg:127
+#: cfg/mill/ellipse.cfg:88
+#: cfg/mill/rectangle.cfg:107
+#: cfg/mill/slot.cfg:81
+#: cfg/plasma/ellipse.cfg:88
+#: cfg/plasma/rectangle.cfg:89
+#: cfg/plasma/slot.cfg:81
 msgid "Angle rotated"
 msgstr ""
 
@@ -2360,236 +2853,381 @@ msgid "SHCS CBore Slot 2"
 msgstr ""
 
 #: cfg/mill/SHCS_slot2.cfg:6
-msgid ""
-"<b>Creates a counterbore slot from two points for a socket head cap screw</"
-"b>&#10;Will mill the screw slot&#10;<span foreground='blue' "
-"style='oblique'><b>Message possible in terminal window</b></span>"
+msgid "<b>Creates a counterbore slot from two points for a socket head cap screw</b>&#10;Will mill the screw slot&#10;<span foreground='blue' style='oblique'><b>Message possible in terminal window</b></span>"
 msgstr ""
 
-#: cfg/mill/SHCS_slot2.cfg:24 cfg/mill/circle-2.cfg:24
-#: cfg/mill/polyline-mirror-i.cfg:54 cfg/mill/slot-2.cfg:24
-#: cfg/plasma/circle-2.cfg:24 cfg/plasma/polyline-mirror-i.cfg:54
+#: cfg/mill/SHCS_slot2.cfg:24
+#: cfg/mill/circle-2.cfg:24
+#: cfg/mill/polyline-mirror-i.cfg:54
+#: cfg/mill/slot-2.cfg:24
+#: cfg/plasma/circle-2.cfg:24
+#: cfg/plasma/polyline-mirror-i.cfg:54
 #: cfg/plasma/slot-2.cfg:24
 msgid "X1"
 msgstr ""
 
-#: cfg/mill/SHCS_slot2.cfg:27 cfg/mill/SHCS_slot2.cfg:36 cfg/mill/slot-2.cfg:28
-#: cfg/mill/slot-2.cfg:37 cfg/plasma/slot-2.cfg:28 cfg/plasma/slot-2.cfg:37
+#: cfg/mill/SHCS_slot2.cfg:27
+#: cfg/mill/SHCS_slot2.cfg:36
+#: cfg/mill/slot-2.cfg:28
+#: cfg/mill/slot-2.cfg:37
+#: cfg/plasma/slot-2.cfg:28
+#: cfg/plasma/slot-2.cfg:37
 msgid "First point"
 msgstr ""
 
-#: cfg/mill/SHCS_slot2.cfg:33 cfg/mill/circle-2.cfg:33
-#: cfg/mill/polyline-mirror-i.cfg:63 cfg/mill/slot-2.cfg:33
-#: cfg/plasma/circle-2.cfg:33 cfg/plasma/polyline-mirror-i.cfg:63
+#: cfg/mill/SHCS_slot2.cfg:33
+#: cfg/mill/circle-2.cfg:33
+#: cfg/mill/polyline-mirror-i.cfg:63
+#: cfg/mill/slot-2.cfg:33
+#: cfg/plasma/circle-2.cfg:33
+#: cfg/plasma/polyline-mirror-i.cfg:63
 #: cfg/plasma/slot-2.cfg:33
 msgid "Y1"
 msgstr ""
 
-#: cfg/mill/SHCS_slot2.cfg:42 cfg/mill/circle-2.cfg:42
-#: cfg/mill/polyline-mirror-i.cfg:72 cfg/mill/slot-2.cfg:42
-#: cfg/plasma/circle-2.cfg:42 cfg/plasma/polyline-mirror-i.cfg:72
+#: cfg/mill/SHCS_slot2.cfg:42
+#: cfg/mill/circle-2.cfg:42
+#: cfg/mill/polyline-mirror-i.cfg:72
+#: cfg/mill/slot-2.cfg:42
+#: cfg/plasma/circle-2.cfg:42
+#: cfg/plasma/polyline-mirror-i.cfg:72
 #: cfg/plasma/slot-2.cfg:42
 msgid "X2"
 msgstr ""
 
-#: cfg/mill/SHCS_slot2.cfg:45 cfg/mill/SHCS_slot2.cfg:54 cfg/mill/slot-2.cfg:46
-#: cfg/mill/slot-2.cfg:55 cfg/plasma/slot-2.cfg:46 cfg/plasma/slot-2.cfg:55
+#: cfg/mill/SHCS_slot2.cfg:45
+#: cfg/mill/SHCS_slot2.cfg:54
+#: cfg/mill/slot-2.cfg:46
+#: cfg/mill/slot-2.cfg:55
+#: cfg/plasma/slot-2.cfg:46
+#: cfg/plasma/slot-2.cfg:55
 msgid "Second point"
 msgstr ""
 
-#: cfg/mill/SHCS_slot2.cfg:51 cfg/mill/circle-2.cfg:51
-#: cfg/mill/polyline-mirror-i.cfg:81 cfg/mill/slot-2.cfg:51
-#: cfg/plasma/circle-2.cfg:51 cfg/plasma/polyline-mirror-i.cfg:81
+#: cfg/mill/SHCS_slot2.cfg:51
+#: cfg/mill/circle-2.cfg:51
+#: cfg/mill/polyline-mirror-i.cfg:81
+#: cfg/mill/slot-2.cfg:51
+#: cfg/plasma/circle-2.cfg:51
+#: cfg/plasma/polyline-mirror-i.cfg:81
 #: cfg/plasma/slot-2.cfg:51
 msgid "Y2"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:3 cfg/plasma/circle-2.cfg:3
+#: cfg/mill/circle-2.cfg:3
+#: cfg/plasma/circle-2.cfg:3
 msgid "Circle 2 points"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:6 cfg/plasma/circle-2.cfg:6
-msgid ""
-"<b>Create a Circle by defining ends of diameter</b>&#10;Points are the ends "
-"of the diameter and can add a flat"
+#: cfg/mill/circle-2.cfg:6
+#: cfg/plasma/circle-2.cfg:6
+msgid "<b>Create a Circle by defining ends of diameter</b>&#10;Points are the ends of the diameter and can add a flat"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:27 cfg/mill/circle-2.cfg:36 cfg/plasma/circle-2.cfg:27
+#: cfg/mill/circle-2.cfg:27
+#: cfg/mill/circle-2.cfg:36
+#: cfg/plasma/circle-2.cfg:27
 #: cfg/plasma/circle-2.cfg:36
 msgid "One end of the diameter"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:45 cfg/mill/circle-2.cfg:54 cfg/plasma/circle-2.cfg:45
+#: cfg/mill/circle-2.cfg:45
+#: cfg/mill/circle-2.cfg:54
+#: cfg/plasma/circle-2.cfg:45
 #: cfg/plasma/circle-2.cfg:54
 msgid "Opposite end of the diameter"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:60 cfg/mill/circle.cfg:91 cfg/plasma/circle-2.cfg:60
+#: cfg/mill/circle-2.cfg:60
+#: cfg/mill/circle.cfg:91
+#: cfg/plasma/circle-2.cfg:60
 #: cfg/plasma/circle.cfg:69
 msgid "D flat"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:64 cfg/mill/circle.cfg:95 cfg/plasma/circle-2.cfg:64
+#: cfg/mill/circle-2.cfg:64
+#: cfg/mill/circle.cfg:95
+#: cfg/plasma/circle-2.cfg:64
 #: cfg/plasma/circle.cfg:73
 msgid "Remove"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:68 cfg/mill/circle.cfg:99 cfg/plasma/circle-2.cfg:68
+#: cfg/mill/circle-2.cfg:68
+#: cfg/mill/circle.cfg:99
+#: cfg/plasma/circle-2.cfg:68
 #: cfg/plasma/circle.cfg:77
 msgid "Height to remove from diameter"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:78 cfg/mill/circle.cfg:109 cfg/plasma/circle-2.cfg:78
+#: cfg/mill/circle-2.cfg:78
+#: cfg/mill/circle.cfg:109
+#: cfg/plasma/circle-2.cfg:78
 #: cfg/plasma/circle.cfg:87
 msgid "Rotation of flat"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:88 cfg/mill/circle.cfg:119 cfg/mill/ellipse.cfg:108
-#: cfg/mill/polygon.cfg:81 cfg/mill/polyline-arc-to.cfg:93
-#: cfg/mill/polyline-arc-to.cfg:106 cfg/mill/polyline-arc-top.cfg:100
-#: cfg/mill/polyline-to.cfg:38 cfg/mill/polyline.cfg:190
-#: cfg/mill/rectangle.cfg:139 cfg/mill/slot-2.cfg:75 cfg/mill/slot-arc.cfg:103
-#: cfg/mill/slot.cfg:90 cfg/mill/thread-milling.cfg:62
-#: cfg/plasma/circle-2.cfg:88 cfg/plasma/circle.cfg:97
-#: cfg/plasma/ellipse.cfg:108 cfg/plasma/polygon.cfg:81
-#: cfg/plasma/polyline-arc-to.cfg:69 cfg/plasma/polyline-arc-to.cfg:82
-#: cfg/plasma/polyline-arc-top.cfg:76 cfg/plasma/polyline-to.cfg:38
-#: cfg/plasma/polyline.cfg:154 cfg/plasma/rectangle.cfg:121
-#: cfg/plasma/slot-2.cfg:75 cfg/plasma/slot-arc.cfg:103 cfg/plasma/slot.cfg:90
+#: cfg/mill/circle-2.cfg:88
+#: cfg/mill/circle.cfg:119
+#: cfg/mill/ellipse.cfg:108
+#: cfg/mill/polygon.cfg:81
+#: cfg/mill/polyline-arc-to.cfg:93
+#: cfg/mill/polyline-arc-to.cfg:106
+#: cfg/mill/polyline-arc-top.cfg:100
+#: cfg/mill/polyline-to.cfg:38
+#: cfg/mill/polyline.cfg:190
+#: cfg/mill/rectangle.cfg:139
+#: cfg/mill/slot-2.cfg:75
+#: cfg/mill/slot-arc.cfg:103
+#: cfg/mill/slot.cfg:90
+#: cfg/mill/thread-milling.cfg:62
+#: cfg/plasma/circle-2.cfg:88
+#: cfg/plasma/circle.cfg:97
+#: cfg/plasma/ellipse.cfg:108
+#: cfg/plasma/polygon.cfg:81
+#: cfg/plasma/polyline-arc-to.cfg:69
+#: cfg/plasma/polyline-arc-to.cfg:82
+#: cfg/plasma/polyline-arc-top.cfg:76
+#: cfg/plasma/polyline-to.cfg:38
+#: cfg/plasma/polyline.cfg:154
+#: cfg/plasma/rectangle.cfg:121
+#: cfg/plasma/slot-2.cfg:75
+#: cfg/plasma/slot-arc.cfg:103
+#: cfg/plasma/slot.cfg:90
 msgid "Option"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:90 cfg/mill/circle.cfg:121 cfg/mill/ellipse.cfg:110
-#: cfg/mill/polygon.cfg:83 cfg/mill/rectangle.cfg:142 cfg/mill/slot-2.cfg:77
-#: cfg/mill/slot-arc.cfg:105 cfg/mill/slot.cfg:93
+#: cfg/mill/circle-2.cfg:90
+#: cfg/mill/circle.cfg:121
+#: cfg/mill/ellipse.cfg:110
+#: cfg/mill/polygon.cfg:83
+#: cfg/mill/rectangle.cfg:142
+#: cfg/mill/slot-2.cfg:77
+#: cfg/mill/slot-arc.cfg:105
+#: cfg/mill/slot.cfg:93
 msgid "Inside normal=0:Pocket=1:On the line=2:Outside=3"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:92 cfg/mill/circle.cfg:123 cfg/mill/ellipse.cfg:112
-#: cfg/mill/polygon.cfg:85 cfg/mill/rectangle.cfg:144 cfg/mill/slot-2.cfg:79
-#: cfg/mill/slot-arc.cfg:107 cfg/mill/slot.cfg:95 cfg/plasma/circle-2.cfg:92
-#: cfg/plasma/circle.cfg:101 cfg/plasma/ellipse.cfg:112
-#: cfg/plasma/polygon.cfg:85 cfg/plasma/rectangle.cfg:126
-#: cfg/plasma/slot-2.cfg:79 cfg/plasma/slot-arc.cfg:107 cfg/plasma/slot.cfg:95
+#: cfg/mill/circle-2.cfg:92
+#: cfg/mill/circle.cfg:123
+#: cfg/mill/ellipse.cfg:112
+#: cfg/mill/polygon.cfg:85
+#: cfg/mill/rectangle.cfg:144
+#: cfg/mill/slot-2.cfg:79
+#: cfg/mill/slot-arc.cfg:107
+#: cfg/mill/slot.cfg:95
+#: cfg/plasma/circle-2.cfg:92
+#: cfg/plasma/circle.cfg:101
+#: cfg/plasma/ellipse.cfg:112
+#: cfg/plasma/polygon.cfg:85
+#: cfg/plasma/rectangle.cfg:126
+#: cfg/plasma/slot-2.cfg:79
+#: cfg/plasma/slot-arc.cfg:107
+#: cfg/plasma/slot.cfg:95
 msgid "Select tool path"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:126 cfg/mill/circle.cfg:157 cfg/mill/ellipse.cfg:146
-#: cfg/mill/polygon.cfg:119 cfg/mill/polyline-mirror-p.cfg:102
-#: cfg/mill/polyline.cfg:148 cfg/mill/rectangle.cfg:177 cfg/mill/slot-2.cfg:113
-#: cfg/mill/slot-arc.cfg:141 cfg/mill/slot.cfg:128
+#: cfg/mill/circle-2.cfg:126
+#: cfg/mill/circle.cfg:157
+#: cfg/mill/ellipse.cfg:146
+#: cfg/mill/polygon.cfg:119
+#: cfg/mill/polyline-mirror-p.cfg:102
+#: cfg/mill/polyline.cfg:148
+#: cfg/mill/rectangle.cfg:177
+#: cfg/mill/slot-2.cfg:113
+#: cfg/mill/slot-arc.cfg:141
+#: cfg/mill/slot.cfg:128
 #: cfg/mill/thread-milling.cfg:110
 msgid "User defined=0:Through=1:Bottom=2:Half=3:One quarter=4:Three quarter=5"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:134 cfg/mill/circle.cfg:165
-#: cfg/mill/drill-array.cfg:167 cfg/mill/drill-circle-irr.cfg:173
-#: cfg/mill/drill-circle.cfg:140 cfg/mill/drill-single.cfg:81
-#: cfg/mill/ellipse.cfg:154 cfg/mill/polygon.cfg:127
-#: cfg/mill/polyline-mirror-p.cfg:110 cfg/mill/polyline.cfg:156
-#: cfg/mill/rectangle.cfg:185 cfg/mill/slot-2.cfg:121 cfg/mill/slot-arc.cfg:149
+#: cfg/mill/circle-2.cfg:134
+#: cfg/mill/circle.cfg:165
+#: cfg/mill/drill-array.cfg:167
+#: cfg/mill/drill-circle-irr.cfg:173
+#: cfg/mill/drill-circle.cfg:140
+#: cfg/mill/drill-single.cfg:81
+#: cfg/mill/ellipse.cfg:154
+#: cfg/mill/polygon.cfg:127
+#: cfg/mill/polyline-mirror-p.cfg:110
+#: cfg/mill/polyline.cfg:156
+#: cfg/mill/rectangle.cfg:185
+#: cfg/mill/slot-2.cfg:121
+#: cfg/mill/slot-arc.cfg:149
 #: cfg/mill/slot.cfg:136
 msgid "User depth"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:142 cfg/mill/circle.cfg:24 cfg/mill/ellipse.cfg:162
-#: cfg/mill/polygon.cfg:135 cfg/mill/rectangle.cfg:193 cfg/mill/slot-2.cfg:129
-#: cfg/mill/slot-arc.cfg:157 cfg/mill/slot.cfg:144
+#: cfg/mill/circle-2.cfg:142
+#: cfg/mill/circle.cfg:24
+#: cfg/mill/ellipse.cfg:162
+#: cfg/mill/polygon.cfg:135
+#: cfg/mill/rectangle.cfg:193
+#: cfg/mill/slot-2.cfg:129
+#: cfg/mill/slot-arc.cfg:157
+#: cfg/mill/slot.cfg:144
 msgid "Finishing"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:146 cfg/mill/circle.cfg:28 cfg/mill/ellipse.cfg:166
-#: cfg/mill/polygon.cfg:139 cfg/mill/rectangle.cfg:28 cfg/mill/slot-2.cfg:133
-#: cfg/mill/slot-arc.cfg:161 cfg/mill/slot.cfg:148
+#: cfg/mill/circle-2.cfg:146
+#: cfg/mill/circle.cfg:28
+#: cfg/mill/ellipse.cfg:166
+#: cfg/mill/polygon.cfg:139
+#: cfg/mill/rectangle.cfg:28
+#: cfg/mill/slot-2.cfg:133
+#: cfg/mill/slot-arc.cfg:161
+#: cfg/mill/slot.cfg:148
 msgid "Finishing pass"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:148 cfg/mill/circle.cfg:30 cfg/mill/ellipse.cfg:168
-#: cfg/mill/polygon.cfg:141 cfg/mill/rectangle.cfg:30 cfg/mill/slot-2.cfg:135
-#: cfg/mill/slot-arc.cfg:163 cfg/mill/slot.cfg:150
+#: cfg/mill/circle-2.cfg:148
+#: cfg/mill/circle.cfg:30
+#: cfg/mill/ellipse.cfg:168
+#: cfg/mill/polygon.cfg:141
+#: cfg/mill/rectangle.cfg:30
+#: cfg/mill/slot-2.cfg:135
+#: cfg/mill/slot-arc.cfg:163
+#: cfg/mill/slot.cfg:150
 msgid "None=0:Clockwise=2:Counter-Clockwise=3"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:149 cfg/mill/circle.cfg:31 cfg/mill/ellipse.cfg:169
-#: cfg/mill/polygon.cfg:142 cfg/mill/slot-2.cfg:136 cfg/mill/slot-arc.cfg:164
+#: cfg/mill/circle-2.cfg:149
+#: cfg/mill/circle.cfg:31
+#: cfg/mill/ellipse.cfg:169
+#: cfg/mill/polygon.cfg:142
+#: cfg/mill/slot-2.cfg:136
+#: cfg/mill/slot-arc.cfg:164
 #: cfg/mill/slot.cfg:151
 msgid "Conventional for better finish"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:154 cfg/mill/circle.cfg:36 cfg/mill/ellipse.cfg:174
-#: cfg/mill/polygon.cfg:147 cfg/mill/rectangle.cfg:36 cfg/mill/slot-2.cfg:141
-#: cfg/mill/slot-arc.cfg:169 cfg/mill/slot.cfg:156
+#: cfg/mill/circle-2.cfg:154
+#: cfg/mill/circle.cfg:36
+#: cfg/mill/ellipse.cfg:174
+#: cfg/mill/polygon.cfg:147
+#: cfg/mill/rectangle.cfg:36
+#: cfg/mill/slot-2.cfg:141
+#: cfg/mill/slot-arc.cfg:169
+#: cfg/mill/slot.cfg:156
 msgid "Finishing cut"
 msgstr ""
 
-#: cfg/mill/circle-2.cfg:159 cfg/mill/circle.cfg:41 cfg/mill/ellipse.cfg:179
-#: cfg/mill/polygon.cfg:152 cfg/mill/rectangle.cfg:41 cfg/mill/slot-2.cfg:146
-#: cfg/mill/slot-arc.cfg:174 cfg/mill/slot.cfg:161
+#: cfg/mill/circle-2.cfg:159
+#: cfg/mill/circle.cfg:41
+#: cfg/mill/ellipse.cfg:179
+#: cfg/mill/polygon.cfg:152
+#: cfg/mill/rectangle.cfg:41
+#: cfg/mill/slot-2.cfg:146
+#: cfg/mill/slot-arc.cfg:174
+#: cfg/mill/slot.cfg:161
 msgid "Last finishing cut"
 msgstr ""
 
-#: cfg/mill/circle.cfg:3 cfg/plasma/circle.cfg:3
+#: cfg/mill/circle.cfg:3
+#: cfg/plasma/circle.cfg:3
 msgid "Circle by Center"
 msgstr ""
 
-#: cfg/mill/circle.cfg:6 cfg/plasma/circle.cfg:6
+#: cfg/mill/circle.cfg:6
+#: cfg/plasma/circle.cfg:6
 msgid "<b>Create a Circle from it's center</b>&#10;Can add a flat"
 msgstr ""
 
-#: cfg/mill/circle.cfg:49 cfg/mill/circle.cfg:66
-#: cfg/mill/drill-circle-irr.cfg:35 cfg/mill/drill-circle-irr.cfg:44
-#: cfg/mill/drill-circle.cfg:35 cfg/mill/drill-circle.cfg:44
-#: cfg/plasma/circle.cfg:27 cfg/plasma/circle.cfg:44
+#: cfg/mill/circle.cfg:49
+#: cfg/mill/circle.cfg:66
+#: cfg/mill/drill-circle-irr.cfg:35
+#: cfg/mill/drill-circle-irr.cfg:44
+#: cfg/mill/drill-circle.cfg:35
+#: cfg/mill/drill-circle.cfg:44
+#: cfg/plasma/circle.cfg:27
+#: cfg/plasma/circle.cfg:44
 msgid "Center of circle"
 msgstr ""
 
-#: cfg/mill/circle.cfg:55 cfg/mill/ellipse.cfg:37 cfg/mill/material.cfg:55
-#: cfg/mill/probe-stock.cfg:106 cfg/mill/rectangle.cfg:55 cfg/mill/slot.cfg:28
-#: cfg/mill/thread-milling.cfg:33 cfg/plasma/circle.cfg:33
-#: cfg/plasma/ellipse.cfg:37 cfg/plasma/material2d.cfg:52
-#: cfg/plasma/material3d.cfg:51 cfg/plasma/rectangle.cfg:37
-#: cfg/plasma/slot.cfg:28 cfg/rectangular-array.cfg:22
+#: cfg/mill/circle.cfg:55
+#: cfg/mill/ellipse.cfg:37
+#: cfg/mill/material.cfg:55
+#: cfg/mill/probe-stock.cfg:106
+#: cfg/mill/rectangle.cfg:55
+#: cfg/mill/slot.cfg:28
+#: cfg/mill/thread-milling.cfg:33
+#: cfg/plasma/circle.cfg:33
+#: cfg/plasma/ellipse.cfg:37
+#: cfg/plasma/material2d.cfg:52
+#: cfg/plasma/material3d.cfg:51
+#: cfg/plasma/rectangle.cfg:37
+#: cfg/plasma/slot.cfg:28
+#: cfg/rectangular-array.cfg:22
 msgid "X axis align"
 msgstr ""
 
-#: cfg/mill/circle.cfg:57 cfg/mill/drill-array.cfg:47 cfg/mill/ellipse.cfg:39
-#: cfg/mill/material.cfg:57 cfg/mill/probe-stock.cfg:108
-#: cfg/mill/rectangle.cfg:57 cfg/mill/thread-milling.cfg:35
-#: cfg/plasma/circle.cfg:35 cfg/plasma/ellipse.cfg:39
-#: cfg/plasma/material2d.cfg:54 cfg/plasma/material3d.cfg:53
-#: cfg/plasma/rectangle.cfg:39 cfg/rectangular-array.cfg:24
+#: cfg/mill/circle.cfg:57
+#: cfg/mill/drill-array.cfg:47
+#: cfg/mill/ellipse.cfg:39
+#: cfg/mill/material.cfg:57
+#: cfg/mill/probe-stock.cfg:108
+#: cfg/mill/rectangle.cfg:57
+#: cfg/mill/thread-milling.cfg:35
+#: cfg/plasma/circle.cfg:35
+#: cfg/plasma/ellipse.cfg:39
+#: cfg/plasma/material2d.cfg:54
+#: cfg/plasma/material3d.cfg:53
+#: cfg/plasma/rectangle.cfg:39
+#: cfg/rectangular-array.cfg:24
 msgid "Left=0:Center=1:Right=2"
 msgstr ""
 
-#: cfg/mill/circle.cfg:60 cfg/mill/drill-array.cfg:50 cfg/mill/ellipse.cfg:42
-#: cfg/mill/probe-stock.cfg:111 cfg/mill/rectangle.cfg:60
-#: cfg/mill/thread-milling.cfg:38 cfg/plasma/circle.cfg:38
-#: cfg/plasma/ellipse.cfg:42 cfg/plasma/rectangle.cfg:42
+#: cfg/mill/circle.cfg:60
+#: cfg/mill/drill-array.cfg:50
+#: cfg/mill/ellipse.cfg:42
+#: cfg/mill/probe-stock.cfg:111
+#: cfg/mill/rectangle.cfg:60
+#: cfg/mill/thread-milling.cfg:38
+#: cfg/plasma/circle.cfg:38
+#: cfg/plasma/ellipse.cfg:42
+#: cfg/plasma/rectangle.cfg:42
 msgid "Define X reference point"
 msgstr ""
 
-#: cfg/mill/circle.cfg:72 cfg/mill/ellipse.cfg:54 cfg/mill/material.cfg:63
-#: cfg/mill/probe-stock.cfg:114 cfg/mill/rectangle.cfg:72
-#: cfg/mill/thread-milling.cfg:50 cfg/plasma/circle.cfg:50
-#: cfg/plasma/ellipse.cfg:54 cfg/plasma/material2d.cfg:60
-#: cfg/plasma/material3d.cfg:59 cfg/plasma/rectangle.cfg:54
+#: cfg/mill/circle.cfg:72
+#: cfg/mill/ellipse.cfg:54
+#: cfg/mill/material.cfg:63
+#: cfg/mill/probe-stock.cfg:114
+#: cfg/mill/rectangle.cfg:72
+#: cfg/mill/thread-milling.cfg:50
+#: cfg/plasma/circle.cfg:50
+#: cfg/plasma/ellipse.cfg:54
+#: cfg/plasma/material2d.cfg:60
+#: cfg/plasma/material3d.cfg:59
+#: cfg/plasma/rectangle.cfg:54
 #: cfg/rectangular-array.cfg:30
 msgid "Y axis align"
 msgstr ""
 
-#: cfg/mill/circle.cfg:74 cfg/mill/drill-array.cfg:73 cfg/mill/ellipse.cfg:56
-#: cfg/mill/material.cfg:65 cfg/mill/probe-stock.cfg:116
-#: cfg/mill/rectangle.cfg:74 cfg/mill/thread-milling.cfg:52
-#: cfg/plasma/circle.cfg:52 cfg/plasma/ellipse.cfg:56
-#: cfg/plasma/material2d.cfg:62 cfg/plasma/material3d.cfg:61
-#: cfg/plasma/rectangle.cfg:56 cfg/rectangular-array.cfg:32
+#: cfg/mill/circle.cfg:74
+#: cfg/mill/drill-array.cfg:73
+#: cfg/mill/ellipse.cfg:56
+#: cfg/mill/material.cfg:65
+#: cfg/mill/probe-stock.cfg:116
+#: cfg/mill/rectangle.cfg:74
+#: cfg/mill/thread-milling.cfg:52
+#: cfg/plasma/circle.cfg:52
+#: cfg/plasma/ellipse.cfg:56
+#: cfg/plasma/material2d.cfg:62
+#: cfg/plasma/material3d.cfg:61
+#: cfg/plasma/rectangle.cfg:56
+#: cfg/rectangular-array.cfg:32
 msgid "Top=0:Center=1:Bottom=2"
 msgstr ""
 
-#: cfg/mill/circle.cfg:77 cfg/mill/drill-array.cfg:76 cfg/mill/ellipse.cfg:59
-#: cfg/mill/probe-stock.cfg:119 cfg/mill/rectangle.cfg:77
-#: cfg/mill/thread-milling.cfg:55 cfg/plasma/circle.cfg:55
-#: cfg/plasma/ellipse.cfg:59 cfg/plasma/rectangle.cfg:59
+#: cfg/mill/circle.cfg:77
+#: cfg/mill/drill-array.cfg:76
+#: cfg/mill/ellipse.cfg:59
+#: cfg/mill/probe-stock.cfg:119
+#: cfg/mill/rectangle.cfg:77
+#: cfg/mill/thread-milling.cfg:55
+#: cfg/plasma/circle.cfg:55
+#: cfg/plasma/ellipse.cfg:59
+#: cfg/plasma/rectangle.cfg:59
 msgid "Define Y reference point"
 msgstr ""
 
@@ -2601,11 +3239,13 @@ msgstr ""
 msgid "<b>Drill Lines of Holes</b>"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:25 cfg/rectangular-array.cfg:39
+#: cfg/mill/drill-array.cfg:25
+#: cfg/rectangular-array.cfg:39
 msgid "Size and offsets"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:45 cfg/mill/drill-array.cfg:71
+#: cfg/mill/drill-array.cfg:45
+#: cfg/mill/drill-array.cfg:71
 msgid "Align axis"
 msgstr ""
 
@@ -2613,9 +3253,12 @@ msgstr ""
 msgid "X axis count"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:57 cfg/mill/drill-array.cfg:83
-#: cfg/mill/drill-circle-irr.cfg:68 cfg/mill/drill-circle-irr.cfg:73
-#: cfg/mill/drill-circle.cfg:70 cfg/mill/drill-circle.cfg:74
+#: cfg/mill/drill-array.cfg:57
+#: cfg/mill/drill-array.cfg:83
+#: cfg/mill/drill-circle-irr.cfg:68
+#: cfg/mill/drill-circle-irr.cfg:73
+#: cfg/mill/drill-circle.cfg:70
+#: cfg/mill/drill-circle.cfg:74
 msgid "Number of holes"
 msgstr ""
 
@@ -2627,7 +3270,8 @@ msgstr ""
 msgid "dX options"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:99 cfg/mill/drill-array.cfg:107
+#: cfg/mill/drill-array.cfg:99
+#: cfg/mill/drill-array.cfg:107
 msgid "Between each hole=0:Overall=1"
 msgstr ""
 
@@ -2647,31 +3291,38 @@ msgstr ""
 msgid "Rotation of line"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:132 cfg/mill/drill-circle-irr.cfg:138
-#: cfg/mill/drill-circle.cfg:105 cfg/mill/drill-single.cfg:46
+#: cfg/mill/drill-array.cfg:132
+#: cfg/mill/drill-circle-irr.cfg:138
+#: cfg/mill/drill-circle.cfg:105
+#: cfg/mill/drill-single.cfg:46
 msgid "Drill automatically"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:134 cfg/mill/drill-circle-irr.cfg:140
-#: cfg/mill/drill-circle.cfg:107 cfg/mill/drill-single.cfg:48
+#: cfg/mill/drill-array.cfg:134
+#: cfg/mill/drill-circle-irr.cfg:140
+#: cfg/mill/drill-circle.cfg:107
+#: cfg/mill/drill-single.cfg:48
 msgid "Or manually"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:139 cfg/mill/drill-circle-irr.cfg:145
-#: cfg/mill/drill-circle.cfg:112 cfg/mill/drill-single.cfg:53
+#: cfg/mill/drill-array.cfg:139
+#: cfg/mill/drill-circle-irr.cfg:145
+#: cfg/mill/drill-circle.cfg:112
+#: cfg/mill/drill-single.cfg:53
 msgid "Drill start"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:157 cfg/mill/drill-circle.cfg:130
+#: cfg/mill/drill-array.cfg:157
+#: cfg/mill/drill-circle.cfg:130
 #: cfg/mill/drill-single.cfg:71
 msgid "Drill down to"
 msgstr ""
 
-#: cfg/mill/drill-array.cfg:159 cfg/mill/drill-circle-irr.cfg:165
-#: cfg/mill/drill-circle.cfg:132 cfg/mill/drill-single.cfg:73
-msgid ""
-"User defined=0:Through=1:Center drill depth=2:Bottom=3:Half=4:One quarter=5:"
-"Three quarter=6"
+#: cfg/mill/drill-array.cfg:159
+#: cfg/mill/drill-circle-irr.cfg:165
+#: cfg/mill/drill-circle.cfg:132
+#: cfg/mill/drill-single.cfg:73
+msgid "User defined=0:Through=1:Center drill depth=2:Bottom=3:Half=4:One quarter=5:Three quarter=6"
 msgstr ""
 
 #: cfg/mill/drill-circle-irr.cfg:3
@@ -2686,7 +3337,8 @@ msgstr ""
 msgid "Count, positions"
 msgstr ""
 
-#: cfg/mill/drill-circle-irr.cfg:29 cfg/mill/tool-change.cfg:25
+#: cfg/mill/drill-circle-irr.cfg:29
+#: cfg/mill/tool-change.cfg:25
 msgid "Drilling params"
 msgstr ""
 
@@ -2694,11 +3346,13 @@ msgstr ""
 msgid "Diameter of circle"
 msgstr ""
 
-#: cfg/mill/drill-circle-irr.cfg:61 cfg/mill/drill-circle.cfg:98
+#: cfg/mill/drill-circle-irr.cfg:61
+#: cfg/mill/drill-circle.cfg:98
 msgid "Drill center"
 msgstr ""
 
-#: cfg/mill/drill-circle-irr.cfg:64 cfg/mill/drill-circle.cfg:101
+#: cfg/mill/drill-circle-irr.cfg:64
+#: cfg/mill/drill-circle.cfg:101
 msgid "Drill also at center"
 msgstr ""
 
@@ -2786,56 +3440,73 @@ msgstr ""
 msgid "Y coordinate"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:6 cfg/plasma/ellipse.cfg:6
+#: cfg/mill/ellipse.cfg:6
+#: cfg/plasma/ellipse.cfg:6
 msgid "<b>Create an Ellipse</b>"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:24 cfg/mill/polygon.cfg:24 cfg/mill/rectangle.cfg:24
-#: cfg/mill/slot.cfg:24 cfg/plasma/ellipse.cfg:24 cfg/plasma/polygon.cfg:24
-#: cfg/plasma/rectangle.cfg:24 cfg/plasma/slot.cfg:24
+#: cfg/mill/ellipse.cfg:24
+#: cfg/mill/polygon.cfg:24
+#: cfg/mill/rectangle.cfg:24
+#: cfg/mill/slot.cfg:24
+#: cfg/plasma/ellipse.cfg:24
+#: cfg/plasma/polygon.cfg:24
+#: cfg/plasma/rectangle.cfg:24
+#: cfg/plasma/slot.cfg:24
 msgid "Size, rotation"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:31 cfg/mill/ellipse.cfg:48 cfg/plasma/ellipse.cfg:31
+#: cfg/mill/ellipse.cfg:31
+#: cfg/mill/ellipse.cfg:48
+#: cfg/plasma/ellipse.cfg:31
 #: cfg/plasma/ellipse.cfg:48
 msgid "Center of ellipse"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:62 cfg/plasma/ellipse.cfg:62
+#: cfg/mill/ellipse.cfg:62
+#: cfg/plasma/ellipse.cfg:62
 msgid "X Radius"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:66 cfg/plasma/ellipse.cfg:66
+#: cfg/mill/ellipse.cfg:66
+#: cfg/plasma/ellipse.cfg:66
 msgid "Radius in X axis"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:73 cfg/plasma/ellipse.cfg:73
+#: cfg/mill/ellipse.cfg:73
+#: cfg/plasma/ellipse.cfg:73
 msgid "Y Radius"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:77 cfg/plasma/ellipse.cfg:77
+#: cfg/mill/ellipse.cfg:77
+#: cfg/plasma/ellipse.cfg:77
 msgid "Radius in Y axis"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:94 cfg/plasma/ellipse.cfg:94
+#: cfg/mill/ellipse.cfg:94
+#: cfg/plasma/ellipse.cfg:94
 msgid "Control points"
 msgstr ""
 
-#: cfg/mill/ellipse.cfg:99 cfg/plasma/ellipse.cfg:99
+#: cfg/mill/ellipse.cfg:99
+#: cfg/plasma/ellipse.cfg:99
 msgid "Per quadrant, smoother with more"
 msgstr ""
 
-#: cfg/mill/material.cfg:3 cfg/plasma/material2d.cfg:3
+#: cfg/mill/material.cfg:3
+#: cfg/plasma/material2d.cfg:3
 #: cfg/plasma/material3d.cfg:3
 msgid "Workpiece"
 msgstr ""
 
-#: cfg/mill/material.cfg:6 cfg/plasma/material2d.cfg:6
+#: cfg/mill/material.cfg:6
+#: cfg/plasma/material2d.cfg:6
 #: cfg/plasma/material3d.cfg:6
 msgid "<b>Workpiece or Raw material used</b>"
 msgstr ""
 
-#: cfg/mill/material.cfg:10 cfg/plasma/material2d.cfg:10
+#: cfg/mill/material.cfg:10
+#: cfg/plasma/material2d.cfg:10
 #: cfg/plasma/material3d.cfg:10
 msgid "Show workpiece"
 msgstr ""
@@ -2844,82 +3515,102 @@ msgstr ""
 msgid "Milling params"
 msgstr ""
 
-#: cfg/mill/material.cfg:31 cfg/plasma/material2d.cfg:27
+#: cfg/mill/material.cfg:31
+#: cfg/plasma/material2d.cfg:27
 #: cfg/plasma/material3d.cfg:27
 msgid "X0"
 msgstr ""
 
-#: cfg/mill/material.cfg:40 cfg/plasma/material2d.cfg:36
+#: cfg/mill/material.cfg:40
+#: cfg/plasma/material2d.cfg:36
 #: cfg/plasma/material3d.cfg:36
 msgid "Y0"
 msgstr ""
 
-#: cfg/mill/material.cfg:59 cfg/plasma/material2d.cfg:56
-#: cfg/plasma/material3d.cfg:55 cfg/rectangular-array.cfg:26
+#: cfg/mill/material.cfg:59
+#: cfg/plasma/material2d.cfg:56
+#: cfg/plasma/material3d.cfg:55
+#: cfg/rectangular-array.cfg:26
 msgid "Define X reference"
 msgstr ""
 
-#: cfg/mill/material.cfg:67 cfg/plasma/material2d.cfg:64
-#: cfg/plasma/material3d.cfg:63 cfg/rectangular-array.cfg:34
+#: cfg/mill/material.cfg:67
+#: cfg/plasma/material2d.cfg:64
+#: cfg/plasma/material3d.cfg:63
+#: cfg/rectangular-array.cfg:34
 msgid "Define Y reference"
 msgstr ""
 
-#: cfg/mill/material.cfg:71 cfg/plasma/material2d.cfg:68
+#: cfg/mill/material.cfg:71
+#: cfg/plasma/material2d.cfg:68
 #: cfg/plasma/material3d.cfg:67
 msgid "Z axis align"
 msgstr ""
 
-#: cfg/mill/material.cfg:73 cfg/plasma/material2d.cfg:70
+#: cfg/mill/material.cfg:73
+#: cfg/plasma/material2d.cfg:70
 #: cfg/plasma/material3d.cfg:69
 msgid "Top=0:Bottom=1"
 msgstr ""
 
-#: cfg/mill/material.cfg:75 cfg/plasma/material2d.cfg:72
+#: cfg/mill/material.cfg:75
+#: cfg/plasma/material2d.cfg:72
 #: cfg/plasma/material3d.cfg:71
 msgid "Define Z reference"
 msgstr ""
 
-#: cfg/mill/material.cfg:79 cfg/plasma/material2d.cfg:77
+#: cfg/mill/material.cfg:79
+#: cfg/plasma/material2d.cfg:77
 #: cfg/plasma/material3d.cfg:75
 msgid "Height (Y)"
 msgstr ""
 
-#: cfg/mill/material.cfg:82 cfg/mill/probe-stock.cfg:38
-#: cfg/plasma/material2d.cfg:80 cfg/plasma/material3d.cfg:78
+#: cfg/mill/material.cfg:82
+#: cfg/mill/probe-stock.cfg:38
+#: cfg/plasma/material2d.cfg:80
+#: cfg/plasma/material3d.cfg:78
 msgid "Y axis"
 msgstr ""
 
-#: cfg/mill/material.cfg:90 cfg/plasma/material2d.cfg:88
+#: cfg/mill/material.cfg:90
+#: cfg/plasma/material2d.cfg:88
 #: cfg/plasma/material3d.cfg:86
 msgid "Width (X)"
 msgstr ""
 
-#: cfg/mill/material.cfg:93 cfg/mill/probe-stock.cfg:34
-#: cfg/plasma/material2d.cfg:91 cfg/plasma/material3d.cfg:89
+#: cfg/mill/material.cfg:93
+#: cfg/mill/probe-stock.cfg:34
+#: cfg/plasma/material2d.cfg:91
+#: cfg/plasma/material3d.cfg:89
 msgid "X axis"
 msgstr ""
 
-#: cfg/mill/material.cfg:101 cfg/plasma/material2d.cfg:99
+#: cfg/mill/material.cfg:101
+#: cfg/plasma/material2d.cfg:99
 #: cfg/plasma/material3d.cfg:97
 msgid "Depth (Z)"
 msgstr ""
 
-#: cfg/mill/material.cfg:104 cfg/plasma/material2d.cfg:102
+#: cfg/mill/material.cfg:104
+#: cfg/plasma/material2d.cfg:102
 #: cfg/plasma/material3d.cfg:100
 msgid "Z axis"
 msgstr ""
 
-#: cfg/mill/material.cfg:112 cfg/plasma/cutting-params2d.cfg:66
+#: cfg/mill/material.cfg:112
+#: cfg/plasma/cutting-params2d.cfg:66
 #: cfg/plasma/cutting-params3d.cfg:63
 msgid "Z clear"
 msgstr ""
 
-#: cfg/mill/material.cfg:115 cfg/plasma/cutting-params2d.cfg:69
+#: cfg/mill/material.cfg:115
+#: cfg/plasma/cutting-params2d.cfg:69
 #: cfg/plasma/cutting-params3d.cfg:66
 msgid "Above rapid to Z"
 msgstr ""
 
-#: cfg/mill/material.cfg:123 cfg/plasma/cutting-params2d.cfg:78
+#: cfg/mill/material.cfg:123
+#: cfg/plasma/cutting-params2d.cfg:78
 #: cfg/plasma/cutting-params3d.cfg:74
 msgid "Rapid to Z"
 msgstr ""
@@ -2936,608 +3627,824 @@ msgstr ""
 msgid "Past bottom"
 msgstr ""
 
-#: cfg/mill/material.cfg:144 cfg/plasma/material2d.cfg:111
+#: cfg/mill/material.cfg:144
+#: cfg/plasma/material2d.cfg:111
 #: cfg/plasma/material3d.cfg:108
 msgid "Centerline align"
 msgstr ""
 
-#: cfg/mill/material.cfg:146 cfg/plasma/material2d.cfg:113
+#: cfg/mill/material.cfg:146
+#: cfg/plasma/material2d.cfg:113
 #: cfg/plasma/material3d.cfg:110
 msgid "X axis=0:Y axis=1:Z axis=2"
 msgstr ""
 
-#: cfg/mill/material.cfg:148 cfg/plasma/material2d.cfg:115
+#: cfg/mill/material.cfg:148
+#: cfg/plasma/material2d.cfg:115
 #: cfg/plasma/material3d.cfg:112
 msgid "Define orientation of centerline"
 msgstr ""
 
-#: cfg/mill/material.cfg:152 cfg/mill/probe-edge.cfg:16
-#: cfg/mill/probe-stock.cfg:42 cfg/plasma/material2d.cfg:120
+#: cfg/mill/material.cfg:152
+#: cfg/mill/probe-edge.cfg:16
+#: cfg/mill/probe-stock.cfg:42
+#: cfg/plasma/material2d.cfg:120
 #: cfg/plasma/material3d.cfg:116
 msgid "Options"
 msgstr ""
 
-#: cfg/mill/material.cfg:156 cfg/plasma/material2d.cfg:124
+#: cfg/mill/material.cfg:156
+#: cfg/plasma/material2d.cfg:124
 #: cfg/plasma/material3d.cfg:120
 msgid "Corner radius"
 msgstr ""
 
-#: cfg/mill/material.cfg:161 cfg/plasma/material2d.cfg:129
+#: cfg/mill/material.cfg:161
+#: cfg/plasma/material2d.cfg:129
 #: cfg/plasma/material3d.cfg:125
 msgid "Define radius"
 msgstr ""
 
-#: cfg/mill/material.cfg:166 cfg/plasma/material2d.cfg:134
+#: cfg/mill/material.cfg:166
+#: cfg/plasma/material2d.cfg:134
 #: cfg/plasma/material3d.cfg:130
 msgid "Wall thickness"
 msgstr ""
 
-#: cfg/mill/material.cfg:171 cfg/plasma/material2d.cfg:139
+#: cfg/mill/material.cfg:171
+#: cfg/plasma/material2d.cfg:139
 #: cfg/plasma/material3d.cfg:135
 msgid "Define if hollow"
 msgstr ""
 
-#: cfg/mill/polygon.cfg:6 cfg/plasma/polygon.cfg:6
+#: cfg/mill/polygon.cfg:6
+#: cfg/plasma/polygon.cfg:6
 msgid "<b>Create a Polygon with n edges</b>"
 msgstr ""
 
-#: cfg/mill/polygon.cfg:31 cfg/plasma/polygon.cfg:31
+#: cfg/mill/polygon.cfg:31
+#: cfg/plasma/polygon.cfg:31
 msgid "Polygon center X"
 msgstr ""
 
-#: cfg/mill/polygon.cfg:40 cfg/plasma/polygon.cfg:40
+#: cfg/mill/polygon.cfg:40
+#: cfg/plasma/polygon.cfg:40
 msgid "Polygon center Y"
 msgstr ""
 
-#: cfg/mill/polygon.cfg:46 cfg/plasma/polygon.cfg:46
+#: cfg/mill/polygon.cfg:46
+#: cfg/plasma/polygon.cfg:46
 msgid "Edges count"
 msgstr ""
 
-#: cfg/mill/polygon.cfg:51 cfg/plasma/polygon.cfg:51
+#: cfg/mill/polygon.cfg:51
+#: cfg/plasma/polygon.cfg:51
 msgid "Number of edges"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:6 cfg/plasma/polyline-arc-ij.cfg:6
-msgid ""
-"<b>Add an arc to a polyline</b>&#10;Define I and J offsets, angle and "
-"direction"
+#: cfg/mill/polyline-arc-ij.cfg:6
+#: cfg/plasma/polyline-arc-ij.cfg:6
+msgid "<b>Add an arc to a polyline</b>&#10;Define I and J offsets, angle and direction"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:10 cfg/mill/polyline-arc-m.cfg:10
-#: cfg/mill/polyline-arc-polar.cfg:10 cfg/mill/polyline-arc-to.cfg:10
-#: cfg/mill/polyline-arc-top.cfg:10 cfg/mill/polyline-mirror-i.cfg:19
-#: cfg/mill/polyline-polar.cfg:49 cfg/mill/polyline-to.cfg:47
-#: cfg/mill/polyline.cfg:18 cfg/plasma/polyline-arc-ij.cfg:10
-#: cfg/plasma/polyline-arc-m.cfg:10 cfg/plasma/polyline-arc-polar.cfg:10
-#: cfg/plasma/polyline-arc-to.cfg:10 cfg/plasma/polyline-arc-top.cfg:10
-#: cfg/plasma/polyline-mirror-i.cfg:19 cfg/plasma/polyline-polar.cfg:49
-#: cfg/plasma/polyline-to.cfg:47 cfg/plasma/polyline.cfg:18
+#: cfg/mill/polyline-arc-ij.cfg:10
+#: cfg/mill/polyline-arc-m.cfg:10
+#: cfg/mill/polyline-arc-polar.cfg:10
+#: cfg/mill/polyline-arc-to.cfg:10
+#: cfg/mill/polyline-arc-top.cfg:10
+#: cfg/mill/polyline-mirror-i.cfg:19
+#: cfg/mill/polyline-polar.cfg:49
+#: cfg/mill/polyline-to.cfg:47
+#: cfg/mill/polyline.cfg:18
+#: cfg/plasma/polyline-arc-ij.cfg:10
+#: cfg/plasma/polyline-arc-m.cfg:10
+#: cfg/plasma/polyline-arc-polar.cfg:10
+#: cfg/plasma/polyline-arc-to.cfg:10
+#: cfg/plasma/polyline-arc-top.cfg:10
+#: cfg/plasma/polyline-mirror-i.cfg:19
+#: cfg/plasma/polyline-polar.cfg:49
+#: cfg/plasma/polyline-to.cfg:47
+#: cfg/plasma/polyline.cfg:18
 msgid "Link"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:12 cfg/mill/polyline-arc-m.cfg:12
-#: cfg/mill/polyline-arc-polar.cfg:12 cfg/mill/polyline-arc-to.cfg:12
-#: cfg/mill/polyline-arc-top.cfg:12 cfg/mill/polyline-mirror-i.cfg:21
-#: cfg/mill/polyline-polar.cfg:51 cfg/mill/polyline-to.cfg:49
-#: cfg/mill/polyline.cfg:21 cfg/plasma/polyline-arc-ij.cfg:12
-#: cfg/plasma/polyline-arc-m.cfg:12 cfg/plasma/polyline-arc-polar.cfg:12
-#: cfg/plasma/polyline-arc-to.cfg:12 cfg/plasma/polyline-arc-top.cfg:12
-#: cfg/plasma/polyline-mirror-i.cfg:21 cfg/plasma/polyline-polar.cfg:51
-#: cfg/plasma/polyline-to.cfg:49 cfg/plasma/polyline.cfg:21
+#: cfg/mill/polyline-arc-ij.cfg:12
+#: cfg/mill/polyline-arc-m.cfg:12
+#: cfg/mill/polyline-arc-polar.cfg:12
+#: cfg/mill/polyline-arc-to.cfg:12
+#: cfg/mill/polyline-arc-top.cfg:12
+#: cfg/mill/polyline-mirror-i.cfg:21
+#: cfg/mill/polyline-polar.cfg:51
+#: cfg/mill/polyline-to.cfg:49
+#: cfg/mill/polyline.cfg:21
+#: cfg/plasma/polyline-arc-ij.cfg:12
+#: cfg/plasma/polyline-arc-m.cfg:12
+#: cfg/plasma/polyline-arc-polar.cfg:12
+#: cfg/plasma/polyline-arc-to.cfg:12
+#: cfg/plasma/polyline-arc-top.cfg:12
+#: cfg/plasma/polyline-mirror-i.cfg:21
+#: cfg/plasma/polyline-polar.cfg:51
+#: cfg/plasma/polyline-to.cfg:49
+#: cfg/plasma/polyline.cfg:21
 msgid "Link style with previous item"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:15 cfg/mill/polyline-arc-m.cfg:15
-#: cfg/mill/polyline-arc-polar.cfg:15 cfg/mill/polyline-arc-to.cfg:15
-#: cfg/mill/polyline-arc-top.cfg:15 cfg/mill/polyline-mirror-i.cfg:28
-#: cfg/mill/polyline-mirror-i.cfg:97 cfg/mill/polyline-polar.cfg:54
-#: cfg/mill/polyline-to.cfg:52 cfg/mill/polyline.cfg:84
-#: cfg/mill/rectangle.cfg:116 cfg/plasma/polyline-arc-ij.cfg:15
-#: cfg/plasma/polyline-arc-m.cfg:15 cfg/plasma/polyline-arc-polar.cfg:15
-#: cfg/plasma/polyline-arc-to.cfg:15 cfg/plasma/polyline-arc-top.cfg:15
-#: cfg/plasma/polyline-mirror-i.cfg:28 cfg/plasma/polyline-mirror-i.cfg:97
-#: cfg/plasma/polyline-polar.cfg:54 cfg/plasma/polyline-to.cfg:52
-#: cfg/plasma/polyline.cfg:84 cfg/plasma/rectangle.cfg:98
+#: cfg/mill/polyline-arc-ij.cfg:15
+#: cfg/mill/polyline-arc-m.cfg:15
+#: cfg/mill/polyline-arc-polar.cfg:15
+#: cfg/mill/polyline-arc-to.cfg:15
+#: cfg/mill/polyline-arc-top.cfg:15
+#: cfg/mill/polyline-mirror-i.cfg:28
+#: cfg/mill/polyline-mirror-i.cfg:97
+#: cfg/mill/polyline-polar.cfg:54
+#: cfg/mill/polyline-to.cfg:52
+#: cfg/mill/polyline.cfg:84
+#: cfg/mill/rectangle.cfg:116
+#: cfg/plasma/polyline-arc-ij.cfg:15
+#: cfg/plasma/polyline-arc-m.cfg:15
+#: cfg/plasma/polyline-arc-polar.cfg:15
+#: cfg/plasma/polyline-arc-to.cfg:15
+#: cfg/plasma/polyline-arc-top.cfg:15
+#: cfg/plasma/polyline-mirror-i.cfg:28
+#: cfg/plasma/polyline-mirror-i.cfg:97
+#: cfg/plasma/polyline-polar.cfg:54
+#: cfg/plasma/polyline-to.cfg:52
+#: cfg/plasma/polyline.cfg:84
+#: cfg/plasma/rectangle.cfg:98
 msgid "Type"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:18 cfg/mill/polyline-arc-m.cfg:18
-#: cfg/mill/polyline-arc-polar.cfg:18 cfg/mill/polyline-arc-to.cfg:18
-#: cfg/mill/polyline-arc-top.cfg:18 cfg/mill/polyline-mirror-i.cfg:31
-#: cfg/mill/polyline-polar.cfg:57 cfg/mill/polyline-to.cfg:55
-#: cfg/mill/polyline.cfg:87 cfg/mill/rectangle.cfg:119
-#: cfg/plasma/polyline-arc-ij.cfg:18 cfg/plasma/polyline-arc-m.cfg:18
-#: cfg/plasma/polyline-arc-polar.cfg:18 cfg/plasma/polyline-arc-to.cfg:18
-#: cfg/plasma/polyline-arc-top.cfg:18 cfg/plasma/polyline-mirror-i.cfg:31
-#: cfg/plasma/polyline-polar.cfg:57 cfg/plasma/polyline-to.cfg:55
-#: cfg/plasma/polyline.cfg:87 cfg/plasma/rectangle.cfg:101
-msgid "None=0:Rounded=1:Chamfered=2:Inverted Round=3"
+#: cfg/mill/polyline-arc-ij.cfg:18
+#: cfg/mill/polyline-arc-m.cfg:18
+#: cfg/mill/polyline-arc-polar.cfg:18
+#: cfg/mill/polyline-arc-to.cfg:18
+#: cfg/mill/polyline-arc-top.cfg:18
+#: cfg/mill/polyline-mirror-i.cfg:31
+#: cfg/mill/polyline-polar.cfg:57
+#: cfg/mill/polyline-to.cfg:55
+#: cfg/mill/polyline.cfg:87
+#: cfg/mill/rectangle.cfg:119
+#: cfg/plasma/polyline-arc-ij.cfg:18
+#: cfg/plasma/polyline-arc-m.cfg:18
+#: cfg/plasma/polyline-arc-polar.cfg:18
+#: cfg/plasma/polyline-arc-to.cfg:18
+#: cfg/plasma/polyline-arc-top.cfg:18
+#: cfg/plasma/polyline-mirror-i.cfg:31
+#: cfg/plasma/polyline-polar.cfg:57
+#: cfg/plasma/polyline-to.cfg:55
+#: cfg/plasma/polyline.cfg:87
+#: cfg/plasma/rectangle.cfg:101
+msgid "None=0:Rounded=1:Beveled=2:Inverted Round=3"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:20 cfg/mill/polyline-arc-m.cfg:20
-#: cfg/mill/polyline-arc-polar.cfg:20 cfg/mill/polyline-arc-to.cfg:20
-#: cfg/mill/polyline-arc-top.cfg:20 cfg/mill/polyline-mirror-i.cfg:33
-#: cfg/mill/polyline-to.cfg:57 cfg/mill/polyline.cfg:89
-#: cfg/plasma/polyline-arc-ij.cfg:20 cfg/plasma/polyline-arc-m.cfg:20
-#: cfg/plasma/polyline-arc-polar.cfg:20 cfg/plasma/polyline-arc-to.cfg:20
-#: cfg/plasma/polyline-arc-top.cfg:20 cfg/plasma/polyline-mirror-i.cfg:33
-#: cfg/plasma/polyline-to.cfg:57 cfg/plasma/polyline.cfg:89
+#: cfg/mill/polyline-arc-ij.cfg:20
+#: cfg/mill/polyline-arc-m.cfg:20
+#: cfg/mill/polyline-arc-polar.cfg:20
+#: cfg/mill/polyline-arc-to.cfg:20
+#: cfg/mill/polyline-arc-top.cfg:20
+#: cfg/mill/polyline-mirror-i.cfg:33
+#: cfg/mill/polyline-to.cfg:57
+#: cfg/mill/polyline.cfg:89
+#: cfg/plasma/polyline-arc-ij.cfg:20
+#: cfg/plasma/polyline-arc-m.cfg:20
+#: cfg/plasma/polyline-arc-polar.cfg:20
+#: cfg/plasma/polyline-arc-to.cfg:20
+#: cfg/plasma/polyline-arc-top.cfg:20
+#: cfg/plasma/polyline-mirror-i.cfg:33
+#: cfg/plasma/polyline-to.cfg:57
+#: cfg/plasma/polyline.cfg:89
 msgid "Select link type"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:29 cfg/mill/polyline-arc-m.cfg:29
-#: cfg/mill/polyline-arc-polar.cfg:29 cfg/mill/polyline-arc-to.cfg:29
-#: cfg/mill/polyline-arc-top.cfg:29 cfg/mill/polyline-mirror-i.cfg:42
-#: cfg/mill/polyline-polar.cfg:68 cfg/mill/polyline-to.cfg:66
-#: cfg/mill/polyline.cfg:98 cfg/mill/rectangle.cfg:130
-#: cfg/plasma/polyline-arc-ij.cfg:29 cfg/plasma/polyline-arc-m.cfg:29
-#: cfg/plasma/polyline-arc-polar.cfg:29 cfg/plasma/polyline-arc-to.cfg:29
-#: cfg/plasma/polyline-arc-top.cfg:29 cfg/plasma/polyline-mirror-i.cfg:42
-#: cfg/plasma/polyline-polar.cfg:68 cfg/plasma/polyline-to.cfg:66
-#: cfg/plasma/polyline.cfg:98 cfg/plasma/rectangle.cfg:112
+#: cfg/mill/polyline-arc-ij.cfg:29
+#: cfg/mill/polyline-arc-m.cfg:29
+#: cfg/mill/polyline-arc-polar.cfg:29
+#: cfg/mill/polyline-arc-to.cfg:29
+#: cfg/mill/polyline-arc-top.cfg:29
+#: cfg/mill/polyline-mirror-i.cfg:42
+#: cfg/mill/polyline-polar.cfg:68
+#: cfg/mill/polyline-to.cfg:66
+#: cfg/mill/polyline.cfg:98
+#: cfg/mill/rectangle.cfg:130
+#: cfg/plasma/polyline-arc-ij.cfg:29
+#: cfg/plasma/polyline-arc-m.cfg:29
+#: cfg/plasma/polyline-arc-polar.cfg:29
+#: cfg/plasma/polyline-arc-to.cfg:29
+#: cfg/plasma/polyline-arc-top.cfg:29
+#: cfg/plasma/polyline-mirror-i.cfg:42
+#: cfg/plasma/polyline-polar.cfg:68
+#: cfg/plasma/polyline-to.cfg:66
+#: cfg/plasma/polyline.cfg:98
+#: cfg/plasma/rectangle.cfg:112
 msgid "Radius for rounded or distance from apex"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:34 cfg/mill/polyline-arc-m.cfg:34
-#: cfg/mill/polyline-arc-polar.cfg:34 cfg/mill/polyline-arc-to.cfg:34
-#: cfg/mill/polyline-arc-top.cfg:34 cfg/mill/polyline-mirror-i.cfg:47
-#: cfg/mill/polyline-polar.cfg:73 cfg/mill/polyline-to.cfg:71
-#: cfg/mill/polyline.cfg:103 cfg/plasma/polyline-arc-ij.cfg:34
-#: cfg/plasma/polyline-arc-m.cfg:34 cfg/plasma/polyline-arc-polar.cfg:34
-#: cfg/plasma/polyline-arc-to.cfg:34 cfg/plasma/polyline-arc-top.cfg:34
-#: cfg/plasma/polyline-mirror-i.cfg:47 cfg/plasma/polyline-polar.cfg:73
-#: cfg/plasma/polyline-to.cfg:71 cfg/plasma/polyline.cfg:103
+#: cfg/mill/polyline-arc-ij.cfg:34
+#: cfg/mill/polyline-arc-m.cfg:34
+#: cfg/mill/polyline-arc-polar.cfg:34
+#: cfg/mill/polyline-arc-to.cfg:34
+#: cfg/mill/polyline-arc-top.cfg:34
+#: cfg/mill/polyline-mirror-i.cfg:47
+#: cfg/mill/polyline-polar.cfg:73
+#: cfg/mill/polyline-to.cfg:71
+#: cfg/mill/polyline.cfg:103
+#: cfg/plasma/polyline-arc-ij.cfg:34
+#: cfg/plasma/polyline-arc-m.cfg:34
+#: cfg/plasma/polyline-arc-polar.cfg:34
+#: cfg/plasma/polyline-arc-to.cfg:34
+#: cfg/plasma/polyline-arc-top.cfg:34
+#: cfg/plasma/polyline-mirror-i.cfg:47
+#: cfg/plasma/polyline-polar.cfg:73
+#: cfg/plasma/polyline-to.cfg:71
+#: cfg/plasma/polyline.cfg:103
 msgid "Complement"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:37 cfg/mill/polyline-arc-m.cfg:37
-#: cfg/mill/polyline-arc-polar.cfg:37 cfg/mill/polyline-arc-to.cfg:37
-#: cfg/mill/polyline-arc-top.cfg:37 cfg/mill/polyline-mirror-i.cfg:50
-#: cfg/mill/polyline-polar.cfg:76 cfg/mill/polyline-to.cfg:74
-#: cfg/mill/polyline.cfg:106 cfg/plasma/polyline-arc-ij.cfg:37
-#: cfg/plasma/polyline-arc-m.cfg:37 cfg/plasma/polyline-arc-polar.cfg:37
-#: cfg/plasma/polyline-arc-to.cfg:37 cfg/plasma/polyline-arc-top.cfg:37
-#: cfg/plasma/polyline-mirror-i.cfg:50 cfg/plasma/polyline-polar.cfg:76
-#: cfg/plasma/polyline-to.cfg:74 cfg/plasma/polyline.cfg:106
+#: cfg/mill/polyline-arc-ij.cfg:37
+#: cfg/mill/polyline-arc-m.cfg:37
+#: cfg/mill/polyline-arc-polar.cfg:37
+#: cfg/mill/polyline-arc-to.cfg:37
+#: cfg/mill/polyline-arc-top.cfg:37
+#: cfg/mill/polyline-mirror-i.cfg:50
+#: cfg/mill/polyline-polar.cfg:76
+#: cfg/mill/polyline-to.cfg:74
+#: cfg/mill/polyline.cfg:106
+#: cfg/plasma/polyline-arc-ij.cfg:37
+#: cfg/plasma/polyline-arc-m.cfg:37
+#: cfg/plasma/polyline-arc-polar.cfg:37
+#: cfg/plasma/polyline-arc-to.cfg:37
+#: cfg/plasma/polyline-arc-top.cfg:37
+#: cfg/plasma/polyline-mirror-i.cfg:50
+#: cfg/plasma/polyline-polar.cfg:76
+#: cfg/plasma/polyline-to.cfg:74
+#: cfg/plasma/polyline.cfg:106
 msgid "Reverse direction of tool path for rounded or inverted round"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:45 cfg/mill/polyline-arc-ij.cfg:54
-#: cfg/mill/polyline-arc-m.cfg:67 cfg/mill/polyline-arc-m.cfg:76
-#: cfg/mill/polyline-arc-polar.cfg:45 cfg/mill/polyline-arc-polar.cfg:54
-#: cfg/mill/polyline-arc-to.cfg:45 cfg/mill/polyline-arc-to.cfg:54
-#: cfg/mill/polyline-arc-top.cfg:45 cfg/mill/polyline-arc-top.cfg:54
-#: cfg/mill/polyline-polar.cfg:84 cfg/mill/polyline-polar.cfg:93
-#: cfg/mill/polyline-to.cfg:82 cfg/mill/polyline-to.cfg:91
-#: cfg/mill/polyline.cfg:219 cfg/mill/polyline.cfg:228
+#: cfg/mill/polyline-arc-ij.cfg:45
+#: cfg/mill/polyline-arc-ij.cfg:54
+#: cfg/mill/polyline-arc-m.cfg:67
+#: cfg/mill/polyline-arc-m.cfg:76
+#: cfg/mill/polyline-arc-polar.cfg:45
+#: cfg/mill/polyline-arc-polar.cfg:54
+#: cfg/mill/polyline-arc-to.cfg:45
+#: cfg/mill/polyline-arc-to.cfg:54
+#: cfg/mill/polyline-arc-top.cfg:45
+#: cfg/mill/polyline-arc-top.cfg:54
+#: cfg/mill/polyline-polar.cfg:84
+#: cfg/mill/polyline-polar.cfg:93
+#: cfg/mill/polyline-to.cfg:82
+#: cfg/mill/polyline-to.cfg:91
+#: cfg/mill/polyline.cfg:219
+#: cfg/mill/polyline.cfg:228
 #: cfg/mill/surf_finish.cfg:79
 msgid "Tool engagement"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:47 cfg/mill/polyline-arc-m.cfg:69
-#: cfg/mill/polyline-arc-polar.cfg:47 cfg/mill/polyline-arc-to.cfg:47
-#: cfg/mill/polyline-arc-top.cfg:47 cfg/mill/polyline-polar.cfg:86
-#: cfg/mill/polyline-to.cfg:84 cfg/mill/polyline.cfg:221
+#: cfg/mill/polyline-arc-ij.cfg:47
+#: cfg/mill/polyline-arc-m.cfg:69
+#: cfg/mill/polyline-arc-polar.cfg:47
+#: cfg/mill/polyline-arc-to.cfg:47
+#: cfg/mill/polyline-arc-top.cfg:47
+#: cfg/mill/polyline-polar.cfg:86
+#: cfg/mill/polyline-to.cfg:84
+#: cfg/mill/polyline.cfg:221
 msgid "Global=0:Specific=1"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:51 cfg/mill/polyline-arc-m.cfg:73
-#: cfg/mill/polyline-arc-polar.cfg:51 cfg/mill/polyline-arc-to.cfg:51
-#: cfg/mill/polyline-arc-top.cfg:51 cfg/mill/polyline-polar.cfg:90
-#: cfg/mill/polyline-to.cfg:88 cfg/mill/polyline.cfg:225
+#: cfg/mill/polyline-arc-ij.cfg:51
+#: cfg/mill/polyline-arc-m.cfg:73
+#: cfg/mill/polyline-arc-polar.cfg:51
+#: cfg/mill/polyline-arc-to.cfg:51
+#: cfg/mill/polyline-arc-top.cfg:51
+#: cfg/mill/polyline-polar.cfg:90
+#: cfg/mill/polyline-to.cfg:88
+#: cfg/mill/polyline.cfg:225
 msgid "Tool engagement for this segment"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:70 cfg/mill/polyline-arc-m.cfg:92
-#: cfg/mill/polyline-arc-polar.cfg:70 cfg/plasma/polyline-arc-ij.cfg:46
-#: cfg/plasma/polyline-arc-m.cfg:74 cfg/plasma/polyline-arc-polar.cfg:46
+#: cfg/mill/polyline-arc-ij.cfg:70
+#: cfg/mill/polyline-arc-m.cfg:92
+#: cfg/mill/polyline-arc-polar.cfg:70
+#: cfg/plasma/polyline-arc-ij.cfg:46
+#: cfg/plasma/polyline-arc-m.cfg:74
+#: cfg/plasma/polyline-arc-polar.cfg:46
 msgid "Arc center"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:74 cfg/mill/polyline-arc-m.cfg:96
-#: cfg/plasma/polyline-arc-ij.cfg:50 cfg/plasma/polyline-arc-m.cfg:78
+#: cfg/mill/polyline-arc-ij.cfg:74
+#: cfg/mill/polyline-arc-m.cfg:96
+#: cfg/plasma/polyline-arc-ij.cfg:50
+#: cfg/plasma/polyline-arc-m.cfg:78
 msgid "Using"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:77 cfg/plasma/polyline-arc-ij.cfg:53
+#: cfg/mill/polyline-arc-ij.cfg:77
+#: cfg/plasma/polyline-arc-ij.cfg:53
 msgid "Offsets=6:Absolute position=7"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:78 cfg/mill/polyline-arc-m.cfg:100
-#: cfg/plasma/polyline-arc-ij.cfg:54 cfg/plasma/polyline-arc-m.cfg:82
+#: cfg/mill/polyline-arc-ij.cfg:78
+#: cfg/mill/polyline-arc-m.cfg:100
+#: cfg/plasma/polyline-arc-ij.cfg:54
+#: cfg/plasma/polyline-arc-m.cfg:82
 msgid "Arc center option"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:83 cfg/mill/polyline-arc-m.cfg:105
-#: cfg/plasma/polyline-arc-ij.cfg:59 cfg/plasma/polyline-arc-m.cfg:87
+#: cfg/mill/polyline-arc-ij.cfg:83
+#: cfg/mill/polyline-arc-m.cfg:105
+#: cfg/plasma/polyline-arc-ij.cfg:59
+#: cfg/plasma/polyline-arc-m.cfg:87
 msgid "I offset or cX"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:88 cfg/mill/polyline-arc-ij.cfg:97
-#: cfg/mill/polyline-arc-m.cfg:110 cfg/mill/polyline-arc-m.cfg:119
-#: cfg/plasma/polyline-arc-ij.cfg:64 cfg/plasma/polyline-arc-ij.cfg:73
-#: cfg/plasma/polyline-arc-m.cfg:92 cfg/plasma/polyline-arc-m.cfg:101
+#: cfg/mill/polyline-arc-ij.cfg:88
+#: cfg/mill/polyline-arc-ij.cfg:97
+#: cfg/mill/polyline-arc-m.cfg:110
+#: cfg/mill/polyline-arc-m.cfg:119
+#: cfg/plasma/polyline-arc-ij.cfg:64
+#: cfg/plasma/polyline-arc-ij.cfg:73
+#: cfg/plasma/polyline-arc-m.cfg:92
+#: cfg/plasma/polyline-arc-m.cfg:101
 msgid "Offset or absolute value"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:92 cfg/mill/polyline-arc-m.cfg:114
-#: cfg/plasma/polyline-arc-ij.cfg:68 cfg/plasma/polyline-arc-m.cfg:96
+#: cfg/mill/polyline-arc-ij.cfg:92
+#: cfg/mill/polyline-arc-m.cfg:114
+#: cfg/plasma/polyline-arc-ij.cfg:68
+#: cfg/plasma/polyline-arc-m.cfg:96
 msgid "J offset or cY"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:105 cfg/mill/polyline-arc-polar.cfg:100
-#: cfg/plasma/polyline-arc-ij.cfg:81 cfg/plasma/polyline-arc-polar.cfg:76
+#: cfg/mill/polyline-arc-ij.cfg:105
+#: cfg/mill/polyline-arc-polar.cfg:100
+#: cfg/plasma/polyline-arc-ij.cfg:81
+#: cfg/plasma/polyline-arc-polar.cfg:76
 msgid "Angle where it ends"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:119 cfg/mill/polyline-arc-polar.cfg:114
-#: cfg/plasma/polyline-arc-ij.cfg:95 cfg/plasma/polyline-arc-polar.cfg:90
+#: cfg/mill/polyline-arc-ij.cfg:119
+#: cfg/mill/polyline-arc-polar.cfg:114
+#: cfg/plasma/polyline-arc-ij.cfg:95
+#: cfg/plasma/polyline-arc-polar.cfg:90
 msgid "Ending"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:123 cfg/mill/polyline-arc-polar.cfg:118
-#: cfg/mill/polyline-arc-polar.cfg:126 cfg/mill/polyline-polar.cfg:40
-#: cfg/plasma/polyline-arc-ij.cfg:99 cfg/plasma/polyline-arc-polar.cfg:94
-#: cfg/plasma/polyline-arc-polar.cfg:102 cfg/plasma/polyline-polar.cfg:40
+#: cfg/mill/polyline-arc-ij.cfg:123
+#: cfg/mill/polyline-arc-polar.cfg:118
+#: cfg/mill/polyline-arc-polar.cfg:126
+#: cfg/mill/polyline-polar.cfg:40
+#: cfg/plasma/polyline-arc-ij.cfg:99
+#: cfg/plasma/polyline-arc-polar.cfg:94
+#: cfg/plasma/polyline-arc-polar.cfg:102
+#: cfg/plasma/polyline-polar.cfg:40
 msgid "Angle option"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:126 cfg/mill/polyline-arc-polar.cfg:121
-#: cfg/plasma/polyline-arc-ij.cfg:102 cfg/plasma/polyline-arc-polar.cfg:97
+#: cfg/mill/polyline-arc-ij.cfg:126
+#: cfg/mill/polyline-arc-polar.cfg:121
+#: cfg/plasma/polyline-arc-ij.cfg:102
+#: cfg/plasma/polyline-arc-polar.cfg:97
 msgid "Relative to start=0:Absolute to arc center=1"
 msgstr ""
 
-#: cfg/mill/polyline-arc-ij.cfg:127 cfg/mill/polyline-arc-polar.cfg:122
-#: cfg/plasma/polyline-arc-ij.cfg:103 cfg/plasma/polyline-arc-polar.cfg:98
+#: cfg/mill/polyline-arc-ij.cfg:127
+#: cfg/mill/polyline-arc-polar.cfg:122
+#: cfg/plasma/polyline-arc-ij.cfg:103
+#: cfg/plasma/polyline-arc-polar.cfg:98
 msgid "Angle relative to beginning of arc or absolute"
 msgstr ""
 
-#: cfg/mill/polyline-arc-m.cfg:3 cfg/plasma/polyline-arc-m.cfg:3
+#: cfg/mill/polyline-arc-m.cfg:3
+#: cfg/plasma/polyline-arc-m.cfg:3
 msgid "Arc Mirrored"
 msgstr ""
 
-#: cfg/mill/polyline-arc-m.cfg:6 cfg/plasma/polyline-arc-m.cfg:6
-msgid ""
-"<b>Add an mirrored arc to a polyline</b>&#10;Define mirror line, I and J "
-"offsets, angle and direction"
+#: cfg/mill/polyline-arc-m.cfg:6
+#: cfg/plasma/polyline-arc-m.cfg:6
+msgid "<b>Add an mirrored arc to a polyline</b>&#10;Define mirror line, I and J offsets, angle and direction"
 msgstr ""
 
-#: cfg/mill/polyline-arc-m.cfg:41 cfg/mill/polyline-arc-m.cfg:49
-#: cfg/mill/polyline-arc-m.cfg:58 cfg/plasma/polyline-arc-m.cfg:41
-#: cfg/plasma/polyline-arc-m.cfg:49 cfg/plasma/polyline-arc-m.cfg:58
+#: cfg/mill/polyline-arc-m.cfg:41
+#: cfg/mill/polyline-arc-m.cfg:49
+#: cfg/mill/polyline-arc-m.cfg:58
+#: cfg/plasma/polyline-arc-m.cfg:41
+#: cfg/plasma/polyline-arc-m.cfg:49
+#: cfg/plasma/polyline-arc-m.cfg:58
 msgid "Mirror line end"
 msgstr ""
 
-#: cfg/mill/polyline-arc-m.cfg:99 cfg/plasma/polyline-arc-m.cfg:81
+#: cfg/mill/polyline-arc-m.cfg:99
+#: cfg/plasma/polyline-arc-m.cfg:81
 msgid "Offsets=14:Absolute position=15"
 msgstr ""
 
-#: cfg/mill/polyline-arc-m.cfg:131 cfg/mill/polyline-mirror-i.cfg:90
-#: cfg/plasma/polyline-arc-m.cfg:63 cfg/plasma/polyline-mirror-i.cfg:90
+#: cfg/mill/polyline-arc-m.cfg:131
+#: cfg/mill/polyline-mirror-i.cfg:90
+#: cfg/plasma/polyline-arc-m.cfg:63
+#: cfg/plasma/polyline-mirror-i.cfg:90
 msgid "Show line"
 msgstr ""
 
-#: cfg/mill/polyline-arc-polar.cfg:3 cfg/plasma/polyline-arc-polar.cfg:3
+#: cfg/mill/polyline-arc-polar.cfg:3
+#: cfg/plasma/polyline-arc-polar.cfg:3
 msgid "Arc Polar Ctr"
 msgstr ""
 
-#: cfg/mill/polyline-arc-polar.cfg:6 cfg/plasma/polyline-arc-polar.cfg:6
-msgid ""
-"<b>Add an arc to a polyline</b>&#10;Define center at polar position, angle "
-"where it ends and direction"
+#: cfg/mill/polyline-arc-polar.cfg:6
+#: cfg/plasma/polyline-arc-polar.cfg:6
+msgid "<b>Add an arc to a polyline</b>&#10;Define center at polar position, angle where it ends and direction"
 msgstr ""
 
-#: cfg/mill/polyline-arc-polar.cfg:74 cfg/plasma/polyline-arc-polar.cfg:50
+#: cfg/mill/polyline-arc-polar.cfg:74
+#: cfg/plasma/polyline-arc-polar.cfg:50
 msgid "Distance"
 msgstr ""
 
-#: cfg/mill/polyline-arc-polar.cfg:79 cfg/plasma/polyline-arc-polar.cfg:55
+#: cfg/mill/polyline-arc-polar.cfg:79
+#: cfg/plasma/polyline-arc-polar.cfg:55
 msgid "Distance defines radius of arc"
 msgstr ""
 
-#: cfg/mill/polyline-arc-polar.cfg:90 cfg/mill/polyline-arc-top.cfg:90
-#: cfg/plasma/polyline-arc-polar.cfg:66 cfg/plasma/polyline-arc-top.cfg:66
+#: cfg/mill/polyline-arc-polar.cfg:90
+#: cfg/mill/polyline-arc-top.cfg:90
+#: cfg/plasma/polyline-arc-polar.cfg:66
+#: cfg/plasma/polyline-arc-top.cfg:66
 msgid "Angle from start point"
 msgstr ""
 
-#: cfg/mill/polyline-arc-polar.cfg:129 cfg/plasma/polyline-arc-polar.cfg:105
-msgid ""
-"Absolute=8:Relative to previous line or chord=9:Relative to previous arc "
-"center=10"
+#: cfg/mill/polyline-arc-polar.cfg:129
+#: cfg/plasma/polyline-arc-polar.cfg:105
+msgid "Absolute=8:Relative to previous line or chord=9:Relative to previous arc center=10"
 msgstr ""
 
-#: cfg/mill/polyline-arc-polar.cfg:130 cfg/mill/polyline-polar.cfg:45
-#: cfg/plasma/polyline-arc-polar.cfg:106 cfg/plasma/polyline-polar.cfg:45
+#: cfg/mill/polyline-arc-polar.cfg:130
+#: cfg/mill/polyline-polar.cfg:45
+#: cfg/plasma/polyline-arc-polar.cfg:106
+#: cfg/plasma/polyline-polar.cfg:45
 msgid "Angle relative to previous line or absolute"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:6 cfg/plasma/polyline-arc-to.cfg:6
-msgid ""
-"<b>Add an arc to a polyline</b>&#10;Define destination, dir and arc height "
-"or radius"
+#: cfg/mill/polyline-arc-to.cfg:6
+#: cfg/plasma/polyline-arc-to.cfg:6
+msgid "<b>Add an arc to a polyline</b>&#10;Define destination, dir and arc height or radius"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:70 cfg/plasma/polyline-arc-to.cfg:46
+#: cfg/mill/polyline-arc-to.cfg:70
+#: cfg/plasma/polyline-arc-to.cfg:46
 msgid "Arc end coords"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:79 cfg/mill/polyline-to.cfg:24
-#: cfg/plasma/polyline-arc-to.cfg:55 cfg/plasma/polyline-to.cfg:24
+#: cfg/mill/polyline-arc-to.cfg:79
+#: cfg/mill/polyline-to.cfg:24
+#: cfg/plasma/polyline-arc-to.cfg:55
+#: cfg/plasma/polyline-to.cfg:24
 msgid "Destination X"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:88 cfg/mill/polyline-to.cfg:33
-#: cfg/plasma/polyline-arc-to.cfg:64 cfg/plasma/polyline-to.cfg:33
+#: cfg/mill/polyline-arc-to.cfg:88
+#: cfg/mill/polyline-to.cfg:33
+#: cfg/plasma/polyline-arc-to.cfg:64
+#: cfg/plasma/polyline-to.cfg:33
 msgid "Destination Y"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:96 cfg/plasma/polyline-arc-to.cfg:72
+#: cfg/mill/polyline-arc-to.cfg:96
+#: cfg/plasma/polyline-arc-to.cfg:72
 msgid "Relative=4:Absolute=5"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:97 cfg/mill/polyline-to.cfg:43
-#: cfg/plasma/polyline-arc-to.cfg:73 cfg/plasma/polyline-to.cfg:43
+#: cfg/mill/polyline-arc-to.cfg:97
+#: cfg/mill/polyline-to.cfg:43
+#: cfg/plasma/polyline-arc-to.cfg:73
+#: cfg/plasma/polyline-to.cfg:43
 msgid "Select Relative or Absolute"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:101 cfg/mill/polyline-arc-top.cfg:95
-#: cfg/mill/polyline-polar.cfg:16 cfg/plasma/polyline-arc-to.cfg:77
-#: cfg/plasma/polyline-arc-top.cfg:71 cfg/plasma/polyline-polar.cfg:16
+#: cfg/mill/polyline-arc-to.cfg:101
+#: cfg/mill/polyline-arc-top.cfg:95
+#: cfg/mill/polyline-polar.cfg:16
+#: cfg/plasma/polyline-arc-to.cfg:77
+#: cfg/plasma/polyline-arc-top.cfg:71
+#: cfg/plasma/polyline-polar.cfg:16
 msgid "Definition"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:103 cfg/mill/polyline-arc-top.cfg:97
-#: cfg/mill/polyline.cfg:186 cfg/plasma/polyline-arc-to.cfg:79
-#: cfg/plasma/polyline-arc-top.cfg:73 cfg/plasma/polyline.cfg:150
+#: cfg/mill/polyline-arc-to.cfg:103
+#: cfg/mill/polyline-arc-top.cfg:97
+#: cfg/mill/polyline.cfg:186
+#: cfg/plasma/polyline-arc-to.cfg:79
+#: cfg/plasma/polyline-arc-top.cfg:73
+#: cfg/plasma/polyline.cfg:150
 msgid "Define arc"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:109 cfg/mill/polyline-arc-top.cfg:103
-#: cfg/mill/polyline.cfg:193 cfg/plasma/polyline-arc-to.cfg:85
-#: cfg/plasma/polyline-arc-top.cfg:79 cfg/plasma/polyline.cfg:157
+#: cfg/mill/polyline-arc-to.cfg:109
+#: cfg/mill/polyline-arc-top.cfg:103
+#: cfg/mill/polyline.cfg:193
+#: cfg/plasma/polyline-arc-to.cfg:85
+#: cfg/plasma/polyline-arc-top.cfg:79
+#: cfg/plasma/polyline.cfg:157
 msgid "Radius=0:Arc height=1"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:111 cfg/mill/polyline-arc-top.cfg:105
-#: cfg/mill/polyline.cfg:195 cfg/plasma/polyline-arc-to.cfg:87
-#: cfg/plasma/polyline-arc-top.cfg:81 cfg/plasma/polyline.cfg:159
+#: cfg/mill/polyline-arc-to.cfg:111
+#: cfg/mill/polyline-arc-top.cfg:105
+#: cfg/mill/polyline.cfg:195
+#: cfg/plasma/polyline-arc-to.cfg:87
+#: cfg/plasma/polyline-arc-top.cfg:81
+#: cfg/plasma/polyline.cfg:159
 msgid "Select value defined"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:132 cfg/mill/polyline-arc-top.cfg:126
-#: cfg/mill/polyline.cfg:207 cfg/plasma/polyline-arc-to.cfg:108
-#: cfg/plasma/polyline-arc-top.cfg:102 cfg/plasma/polyline.cfg:171
+#: cfg/mill/polyline-arc-to.cfg:132
+#: cfg/mill/polyline-arc-top.cfg:126
+#: cfg/mill/polyline.cfg:207
+#: cfg/plasma/polyline-arc-to.cfg:108
+#: cfg/plasma/polyline-arc-top.cfg:102
+#: cfg/plasma/polyline.cfg:171
 msgid "Flip center"
 msgstr ""
 
-#: cfg/mill/polyline-arc-to.cfg:136 cfg/mill/polyline-arc-top.cfg:130
-#: cfg/mill/polyline.cfg:211 cfg/plasma/polyline-arc-to.cfg:112
-#: cfg/plasma/polyline-arc-top.cfg:106 cfg/plasma/polyline.cfg:175
+#: cfg/mill/polyline-arc-to.cfg:136
+#: cfg/mill/polyline-arc-top.cfg:130
+#: cfg/mill/polyline.cfg:211
+#: cfg/plasma/polyline-arc-to.cfg:112
+#: cfg/plasma/polyline-arc-top.cfg:106
+#: cfg/plasma/polyline.cfg:175
 msgid "Center opposite side of chord"
 msgstr ""
 
-#: cfg/mill/polyline-arc-top.cfg:6 cfg/plasma/polyline-arc-top.cfg:6
-msgid ""
-"<b>Add an arc to a polyline</b>&#10;Define polar destination, dir and arc "
-"height or radius"
+#: cfg/mill/polyline-arc-top.cfg:6
+#: cfg/plasma/polyline-arc-top.cfg:6
+msgid "<b>Add an arc to a polyline</b>&#10;Define polar destination, dir and arc height or radius"
 msgstr ""
 
-#: cfg/mill/polyline-arc-top.cfg:70 cfg/plasma/polyline-arc-top.cfg:46
+#: cfg/mill/polyline-arc-top.cfg:70
+#: cfg/plasma/polyline-arc-top.cfg:46
 msgid "Arc end"
 msgstr ""
 
-#: cfg/mill/polyline-arc-top.cfg:74 cfg/plasma/polyline-arc-top.cfg:50
+#: cfg/mill/polyline-arc-top.cfg:74
+#: cfg/plasma/polyline-arc-top.cfg:50
 msgid "Chord length"
 msgstr ""
 
-#: cfg/mill/polyline-arc-top.cfg:79 cfg/plasma/polyline-arc-top.cfg:55
+#: cfg/mill/polyline-arc-top.cfg:79
+#: cfg/plasma/polyline-arc-top.cfg:55
 msgid "Center of arc will be calculated"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-i.cfg:6 cfg/plasma/polyline-mirror-i.cfg:6
+#: cfg/mill/polyline-mirror-i.cfg:6
+#: cfg/plasma/polyline-mirror-i.cfg:6
 msgid "<b>Duplicate and reverse polyline items</b>"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-i.cfg:15 cfg/plasma/polyline-mirror-i.cfg:15
+#: cfg/mill/polyline-mirror-i.cfg:15
+#: cfg/plasma/polyline-mirror-i.cfg:15
 msgid "Mirror line"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-i.cfg:24 cfg/plasma/polyline-mirror-i.cfg:24
+#: cfg/mill/polyline-mirror-i.cfg:24
+#: cfg/plasma/polyline-mirror-i.cfg:24
 msgid "Connection"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-i.cfg:58 cfg/mill/polyline-mirror-i.cfg:67
-#: cfg/plasma/polyline-mirror-i.cfg:58 cfg/plasma/polyline-mirror-i.cfg:67
+#: cfg/mill/polyline-mirror-i.cfg:58
+#: cfg/mill/polyline-mirror-i.cfg:67
+#: cfg/plasma/polyline-mirror-i.cfg:58
+#: cfg/plasma/polyline-mirror-i.cfg:67
 msgid "Line start"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-i.cfg:76 cfg/mill/polyline-mirror-i.cfg:85
-#: cfg/plasma/polyline-mirror-i.cfg:76 cfg/plasma/polyline-mirror-i.cfg:85
+#: cfg/mill/polyline-mirror-i.cfg:76
+#: cfg/mill/polyline-mirror-i.cfg:85
+#: cfg/plasma/polyline-mirror-i.cfg:76
+#: cfg/plasma/polyline-mirror-i.cfg:85
 msgid "Line end"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-i.cfg:94 cfg/plasma/polyline-mirror-i.cfg:94
+#: cfg/mill/polyline-mirror-i.cfg:94
+#: cfg/plasma/polyline-mirror-i.cfg:94
 msgid "Show mirror line"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-i.cfg:100 cfg/plasma/polyline-mirror-i.cfg:100
+#: cfg/mill/polyline-mirror-i.cfg:100
+#: cfg/plasma/polyline-mirror-i.cfg:100
 msgid "Straight line=1:Arc clockwise=2:Arc counter-clockwise=3"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-i.cfg:106 cfg/plasma/polyline-mirror-i.cfg:106
+#: cfg/mill/polyline-mirror-i.cfg:106
+#: cfg/plasma/polyline-mirror-i.cfg:106
 msgid "Arc height"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:6 cfg/plasma/polyline-mirror-p.cfg:6
+#: cfg/mill/polyline-mirror-p.cfg:6
+#: cfg/plasma/polyline-mirror-p.cfg:6
 msgid "<b>Duplicate and reverse a polyline</b>"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:15 cfg/mill/polyline.cfg:10
-#: cfg/plasma/polyline-mirror-p.cfg:15 cfg/plasma/polyline.cfg:10
+#: cfg/mill/polyline-mirror-p.cfg:15
+#: cfg/mill/polyline.cfg:10
+#: cfg/plasma/polyline-mirror-p.cfg:15
+#: cfg/plasma/polyline.cfg:10
 msgid "Offsets, rotation"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:24 cfg/plasma/polyline-mirror-p.cfg:24
+#: cfg/mill/polyline-mirror-p.cfg:24
+#: cfg/plasma/polyline-mirror-p.cfg:24
 msgid "Mirror axis"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:32 cfg/plasma/polyline-mirror-p.cfg:32
+#: cfg/mill/polyline-mirror-p.cfg:32
+#: cfg/plasma/polyline-mirror-p.cfg:32
 msgid "Offset X"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:41 cfg/plasma/polyline-mirror-p.cfg:41
+#: cfg/mill/polyline-mirror-p.cfg:41
+#: cfg/plasma/polyline-mirror-p.cfg:41
 msgid "Offset Y"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:46 cfg/mill/probe-edge.cfg:20
-#: cfg/mill/surf_finish.cfg:19 cfg/plasma/polyline-mirror-p.cfg:46
+#: cfg/mill/polyline-mirror-p.cfg:46
+#: cfg/mill/probe-edge.cfg:20
+#: cfg/mill/surf_finish.cfg:19
+#: cfg/plasma/polyline-mirror-p.cfg:46
 msgid "Axis"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:49 cfg/plasma/polyline-mirror-p.cfg:49
+#: cfg/mill/polyline-mirror-p.cfg:49
+#: cfg/plasma/polyline-mirror-p.cfg:49
 msgid "Line or mirroring"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:50 cfg/plasma/polyline-mirror-p.cfg:50
+#: cfg/mill/polyline-mirror-p.cfg:50
+#: cfg/plasma/polyline-mirror-p.cfg:50
 msgid "X=1:Y=0"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:60 cfg/plasma/polyline-mirror-p.cfg:60
+#: cfg/mill/polyline-mirror-p.cfg:60
+#: cfg/plasma/polyline-mirror-p.cfg:60
 msgid "Rotation center is origin"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:64 cfg/mill/polyline.cfg:110
+#: cfg/mill/polyline-mirror-p.cfg:64
+#: cfg/mill/polyline.cfg:110
 msgid "Tool compensation"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:67 cfg/mill/polyline.cfg:113
-#: cfg/plasma/polyline-mirror-p.cfg:67 cfg/plasma/polyline.cfg:113
+#: cfg/mill/polyline-mirror-p.cfg:67
+#: cfg/mill/polyline.cfg:113
+#: cfg/plasma/polyline-mirror-p.cfg:67
+#: cfg/plasma/polyline.cfg:113
 msgid "None=40:Left=41:Right=42"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:69 cfg/mill/polyline.cfg:115
+#: cfg/mill/polyline-mirror-p.cfg:69
+#: cfg/mill/polyline.cfg:115
 #: cfg/plasma/polyline-mirror-p.cfg:69
 msgid "Which side cutter will travel"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:76 cfg/mill/polyline.cfg:122
-#: cfg/plasma/polyline-mirror-p.cfg:76 cfg/plasma/polyline.cfg:122
+#: cfg/mill/polyline-mirror-p.cfg:76
+#: cfg/mill/polyline.cfg:122
+#: cfg/plasma/polyline-mirror-p.cfg:76
+#: cfg/plasma/polyline.cfg:122
 msgid "Designed=0:Reverse=1"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:78 cfg/mill/polyline.cfg:124
+#: cfg/mill/polyline-mirror-p.cfg:78
+#: cfg/mill/polyline.cfg:124
 msgid "Mill as designed or in reverse"
 msgstr ""
 
-#: cfg/mill/polyline-mirror-p.cfg:123 cfg/mill/polyline.cfg:239
+#: cfg/mill/polyline-mirror-p.cfg:123
+#: cfg/mill/polyline.cfg:239
 msgid "Global tool engagement"
 msgstr ""
 
-#: cfg/mill/polyline-polar.cfg:6 cfg/plasma/polyline-polar.cfg:6
-msgid ""
-"<b>Trace a line to a polar position</b>&#10;Relative with optional styled "
-"corner"
+#: cfg/mill/polyline-polar.cfg:6
+#: cfg/plasma/polyline-polar.cfg:6
+msgid "<b>Trace a line to a polar position</b>&#10;Relative with optional styled corner"
 msgstr ""
 
-#: cfg/mill/polyline-polar.cfg:24 cfg/plasma/polyline-polar.cfg:24
+#: cfg/mill/polyline-polar.cfg:24
+#: cfg/plasma/polyline-polar.cfg:24
 msgid "Length of line"
 msgstr ""
 
-#: cfg/mill/polyline-polar.cfg:43 cfg/plasma/polyline-polar.cfg:43
-msgid ""
-"Absolute=2:Relative to previous line or chord=3:Relative to previous arc "
-"center=30"
+#: cfg/mill/polyline-polar.cfg:43
+#: cfg/plasma/polyline-polar.cfg:43
+msgid "Absolute=2:Relative to previous line or chord=3:Relative to previous arc center=30"
 msgstr ""
 
-#: cfg/mill/polyline-polar.cfg:59 cfg/plasma/polyline-polar.cfg:59
+#: cfg/mill/polyline-polar.cfg:59
+#: cfg/plasma/polyline-polar.cfg:59
 msgid "Corner style to apply with previous item"
 msgstr ""
 
-#: cfg/mill/polyline-repeat.cfg:3 cfg/plasma/polyline-repeat.cfg:3
+#: cfg/mill/polyline-repeat.cfg:3
+#: cfg/plasma/polyline-repeat.cfg:3
 msgid "Repeated"
 msgstr ""
 
-#: cfg/mill/polyline-repeat.cfg:6 cfg/plasma/polyline-repeat.cfg:6
+#: cfg/mill/polyline-repeat.cfg:6
+#: cfg/plasma/polyline-repeat.cfg:6
 msgid "<b>Repeat polyline items</b>"
 msgstr ""
 
-#: cfg/mill/polyline-repeat.cfg:13 cfg/plasma/polyline-repeat.cfg:13
+#: cfg/mill/polyline-repeat.cfg:13
+#: cfg/plasma/polyline-repeat.cfg:13
 msgid "Add polyline items to repeat"
 msgstr ""
 
-#: cfg/mill/polyline-repeat.cfg:16 cfg/plasma/polyline-repeat.cfg:16
+#: cfg/mill/polyline-repeat.cfg:16
+#: cfg/plasma/polyline-repeat.cfg:16
 msgid "Repeat"
 msgstr ""
 
-#: cfg/mill/polyline-repeat.cfg:20 cfg/plasma/polyline-repeat.cfg:20
+#: cfg/mill/polyline-repeat.cfg:20
+#: cfg/plasma/polyline-repeat.cfg:20
 msgid "Number of repetition"
 msgstr ""
 
-#: cfg/mill/polyline-repeat.cfg:27 cfg/plasma/polyline-repeat.cfg:27
+#: cfg/mill/polyline-repeat.cfg:27
+#: cfg/plasma/polyline-repeat.cfg:27
 msgid "Disabling will disable ALL items in group"
 msgstr ""
 
-#: cfg/mill/polyline-to.cfg:6 cfg/plasma/polyline-to.cfg:6
-msgid ""
-"<b>Create a line to X, Y</b>&#10;Absolute or Relative with optional styled "
-"corner"
+#: cfg/mill/polyline-to.cfg:6
+#: cfg/plasma/polyline-to.cfg:6
+msgid "<b>Create a line to X, Y</b>&#10;Absolute or Relative with optional styled corner"
 msgstr ""
 
-#: cfg/mill/polyline-to.cfg:41 cfg/plasma/polyline-to.cfg:41
+#: cfg/mill/polyline-to.cfg:41
+#: cfg/plasma/polyline-to.cfg:41
 msgid "Relative=0:Absolute=1"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:6 cfg/plasma/polyline.cfg:6
-msgid ""
-"<b>Create a closed or open Polyline</b>&#10;<span foreground='blue' "
-"style='oblique'><b>Message possible in terminal window</b></span>"
+#: cfg/mill/polyline.cfg:6
+#: cfg/plasma/polyline.cfg:6
+msgid "<b>Create a closed or open Polyline</b>&#10;<span foreground='blue' style='oblique'><b>Message possible in terminal window</b></span>"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:14 cfg/plasma/polyline.cfg:14
+#: cfg/mill/polyline.cfg:14
+#: cfg/plasma/polyline.cfg:14
 #: cfg/rectangular-array.cfg:19
 msgid "Origin"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:28 cfg/plasma/polyline.cfg:28
+#: cfg/mill/polyline.cfg:28
+#: cfg/plasma/polyline.cfg:28
 msgid "Closing"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:42 cfg/plasma/polyline.cfg:42
+#: cfg/mill/polyline.cfg:42
+#: cfg/plasma/polyline.cfg:42
 #: cfg/rectangular-array.cfg:67
 msgid "Origin X"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:51 cfg/plasma/polyline.cfg:51
+#: cfg/mill/polyline.cfg:51
+#: cfg/plasma/polyline.cfg:51
 #: cfg/rectangular-array.cfg:76
 msgid "Origin Y"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:60 cfg/mill/polyline.cfg:69 cfg/plasma/polyline.cfg:60
+#: cfg/mill/polyline.cfg:60
+#: cfg/mill/polyline.cfg:69
+#: cfg/plasma/polyline.cfg:60
 #: cfg/plasma/polyline.cfg:69
 msgid "Offset origin"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:80 cfg/plasma/polyline.cfg:80
+#: cfg/mill/polyline.cfg:80
+#: cfg/plasma/polyline.cfg:80
 msgid "Rotation around offsets"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:167 cfg/plasma/polyline.cfg:131
+#: cfg/mill/polyline.cfg:167
+#: cfg/plasma/polyline.cfg:131
 msgid "Add polyline items here"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:175 cfg/plasma/polyline.cfg:139
+#: cfg/mill/polyline.cfg:175
+#: cfg/plasma/polyline.cfg:139
 msgid "Closing item"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:178 cfg/plasma/polyline.cfg:142
+#: cfg/mill/polyline.cfg:178
+#: cfg/plasma/polyline.cfg:142
 msgid "None=0:Straight line=1:Arc clockwise=2:Arc counter-clockwise=3"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:180 cfg/plasma/polyline.cfg:144
+#: cfg/mill/polyline.cfg:180
+#: cfg/plasma/polyline.cfg:144
 msgid "Closed or not and direction of closing line"
 msgstr ""
 
-#: cfg/mill/polyline.cfg:184 cfg/plasma/polyline.cfg:148
+#: cfg/mill/polyline.cfg:184
+#: cfg/plasma/polyline.cfg:148
 msgid "Arc definition"
 msgstr ""
 
@@ -3569,7 +4476,8 @@ msgstr ""
 msgid "Master axis to follow"
 msgstr ""
 
-#: cfg/mill/probe-array.cfg:50 cfg/mill/surf_finish.cfg:21
+#: cfg/mill/probe-array.cfg:50
+#: cfg/mill/surf_finish.cfg:21
 msgid "X axis=0:Y axis=1"
 msgstr ""
 
@@ -3586,9 +4494,7 @@ msgid "Reverse latch dir"
 msgstr ""
 
 #: cfg/mill/probe-edge.cfg:6
-msgid ""
-"<b>Probe Edges with touch-off options</b>&#10;When done, the probe will be "
-"above the edge"
+msgid "<b>Probe Edges with touch-off options</b>&#10;When done, the probe will be above the edge"
 msgstr ""
 
 #: cfg/mill/probe-edge.cfg:22
@@ -3624,18 +4530,15 @@ msgid "Probe Workpiece"
 msgstr ""
 
 #: cfg/mill/probe-stock.cfg:6
-msgid ""
-"<b>Probe X and Y axis differently inside or outside with options for touch-"
-"off&#10;START WITH PROBE IN CENTER OF WORK PIECE</b>&#10;<span "
-"foreground='blue' style='oblique'><b>Message possible in terminal window</"
-"b></span>"
+msgid "<b>Probe X and Y axis differently inside or outside with options for touch-off&#10;START WITH PROBE IN CENTER OF WORK PIECE</b>&#10;<span foreground='blue' style='oblique'><b>Message possible in terminal window</b></span>"
 msgstr ""
 
 #: cfg/mill/probe-stock.cfg:16
 msgid "Show entry lines"
 msgstr ""
 
-#: cfg/mill/probe-stock.cfg:21 cfg/mill/probe-stock.cfg:27
+#: cfg/mill/probe-stock.cfg:21
+#: cfg/mill/probe-stock.cfg:27
 msgid "Double check"
 msgstr ""
 
@@ -3651,7 +4554,8 @@ msgstr ""
 msgid "Safe relative Z"
 msgstr ""
 
-#: cfg/mill/probe-stock.cfg:51 cfg/mill/probe-stock.cfg:82
+#: cfg/mill/probe-stock.cfg:51
+#: cfg/mill/probe-stock.cfg:82
 #: cfg/mill/probe-stock.cfg:91
 msgid "Relative to start position"
 msgstr ""
@@ -3664,21 +4568,26 @@ msgstr ""
 msgid "Show calibration helpful info"
 msgstr ""
 
-#: cfg/mill/probe-stock.cfg:65 cfg/mill/probe-stock.cfg:73
-#: cfg/mill/surf_finish.cfg:27 cfg/mill/tool-change.cfg:189
+#: cfg/mill/probe-stock.cfg:65
+#: cfg/mill/probe-stock.cfg:73
+#: cfg/mill/surf_finish.cfg:27
+#: cfg/mill/tool-change.cfg:189
 #: cfg/mill/tool-change.cfg:217
 msgid "Mode"
 msgstr ""
 
-#: cfg/mill/probe-stock.cfg:67 cfg/mill/probe-stock.cfg:75
+#: cfg/mill/probe-stock.cfg:67
+#: cfg/mill/probe-stock.cfg:75
 msgid "Probe inside or outside"
 msgstr ""
 
-#: cfg/mill/probe-stock.cfg:69 cfg/mill/probe-stock.cfg:77
+#: cfg/mill/probe-stock.cfg:69
+#: cfg/mill/probe-stock.cfg:77
 msgid "Inside=0:Outside=1"
 msgstr ""
 
-#: cfg/mill/probe-stock.cfg:81 cfg/mill/probe-stock.cfg:90
+#: cfg/mill/probe-stock.cfg:81
+#: cfg/mill/probe-stock.cfg:90
 msgid "Probe height"
 msgstr ""
 
@@ -3690,113 +4599,143 @@ msgstr ""
 msgid "Set center to X0 and Y0"
 msgstr ""
 
-#: cfg/mill/rectangle.cfg:6 cfg/plasma/rectangle.cfg:6
-msgid ""
-"<b>Create a Rectangle and align X and Y</b>&#10;Corners can be radiused or "
-"chamfered"
+#: cfg/mill/rectangle.cfg:6
+#: cfg/plasma/rectangle.cfg:6
+msgid "<b>Create a Rectangle and align X and Y</b>&#10;Corners can be radiused or beveled"
 msgstr ""
 
 #: cfg/mill/rectangle.cfg:31
 msgid "Usualy conventional has better finish"
 msgstr ""
 
-#: cfg/mill/rectangle.cfg:50 cfg/mill/rectangle.cfg:67
-#: cfg/plasma/rectangle.cfg:32 cfg/plasma/rectangle.cfg:49
+#: cfg/mill/rectangle.cfg:50
+#: cfg/mill/rectangle.cfg:67
+#: cfg/plasma/rectangle.cfg:32
+#: cfg/plasma/rectangle.cfg:49
 msgid "Reference coord"
 msgstr ""
 
-#: cfg/mill/rectangle.cfg:80 cfg/mill/slot-2.cfg:60 cfg/mill/slot-arc.cfg:88
-#: cfg/mill/slot.cfg:54 cfg/plasma/rectangle.cfg:62 cfg/plasma/slot-2.cfg:60
-#: cfg/plasma/slot-arc.cfg:88 cfg/plasma/slot.cfg:54
+#: cfg/mill/rectangle.cfg:80
+#: cfg/mill/slot-2.cfg:60
+#: cfg/mill/slot-arc.cfg:88
+#: cfg/mill/slot.cfg:54
+#: cfg/plasma/rectangle.cfg:62
+#: cfg/plasma/slot-2.cfg:60
+#: cfg/plasma/slot-arc.cfg:88
+#: cfg/plasma/slot.cfg:54
 msgid "Width"
 msgstr ""
 
-#: cfg/mill/rectangle.cfg:84 cfg/mill/rectangle.cfg:95
-#: cfg/plasma/rectangle.cfg:66 cfg/plasma/rectangle.cfg:77
+#: cfg/mill/rectangle.cfg:84
+#: cfg/mill/rectangle.cfg:95
+#: cfg/plasma/rectangle.cfg:66
+#: cfg/plasma/rectangle.cfg:77
 msgid "Positive value only"
 msgstr ""
 
-#: cfg/mill/rectangle.cfg:112 cfg/plasma/rectangle.cfg:94
+#: cfg/mill/rectangle.cfg:112
+#: cfg/plasma/rectangle.cfg:94
 msgid "Corners"
 msgstr ""
 
-#: cfg/mill/rectangle.cfg:121 cfg/plasma/rectangle.cfg:103
+#: cfg/mill/rectangle.cfg:121
+#: cfg/plasma/rectangle.cfg:103
 msgid "Select corner type"
 msgstr ""
 
-#: cfg/mill/slot-2.cfg:3 cfg/plasma/slot-2.cfg:3
+#: cfg/mill/slot-2.cfg:3
+#: cfg/plasma/slot-2.cfg:3
 msgid "Slot/oval 2 points"
 msgstr ""
 
-#: cfg/mill/slot-2.cfg:6 cfg/plasma/slot-2.cfg:6
+#: cfg/mill/slot-2.cfg:6
+#: cfg/plasma/slot-2.cfg:6
 msgid "<b>Creates a Slot between two end points</b>"
 msgstr ""
 
-#: cfg/mill/slot-2.cfg:64 cfg/mill/slot-arc.cfg:91 cfg/mill/slot.cfg:58
-#: cfg/plasma/slot-2.cfg:64 cfg/plasma/slot-arc.cfg:91 cfg/plasma/slot.cfg:58
+#: cfg/mill/slot-2.cfg:64
+#: cfg/mill/slot-arc.cfg:91
+#: cfg/mill/slot.cfg:58
+#: cfg/plasma/slot-2.cfg:64
+#: cfg/plasma/slot-arc.cfg:91
+#: cfg/plasma/slot.cfg:58
 msgid "Width of slot"
 msgstr ""
 
-#: cfg/mill/slot-arc.cfg:6 cfg/plasma/slot-arc.cfg:6
+#: cfg/mill/slot-arc.cfg:6
+#: cfg/plasma/slot-arc.cfg:6
 msgid "<b>Creates a Radial Slot</b>&#10;Define center, start and extend angle"
 msgstr ""
 
-#: cfg/mill/slot-arc.cfg:35 cfg/mill/slot-arc.cfg:44 cfg/plasma/slot-arc.cfg:35
+#: cfg/mill/slot-arc.cfg:35
+#: cfg/mill/slot-arc.cfg:44
+#: cfg/plasma/slot-arc.cfg:35
 #: cfg/plasma/slot-arc.cfg:44
 msgid "Center of slot arc"
 msgstr ""
 
-#: cfg/mill/slot-arc.cfg:50 cfg/plasma/slot-arc.cfg:50
+#: cfg/mill/slot-arc.cfg:50
+#: cfg/plasma/slot-arc.cfg:50
 msgid "Ends style"
 msgstr ""
 
-#: cfg/mill/slot-arc.cfg:52 cfg/plasma/slot-arc.cfg:52
+#: cfg/mill/slot-arc.cfg:52
+#: cfg/plasma/slot-arc.cfg:52
 msgid "Round=0:Converging=1"
 msgstr ""
 
-#: cfg/mill/slot-arc.cfg:61 cfg/plasma/slot-arc.cfg:61
+#: cfg/mill/slot-arc.cfg:61
+#: cfg/plasma/slot-arc.cfg:61
 msgid "Distance from center"
 msgstr ""
 
-#: cfg/mill/slot-arc.cfg:72 cfg/plasma/slot-arc.cfg:72
+#: cfg/mill/slot-arc.cfg:72
+#: cfg/plasma/slot-arc.cfg:72
 msgid "Absolute angle"
 msgstr ""
 
-#: cfg/mill/slot.cfg:3 cfg/plasma/slot.cfg:3
+#: cfg/mill/slot.cfg:3
+#: cfg/plasma/slot.cfg:3
 msgid "Slot/oval 1 point"
 msgstr ""
 
-#: cfg/mill/slot.cfg:6 cfg/plasma/slot.cfg:6
-msgid ""
-"<b>Creates a Slot from a single point</b>&#10;Reference point can be center "
-"of slot or of one end"
+#: cfg/mill/slot.cfg:6
+#: cfg/plasma/slot.cfg:6
+msgid "<b>Creates a Slot from a single point</b>&#10;Reference point can be center of slot or of one end"
 msgstr ""
 
-#: cfg/mill/slot.cfg:31 cfg/plasma/slot.cfg:31
+#: cfg/mill/slot.cfg:31
+#: cfg/plasma/slot.cfg:31
 msgid "End=0:Center of slot=1"
 msgstr ""
 
-#: cfg/mill/slot.cfg:32 cfg/plasma/slot.cfg:32
+#: cfg/mill/slot.cfg:32
+#: cfg/plasma/slot.cfg:32
 msgid "X,Y center of slot or left end"
 msgstr ""
 
-#: cfg/mill/slot.cfg:40 cfg/plasma/slot.cfg:40
+#: cfg/mill/slot.cfg:40
+#: cfg/plasma/slot.cfg:40
 msgid "X Center"
 msgstr ""
 
-#: cfg/mill/slot.cfg:49 cfg/plasma/slot.cfg:49
+#: cfg/mill/slot.cfg:49
+#: cfg/plasma/slot.cfg:49
 msgid "Y center"
 msgstr ""
 
-#: cfg/mill/slot.cfg:65 cfg/plasma/slot.cfg:65
+#: cfg/mill/slot.cfg:65
+#: cfg/plasma/slot.cfg:65
 msgid "Effective length"
 msgstr ""
 
-#: cfg/mill/slot.cfg:69 cfg/plasma/slot.cfg:69
+#: cfg/mill/slot.cfg:69
+#: cfg/plasma/slot.cfg:69
 msgid "Length between center of arcs"
 msgstr ""
 
-#: cfg/mill/slot.cfg:104 cfg/plasma/slot.cfg:104
+#: cfg/mill/slot.cfg:104
+#: cfg/plasma/slot.cfg:104
 msgid "Direction of tool path"
 msgstr ""
 
@@ -3812,7 +4751,8 @@ msgstr ""
 msgid "Bidirectional=0:Unidirectional=2"
 msgstr ""
 
-#: cfg/mill/surf_finish.cfg:32 cfg/mill/surf_finish.cfg:40
+#: cfg/mill/surf_finish.cfg:32
+#: cfg/mill/surf_finish.cfg:40
 msgid "Defines quality of finish"
 msgstr ""
 
@@ -3844,7 +4784,8 @@ msgstr ""
 msgid "<b>Create internal or external threads</b>"
 msgstr ""
 
-#: cfg/mill/thread-milling.cfg:27 cfg/mill/thread-milling.cfg:44
+#: cfg/mill/thread-milling.cfg:27
+#: cfg/mill/thread-milling.cfg:44
 msgid "Center of helix"
 msgstr ""
 
@@ -3892,11 +4833,13 @@ msgstr ""
 msgid "Metric pitch is thread to thread, imperial is per inch"
 msgstr ""
 
-#: cfg/mill/thread-milling.cfg:138 cfg/mill/thread-milling.cfg:142
+#: cfg/mill/thread-milling.cfg:138
+#: cfg/mill/thread-milling.cfg:142
 msgid "Major diameter"
 msgstr ""
 
-#: cfg/mill/thread-milling.cfg:149 cfg/mill/thread-milling.cfg:153
+#: cfg/mill/thread-milling.cfg:149
+#: cfg/mill/thread-milling.cfg:153
 msgid "Minor diameter"
 msgstr ""
 
@@ -3921,10 +4864,7 @@ msgid "Tool Change"
 msgstr ""
 
 #: cfg/mill/tool-change.cfg:6
-msgid ""
-"<b>Change Tool and/or settings</b>&#10;Changes setting accordingly even if "
-"disabled&#10;<span foreground='blue' style='oblique'><b>Message possible in "
-"terminal window</b></span>"
+msgid "<b>Change Tool and/or settings</b>&#10;Changes setting accordingly even if disabled&#10;<span foreground='blue' style='oblique'><b>Message possible in terminal window</b></span>"
 msgstr ""
 
 #: cfg/mill/tool-change.cfg:13
@@ -4036,9 +4976,7 @@ msgid "Point angle"
 msgstr ""
 
 #: cfg/mill/tool-change.cfg:145
-msgid ""
-"118° Medium hard material=118:135° Hard material=135:90° Plastic=90:60° "
-"Plastic=60"
+msgid "118° Medium hard material=118:135° Hard material=135:90° Plastic=90:60° Plastic=60"
 msgstr ""
 
 #: cfg/mill/tool-change.cfg:147
@@ -4079,15 +5017,11 @@ msgid "Retract height"
 msgstr ""
 
 #: cfg/mill/tool-change.cfg:191
-msgid ""
-"With Chip Breaking - G73=73:Standard - G81=81:Dwell at bottom - G82=82:Peck "
-"Drilling Cycle - G83=83"
+msgid "With Chip Breaking - G73=73:Standard - G81=81:Dwell at bottom - G82=82:Peck Drilling Cycle - G83=83"
 msgstr ""
 
 #: cfg/mill/tool-change.cfg:193
-msgid ""
-"G73 requires Q>0 and R&#10;G81 requires R&#10;G82 requires R and P&#10;G83 "
-"requires Q>0 and R"
+msgid "G73 requires Q>0 and R&#10;G81 requires R&#10;G82 requires R and P&#10;G83 requires Q>0 and R"
 msgstr ""
 
 #: cfg/mill/tool-change.cfg:198
@@ -4166,73 +5100,91 @@ msgstr ""
 msgid "Distance from face in machine units before engaging cutter"
 msgstr ""
 
-#: cfg/plasma/circle-2.cfg:90 cfg/plasma/circle.cfg:99
-#: cfg/plasma/ellipse.cfg:110 cfg/plasma/polygon.cfg:83
-#: cfg/plasma/rectangle.cfg:124 cfg/plasma/slot-2.cfg:77
-#: cfg/plasma/slot-arc.cfg:105 cfg/plasma/slot.cfg:93
+#: cfg/plasma/circle-2.cfg:90
+#: cfg/plasma/circle.cfg:99
+#: cfg/plasma/ellipse.cfg:110
+#: cfg/plasma/polygon.cfg:83
+#: cfg/plasma/rectangle.cfg:124
+#: cfg/plasma/slot-2.cfg:77
+#: cfg/plasma/slot-arc.cfg:105
+#: cfg/plasma/slot.cfg:93
 msgid "Inside=0:On the line=2:Outside=3"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:6 cfg/plasma/cutting-params3d.cfg:6
-msgid ""
-"<b>Add cutting parameters</b>&#10;Changes setting accordingly even if "
-"disabled"
+#: cfg/plasma/cutting-params2d.cfg:6
+#: cfg/plasma/cutting-params3d.cfg:6
+msgid "<b>Add cutting parameters</b>&#10;Changes setting accordingly even if disabled"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:13 cfg/plasma/cutting-params3d.cfg:13
+#: cfg/plasma/cutting-params2d.cfg:13
+#: cfg/plasma/cutting-params3d.cfg:13
 msgid "Cutting params will be set even if disabled"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:20 cfg/plasma/cutting-params3d.cfg:20
+#: cfg/plasma/cutting-params2d.cfg:20
+#: cfg/plasma/cutting-params3d.cfg:20
 msgid "Kerf width"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:24 cfg/plasma/cutting-params3d.cfg:24
+#: cfg/plasma/cutting-params2d.cfg:24
+#: cfg/plasma/cutting-params3d.cfg:24
 msgid "Select kerf width for compensation"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:28 cfg/plasma/cutting-params3d.cfg:28
+#: cfg/plasma/cutting-params2d.cfg:28
+#: cfg/plasma/cutting-params3d.cfg:28
 msgid "Start height"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:32 cfg/plasma/cutting-params3d.cfg:32
+#: cfg/plasma/cutting-params2d.cfg:32
+#: cfg/plasma/cutting-params3d.cfg:32
 msgid "Above surface"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:38 cfg/plasma/cutting-params3d.cfg:37
+#: cfg/plasma/cutting-params2d.cfg:38
+#: cfg/plasma/cutting-params3d.cfg:37
 msgid "Normal feed"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:47 cfg/plasma/cutting-params3d.cfg:46
+#: cfg/plasma/cutting-params2d.cfg:47
+#: cfg/plasma/cutting-params3d.cfg:46
 msgid "Vertical feed"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:62 cfg/plasma/cutting-params3d.cfg:60
+#: cfg/plasma/cutting-params2d.cfg:62
+#: cfg/plasma/cutting-params3d.cfg:60
 msgid "Rapid params"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:81 cfg/plasma/cutting-params3d.cfg:77
+#: cfg/plasma/cutting-params2d.cfg:81
+#: cfg/plasma/cutting-params3d.cfg:77
 msgid "Above cut start"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:90 cfg/plasma/cutting-params3d.cfg:85
+#: cfg/plasma/cutting-params2d.cfg:90
+#: cfg/plasma/cutting-params3d.cfg:85
 msgid "Lead in factor"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:93 cfg/plasma/cutting-params2d.cfg:101
-#: cfg/plasma/cutting-params3d.cfg:88 cfg/plasma/cutting-params3d.cfg:96
+#: cfg/plasma/cutting-params2d.cfg:93
+#: cfg/plasma/cutting-params2d.cfg:101
+#: cfg/plasma/cutting-params3d.cfg:88
+#: cfg/plasma/cutting-params3d.cfg:96
 msgid "Times kerf"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:98 cfg/plasma/cutting-params3d.cfg:93
+#: cfg/plasma/cutting-params2d.cfg:98
+#: cfg/plasma/cutting-params3d.cfg:93
 msgid "Lead out factor"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:106 cfg/plasma/cutting-params3d.cfg:101
+#: cfg/plasma/cutting-params2d.cfg:106
+#: cfg/plasma/cutting-params3d.cfg:101
 msgid "Pierce delay"
 msgstr ""
 
-#: cfg/plasma/cutting-params2d.cfg:109 cfg/plasma/cutting-params3d.cfg:104
+#: cfg/plasma/cutting-params2d.cfg:109
+#: cfg/plasma/cutting-params3d.cfg:104
 msgid "Wait after torch OK"
 msgstr ""
 
@@ -4240,7 +5192,8 @@ msgstr ""
 msgid "Cut width compensation"
 msgstr ""
 
-#: cfg/plasma/polyline-mirror-p.cfg:78 cfg/plasma/polyline.cfg:124
+#: cfg/plasma/polyline-mirror-p.cfg:78
+#: cfg/plasma/polyline.cfg:124
 msgid "Cut as designed or in reverse"
 msgstr ""
 
@@ -4280,7 +5233,8 @@ msgstr ""
 msgid "X items rotation"
 msgstr ""
 
-#: cfg/rectangular-array.cfg:113 cfg/rectangular-array.cfg:132
+#: cfg/rectangular-array.cfg:113
+#: cfg/rectangular-array.cfg:132
 msgid "Relative to previous one"
 msgstr ""
 
@@ -4291,3 +5245,4 @@ msgstr ""
 #: cfg/rectangular-array.cfg:128
 msgid "Y items rotation"
 msgstr ""
+

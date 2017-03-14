@@ -1,12 +1,16 @@
 '''
 Created on 2017-03-13
 
-@author: fernand
+@author: Fernand Veilleux <fernveilleux@gmail.com>
 
-This translate glade files for treting before installation
-export these values :
+This translates glade files as string
+for testing language files before installation.
+
+Export these values :
 NATIVECAM_LOCALE=path_to_ncam_locale
 LANGUAGE=2_characters_language_code
+
+then run NativeCAM standalone in same terminal
 '''
 
 import gtk
@@ -24,12 +28,6 @@ def translate(fstring):
         if inx > -1 :
             inx2 = line.find('</')
             txt = line[inx + 19:inx2]
-#            ttxt = _(txt)
             line = re.sub(r'%s' % txt, '%s' % _(txt), line)
         fstring += line + '\n'
-
     return fstring
-
-# if __name__ == "__main__":
-    # import sys;sys.argv = ['', 'Test.testName']
-#    exit translate('')
