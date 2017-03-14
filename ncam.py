@@ -4,12 +4,10 @@
 # --  NO USER SETTINGS IN THIS FILE -- EDIT PREFERENCES INSTEAD  ---
 # ------------------------------------------------------------------
 
-APP_TITLE = "NativeCAM for LinuxCNC"  # formerly LinuxCNC-Features
-
 APP_COPYRIGHT = '''Copyright © 2017 Fernand Veilleux : fernveilleux@gmail.com
 Copyright © 2012 Nick Drobchenko'''
 APP_AUTHORS = ['Fernand Veilleux, maintainer', 'Nick Drobchenko, initiator', 'Meison Kim', 'Alexander Wigen',
-               'Konstantin Navrockiy', 'Mit Zot', 'Dewey Garrett', 'Karl Jacobs', 'orpheus']
+               'Konstantin Navrockiy', 'Mit Zot', 'Dewey Garrett', 'Karl Jacobs', 'Philip Mullen']
 
 APP_VERSION = "(non deb)"
 
@@ -35,6 +33,7 @@ import time
 import locale
 import platform
 import pref_edit
+import tr_glade
 
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -58,12 +57,22 @@ UNDO_MAX_LEN = 200
 gmoccapy_time_out = 0.0
 developer_menu = False
 
+APP_NAME = 'nativecam'
+nativecam_locale = os.getenv('NATIVECAM_LOCALE')
+if nativecam_locale is not None :
+    translate_test = True
+else :
+    translate_test = False
+    nativecam_locale = '/usr/share/locale'
+gettext.bindtextdomain(APP_NAME, nativecam_locale)
+gettext.textdomain(APP_NAME)
 try :
-    t = gettext.translation('ncam', '/usr/share/locale')
-    _ = t.ugettext
+    lang = gettext.translation(APP_NAME, nativecam_locale, fallback = True)
+    lang.install()
 except :
-    gettext.install('ncam', None, unicode = True)
+    gettext.install(APP_NAME, None, unicode = True)
 
+APP_TITLE = _("NativeCAM for LinuxCNC")
 APP_COMMENTS = _('A GUI to help create LinuxCNC NGC files.')
 APP_LICENCE = _('''This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -546,6 +555,7 @@ class CellRendererMx(gtk.CellRendererText):
     def create_VKB(self, cell_area):
         self.vkb = gtk.Dialog(parent = self.tv.get_toplevel())
         self.vkb.set_decorated(False)
+        self.vkb.set_transient_for(None)
         self.vkb.set_border_width(3)
 
         lbl = gtk.Label()
@@ -754,7 +764,7 @@ class CellRendererMx(gtk.CellRendererText):
             fmt = '{0:0.%sf}' % self.digits
             newval = fmt.format(val)
             if (val == 0.0) and (self.not_zero != '0'):
-                mess_dlg(_('Value can not be "%(value)s" for\n\n%(tooltip)s') % \
+                mess_dlg(_("Value can not be '%(value)s' for\n\n%(tooltip)s") % \
                          {'value':newval, 'tooltip':self.tooltip})
                 self.vkb.destroy()
                 return None
@@ -769,6 +779,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.list_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.list_window.set_border_width(0)
         self.list_window.set_decorated(False)
+        self.list_window.set_transient_for(None)
         vp = gtk.Viewport()
         vp.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         self.list_window.vbox.add(vp)
@@ -834,6 +845,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.stringedit_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.stringedit_window.hide()
         self.stringedit_window.set_decorated(False)
+        self.stringedit_window.set_transient_for(None)
         self.stringedit_window.set_border_width(0)
         self.new_dt = ''
 
@@ -995,6 +1007,7 @@ class CellRendererMx(gtk.CellRendererText):
 
             self.textedit_window = gtk.Dialog(parent = treeview.get_toplevel())
             self.textedit_window.set_decorated(False)
+            self.textedit_window.set_transient_for(None)
 
             self.textedit = gtk.TextView()
             self.textedit.set_editable(True)
@@ -1104,12 +1117,12 @@ class Parameter() :
             xml.set(i, unicode(str(self.attr[i])))
         return xml
 
-    def get_icon(self) :
+    def get_icon(self, icon_size) :
         icon = self.get_attr("icon")
         if icon is None or icon == "" :
-            if self.get_name().lower() in DEFAULT_ICONS:
-                icon = DEFAULT_ICONS[self.get_name().lower()]
-        return get_pixbuf(icon, treeview_icon_size)
+            if self.get_attr('name').lower() in DEFAULT_ICONS:
+                icon = DEFAULT_ICONS[self.get_attr('name').lower()]
+        return get_pixbuf(icon, icon_size)
 
     def get_image(self) :
         return get_pixbuf(self.get_attr("image"), add_dlg_icon_size)
@@ -1133,10 +1146,10 @@ class Parameter() :
                 self.attr['metric_value'] = fmt.format(get_float(new_val) * 25.4)
 
     def get_name(self) :
-        return self.attr["name"] if "name" in self.attr else ""
+        return _(self.attr["name"]) if "name" in self.attr else ""
 
     def get_options(self):
-        return self.attr["options"] if "options" in self.attr else ""
+        return _(self.attr["options"]) if "options" in self.attr else ""
 
     def get_type(self):
         return self.attr["type"] if "type" in self.attr else "string"
@@ -1147,7 +1160,7 @@ class Parameter() :
             self.set_value(self.get_value())
 
     def get_tooltip(self):
-        return self.attr["tool_tip"] if "tool_tip" in self.attr else None
+        return _(self.attr["tool_tip"]) if "tool_tip" in self.attr else None
 
     def get_attr(self, name) :
         return self.attr[name] if name in self.attr else None
@@ -1185,8 +1198,8 @@ class Feature():
     def __repr__(self) :
         return etree.tostring(self.to_xml(), pretty_print = True)
 
-    def get_icon(self) :
-        return get_pixbuf(self.get_attr("icon"), treeview_icon_size)
+    def get_icon(self, icon_size) :
+        return get_pixbuf(self.get_attr("icon"), icon_size)
 
     def get_image(self) :
         return get_pixbuf(self.get_attr("image"), add_dlg_icon_size)
@@ -1201,14 +1214,14 @@ class Feature():
         return self.attr["type"] if "type" in self.attr else "string"
 
     def get_tooltip(self):
-        return self.attr["tool_tip"] if "tool_tip" in self.attr else \
-            self.attr["help"] if "help" in self.attr else None
+        return _(self.attr["tool_tip"]) if "tool_tip" in self.attr else \
+            _(self.attr["help"]) if "help" in self.attr else None
 
     def get_attr(self, attr) :
         return self.attr[attr] if attr in self.attr else None
 
     def get_name(self):
-        return self.attr["name"] if "name" in self.attr else ""
+        return _(self.attr["name"]) if "name" in self.attr else ""
 
     def from_src(self, src) :
         src_config = ConfigParser.ConfigParser()
@@ -1232,7 +1245,7 @@ class Feature():
         self.attr = conf["SUBROUTINE"]
 
         self.attr["src"] = src
-        self.attr["name"] = self.get_name()
+#        self.attr["name"] = self.get_name()
 
         # get order
         if "order" not in self.attr :
@@ -1249,7 +1262,7 @@ class Feature():
         for s in parameters :
             if s in conf :
                 p = Parameter(ini = conf[s], ini_id = s.lower())
-                p.attr['name'] = p.get_name()
+#                p.attr['name'] = p.get_name()
                 p.attr['tool_tip'] = (p.get_attr('tool_tip') \
                             if "tool_tip" in p.attr else p.get_attr('name'))
                 opt = p.attr["options"] if "options" in self.attr else None
@@ -1588,7 +1601,8 @@ class Preferences():
 
     def edit(self, natcam):
         global NCAM_DIR
-        if pref_edit.edit_preferences(natcam, default_metric, self.cat_name, NCAM_DIR, self.ngc_init_str, self.ngc_post_amble, SYS_DIR) :
+        if pref_edit.edit_preferences(natcam, default_metric, self.cat_name, NCAM_DIR, \
+                self.ngc_init_str, self.ngc_post_amble, SYS_DIR, translate_test) :
             self.read(None)
             ncam.autorefresh_call()
 
@@ -1722,7 +1736,7 @@ class NCam(gtk.VBox):
 
             val = ini_instance.find('DISPLAY', 'DISPLAY')
             if val not in ['axis', 'gmoccapy'] :
-                mess_dlg(_('Display can only be "axis" or "gmoccapy"'))
+                mess_dlg(_("DISPLAY can only be 'axis' or 'gmoccapy'"))
                 sys.exit(-1)
 
             val = ini_instance.find('DISPLAY', 'LATHE')
@@ -1800,9 +1814,16 @@ class NCam(gtk.VBox):
         gtk.VBox.__init__(self, *a, **kw)
         self.builder = gtk.Builder()
         try :
-            self.builder.add_from_file(os.path.join(SYS_DIR, "ncam.glade"))
+            gf = open(os.path.join(SYS_DIR, "ncam.glade")).read()
         except :
-            raise IOError(_("Expected file not found : ncam.glade"))
+            raise IOError(_("Expected file not found : %s") % "ncam.glade")
+
+        if translate_test :
+            gf = tr_glade.translate(gf)
+        else :
+            self.builder.set_translation_domain('nativecam')
+
+        self.builder.add_from_string(gf)
 
         self.pref.read(self.catalog_dir)
 
@@ -2029,12 +2050,19 @@ class NCam(gtk.VBox):
         h_menu = gtk.MenuItem(_('_Help'))
         h_menu.set_submenu(menu_help)
 
-        self.menu_tutorial = gtk.ImageMenuItem(_('NativeCAM on YouTube'))
+        menu_tutorial = gtk.ImageMenuItem(_('NativeCAM on YouTube'))
         img = gtk.Image()
         img.set_from_pixbuf(get_pixbuf("youtube.png", add_menu_icon_size))
-        self.menu_tutorial.set_image(img)
-        self.menu_tutorial.connect("activate", self.menu_tutorial_activate)
-        menu_help.append(self.menu_tutorial)
+        menu_tutorial.set_image(img)
+        menu_tutorial.connect("activate", self.menu_tutorial_activate)
+        menu_help.append(menu_tutorial)
+
+        menu_translate = gtk.ImageMenuItem(_('How to translate NativeCAM'))
+        img = gtk.Image()
+        img.set_from_pixbuf(get_pixbuf("youtube.png", add_menu_icon_size))
+        menu_translate.set_image(img)
+        menu_translate.connect("activate", self.menu_translate_activate)
+        menu_help.append(menu_translate)
 
         menu_linuxcnc_home = gtk.ImageMenuItem(_('LinuxCNC Home'))
         img = gtk.Image()
@@ -2133,6 +2161,10 @@ class NCam(gtk.VBox):
     def menu_tutorial_activate(self, *args):
         webbrowser.open('https://www.youtube.com/channel/UCjOe4VxKL86HyVrshTmiUBQ')
 
+    def menu_translate_activate(self, *args):
+#        webbrowser.open('https://www.youtube.com/channel/UCjOe4VxKL86HyVrshTmiUBQ')
+        pass
+
     def btn_cancel_add_clicked(self, *args):
         self.addVBox.hide()
         self.feature_Hpane.show()
@@ -2195,9 +2227,9 @@ class NCam(gtk.VBox):
         for path in range(len(self.catalog_path)) :
             p = self.catalog_path[path]
             if p.tag.lower() in ["group", "sub", "import"] :
-                name = p.get('name') if "name" in p.keys() else 'Un-named'
+                name = _(p.get('name') if "name" in p.keys() else 'Un-named')
                 src = p.get("src") if "src" in p.keys() else None
-                tooltip = p.get('tool_tip') if "tool_tip" in p.keys() else None
+                tooltip = _(p.get('tool_tip')) if "tool_tip" in p.keys() else None
                 self.icon_store.append([get_pixbuf(p.get("icon"),
                     add_dlg_icon_size), p.tag.lower(), name, src, path, tooltip])
 
@@ -2230,7 +2262,7 @@ class NCam(gtk.VBox):
         feature_list = [s.get("src") for s in self.catalog.findall(".//sub") if "src" in s.keys()]
         self.quick_access = {}
         self.quick_access_buttons = {}
-        self.quick_access_topbuttons = {}
+#        self.quick_access_topbuttons = {}
 
         for src in feature_list :
             try :
@@ -2239,22 +2271,21 @@ class NCam(gtk.VBox):
                     continue
                 f = Feature(src_file)
                 icon = gtk.Image()
-                icon.set_from_pixbuf(get_pixbuf(f.get_attr("icon"),
-                        quick_access_icon_size))
-                button = gtk.ToolButton(icon, label = f.get_attr("name"))
-                button.set_tooltip_markup(_(f.get_attr("help")))
+                icon.set_from_pixbuf(f.get_icon(quick_access_icon_size))
+                button = gtk.ToolButton(icon, label = f.get_name())
+                button.set_tooltip_markup(f.get_tooltip())
                 button.connect("clicked", self.quick_access_tb_clicked, src_file)
                 self.quick_access_buttons[src_file] = button
 
-                icon = gtk.Image()
-                icon.set_from_pixbuf(get_pixbuf(f.get_attr("icon"),
-                        quick_access_icon_size))
-                button1 = gtk.ToolButton(icon, label = f.get_attr("name"))
-                button1.set_tooltip_markup(_(f.get_attr("help")))
-                button1.connect("clicked", self.quick_access_tb_clicked, src_file)
-                self.quick_access_topbuttons[src_file] = button1
-
-                self.quick_access[src_file] = [button, button1, 0, 0, 0]
+#                 icon = gtk.Image()
+#                 icon.set_from_pixbuf(get_pixbuf(f.get_attr("icon"),
+#                         quick_access_icon_size))
+#                 button1 = gtk.ToolButton(icon, label = f.get_attr("name"))
+#                 button1.set_tooltip_markup(_(f.get_attr("help")))
+#                 button1.connect("clicked", self.quick_access_tb_clicked, src_file)
+#                 self.quick_access_topbuttons[src_file] = button1
+                button1 = None
+                self.quick_access[src_file] = [button1, button, 0, 0, 0]
                 if src_file in self.quick_access_dict :
                     self.quick_access[src_file][2:] = self.quick_access_dict[src_file]
             except :
@@ -2308,7 +2339,7 @@ class NCam(gtk.VBox):
                         name = p.get("name") if "name" in p.keys() else None
                         a_menu_item = gtk.ImageMenuItem(_(name))
 
-                        tooltip = p.get("tool_tip") if "tool_tip" in p.keys() else None
+                        tooltip = _(p.get("tool_tip")) if "tool_tip" in p.keys() else None
                         if (tooltip is not None) and (tooltip != '') :
                             a_menu_item.set_tooltip_text(_(tooltip))
 
@@ -2328,7 +2359,7 @@ class NCam(gtk.VBox):
                         name = p.get("name") if "name" in p.keys() else None
                         a_menu_item = gtk.ImageMenuItem(_(name))
 
-                        tooltip = p.get("tool_tip") if "tool_tip" in p.keys() else None
+                        tooltip = _(p.get("tool_tip")) if "tool_tip" in p.keys() else None
                         if (tooltip is not None) and (tooltip != '') :
                             a_menu_item.set_tooltip_text(_(tooltip))
 
@@ -3203,7 +3234,7 @@ class NCam(gtk.VBox):
                     for p in f.param :
                         header_name = p.attr["header"].lower() if "header" in p.attr else ''
 
-                        tool_tip = p.get_tooltip()  # if "tool_tip" in p.attr else None
+                        tool_tip = p.get_tooltip() if "tool_tip" in p.attr else None
                         p_type = p.get_type()
                         p_hidden = get_int(p.attr['hidden'] if 'hidden' in p.attr else '0')
 
@@ -3353,7 +3384,7 @@ class NCam(gtk.VBox):
                         while children is not None :
                             ca = self.treestore.get_value(children, 0).get_attr('call')
                             if ca == '#param_' + opt[0] :
-                                renderer.set_tooltip(_(self.treestore.get_value(children, 0).get_tooltip()))
+                                renderer.set_tooltip(self.treestore.get_value(children, 0).get_tooltip())
                                 dt = self.treestore.get_value(children, 0).get_type()
                                 renderer.set_edit_datatype(dt)
                                 val = self.treestore.get_value(children, 0).get_value()
@@ -3725,7 +3756,7 @@ class NCam(gtk.VBox):
 
     def get_col_name(self, column, cell, model, itr) :
         data_type = model.get_value(itr, 0).get_type()
-        val = _(model.get_value(itr, 0).get_name())
+        val = model.get_value(itr, 0).get_name()
         if data_type == 'header' :
             cell.set_property('markup', header_fmt_str % val)
         elif data_type == 'sub-header' :
@@ -3811,7 +3842,7 @@ class NCam(gtk.VBox):
                                         found = True
                                         data_type = f.get_type()
                                         if data_type == 'list':
-                                            link_val = f.get_value()
+                                            link_val = _(f.get_value())
                                             options = _(f.get_attr('options'))
                                             for option in options.split(":") :
                                                 opt = option.split('=')
@@ -3821,7 +3852,7 @@ class NCam(gtk.VBox):
                                                     stop = True
                                                     break
                                         else :
-                                            val = f.get_value()
+                                            val = _(f.get_value())
                                             loop = False
                                             stop = True
                                             break
@@ -3832,7 +3863,7 @@ class NCam(gtk.VBox):
 
             if not found :
                 f = model.get_value(itr, 0)
-                options = f.attr['options']
+                options = _(f.attr['options'])
                 for option in options.split(":") :
                     opt = option.split('=')
                     if opt[1] == val :
@@ -3856,7 +3887,7 @@ class NCam(gtk.VBox):
         if model.get_value(itr, 0).get_type() in NO_ICON_TYPES :
             cell.set_property('pixbuf', None)
         else :
-            cell.set_property('pixbuf', model.get_value(itr, 0).get_icon())
+            cell.set_property('pixbuf', model.get_value(itr, 0).get_icon(treeview_icon_size))
 
     def treestore_to_xml_recursion(self, itr, xmlpath, allitems = True):
         while itr :
@@ -4080,7 +4111,7 @@ def verify_ini(fname, catalog) :
 
             dp = parser.get('DISPLAY', 'DISPLAY').lower()
             if dp not in ['gmoccapy', 'axis'] :
-                mess_dlg(_('Display can only be "axis" or "gmoccapy"'))
+                mess_dlg(_("DISPLAY can only be 'axis' or 'gmoccapy'"))
                 sys.exit(-1)
 
             try :

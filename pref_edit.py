@@ -11,6 +11,7 @@ import sys, os
 import pygtk
 pygtk.require('2.0')
 import ConfigParser
+import tr_glade
 
 class PrefEditor():
 
@@ -48,7 +49,7 @@ class PrefEditor():
     def read_int(self, cf, section, key, default):
         return int(self.read_float(cf, section, key, default))
 
-    def __init__(self, ncam, is_metric, catalog, path, pre_amble, post_amble, sysdir) :
+    def __init__(self, ncam, is_metric, catalog, path, pre_amble, post_amble, sysdir, translate_test) :
 
         self.path = path
         self.default_metric = is_metric
@@ -60,12 +61,18 @@ class PrefEditor():
         self.config_def = ConfigParser.ConfigParser()
         self.config_def.read(self.pref_file)
 
-        builder = gtk.Builder()
-        builder.set_translation_domain('ncam')
         try :
-            builder.add_from_file(os.path.join(sysdir, "ncam_pref.glade"))
+            gf = open(os.path.join(sysdir, "ncam_pref.glade")).read()
         except :
-            raise IOError(_("Expected file not found : %s") % "ncam_pref.glade")
+            raise IOError(_("Expected file not found : %s") % 'ncam_pref.glade')
+
+        builder = gtk.Builder()
+        if translate_test :
+            gf = tr_glade.translate(gf)
+        else :
+            builder.set_translation_domain('nativecam')
+
+        builder.add_from_string(gf)
 
         prefdlg = builder.get_object("prefdlg")
         if ncam is not None :
@@ -380,8 +387,10 @@ class PrefEditor():
 
         self.saved = True
 
-def edit_preferences(ncam = None, default_metric = True, catalog = 'mill', path = '', pre_amble = '', post_amble = '', sysdir = ''):
-    ed = PrefEditor(ncam, default_metric, catalog, path, pre_amble.strip(), post_amble.strip(), sysdir)
+def edit_preferences(ncam = None, default_metric = True, catalog = 'mill', path = '', \
+        pre_amble = '', post_amble = '', sysdir = '', translate_test = False):
+    ed = PrefEditor(ncam, default_metric, catalog, path, pre_amble.strip(), \
+        post_amble.strip(), sysdir, translate_test)
     return ed.saved
 
 if __name__ == '__main__':
