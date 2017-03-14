@@ -26,6 +26,7 @@ override_dh_install:
 	       ncam.glade \
 	       ncam_pref.glade \
 	       pref_edit.py \
+	       tr_glade.py \
 	       debian/tmp/$(AUX_DIR)
 	# Examples for Configuration Selector:
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/axis
@@ -50,6 +51,12 @@ override_dh_install:
 	    ln -sf ../../$(AUX_DIR)/ncam.py ./nativecam; \
 	    ln -sf ../../$(AUX_DIR)/ncam.py ./ncam; \
 	)
+	mkdir -p debian/tmp/usr/share/locale/fr/LC_MESSAGES
+	cp -pr locale/fr/LC_MESSAGES/nativecam.mo \
+		debian/tmp/usr/share/locale/fr/LC_MESSAGES
+	mkdir -p debian/tmp/usr/share/locale/de/LC_MESSAGES
+	cp -pr locale/de/LC_MESSAGES/nativecam.mo \
+		debian/tmp/usr/share/locale/de/LC_MESSAGES
 	# Remove extraneous vcs-control files:
 	find debian/tmp -iname .gitignore -exec rm {} \;
 	# Install:
