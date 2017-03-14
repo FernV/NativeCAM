@@ -1,18 +1,18 @@
 <xml>
 	
 	<group name=_("Parameters")_ icon="od.png">
-		<sub name=_("Cutting params")_ tool_tip= _("Set cutting params")_ icon="threading-params.png" src="lathe/cutting-params.cfg"/>
-        <sub name=_("Threading params")_ tool_tip= _("Set thread cutting params")_ icon="threading-params.png" src="lathe/threading-params.cfg"/>
+		<sub name=_("Cutting Params")_ tool_tip= _("Set cutting parameters")_ icon="threading-params.png" src="lathe/cutting-params.cfg"/>
+        <sub name=_("Threading Params")_ tool_tip= _("Set thread cutting params")_ icon="threading-params.png" src="lathe/threading-params.cfg"/>
 	</group>
     <group name=_("Tool")_ icon="lathe-tool.png">
-        <sub name=_("Change tool")_ tool_tip= _("Change cutter")_ icon="lathe-tool-change.png" src="lathe/tool-change.cfg"/>
+        <sub name=_("Change Tool")_ tool_tip= _("Change cutter")_ icon="lathe-tool-change.png" src="lathe/tool-change.cfg"/>
     </group>
 	<group name=_("Cutting")_ icon="threading.png">
-		<sub name=_("Threads")_ tool_tip= _("Cuts regular threads")_ icon="threading.png" src="lathe/thread-adv.cfg"/>
+		<sub name=_("Threads")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/thread-adv.cfg"/>
         <sub name=_("Face")_ tool_tip= _("Cut face")_ icon="lathe-facing.png" src="lathe/face.cfg"/>
 	</group>
     <group name=_('Miscellaneous')_ icon='misc.png'>
-        <sub name=_('Insert a G Code file')_ tool_tip= _('Include a custom gcode file')_ icon="gcode.png" src="i_gcode.cfg"/>
+        <sub name=_('Insert a G Code File')_ tool_tip= _('Include a custom gcode file')_ icon="gcode.png" src="i_gcode.cfg"/>
         <sub name=_('Custom G Code')_ tool_tip= _('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
         <sub name=_('Change Units')_ tool_tip= _('Change from inch to metric or inverse')_ icon="rect.png" src="change-units.cfg"/>
     </group>

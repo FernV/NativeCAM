@@ -7,7 +7,7 @@
         <separator/>
         <sub name=_('Slot/Oval From 1 Point')_ tool_tip=_('Define a point, angle and length')_ icon="slot.png" src="plasma/slot.cfg"/>
         <sub name=_('Slot/Oval From 2 Points')_ tool_tip=_('Define center of ends')_ icon="slot-2.png" src="plasma/slot-2.cfg"/>
-        <sub name=_('Radial Slot')_ tool_tip=_('Create an radial slot')_ icon="radial-slot.png" src="plasma/slot-arc.cfg"/>
+        <sub name=_('Radial Slot')_ tool_tip=_('Create a radial slot')_ icon="radial-slot.png" src="plasma/slot-arc.cfg"/>
         <separator/>
         <sub name=_('Ellipse')_ tool_tip=_('Create an ellipse')_ icon="ellipse.png" src="plasma/ellipse.cfg"/>
         <sub name=_('Polygon')_ tool_tip=_('Polygon of N edges')_ icon="hexagon.png" src="plasma/polygon.cfg"/>
@@ -42,7 +42,7 @@
     <group name=_('Miscellaneous')_ icon='misc.png'>
         <sub name=_('Raw Material')_ tool_tip=_('Show a temporary image of rough material')_ icon="rect.png" src="plasma/material3d.cfg"/>
         <sub name=_('Custom G Code')_ tool_tip=_('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
-        <sub name=_('Insert a G Code file')_ tool_tip=_('Include a custom gcode file')_ icon="gcode.png" src="i_gcode.cfg"/>
+        <sub name=_('Insert a G Code File')_ tool_tip=_('Include a custom gcode file')_ icon="gcode.png" src="i_gcode.cfg"/>
 		<sub name=_('Comment')_ tool_tip=_('Add comments')_ icon="gcode.png" src="comment.cfg"/>
         <sub name=_('Change Units')_ tool_tip=_('Temporarily change units')_ icon="rect.png" src="change-units.cfg"/>
     </group>
