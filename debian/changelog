@@ -1,3 +1,13 @@
+nativecam (0.0.12) UNRELEASED; urgency=medium
+
+  .gitignore regrouped in a single file
+  Chamfered changed to Beveled in cfg files
+  cfg and menu files changed to extract strings
+  add French and German translation
+  change in program files to use translation
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Tue, 14 Mar 2017 18:34:00 -0500
+ 
 nativecam (0.0.11) UNRELEASED; urgency=medium
 
   change debian/rules for LCNC 2.8-pre
