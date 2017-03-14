@@ -1,14 +1,14 @@
-nativecam (0:0.0.11) UNRELEASED; urgency=medium
+nativecam (0.0.11) UNRELEASED; urgency=medium
 
   change debian/rules for LCNC 2.8-pre
   make dirs and sim examples for LCNC 2.8-pre
   change demo files to not use VERSION=1.0
-  code-clean-up and some string formating
+  code-clean-up and some string formatting
   move preference editing code to pref_edit.py
 
- -- Fernand Veilleux <fernveilleux@gmail.com> Wed, 08 Mar 2017 17:59:00 -0500
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Wed, 08 Mar 2017 17:59:00 -0500
 
-nativecam (0:0.0.10) UNRELEASED; urgency=medium
+nativecam (0.0.10) UNRELEASED; urgency=medium
 
   setup.py renamed to nondeb_setup.py
   added man pages
@@ -27,16 +27,16 @@ nativecam (0:0.0.10) UNRELEASED; urgency=medium
   update README.md
   update all demo files
 
- -- Fernand Veilleux <fernveilleux@gmail.com> Sat, 04 Mar 2017 14:01:00 -0500
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Sat, 04 Mar 2017 14:01:00 -0500
 
-nativecam (0:0.0.9) UNRELEASED; urgency=medium
+nativecam (0.0.9) UNRELEASED; urgency=medium
 
   * v9 test
   * note: this change log needs to be maintained for each release version
 
  -- Dewey Garrett <dgarrett@panix.com>  Fri, 13 Jan 2017 07:00:25 -0700
 
-nativecam (0:0.0.0) UNRELEASED; urgency=medium
+nativecam (0.0.0) UNRELEASED; urgency=medium
 
   * initial: deb package for nativecam
 
