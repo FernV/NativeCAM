@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 '''
 Will create links and modify files to embed NativeCAM in LinuxCNC
