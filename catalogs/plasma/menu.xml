@@ -1,5 +1,5 @@
 <xml>
-    <group name=_('Basic Shapes')_ icon="rect.png">
+    <group name=_('Basic Shapes')_ icon="basic.png">
         <sub name=_('Rectangle')_ tool_tip=_('Create a rectangle with optional corner types')_ icon="center-rect.png" src="plasma/rectangle.cfg"/>
         <separator/>
         <sub name=_('Circle')_ tool_tip=_('Create a circle with optional D flat')_ icon="circle.png" src="plasma/circle.cfg"/>
@@ -12,38 +12,38 @@
         <sub name=_('Ellipse')_ tool_tip=_('Create an ellipse')_ icon="ellipse.png" src="plasma/ellipse.cfg"/>
         <sub name=_('Polygon')_ tool_tip=_('Polygon of N edges')_ icon="hexagon.png" src="plasma/polygon.cfg"/>
     </group>
-    <group name=_('Advanced')_ icon='adv-Ab.png'>
+    <group name=_('Advanced')_ icon='advanced.png'>
 		<group name=_('Polyline')_ icon="polyline.png">
-			<sub name=_('Begin')_ tool_tip=_('Starts a polyline')_ icon="close.png" src="plasma/polyline.cfg"/>
+			<sub name=_('Begin')_ tool_tip=_('Starts a polyline')_ icon="polyline.png" src="plasma/polyline.cfg"/>
 			<separator/>
 			<sub name=_('Line To')_ tool_tip=_('Relative or absolute position')_ icon="line-to.png" src="plasma/polyline-to.cfg"/>
-			<sub name=_('Line Polar')_ tool_tip=_('Define angle and length')_ icon="line-al.png" src="plasma/polyline-polar.cfg"/>
+			<sub name=_('Line Polar')_ tool_tip=_('Define angle and length')_ icon="line-polar.png" src="plasma/polyline-polar.cfg"/>
 			<separator/>
-			<sub name=_('Arc I,J')_ tool_tip=_('Defined center by offsets or absolute position')_ icon="arc-to-xyij.png" src="plasma/polyline-arc-ij.cfg"/>
-			<sub name=_('Arc Polar Center')_ tool_tip=_('Define center at angle and distance')_ icon="arc-to-xyij.png" src="plasma/polyline-arc-polar.cfg"/>
-			<sub name=_('Arc To Coords')_ tool_tip=_('Define end point, arc height or radius')_ icon="arc-to-xyr.png" src="plasma/polyline-arc-to.cfg"/>
-			<sub name=_('Arc To Polar')_ tool_tip=_('Define end point, arc height or radius')_ icon="arc-to-xyr.png" src="plasma/polyline-arc-top.cfg"/>
-			<sub name=_('Arc Mirror End')_ tool_tip=_('Define I,J and mirror line')_ icon="arc-to-xyr.png" src="plasma/polyline-arc-m.cfg"/>
+			<sub name=_('Arc I,J')_ tool_tip=_('Defined center by offsets or absolute position')_ icon="arc-to-ij.png" src="plasma/polyline-arc-ij.cfg"/>
+			<sub name=_('Arc Polar Center')_ tool_tip=_('Define center at angle and distance')_ icon="arc-polar-ctr.png" src="plasma/polyline-arc-polar.cfg"/>
+			<sub name=_('Arc To Coords')_ tool_tip=_('Define end point, arc height or radius')_ icon="arc-to-coords.png" src="plasma/polyline-arc-to.cfg"/>
+			<sub name=_('Arc To Polar')_ tool_tip=_('Define end point, arc height or radius')_ icon="arc-polar.png" src="plasma/polyline-arc-top.cfg"/>
+			<sub name=_('Arc Mirror End')_ tool_tip=_('Define I,J and mirror line')_ icon="arc-bisector.png" src="plasma/polyline-arc-m.cfg"/>
 			<separator/>
-	        <sub name=_('Repeat Items')_ tool_tip=_('Repeat a group of polyline items')_ icon="array.png" src="plasma/polyline-repeat.cfg"/>
-			<sub name=_('Mirror Items')_ tool_tip=_('Duplicate and reverse polyline items')_ icon="array.png" src="plasma/polyline-mirror-i.cfg"/>
+	        <sub name=_('Repeat Items')_ tool_tip=_('Repeat a group of polyline items')_ icon="poly-repeat-items.png" src="plasma/polyline-repeat.cfg"/>
+			<sub name=_('Mirror Items')_ tool_tip=_('Duplicate and reverse polyline items')_ icon="polyline-mirror-items.png" src="plasma/polyline-mirror-i.cfg"/>
 			<separator/>
-			<sub name=_('Mirror Polyline')_ tool_tip=_('Create a reversed polyline from previous one')_ icon="array.png" src="plasma/polyline-mirror-p.cfg"/>
+			<sub name=_('Mirror Polyline')_ tool_tip=_('Create a reversed polyline from previous one')_ icon="polyline-mirrored.png" src="plasma/polyline-mirror-p.cfg"/>
 		</group>
     </group>
     <group name=_('Group, Offset And Rotation')_ icon="group.png">
 		<sub name=_('Standard Group')_ tool_tip=_('Group subroutines')_ icon="group.png" src="group.cfg"/>
-		<sub name=_('Offset/Rotate')_ tool_tip=_('Group subroutines, offset and rotate')_ icon="group.png" src="group-off.cfg"/>
+		<sub name=_('Offset/Rotate')_ tool_tip=_('Group subroutines, offset and rotate')_ icon="group-offset.png" src="group-off.cfg"/>
         <separator/>
         <sub name=_('Radial Array')_ tool_tip=_('Define diameter or distance between groups')_ icon="circ-array-diam.png" src="circular-array.cfg"/>
         <sub name=_('Rectangular Array')_ tool_tip=_('Array of rows and columns')_ icon="rect-array.png" src="rectangular-array.cfg"/>
     </group>
-    <sub name=_('Cutting Params')_ tool_tip=_('Set cutting parameters')_ icon="tool-change.png" src="plasma/cutting-params2d.cfg"/>
+    <sub name=_('Cutting Params')_ tool_tip=_('Set cutting parameters')_ icon="torch.png" src="plasma/cutting-params2d.cfg"/>
     <group name=_('Miscellaneous')_ icon='misc.png'>
-        <sub name=_('Raw Material')_ tool_tip=_('Show a temporary image of rough material')_ icon="rect.png" src="plasma/material2d.cfg"/>
+        <sub name=_('Raw Material')_ tool_tip=_('Show a temporary image of rough material')_ icon="square.png" src="plasma/material2d.cfg"/>
         <sub name=_('Custom G Code')_ tool_tip=_('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
-        <sub name=_('Insert a G Code File')_ tool_tip=_('Include a custom gcode file')_ icon="gcode.png" src="i_gcode.cfg"/>
-		<sub name=_('Comment')_ tool_tip=_('Add comments')_ icon="gcode.png" src="comment.cfg"/>
-        <sub name=_('Change Units')_ tool_tip=_('Temporarily change units')_ icon="rect.png" src="change-units.cfg"/>
+        <sub name=_('Insert a G Code File')_ tool_tip=_('Include a custom gcode file')_ icon="file-gcode.png" src="i_gcode.cfg"/>
+		<sub name=_('Comment')_ tool_tip=_('Add comments')_ icon="comment.png" src="comment.cfg"/>
+        <sub name=_('Change Units')_ tool_tip=_('Temporarily change units')_ icon="mm2in.png" src="change-units.cfg"/>
     </group>
 </xml>

@@ -1,5 +1,5 @@
 <xml>
-    <group name=_('Basic Shapes')_ icon="rect.png">
+    <group name=_('Basic Shapes')_ icon="basic.png">
         <sub name=_('Rectangle')_ tool_tip=_('Create a rectangle with optional corner types')_ icon="center-rect.png" src="mill/rectangle.cfg"/>
         <separator/>
         <sub name=_('Circle')_ tool_tip=_('Create a circle with optional D flat')_ icon="circle.png" src="mill/circle.cfg"/>
@@ -14,56 +14,56 @@
         <separator/>
         <sub name=_('Surface Finishing')_ tool_tip=_('Uni or Bi-directional')_ icon="rect-pocket.png" src="mill/surf_finish.cfg"/>
     </group>
-    <group name=_('Advanced')_ icon='adv-Ab.png'>
+    <group name=_('Advanced')_ icon='advanced.png'>
 		<group name=_('Polyline')_ icon="polyline.png">
-			<sub name=_('Start')_ tool_tip=_('Starts a polyline')_ icon="close.png" src="mill/polyline.cfg"/>
+			<sub name=_('Start')_ tool_tip=_('Starts a polyline')_ icon="polyline.png" src="mill/polyline.cfg"/>
 			<separator/>
 			<sub name=_('Line To')_ tool_tip=_('Relative or absolute position')_ icon="line-to.png" src="mill/polyline-to.cfg"/>
-			<sub name=_('Line Polar')_ tool_tip=_('Define angle and length')_ icon="line-al.png" src="mill/polyline-polar.cfg"/>
+			<sub name=_('Line Polar')_ tool_tip=_('Define angle and length')_ icon="line-polar.png" src="mill/polyline-polar.cfg"/>
 			<separator/>
-			<sub name=_('Arc I,J')_ tool_tip=_('Defined center by offsets or absolute position')_ icon="arc-to-xyij.png" src="mill/polyline-arc-ij.cfg"/>
-			<sub name=_('Arc Polar Center')_ tool_tip=_('Define center at angle and distance')_ icon="arc-to-xyij.png" src="mill/polyline-arc-polar.cfg"/>
-			<sub name=_('Arc To Coords')_ tool_tip=_('Define end point, arc height or radius')_ icon="arc-to-xyr.png" src="mill/polyline-arc-to.cfg"/>
-			<sub name=_('Arc To Polar')_ tool_tip=_('Define end point, arc height or radius')_ icon="arc-to-xyr.png" src="mill/polyline-arc-top.cfg"/>
-			<sub name=_('Arc Mirror End')_ tool_tip=_('Define I,J and mirror line')_ icon="arc-to-xyr.png" src="mill/polyline-arc-m.cfg"/>
+			<sub name=_('Arc I,J')_ tool_tip=_('Defined center by offsets or absolute position')_ icon="arc-to-ij.png" src="mill/polyline-arc-ij.cfg"/>
+			<sub name=_('Arc Polar Center')_ tool_tip=_('Define center at angle and distance')_ icon="arc-polar-ctr.png" src="mill/polyline-arc-polar.cfg"/>
+			<sub name=_('Arc To Coords')_ tool_tip=_('Define end point, arc height or radius')_ icon="arc-to-coords.png" src="mill/polyline-arc-to.cfg"/>
+			<sub name=_('Arc To Polar')_ tool_tip=_('Define end point, arc height or radius')_ icon="arc-polar.png" src="mill/polyline-arc-top.cfg"/>
+			<sub name=_('Arc Mirror End')_ tool_tip=_('Define I,J and mirror line')_ icon="arc-bisector.png" src="mill/polyline-arc-m.cfg"/>
 			<separator/>
-	        <sub name=_('Repeat Items')_ tool_tip=_('Repeat a group of polyline items')_ icon="array.png" src="mill/polyline-repeat.cfg"/>
-			<sub name=_('Mirror Items')_ tool_tip=_('Duplicate and reverse polyline items')_ icon="array.png" src="mill/polyline-mirror-i.cfg"/>
+	        <sub name=_('Repeat Items')_ tool_tip=_('Repeat a group of polyline items')_ icon="poly-repeat-items.png" src="mill/polyline-repeat.cfg"/>
+			<sub name=_('Mirror Items')_ tool_tip=_('Duplicate and reverse polyline items')_ icon="polyline-mirror-items.png" src="mill/polyline-mirror-i.cfg"/>
 			<separator/>
-			<sub name=_('Mirror Polyline')_ tool_tip=_('Create a reversed polyline from previous one')_ icon="array.png" src="mill/polyline-mirror-p.cfg"/>
+			<sub name=_('Mirror Polyline')_ tool_tip=_('Create a reversed polyline from previous one')_ icon="polyline-mirrored.png" src="mill/polyline-mirror-p.cfg"/>
 		</group>
 		<group name=_('Counterbore')_ tool_tip=_('For Socket Head Cap Screw')_ icon='counterbore.png' >
-	        <sub name=_('Single Hole')_ tool_tip=_('No slot')_ icon="circle.png" src="mill/SHCS.cfg"/>
-	        <sub name=_('Slot From 1 Point')_ tool_tip=_('Define a point, angle and length')_ icon="slot.png" src="mill/SHCS_slot.cfg"/>
-	        <sub name=_('Slot From 2 Points')_ tool_tip=_('Define 2 points')_ icon="slot-2.png" src="mill/SHCS_slot2.cfg"/>
-	        <sub name=_('Radial Slot')_ tool_tip=_('Create a radial slot')_ icon="radial-slot.png" src="mill/SHCS_slot-arc.cfg"/>
+	        <sub name=_('Single Hole')_ tool_tip=_('No slot')_ icon="shcs-hole.png" src="mill/SHCS.cfg"/>
+	        <sub name=_('Slot From 1 Point')_ tool_tip=_('Define a point, angle and length')_ icon="shcs-slot.png" src="mill/SHCS_slot.cfg"/>
+	        <sub name=_('Slot From 2 Points')_ tool_tip=_('Define 2 points')_ icon="shcs-slot2.png" src="mill/SHCS_slot2.cfg"/>
+	        <sub name=_('Radial Slot')_ tool_tip=_('Create a radial slot')_ icon="shcs-arc.png" src="mill/SHCS_slot-arc.cfg"/>
 	    </group>
-		<sub name=_('Thread Milling')_ tool_tip=_('True thread mill needed')_ icon="circle.png" src="mill/thread-milling.cfg"/>
+		<sub name=_('Thread Milling')_ tool_tip=_('True thread mill needed')_ icon="threading-v.png" src="mill/thread-milling.cfg"/>
     </group>
-    <group name=_('Drilling')_ icon="drill.png">
-        <sub name=_('Single Hole')_ tool_tip=_('Drill a single hole')_ icon="drill.png" src="mill/drill-single.cfg"/>
-        <sub name=_('Array Of Holes')_ tool_tip=_('Drill lines of holes')_ icon="drill.png" src="mill/drill-array.cfg"/>
+    <group name=_('Drilling')_ icon="drills.png">
+        <sub name=_('Single Hole')_ tool_tip=_('Drill a single hole')_ icon="drill-single.png" src="mill/drill-single.cfg"/>
+        <sub name=_('Array Of Holes')_ tool_tip=_('Drill lines of holes')_ icon="drill-array.png" src="mill/drill-array.cfg"/>
         <sub name=_('Regular Circle')_ tool_tip=_('Create a regular spaced holes circle')_ icon="drill-circle.png" src="mill/drill-circle.cfg"/>
-        <sub name=_('Irregular Circle')_ tool_tip=_('Create a hole circle of different angle spacing')_ icon="drill-circle-irregular.png" src="mill/drill-circle-irr.cfg"/>
+        <sub name=_('Irregular Circle')_ tool_tip=_('Create a hole circle of different angle spacing')_ icon="drill-irr-circle.png" src="mill/drill-circle-irr.cfg"/>
     </group>
     <group name=_('Group, Offset And Rotation')_ icon="group.png">
 		<sub name=_('Standard Group')_ tool_tip=_('Group subroutines')_ icon="group.png" src="group.cfg"/>
-		<sub name=_('Offset/Rotate')_ tool_tip=_('Group subroutines, offset and rotate')_ icon="group.png" src="group-off.cfg"/>
+		<sub name=_('Offset/Rotate')_ tool_tip=_('Group subroutines, offset and rotate')_ icon="group-offset.png" src="group-off.cfg"/>
         <separator/>
-        <sub name=_('Radial Array')_ tool_tip=_('Define diameter or distance between groups')_ icon="circ-array-diam.png" src="circular-array.cfg"/>
+        <sub name=_('Radial Array')_ tool_tip=_('Define diameter or distance between groups')_ icon="circular-array.png" src="circular-array.cfg"/>
         <sub name=_('Rectangular Array')_ tool_tip=_('Array of rows and columns')_ icon="rect-array.png" src="rectangular-array.cfg"/>
     </group>
     <sub name=_('Change Tool')_ tool_tip=_('Select end mill or drill and set parameters')_ icon="tool-change.png" src="mill/tool-change.cfg"/>
     <group name=_('Probing')_ icon="probe.png">
 		<sub name=_('Probe Edges')_ tool_tip=_('Find workpiece edges')_ icon="probe.png" src="mill/probe-edge.cfg"/>
 		<sub name=_('Probe Stock')_ tool_tip=_('Find the center of a cube or cylinder')_ icon="probe.png" src="mill/probe-stock.cfg"/>
-		<sub name=_('Probe Array')_ tool_tip=_('Probe a array of points and save to file')_ icon="probe-down.png" src="mill/probe-array.cfg"/>
+		<sub name=_('Probe Array')_ tool_tip=_('Probe a array of points and save to file')_ icon="probe-grid.png" src="mill/probe-array.cfg"/>
     </group>
     <group name=_('Miscellaneous')_ icon='misc.png'>
-        <sub name=_('Raw Material')_ tool_tip=_('Show a temporary image of rough material')_ icon="rect.png" src="mill/material.cfg"/>
+        <sub name=_('Raw Material')_ tool_tip=_('Show a temporary image of rough material')_ icon="stock.png" src="mill/material.cfg"/>
         <sub name=_('Custom G Code')_ tool_tip=_('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
-        <sub name=_('Insert a G Code File')_ tool_tip=_('Include a custom gcode file')_ icon="gcode.png" src="i_gcode.cfg"/>
-		<sub name=_('Comment')_ tool_tip=_('Add comments')_ icon="gcode.png" src="comment.cfg"/>
-        <sub name=_('Change Units')_ tool_tip=_('Temporarily change units')_ icon="rect.png" src="change-units.cfg"/>
+        <sub name=_('Insert a G Code File')_ tool_tip=_('Include a custom gcode file')_ icon="file-gcode.png" src="i_gcode.cfg"/>
+		<sub name=_('Comment')_ tool_tip=_('Add comments')_ icon="comment.png" src="comment.cfg"/>
+        <sub name=_('Change Units')_ tool_tip=_('Temporarily change units')_ icon="mm2in.png" src="change-units.cfg"/>
     </group>
 </xml>

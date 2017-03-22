@@ -12,9 +12,9 @@
         <sub name=_("Face")_ tool_tip= _("Cut face")_ icon="lathe-facing.png" src="lathe/face.cfg"/>
 	</group>
     <group name=_('Miscellaneous')_ icon='misc.png'>
-        <sub name=_('Insert a G Code File')_ tool_tip= _('Include a custom gcode file')_ icon="gcode.png" src="i_gcode.cfg"/>
+        <sub name=_('Insert a G Code File')_ tool_tip= _('Include a custom gcode file')_ icon="file-gcode.png" src="i_gcode.cfg"/>
         <sub name=_('Custom G Code')_ tool_tip= _('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
-        <sub name=_('Change Units')_ tool_tip= _('Change from inch to metric or inverse')_ icon="rect.png" src="change-units.cfg"/>
+        <sub name=_('Change Units')_ tool_tip= _('Change from inch to metric or inverse')_ icon="mm2in.png" src="change-units.cfg"/>
     </group>
 
 </xml>
