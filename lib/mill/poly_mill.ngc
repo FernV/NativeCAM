@@ -55,7 +55,7 @@ o<poly_mill> sub
 		/o<trace> CALL [#<pds>] [#<cut_start>]
 	/o<if_01> endif
 
-	G0 Z#<_z_clear>
+	G0 Z#<_rapid_z>
 	G40
 
 	(restore coordinate system)

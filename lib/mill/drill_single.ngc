@@ -14,12 +14,12 @@ o<drill_single> sub
 		o<drill_single> return
 	o<valid> endif
 	
-	o<comp0> if [#<_z> LT #<_z_clear>]
-		G0 Z#<_z_clear>
+	o<comp0> if [#<_z> LT #<_rapid_z>]
+		G0 Z#<_rapid_z>
 	o<comp0> endif	
 
 	G0 X#1 Y#2
-	G0 Z[#3 + #<_rapid_z>]
+	G0 Z[#3 + #<_z_clear>]
 	o<auto> if [#8] (auto)
 		F#<_drill_feed>
 		o<100> if [#<_drill_mode> EQ 73]
@@ -43,5 +43,5 @@ o<drill_single> sub
 	/ 		G2 X[#1 + #5 / 2] Y#2 I[-#5 / 2]
 	/ 	o<preview1> endif
 	/ o<preview> endif
-	G0 Z#<_z_clear>
+	G0 Z#<_rapid_z>
 o<drill_single> endsub

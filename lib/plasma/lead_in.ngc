@@ -18,8 +18,8 @@ o<lead_in> sub
 	#<to_cy>          = #[#1 + 5]
 
 	F#<_feed_normal>
-	o<comp0> if [#<_has_Z_axis> AND [#<_z> LT #<_z_clear>]]
-		G0 Z#<_z_clear>
+	o<comp0> if [#<_has_Z_axis> AND [#<_z> LT #<_rapid_z>]]
+		G0 Z#<_rapid_z>
 	o<comp0> endif	
 	G40
 	
@@ -81,7 +81,7 @@ o<lead_in> sub
 	o<comp00> endif
 	
 	o15 if [#<_has_Z_axis>]
-		G0 Z[#<cut_start> + #<_rapid_z>]
+		G0 Z[#<cut_start> + #<_z_clear>]
 		G1 Z#<cut_start> F#<_feed_vertical>
 	o15 endif
 	G#<opt> F#<_feed_normal>

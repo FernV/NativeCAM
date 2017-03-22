@@ -55,7 +55,7 @@ o<circle> sub
 
 (exit)
 	o12 if [#<_has_Z_axis>]
-		G0 Z#<_z_clear>
+		G0 Z#<_rapid_z>
 	o12 endif
 	G40
 

@@ -201,13 +201,13 @@ o<stock> sub
 				o<cr_X_002_repeat> endrepeat
 				G#<c_plane>  (restore plane)
 			o<cr_X_002> else
-				o<cr_X_01_repeat> repeat [2]
+				o<cr_X_03_repeat> repeat [2]
 					G1 Y#<rear> F10
 					G1 X#<right>
 					G1 Y#<front>
 					G1 X#<left>
 					G1 Z#<top>
-				o<cr_X_01_repeat> endrepeat
+				o<cr_X_03_repeat> endrepeat
 			o<cr_X_002> endif
 			(Draw longitudinal lines)
 			G0 X#<left> Y#<front_in>
