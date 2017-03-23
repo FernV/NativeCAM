@@ -159,12 +159,11 @@ o<ellipse> sub
 	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<ellipse_create> CALL [#<_mill_data_start>] [#<xr>] [#<yr>] [#<fin_dir>] [#<segments>]
 		o<set_feed_rate_and_speed> CALL [#41 * #5410]
-		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-3] ;?
+		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1] ;[-3] ;?
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>]
-			o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [3] (will force an arc to clear workpiece when completed)
+			o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [2] ;[3] (will force an arc to clear workpiece when completed)
 		o<wh01> endwhile
-
 	o<finishing_tool> endif
 
 (draw reference lines)
@@ -182,7 +181,7 @@ o<ellipse> sub
 	G0 Z#<_rapid_z>
 	G40
 
-(restore previous coordinate system)
+(restore coordinate system)
 	G#<old_coord_system>
 	G10 L2 P#5220 X#<saved_offset_x> Y#<saved_offset_y> Z#<saved_offset_z> R#<saved_offset_r>
 o<ellipse> endsub

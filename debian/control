@@ -16,7 +16,7 @@ Description: Conversational programming for LinuxCNC
  and auxiliary gladevcp applications.
  To check for availability, run the script:
  $ linuxcnc_var all # if Run-in-place, source rip-environment first
- When available, expected systme directories are:
+ When available, expected system directories are:
  LINUXCNC_AUX_GLADEVCP=/usr/share/linuxcnc/aux_gladevcp
  LINUXCNC_AUX_EXAMPLES=/usr/share/linuxcnc/aux_examples
 

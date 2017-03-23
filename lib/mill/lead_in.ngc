@@ -26,7 +26,7 @@ o<lead_in> sub
 	o<comp0> endif	
 	G40
 	
-	#<tool_radius> = [#5410 * 0.501]
+	#<tool_radius> = [#5410 * #<_lead_in_fact>]
 	
 	o16 if [#<opt> LE 1] (inside or pocket)
 		o17 if [#<dir> EQ 2]

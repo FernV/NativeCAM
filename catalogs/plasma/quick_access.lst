@@ -1,0 +1,37 @@
+[INFO]
+warning = This file is rewritten every time a subroutine is used and shows usage of each one
+	columns are : source, total usage, last time used and order of preference
+	Delete this file to reset or edit rank in descending order
+
+[VAR]
+quick_access = 
+	plasma/circle.cfg	3	1490225607.67	20
+	plasma/material2d.cfg	3	1490225739.67	1
+	plasma/polyline.cfg	1	1490224950.04	5
+	group-off.cfg	0	0.0	11
+	plasma/circle-2.cfg	1	1490225099.5	0
+	gcode.cfg	2	1490225635.99	7
+	plasma/polyline-arc-ij.cfg	1	1490224964.67	2
+	plasma/polyline-arc-to.cfg	1	1490225059.33	3
+	plasma/slot-arc.cfg	1	1490225110.17	15
+	plasma/slot-2.cfg	1	1490225107.22	16
+	i_gcode.cfg	0	0.0	0
+	plasma/slot.cfg	2	1490225176.72	17
+	plasma/polygon.cfg	1	1490225155.37	0
+	plasma/rectangle.cfg	3	1490225744.02	18
+	plasma/polyline-arc-top.cfg	1	1490225063.97	0
+	plasma/polyline-arc-m.cfg	1	1490225067.41	0
+	change-units.cfg	1	1490224768.2	0
+	plasma/polyline-polar.cfg	1	1490224961.47	0
+	plasma/polyline-mirror-p.cfg	1	1490225078.3	0
+	rectangular-array.cfg	1	1490225747.17	9
+	group.cfg	1	1490225611.55	12
+	plasma/polyline-to.cfg	1	1490224957.91	4
+	plasma/polyline-arc-polar.cfg	2	1490225198.63	0
+	comment.cfg	0	0.0	0
+	plasma/polyline-mirror-i.cfg	1	1490225073.23	0
+	circular-array.cfg	0	0.0	10
+	plasma/ellipse.cfg	1	1490225151.59	0
+	plasma/cutting-params2d.cfg	4	1490225742.57	0
+	plasma/polyline-repeat.cfg	1	1490225070.48	0
+

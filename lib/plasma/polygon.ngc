@@ -9,7 +9,11 @@ o<polygon> sub
 	#<edges>       =  #3
 	#<radius>      =  #4
 	#<start_angle> =  #5
-	#<cut_opt>     =  #6 (Inside=0:On the line=2:Outside=3)
+	o<tool_dia> if [#5410 EQ 0] (no kerf defined, will cut on the line)
+		#<cut_opt>  =   2
+	o<tool_dia> else
+		#<cut_opt>  =  #6 (Inside normal=0:On the line=2:Outside=3)
+	o<tool_dia> endif
 	#<dir>         =  #7 (Clockwise=2:Counter-Clockwise=3)
 	#<cut_start>   = [#8 + #9]
 	#<surface>     =  #9

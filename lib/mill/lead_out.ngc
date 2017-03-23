@@ -52,7 +52,7 @@ o<lead_out> sub
 	#<exit_dir>  = 0
 	
 	#<cmp>         = FIX[#<_ccomp> / 10]
-	#<tool_radius> = [#5410 * 0.501]
+	#<tool_radius> = [#5410 * #<_lead_out_fact>]
 
 	o<dbg> if [#<debug>]
 		(print,)

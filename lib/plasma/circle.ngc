@@ -18,7 +18,13 @@ o<circle> sub
 	#<final_rad> = [#3 / 2]
 	#<flat>      =  #4
 	#<rot>       =  #5 (flat angle rotation)
-	#<cut_opt>   =  #6 (Inside=0:On the line=2:Outside=3)
+
+	o<tool_dia> if [#5410 EQ 0] (kerf defined, will cut on the line)
+		#<cut_opt>  =   2
+	o<tool_dia> else
+		#<cut_opt>  =  #6 (Inside normal=0:On the line=2:Outside=3)
+	o<tool_dia> endif
+
 	#<dir>       =  #7 (Clockwise=2:Counter-Clockwise=3)
 	#<cut_start> = [#8 + #9]
 	#<surface>   =  #9

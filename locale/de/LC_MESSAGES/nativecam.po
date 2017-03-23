@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: nativecam\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-14 11:44-0400\n"
-"PO-Revision-Date: 2017-03-14 18:26-0500\n"
+"PO-Revision-Date: 2017-03-22 21:05-0500\n"
 "Last-Translator: Fernand Veilleux <fernveilleux@gmail.com>\n"
 "Language-Team: LL@li.org\n"
 "Language: de\n"
@@ -23,6 +23,14 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-7: scripts\n"
 "X-Poedit-SearchPathExcluded-8: .git\n"
 "X-Poedit-SearchPath-0: .\n"
+
+#: ncam.py:583
+msgid "Alpha"
+msgstr ""
+
+#: ncam.py:584
+msgid "Change to alphanumeric"
+msgstr ""
 
 #: ncam.glade:8
 msgid "Save project"
@@ -3648,18 +3656,18 @@ msgstr "Z-Abstand"
 #: cfg/mill/material.cfg:115
 #: cfg/plasma/cutting-params2d.cfg:69
 #: cfg/plasma/cutting-params3d.cfg:66
-msgid "Above rapid to Z"
-msgstr "Eilgang bis Z-Abstand"
+msgid "Above surface or cut start"
+msgstr "Über Oberfläche oder Schnittstart"
 
 #: cfg/mill/material.cfg:123
 #: cfg/plasma/cutting-params2d.cfg:78
 #: cfg/plasma/cutting-params3d.cfg:74
-msgid "Rapid to Z"
+msgid "Rapid (Z)"
 msgstr "Eilgang auf Z"
 
 #: cfg/mill/material.cfg:126
-msgid "Above surface or cut start"
-msgstr "Über Oberfläche oder Schnittstart"
+msgid "Above Z clear"
+msgstr "Eilgang bis Z-Abstand"
 
 #: cfg/mill/material.cfg:134
 msgid "Clear through"

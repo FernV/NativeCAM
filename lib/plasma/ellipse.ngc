@@ -12,7 +12,12 @@ o<ellipse> sub
 	#<off_center_x> =  #6
 	#<off_center_y> =  #7
 	#<segments>     =  #8	
-	#<cut_opt>      =  #9 (Inside=0:On the line=2:Outside=3)
+	o<tool_dia> if [#5410 EQ 0] (kerf defined, will cut on the line)
+		#<cut_opt>  =   2
+	o<tool_dia> else
+		#<cut_opt>  =  #9 (Inside normal=0:On the line=2:Outside=3)
+	o<tool_dia> endif
+
 	#<dir>          = #10 (Clockwise=2:Counter-Clockwise=3)
 	#<cut_start>    = [#11 + #12]
 	#<surface>      = #12

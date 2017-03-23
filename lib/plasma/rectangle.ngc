@@ -18,7 +18,11 @@ o<rectangle> sub
 		#<corner_style>  =  0
 	o<final_style01> endif
 
-	#<cut_opt>      = #10
+	o<tool_dia> if [#5410 EQ 0] (kerf defined, will cut on the line)
+		#<cut_opt>  =   2
+	o<tool_dia> else
+		#<cut_opt>  =  #10 (Inside normal=0:Pocket=1:On the line=2:Outside=3)
+	o<tool_dia> endif
 	#<dir>          = #11 (Clockwise=2:Counter-Clockwise=3)
 	#<cut_start>    = [#12 + #13]
 	#<surface>      = #13

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nativecam\n"
 "POT-Creation-Date: 2017-03-14 11:43-0400\n"
-"PO-Revision-Date: 2017-03-14 18:20-0500\n"
+"PO-Revision-Date: 2017-03-22 21:06-0500\n"
 "Last-Translator: Fernand Veilleux <fernveilleux@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,6 +18,14 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-3: man\n"
 "X-Poedit-SearchPathExcluded-4: xml\n"
 "X-Poedit-SearchPath-0: .\n"
+
+#: ncam.py:583
+msgid "Alpha"
+msgstr "Alpha"
+
+#: ncam.py:584
+msgid "Change to alphanumeric"
+msgstr "Changer pour alphanumérique"
 
 #: ncam.glade:8
 msgid "Save project"
@@ -3671,18 +3679,18 @@ msgstr "Dégag. vertical"
 #: cfg/mill/material.cfg:115
 #: cfg/plasma/cutting-params2d.cfg:69
 #: cfg/plasma/cutting-params3d.cfg:66
-msgid "Above rapid to Z"
-msgstr "Au-dessus rapide"
+msgid "Above surface or cut start"
+msgstr "Au-dessus début coupe "
 
 #: cfg/mill/material.cfg:123
 #: cfg/plasma/cutting-params2d.cfg:78
 #: cfg/plasma/cutting-params3d.cfg:74
-msgid "Rapid to Z"
-msgstr "Au-dessus rapide"
+msgid "Rapid (Z)"
+msgstr "Dépl. rapide"
 
 #: cfg/mill/material.cfg:126
-msgid "Above surface or cut start"
-msgstr "Au-dessus début coupe "
+msgid "Above Z clear"
+msgstr "Au-dessus dégagement vertical"
 
 #: cfg/mill/material.cfg:134
 msgid "Clear through"

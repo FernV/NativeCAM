@@ -6,7 +6,7 @@ Will create links and modify files to embed NativeCAM in LinuxCNC
 should work with any linux distro
 
 usage :
-    sudo python setup.py [c]
+    sudo python nondeb_setup.py [c]
 
     w/ argument c will restore files and delete links
     w/o argument will create links and modify files

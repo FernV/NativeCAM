@@ -180,7 +180,7 @@ def search_path(warn, f, *argsl) :
 def get_pixbuf(icon, size) :
     if size < 16 :
         size = 16
-    if ((icon is None) or (icon == "")) :
+    if ((icon is None) or (icon.strip() == "")) :
         if DEFAULT_USE_NO_ICON:
             return None
         else :
@@ -572,13 +572,16 @@ class CellRendererMx(gtk.CellRendererText):
                    xoptions = gtk.EXPAND | gtk.FILL,
                    yoptions = gtk.EXPAND | gtk.FILL)
 
-        btn = gtk.Button('<-')
+        btn = gtk.Button()
+        img = gtk.Image()
+        img.set_from_stock('gtk-clear', menu_icon_size)
+        btn.set_image(img)
         btn.connect("clicked", self.backspace_clicked)
         tbl.attach(btn, 3, 4, 1, 2)
 
         self.new_dt = ''
-        btn = gtk.Button('9->A')
-        btn.set_tooltip_text(_('Change to string'))
+        btn = gtk.Button(_('Alpha'))
+        btn.set_tooltip_text(_('Change to alphanumeric'))
         btn.connect("clicked", self.cdt_request)
         tbl.attach(btn, 3, 4, 0, 1)
 
@@ -2256,13 +2259,10 @@ class NCam(gtk.VBox):
                 s = s.split("\t")
                 if len(s) == 4 :
                     self.quick_access_dict[s[0]] = [int(s[1]), float(s[2]), int(s[3])]
-        else :
-            quick_access = ""
 
         feature_list = [s.get("src") for s in self.catalog.findall(".//sub") if "src" in s.keys()]
         self.quick_access = {}
         self.quick_access_buttons = {}
-#        self.quick_access_topbuttons = {}
 
         for src in feature_list :
             try :
@@ -2274,25 +2274,19 @@ class NCam(gtk.VBox):
                 icon.set_from_pixbuf(f.get_icon(quick_access_icon_size))
                 button = gtk.ToolButton(icon, label = f.get_name())
                 button.set_tooltip_markup(f.get_tooltip())
-                button.connect("clicked", self.quick_access_tb_clicked, src_file)
-                self.quick_access_buttons[src_file] = button
+#                s = src.split("/") #this will convert to new format
+                s = src
+                button.connect("clicked", self.quick_access_tb_clicked, s)
+                self.quick_access_buttons[s] = button
 
-#                 icon = gtk.Image()
-#                 icon.set_from_pixbuf(get_pixbuf(f.get_attr("icon"),
-#                         quick_access_icon_size))
-#                 button1 = gtk.ToolButton(icon, label = f.get_attr("name"))
-#                 button1.set_tooltip_markup(_(f.get_attr("help")))
-#                 button1.connect("clicked", self.quick_access_tb_clicked, src_file)
-#                 self.quick_access_topbuttons[src_file] = button1
-                button1 = None
-                self.quick_access[src_file] = [button1, button, 0, 0, 0]
-                if src_file in self.quick_access_dict :
-                    self.quick_access[src_file][2:] = self.quick_access_dict[src_file]
+                self.quick_access[s] = [None, button, 0, 0, 0]
+                if s in self.quick_access_dict :
+                    self.quick_access[s][2:] = self.quick_access_dict[s]
             except :
                 pass
 
         tf = self.quick_access.items()
-        tf.sort(lambda x, y:-1 if x[1][4] - y[1][4] > 0 else 1)  # sort by selected order
+        tf.sort(lambda x, y:y[1][4] - x[1][4])  # sort by selected order
         for tfi in tf[:MAX_QUICK_ACCESS_BTN] :
             self.quick_access_tb.insert(tfi[1][1], -1)
 
