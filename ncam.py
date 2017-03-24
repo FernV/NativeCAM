@@ -127,6 +127,7 @@ class tv_select :  # 'enum' items
 INCLUDE = []
 DEFINITIONS = []
 PIXBUF_DICT = {}
+DEFAULT_VALUES = {}
 
 UNIQUE_ID = 10
 
@@ -1130,7 +1131,7 @@ class Parameter() :
     def get_image(self) :
         return get_pixbuf(self.get_attr("image"), add_dlg_icon_size)
 
-    def get_value(self) :  # , display = False) :
+    def get_value(self) :
         if default_metric and "metric_value" in self.attr :
             return self.attr["metric_value"]
         else :
@@ -1248,7 +1249,6 @@ class Feature():
         self.attr = conf["SUBROUTINE"]
 
         self.attr["src"] = src
-#        self.attr["name"] = self.get_name()
 
         # get order
         if "order" not in self.attr :
@@ -1265,10 +1265,22 @@ class Feature():
         for s in parameters :
             if s in conf :
                 p = Parameter(ini = conf[s], ini_id = s.lower())
-#                p.attr['name'] = p.get_name()
                 p.attr['tool_tip'] = (p.get_attr('tool_tip') \
                             if "tool_tip" in p.attr else p.get_attr('name'))
-                opt = p.attr["options"] if "options" in self.attr else None
+
+                # set the value to user preference
+                value = p.get_value()
+                if value.find('##') == 0 :
+                    if value in DEFAULT_VALUES :
+                        p.set_value(DEFAULT_VALUES[value])
+                    else :
+                        if default_metric :
+                            if ('default_metric') in p.attr :
+                                p.set_value(p.get_attr('default_metric'))
+                        else :
+                            if ('default_value') in p.attr :
+                                p.set_value(p.get_attr('default_value'))
+
                 if p.get_type() == 'float' :
                     fmt = '{0:0.%sf}' % p.get_digits()
                     p.set_value(fmt.format(get_float(p.get_value())))
@@ -1481,7 +1493,8 @@ class Preferences():
         global default_digits, default_metric, add_menu_icon_size, \
             add_dlg_icon_size, quick_access_icon_size, menu_icon_size, \
             treeview_icon_size, vkb_width, vkb_height, vkb_cancel_on_out, \
-            toolbar_icon_size, gmoccapy_time_out, developer_menu, NCAM_DIR
+            toolbar_icon_size, gmoccapy_time_out, developer_menu, NCAM_DIR, \
+            DEFAULT_VALUES
 
         def read_float(cf, section, key, default):
             try :
@@ -1599,6 +1612,12 @@ class Preferences():
         self.opt_sf0 = read_str(config, 'optimizing', 'speedfactor0', '1.00')
 
         self.plasma_test_mode = read_sbool(config, 'plasma', 'test_mode', True)
+
+        # read default values in the dict
+        if config.has_section('default_values') :
+            DEFAULT_VALUES = {}
+            for key, val in config.items('default_values') :
+                DEFAULT_VALUES['##' + key] = val
 
         self.create_defaults()
 
