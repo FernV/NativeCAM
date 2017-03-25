@@ -4,8 +4,7 @@
 # --  NO USER SETTINGS IN THIS FILE -- EDIT PREFERENCES INSTEAD  ---
 # ------------------------------------------------------------------
 
-APP_COPYRIGHT = '''Copyright © 2017 Fernand Veilleux : fernveilleux@gmail.com
-Copyright © 2012 Nick Drobchenko'''
+APP_COPYRIGHT = '''Copyright © 2017 Fernand Veilleux : fernveilleux@gmail.com'''
 APP_AUTHORS = ['Fernand Veilleux, maintainer', 'Nick Drobchenko, initiator', 'Meison Kim', 'Alexander Wigen',
                'Konstantin Navrockiy', 'Mit Zot', 'Dewey Garrett', 'Karl Jacobs', 'Philip Mullen']
 
@@ -89,19 +88,21 @@ DEFAULT_METRIC = False
 
 # directories
 CFG_DIR = 'cfg'
-XML_DIR = 'xml'
+PROJECTS_DIR = 'projects'
 LIB_DIR = 'lib'
 NGC_DIR = 'scripts'
-EXAMPLES_DIR = 'xml/examples'
+EXAMPLES_DIR = 'examples'
 CATALOGS_DIR = 'catalogs'
 GRAPHICS_DIR = 'graphics'
+DEFAULTS_DIR = 'defaults'
 
 # files
-DEFAULT_TEMPLATE = 'def_template.xml'
+DEFAULT_TEMPLATE = 'default_template.xml'
+USER_DEFAULT_FILE = 'custom_defaults.conf'
 CURRENT_WORK = "current_work.xml"
 PREFERENCES_FILE = "default.conf"
 CONFIG_FILE = 'ncam.conf'
-QUICK_ACCESS_FNAME = "quick_access.lst"
+TOOLBAR_FNAME = "toolbar.conf"
 GENERATED_FILE = "ncam.ngc"
 
 DEFAULT_EDITOR = 'gedit'  # or any like kate, etc...
@@ -119,7 +120,7 @@ DEFAULT_ICONS = {
 
 XML_TAG = "lcnc-ncam"
 
-HOME_PAGE = ''  # 'https://github.com/FernV/NativeCAM'
+HOME_PAGE = 'https://github.com/FernV/NativeCAM'
 
 class tv_select :  # 'enum' items
     none, feature, items, header, param = range(5)
@@ -127,7 +128,7 @@ class tv_select :  # 'enum' items
 INCLUDE = []
 DEFINITIONS = []
 PIXBUF_DICT = {}
-DEFAULT_VALUES = {}
+USER_VALUES = {}
 
 UNIQUE_ID = 10
 
@@ -163,7 +164,7 @@ def search_path(warn, f, *argsl) :
     if os.path.isfile(src) :
         return src
 
-    for pa in [GRAPHICS_DIR, CFG_DIR, CATALOGS_DIR, LIB_DIR, XML_DIR] :
+    for pa in [GRAPHICS_DIR, CFG_DIR, CATALOGS_DIR, LIB_DIR, PROJECTS_DIR] :
         src = os.path.join(pa, f)
         if os.path.isfile(src) :
             return src
@@ -291,7 +292,7 @@ def copy_dir_recursive(fromdir, todir,
             shutil.copy(frompath, topath)
             update_ct += 1
             continue
-        else :  # local file existes and not overwrite
+        else :  # local file exists and not overwrite
             if (hashlib.md5(open(frompath, 'rb').read()).digest()
                  == hashlib.md5(open(topath, 'rb').read()).digest()) :
                 # files are same
@@ -1137,6 +1138,18 @@ class Parameter() :
         else :
             return self.attr["value"] if "value" in self.attr else ""
 
+    def set_user_value(self, user_value) :
+        if (self.get_type() == "float") :
+            fmt = '{0:0.%sf}' % self.get_digits()
+            value = get_float(user_value)
+            if self.get_attr("metric_value") is not None :
+                self.attr['metric_value'] = fmt.format(value * 25.4)
+            self.attr['value'] = fmt.format(value)
+        elif self.get_type() == 'int' :
+            self.attr['value'] = str(get_int(user_value))
+        else :
+            self.attr['value'] = user_value
+
     def set_value(self, new_val) :
         if default_metric and "metric_value" in self.attr :
             self.attr["metric_value"] = new_val
@@ -1249,6 +1262,7 @@ class Feature():
         self.attr = conf["SUBROUTINE"]
 
         self.attr["src"] = src
+        ftype = self.attr["type"]
 
         # get order
         if "order" not in self.attr :
@@ -1269,26 +1283,17 @@ class Feature():
                             if "tool_tip" in p.attr else p.get_attr('name'))
 
                 # set the value to user preference
-                value = p.get_value()
-                if value.find('##') == 0 :
-                    if value in DEFAULT_VALUES :
-                        p.set_value(DEFAULT_VALUES[value])
-                    else :
-                        if default_metric :
-                            if ('default_metric') in p.attr :
-                                p.set_value(p.get_attr('default_metric'))
-                        else :
-                            if ('default_value') in p.attr :
-                                p.set_value(p.get_attr('default_value'))
-
-                if p.get_type() == 'float' :
-                    fmt = '{0:0.%sf}' % p.get_digits()
-                    p.set_value(fmt.format(get_float(p.get_value())))
-                elif p.get_type() == 'int' :
-                    p.set_value(str(get_int(p.get_value())))
+                if ('call' in p.attr) and (ftype + p.attr['call']) in USER_VALUES :
+                    p.set_user_value(USER_VALUES[ftype + p.attr['call']])
+                else :
+                    if p.get_type() == 'float' :
+                        fmt = '{0:0.%sf}' % p.get_digits()
+                        p.set_value(fmt.format(get_float(p.get_value())))
+                    elif p.get_type() == 'int' :
+                        p.set_value(str(get_int(p.get_value())))
                 self.param.append(p)
 
-        self.attr["id"] = self.attr["type"] + '_000'
+        self.attr["id"] = ftype + '_000'
 
         # get gcode parameters
         for l in ["definitions", "before", "call", "after"] :
@@ -1421,7 +1426,7 @@ class Feature():
 
         def import_callback(m) :
             fname = m.group(2)
-            fname = search_path(2, fname, XML_DIR)
+            fname = search_path(2, fname, PROJECTS_DIR)
             if fname is not None :
                 return str(open(fname).read())
 
@@ -1493,8 +1498,7 @@ class Preferences():
         global default_digits, default_metric, add_menu_icon_size, \
             add_dlg_icon_size, quick_access_icon_size, menu_icon_size, \
             treeview_icon_size, vkb_width, vkb_height, vkb_cancel_on_out, \
-            toolbar_icon_size, gmoccapy_time_out, developer_menu, NCAM_DIR, \
-            DEFAULT_VALUES
+            toolbar_icon_size, gmoccapy_time_out, developer_menu, NCAM_DIR
 
         def read_float(cf, section, key, default):
             try :
@@ -1613,13 +1617,19 @@ class Preferences():
 
         self.plasma_test_mode = read_sbool(config, 'plasma', 'test_mode', True)
 
-        # read default values in the dict
-        if config.has_section('default_values') :
-            DEFAULT_VALUES = {}
-            for key, val in config.items('default_values') :
-                DEFAULT_VALUES['##' + key] = val
-
+        self.read_user_values()
         self.create_defaults()
+
+    def read_user_values(self):
+        global USER_VALUES
+
+        USER_VALUES = {}
+        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, USER_DEFAULT_FILE)
+        config = ConfigParser.ConfigParser()
+        config.read(fname)
+        for section in config.sections() :
+            for key, val in config.items(section) :
+                USER_VALUES[section + '#' + key] = val
 
     def edit(self, natcam):
         global NCAM_DIR
@@ -1788,8 +1798,7 @@ class NCam(gtk.VBox):
         print "   program =", __file__
         print ""
 
-        fromdirs = [CATALOGS_DIR, CFG_DIR, LIB_DIR,
-                    GRAPHICS_DIR, XML_DIR]
+        fromdirs = [CATALOGS_DIR, CFG_DIR, LIB_DIR, GRAPHICS_DIR]
 
         if ini is None :
             self.ask_to_create_standalone(fromdirs)
@@ -1870,7 +1879,7 @@ class NCam(gtk.VBox):
         self.main_box.reorder_child(self.quick_access_tb, 1)
 
         self.create_menu_interface()
-        self.setup_quick_access_tb()
+        self.setup_toolbar()
         self.create_add_dialog()
 
         self.builder.connect_signals(self)
@@ -1925,6 +1934,15 @@ class NCam(gtk.VBox):
                 print (fmt2 % {'qty':update_ct, 'dir':NCAM_DIR.rstrip('/') + '/' + d.lstrip('/')})
         print('')
 
+        # copy default files if not exist
+        for s in VALID_CATALOGS :
+            src_dir = os.path.join(SYS_DIR, DEFAULTS_DIR, s)
+            for f in os.listdir(src_dir) :
+                dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, f)
+                if not os.path.exists(dst) :
+                    shutil.copy(os.path.join(src_dir, f), dst)
+
+
     def create_mi(self, _action):
         mi = _action.create_menu_item()
         mi.set_image(_action.create_icon(menu_icon_size))
@@ -1941,6 +1959,8 @@ class NCam(gtk.VBox):
 
         file_menu.append(self.create_mi(self.actionNew))
         file_menu.append(self.create_mi(self.actionOpen))
+        file_menu.append(self.create_mi(self.actionOpenExample))
+        file_menu.append(gtk.SeparatorMenuItem())
         file_menu.append(self.create_mi(self.actionSave))
         file_menu.append(self.create_mi(self.actionSaveTemplate))
         file_menu.append(gtk.SeparatorMenuItem())
@@ -1973,6 +1993,9 @@ class NCam(gtk.VBox):
 
         ed_menu.append(self.create_mi(self.actionAppendItem))
         ed_menu.append(self.create_mi(self.actionRemoveItem))
+        ed_menu.append(gtk.SeparatorMenuItem())
+
+        ed_menu.append(self.create_mi(self.actionSaveUserDef))
         self.dev_separator = gtk.SeparatorMenuItem()
         ed_menu.append(self.dev_separator)
 
@@ -2100,14 +2123,6 @@ class NCam(gtk.VBox):
         menu_linuxcnc_forum.connect("activate", self.menu_html_forum_activate)
         menu_help.append(menu_linuxcnc_forum)
 
-#        menu_cnc_russia = gtk.ImageMenuItem(_('CNC-Club Russia'))
-#        img = gtk.Image()
-#        img.set_from_pixbuf(get_pixbuf("cnc-ru.png", add_menu_icon_size))
-#        menu_cnc_russia.set_image(img)
-#        menu_cnc_russia.connect("activate", self.menu_html_ru_activate)
-#        menu_help.append(menu_cnc_russia)
-#        menu_help.append(gtk.SeparatorMenuItem())
-
         menu_about = gtk.ImageMenuItem(_('_About'))
         img = gtk.Image()
         img.set_from_stock('gtk-about', menu_icon_size)
@@ -2166,14 +2181,13 @@ class NCam(gtk.VBox):
         self.chng_dt_sep.set_visible(self.selected_type == 'float')
         self.set_digits_mi.set_visible(self.selected_type == 'float')
 
+        self.actionSaveUserDef.set_sensitive(self.selected_feature is not None)
+
     def menu_html_cnc_activate(self, *args):
         webbrowser.open('http://www.linuxcnc.org')
 
     def menu_html_forum_activate(self, *args):
         webbrowser.open('http://www.linuxcnc.org/index.php/english/forum/40-subroutines-and-ngcgui')
-
-    def menu_html_ru_activate(self, *args):
-        webbrowser.open('www.cnc-club.ru')
 
     def edit_feature(self, *args):
         subprocess.Popen(self.editor + ' ' +
@@ -2263,25 +2277,21 @@ class NCam(gtk.VBox):
         self.quick_access_tb.set_sensitive(False)
         self.add_iconview.grab_focus()
 
-    def quick_access_tb_clicked(self, call, src) :
+    def toolbutton_clicked(self, call, src) :
         self.add_feature(src)
 
-    def setup_quick_access_tb(self) :
-        self.config_quick_access = ConfigParser.ConfigParser()
-        fname = search_path(1, QUICK_ACCESS_FNAME, CATALOGS_DIR, self.catalog_dir)
-        self.quick_access_dict = {}
+    def setup_toolbar(self) :
+        config = ConfigParser.ConfigParser()
+        fname = search_path(1, TOOLBAR_FNAME, CATALOGS_DIR, self.catalog_dir)
+        quick_access_dict = {}
         if fname is not None :
-            self.config_quick_access.read(fname)
-            quick_access = self.config_quick_access.get("VAR", "quick_access", raw = True)
-            quick_access = quick_access.split("\n")
-            for s in quick_access :
-                s = s.split("\t")
-                if len(s) == 4 :
-                    self.quick_access_dict[s[0]] = [int(s[1]), float(s[2]), int(s[3])]
+            config.read(fname)
+            for section in config.sections() :
+                quick_access_dict[section] = [get_int(config.get(section, 'order'))]
 
         feature_list = [s.get("src") for s in self.catalog.findall(".//sub") if "src" in s.keys()]
-        self.quick_access = {}
-        self.quick_access_buttons = {}
+        quick_access = {}
+        quick_access_buttons = {}
 
         for src in feature_list :
             try :
@@ -2293,54 +2303,31 @@ class NCam(gtk.VBox):
                 icon.set_from_pixbuf(f.get_icon(quick_access_icon_size))
                 button = gtk.ToolButton(icon, label = f.get_name())
                 button.set_tooltip_markup(f.get_tooltip())
-#                s = src.split("/") #this will convert to new format
-                s = src
-                button.connect("clicked", self.quick_access_tb_clicked, s)
-                self.quick_access_buttons[s] = button
 
-                self.quick_access[s] = [None, button, 0, 0, 0]
-                if s in self.quick_access_dict :
-                    self.quick_access[s][2:] = self.quick_access_dict[s]
+                button.connect("clicked", self.toolbutton_clicked, src)
+                quick_access_buttons[src] = button
+
+                quick_access[src] = [None, button, 0]
+                if src in quick_access_dict :
+                    quick_access[src][2] = quick_access_dict[src][0]
             except :
                 pass
 
-        tf = self.quick_access.items()
-        tf.sort(lambda x, y:y[1][4] - x[1][4])  # sort by selected order
+        tf = quick_access.items()
+        tf.sort(lambda x, y:y[1][2] - x[1][2])  # sort by selected order
         for tfi in tf[:MAX_QUICK_ACCESS_BTN] :
             self.quick_access_tb.insert(tfi[1][1], -1)
 
-    def update_quick_access(self, src):
-        if src in self.quick_access :
-            self.quick_access[src][2] += 1
-            self.quick_access[src][3] = time.time()
-
-        if src is not None:
-            # save config
-            if "INFO" not in self.config_quick_access.sections() :
-                self.config_quick_access.add_section('INFO')
-                self.config_quick_access.set('INFO', 'warning',
-                    'This file is rewritten every time a subroutine is used and shows usage of each one\n'
-                    'columns are : source, total usage, last time used and order of preference\n'
-                    'Delete this file to reset or edit rank in descending order')
-
-            if "VAR" not in self.config_quick_access.sections() :
-                self.config_quick_access.add_section('VAR')
-
-            for sr in self.quick_access :
-                self.quick_access_dict[sr] = self.quick_access[sr][2:]
-            quick_access = ""
-            for sr in self.quick_access_dict :
-                quick_access += "\n%s\t%s\t%s\t%s" % (sr,
-                        self.quick_access_dict[sr][0],
-                        self.quick_access_dict[sr][1],
-                        self.quick_access_dict[sr][2])
-            self.config_quick_access.set("VAR", "quick_access", quick_access)
-
-            fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, QUICK_ACCESS_FNAME)
+        if fname is None :  # write TOOLBAR_FNAME file
+            fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, TOOLBAR_FNAME)
+            for src in quick_access :
+                config.add_section(src)
+                config.set(src, 'name', quick_access[src][1].get_label())
+                config.set(src, 'order', 0)
             try :
-                self.config_quick_access.write(open(fname, "w"))
+                config.write(open(fname, "w"))
             except :
-                mess_dlg(_("WARNING:\nCannot write to quick_access file %(filename)s") % {'filename':fname})
+                mess_dlg(_("WARNING:\nCannot write to toolbar file %(filename)s") % {'filename':fname})
 
     def add_catalog_items(self):
 
@@ -2459,6 +2446,25 @@ class NCam(gtk.VBox):
 
         self.treeview.set_model(self.master_filter)
         self.treeview.set_size_request(int(self.col_width_adj.value), 100)
+
+    def save_user_values(self, *args) :
+        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, USER_DEFAULT_FILE)
+        parser = ConfigParser.ConfigParser()
+        parser.read(fname)
+
+        section = self.selected_feature.get_type()
+        if not parser.has_section(section) :
+            parser.add_section(section)
+
+        for p in self.selected_feature.param :
+            if p.attr['type'] not in GROUP_HEADER_TYPES :
+                s = p.attr['call'].lstrip('#')
+                parser.set(section, s, p.attr['value'])
+
+        with open(fname, 'wb') as configfile:
+            parser.write(configfile)
+
+        self.pref.read_user_values()
 
     def save_work(self, *args):
         fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, CURRENT_WORK)
@@ -2673,6 +2679,14 @@ class NCam(gtk.VBox):
         self.actionRenameFeature = gtk.Action("actionRenameFeature",
                 _('Rename'), _('Rename selected subroutine'), '')
         self.actionRenameFeature.connect('activate', self.rename_selected_feature)
+
+        self.actionSaveUserDef = gtk.Action("actionSaveUDef", _('Save values as defaults'),
+                _('Save values of this subroutine as defaults'), 'gtk-save')
+        self.actionSaveUserDef.connect('activate', self.save_user_values)
+
+        self.actionOpenExample = gtk.Action("actionOpenExample", _('Open example project'),
+                _('Open example project'), 'gtk-open')
+        self.actionOpenExample.connect('activate', self.menu_open_example_activate)
 
     def save_default_layout(self, *arg) :
         cfg_file = os.path.join(NCAM_DIR, 'catalogs', 'ncam.conf')
@@ -2947,7 +2961,6 @@ class NCam(gtk.VBox):
             self.treeview.set_cursor((0,))
 
     def duplicate_clicked(self, *arg) :
-        self.update_quick_access(self.selected_feature.get_attr('src'))
         xml = etree.Element(XML_TAG)
         self.treestore_to_xml_recursion(self.selected_feature_ts_itr, xml, False)
         self.import_xml(xml)
@@ -3567,7 +3580,6 @@ class NCam(gtk.VBox):
             mess_dlg(_("'%(source_file)s' is not a valid cfg or xml file") % {'source_file':src_file})
             return
         self.import_xml(xml)
-        self.update_quick_access(src)
 
     def autorefresh_call(self) :
         try :
@@ -3992,7 +4004,7 @@ class NCam(gtk.VBox):
                 gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
         try:
             filt = gtk.FileFilter()
-            filt.set_name("XML")
+            filt.set_name(_("NativeCAM projects"))
             filt.add_mime_type("text/xml")
             filt.add_pattern("*.xml")
             filechooserdialog.add_filter(filt)
@@ -4000,7 +4012,7 @@ class NCam(gtk.VBox):
             filt.set_name(_("All files"))
             filt.add_pattern("*")
             filechooserdialog.add_filter(filt)
-            filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, XML_DIR))
+            filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR))
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 fname = filechooserdialog.get_filename()
@@ -4017,15 +4029,13 @@ class NCam(gtk.VBox):
                 gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
         try:
             filt = gtk.FileFilter()
-            filt.set_name("XML")
+            filt.set_name(_("NativeCAM projects"))
             filt.add_mime_type("text/xml")
             filt.add_pattern("*.xml")
             filechooserdialog.add_filter(filt)
-            if os.path.exists(self.current_filename):
-                filechooserdialog.set_filename(self.current_filename)
-            else :
-                filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, XML_DIR))
-                filechooserdialog.set_current_name(self.current_filename)
+            d, fname = os.path.split(self.current_filename)
+            filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR))
+            filechooserdialog.set_current_name(fname)
             filechooserdialog.set_do_overwrite_confirmation(True)
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
@@ -4039,18 +4049,33 @@ class NCam(gtk.VBox):
             filechooserdialog.destroy()
 
     def menu_open_activate(self, callback = None) :
+        self.open_project(0)
+
+    def menu_open_example_activate(self, callback = None) :
+        self.open_project(1)
+
+    def open_project(self, option = 0):
         global UNIQUE_ID
 
-        filechooserdialog = gtk.FileChooserDialog(_("Open project"), None,
+        if option == 0 :  # user project
+            dlg_title = _("Open project")
+            flt_name = _("NativeCAM projects")
+            dir = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR)
+        else :  # example
+            dlg_title = _("Open example project")
+            flt_name = _("NativeCAM example projects")
+            dir = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR, EXAMPLES_DIR)
+
+        filechooserdialog = gtk.FileChooserDialog(dlg_title, None,
                 gtk.FILE_CHOOSER_ACTION_OPEN, (gtk.STOCK_CANCEL, \
                 gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
         try:
             filt = gtk.FileFilter()
-            filt.set_name("XML")
+            filt.set_name(flt_name)
             filt.add_mime_type("text/xml")
             filt.add_pattern("*.xml")
             filechooserdialog.add_filter(filt)
-            filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, XML_DIR))
+            filechooserdialog.set_current_folder(dir)
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 filename = filechooserdialog.get_filename()
