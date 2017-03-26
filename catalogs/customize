@@ -1,0 +1,16 @@
+menu.xml can be customized and will not be over-written with updates
+if you rename it menu-custom.xml
+
+You can also customize your toolbar.conf and rename it toolbar-custom.conf
+it will not be over-written
+Change 'order = ?' in descending order. 15 buttons are shown.
+The highest numbered will be at the left.
+Delete the file to restore to defaults.
+
+Customize your default values for any sub-routine by changing the values
+in the treeview to the one that fits best your needs then
+select Edit->Save values as defaults
+Each time you add the same sub-routine, those values will be used
+To restore all defaults, delete 'custom_defaults.conf' file or
+edit the file and remove the section you want restored.
+This file is never over-written

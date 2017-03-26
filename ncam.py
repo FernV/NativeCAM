@@ -103,6 +103,7 @@ CURRENT_WORK = "current_work.xml"
 PREFERENCES_FILE = "default.conf"
 CONFIG_FILE = 'ncam.conf'
 TOOLBAR_FNAME = "toolbar.conf"
+TOOLBAR_CUSTOM_FNAME = "toolbar-custom.conf"
 GENERATED_FILE = "ncam.ngc"
 
 DEFAULT_EDITOR = 'gedit'  # or any like kate, etc...
@@ -1545,7 +1546,7 @@ class Preferences():
         self.col_width_adj_value = read_float(config, 'display', 'col_width', 175)
         self.tv_w_adj_value = read_float(config, 'display', 'master_tv_width', 175)
         self.sub_hdrs_in_tv1 = read_boolean(config, 'display', 'subheaders_in_master', False)
-        self.restore_expand_state = read_boolean(config, 'display', 'restore_expand_state', True)
+        self.restore_expand_state = read_boolean(config, 'display', 'restore_expand_state', False)
         developer_menu = read_boolean(config, 'display', 'developer_menu', False)
         self.use_dual_views = read_boolean(config, 'layout', 'dual_view', True)
         self.side_by_side = read_boolean(config, 'layout', 'side_by_side', True)
@@ -1632,10 +1633,35 @@ class Preferences():
                 USER_VALUES[section + '#' + key] = val
 
     def edit(self, natcam):
-        global NCAM_DIR
+        old_toolbar_icon_size = toolbar_icon_size
+        old_quick_access_icon_size = quick_access_icon_size
+        old_treeview_icon_size = treeview_icon_size
+        old_menu_icon_size = menu_icon_size
+        old_add_menu_icon_size = add_menu_icon_size
+        old_add_dlg_icon_size = add_dlg_icon_size
+        old_view = natcam.pref.use_dual_views
+
         if pref_edit.edit_preferences(natcam, default_metric, self.cat_name, NCAM_DIR, \
                 self.ngc_init_str, self.ngc_post_amble, SYS_DIR, translate_test) :
             self.read(None)
+            if old_toolbar_icon_size <> toolbar_icon_size :
+                natcam.button_tb.set_icon_size(toolbar_icon_size)
+                natcam.add_toolbar.set_icon_size(toolbar_icon_size)
+            if old_quick_access_icon_size <> quick_access_icon_size :
+                natcam.setup_toolbar()
+                natcam.quick_access_tb.show_all()
+            if old_treeview_icon_size <> treeview_icon_size :
+                natcam.tv1_icon_cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
+                if natcam.treeview2 is not None:
+                    natcam.tv2_icon_cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
+                natcam.set_layout(old_view)
+            if (old_menu_icon_size <> menu_icon_size) or (old_add_menu_icon_size <> add_menu_icon_size) :
+                natcam.menu.destroy()
+                natcam.create_menu_interface()
+                natcam.menu.show_all()
+            if old_add_dlg_icon_size <> add_dlg_icon_size :
+                natcam.update_catalog()
+
             ncam.autorefresh_call()
 
 
@@ -1875,7 +1901,6 @@ class NCam(gtk.VBox):
         self.quick_access_tb = gtk.Toolbar()
         self.main_box.pack_start(self.quick_access_tb, False, False, 0)
         self.quick_access_tb.set_style(gtk.TOOLBAR_ICONS)
-        self.quick_access_tb.set_icon_size(menu_icon_size)
         self.main_box.reorder_child(self.quick_access_tb, 1)
 
         self.create_menu_interface()
@@ -2077,7 +2102,7 @@ class NCam(gtk.VBox):
 
         mi = gtk.ImageMenuItem(_('_Reload tools table'))
         img = gtk.Image()
-        img.set_from_pixbuf(get_pixbuf("tool-01.png", add_menu_icon_size))
+        img.set_from_stock('gtk-refresh', menu_icon_size)
         mi.set_image(img)
         mi.connect("activate", self.tools.load_table)
         menu_utils.append(mi)
@@ -2220,43 +2245,40 @@ class NCam(gtk.VBox):
         self.add_iconview.set_pixbuf_column(0)
         self.add_iconview.set_text_column(2)
         self.catalog_path = self.catalog
-        self.updating_catalog = True
-        self.update_catalog(xml = self.catalog_path)
-        self.updating_catalog = False
+        self.update_catalog()
 
     def catalog_activate(self, iconview):
-        if not self.updating_catalog :
-            lst = iconview.get_selected_items()
-            if lst is not None and (len(lst) > 0) :
-                itr = self.icon_store.get_iter(lst[0])
-                src = self.icon_store.get(itr, 3)[0]
-                tag = self.icon_store.get(itr, 1)[0]
-                self.updating_catalog = True
-                if tag == "parent" :
-                    self.update_catalog(xml = "parent")
-                elif tag in ["sub", "import"] :
-                    self.addVBox.hide()
-                    self.feature_Hpane.show()
-                    self.menubar.set_sensitive(True)
-                    self.button_tb.set_sensitive(True)
-                    self.quick_access_tb.set_sensitive(True)
-                    self.add_feature(src)
-                elif tag == "group" :
-                    path = self.icon_store.get(itr, 4)[0]
-                    self.update_catalog(xml = self.catalog_path[path])
-                self.updating_catalog = False
+        lst = iconview.get_selected_items()
+        if lst is not None and (len(lst) > 0) :
+            itr = self.icon_store.get_iter(lst[0])
+            src = self.icon_store.get(itr, 3)[0]
+            tag = self.icon_store.get(itr, 1)[0]
+            if tag == "parent" :
+                self.update_catalog(xml = "parent")
+            elif tag in ["sub"] :
+                self.addVBox.hide()
+                self.feature_Hpane.show()
+                self.menubar.set_sensitive(True)
+                self.button_tb.set_sensitive(True)
+                self.quick_access_tb.set_sensitive(True)
+                self.add_feature(src)
+            elif tag == "group" :
+                path = self.icon_store.get(itr, 4)[0]
+                self.update_catalog(xml = self.catalog_path[path])
 
-    def update_catalog(self, call = None, xml = None) :
-        if xml == "parent" :
+    def update_catalog(self, xml = None) :
+        if xml is not None and xml == "parent" :
             self.catalog_path = self.catalog_path.getparent()
         else :
             self.catalog_path = xml
+
         if self.catalog_path is None :
             self.catalog_path = self.catalog
+
         self.icon_store.clear()
 
         # add link to upper level
-        if self.catalog_path != self.catalog :
+        if (self.catalog_path != self.catalog) :
             self.icon_store.append([get_pixbuf("upper-level.png",
                 add_dlg_icon_size), "parent", _('Back...'), "parent", 0, None])
 
@@ -2281,8 +2303,13 @@ class NCam(gtk.VBox):
         self.add_feature(src)
 
     def setup_toolbar(self) :
+        while self.quick_access_tb.get_n_items() > 0 :
+            self.quick_access_tb.remove(self.quick_access_tb.get_nth_item(0))
         config = ConfigParser.ConfigParser()
-        fname = search_path(1, TOOLBAR_FNAME, CATALOGS_DIR, self.catalog_dir)
+        fname = search_path(1, TOOLBAR_CUSTOM_FNAME, CATALOGS_DIR, self.catalog_dir)
+        if fname is None :
+            fname = search_path(1, TOOLBAR_FNAME, CATALOGS_DIR, self.catalog_dir)
+
         quick_access_dict = {}
         if fname is not None :
             config.read(fname)
@@ -2415,6 +2442,7 @@ class NCam(gtk.VBox):
         col.set_min_width(int(self.col_width_adj.value))
         cell = gtk.CellRendererPixbuf()
         cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
+        self.tv1_icon_cell = cell
         col.pack_start(cell, expand = False)
         col.set_cell_data_func(cell, self.get_col_icon)
 
@@ -2578,6 +2606,7 @@ class NCam(gtk.VBox):
         col = gtk.TreeViewColumn(_("Name"))
         cell = gtk.CellRendererPixbuf()
         cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
+        self.tv2_icon_cell = cell
 
         col.pack_start(cell, expand = False)
         col.set_cell_data_func(cell, self.get_col_icon)
@@ -2625,7 +2654,6 @@ class NCam(gtk.VBox):
 
     def create_actions(self):
         # without accelerators
-
         self.actionBuild = gtk.Action("actionBuild", _('Create %(filename)s') % {'filename':GENERATED_FILE},
                 _('Build gcode and save to %(filename)s') % {'filename':GENERATED_FILE}, 'gnome-run')
         self.actionBuild.connect('activate', self.action_build)
@@ -2899,7 +2927,9 @@ class NCam(gtk.VBox):
 
         if self.pref.use_dual_views :
             if self.iter_selected_type == tv_select.none :
-                if self.treeview2 is not None:
+                if self.treeview2 is None:
+                    self.create_second_treeview()
+                else :
                     self.treeview2.set_model(None)
 
             if ((old_selected_feature == self.selected_feature) and \
@@ -3733,8 +3763,8 @@ class NCam(gtk.VBox):
         self.file_changed = False
         self.action()
 
-    def set_layout(self, val):
-        self.pref.use_dual_views = val
+    def set_layout(self, dual_views):
+        self.pref.use_dual_views = dual_views
         if self.pref.use_dual_views :
             if self.treeview2 is None :
                 self.create_second_treeview()
@@ -3748,6 +3778,7 @@ class NCam(gtk.VBox):
                 self.treeview2.destroy()
                 self.treeview2 = None
         self.treestore_from_xml(self.treestore_to_xml())
+        self.expand_and_select(self.path_to_new_selected)
 
         self.actionTopBottom.set_sensitive(self.pref.use_dual_views)
         self.actionSideBySide.set_sensitive(self.pref.use_dual_views)
