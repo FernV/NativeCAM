@@ -49,6 +49,7 @@ o<rectangle> sub
 	o234 else
 		o<get_max> CALL [41] [2] [#16] [#<_stepover_min>]
 	o234 endif
+	#<fcut> = #41
 		
 (change coords system to offset/rotate)
 	#<old_coord_system> = [#<_coord_system> / 10]
@@ -167,8 +168,12 @@ o<rectangle> sub
 	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<rectangle_create> CALL [#<_mill_data_start>] [#<width>] [#<height>] [#<corner_radius>] [#<corner_style>] [#<fin_dir>] [#<width>] [#<height>]
 		o<set_feed_rate_and_speed> CALL [#41 * #5410]
-		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
-
+		o15 if [#<fin_dir> GT 10]
+			o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_depth>] [-1] [#<fcut>]
+		o15 else
+			o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
+		o15 endif
+	
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>]
 			o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [2]

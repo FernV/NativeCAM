@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nativecam\n"
-"POT-Creation-Date: 2017-03-25 22:24-0400\n"
-"PO-Revision-Date: 2017-03-26 15:03-0500\n"
+"POT-Creation-Date: 2017-04-03 10:53-0400\n"
+"PO-Revision-Date: 2017-04-03 18:05-0500\n"
 "Last-Translator: Fernand Veilleux <fernveilleux@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 2.0\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPathExcluded-0: configs\n"
@@ -20,194 +20,216 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: ncam.glade:8
-msgid "Save project"
-msgstr "Enregistrer le projet"
-
-#: ncam.glade:9
-msgid "Save project as xml file"
-msgstr "Enregistrer le projet au format xml"
+msgid "Add a subroutine"
+msgstr "Ajouter un sous-programme"
 
 #: ncam.glade:16
-#: ncam.py:4061
-msgid "Open project"
-msgstr "Ouvrir un projet"
-
 #: ncam.glade:17
-msgid "Open a saved project xml file"
-msgstr "Ouvrir un fichier projet xml"
-
-#: ncam.glade:24
-msgid "New project"
-msgstr "Nouveau projet"
+msgid "Collapse all other nodes"
+msgstr "Réduire tous les autre noeuds"
 
 #: ncam.glade:25
-msgid "Create a new project"
-msgstr "Créer un nouveau projet"
+#: ncam.glade:26
+#: ncam.glade:251
+msgid "Duplicate selected subroutine"
+msgstr "Dupliquer le sous-programme"
 
-#: ncam.glade:32
-msgid "Paste"
-msgstr "Coller"
+#: ncam.glade:34
+#: ncam.glade:35
+#: ncam.glade:265
+msgid "Remove selected subroutine"
+msgstr "Supprimer le sous-programme"
 
-#: ncam.glade:33
-msgid "Paste from clipboard"
-msgstr "Coller depuis le presse-papiers"
+#: ncam.glade:43
+#: ncam.glade:289
+msgid "Undo"
+msgstr "Défaire"
 
-#: ncam.glade:40
-msgid "Copy"
-msgstr "Copier"
+#: ncam.glade:44
+msgid "Undo last operation"
+msgstr "Annuler la dernière opération"
 
-#: ncam.glade:41
-msgid "Copy selected subroutine to clipboard"
-msgstr "Copier le sous-programme vers le presse-papiers"
+#: ncam.glade:52
+#: ncam.glade:303
+msgid "Redo"
+msgstr "Rétablir"
 
-#: ncam.glade:48
+#: ncam.glade:53
+msgid "Cancel last Undo"
+msgstr "Annuler dernier Défaire"
+
+#: ncam.glade:61
+msgid "Move up"
+msgstr "Monter"
+
+#: ncam.glade:62
+msgid "Move up one row"
+msgstr "Remonter d'une ligne"
+
+#: ncam.glade:70
+msgid "Move down"
+msgstr "Descendre"
+
+#: ncam.glade:71
+msgid "Move down one row"
+msgstr "Descendre d'une ligne"
+
+#: ncam.glade:79
+#: ncam.glade:365
+msgid "Add to items"
+msgstr "Ajouter aux éléments"
+
+#: ncam.glade:80
+msgid "Add to Group"
+msgstr "Ajouter au groupe"
+
+#: ncam.glade:88
+#: ncam.glade:379
+msgid "Remove from items"
+msgstr "Retirer des éléments"
+
+#: ncam.glade:89
+msgid "Remove from Group"
+msgstr "Retirer du groupe"
+
+#: ncam.glade:97
 #: cfg/plasma/cutting-params2d.cfg:16
 #: cfg/plasma/cutting-params3d.cfg:16
 msgid "Cut"
 msgstr "Couper"
 
-#: ncam.glade:49
+#: ncam.glade:98
 msgid "Cut selected subroutine to clipboard"
 msgstr "Couper le sous-programme vers le presse-papiers"
 
-#: ncam.glade:56
-#: ncam.glade:380
-msgid "Remove from items"
-msgstr "Retirer des éléments"
+#: ncam.glade:105
+msgid "Copy"
+msgstr "Copier"
 
-#: ncam.glade:57
-msgid "Remove from Group"
-msgstr "Retirer du groupe"
+#: ncam.glade:106
+msgid "Copy selected subroutine to clipboard"
+msgstr "Copier le sous-programme vers le presse-papiers"
 
-#: ncam.glade:65
-#: ncam.glade:366
-msgid "Add to items"
-msgstr "Ajouter aux éléments"
+#: ncam.glade:113
+msgid "Paste"
+msgstr "Coller"
 
-#: ncam.glade:66
-msgid "Add to Group"
-msgstr "Ajouter au groupe"
+#: ncam.glade:114
+msgid "Paste from clipboard"
+msgstr "Coller depuis le presse-papiers"
 
-#: ncam.glade:74
-msgid "Move down"
-msgstr "Descendre"
+#: ncam.glade:121
+msgid "New"
+msgstr "Nouveau"
 
-#: ncam.glade:75
-msgid "Move down one row"
-msgstr "Descendre d'une ligne"
+#: ncam.glade:122
+msgid "Create a new project"
+msgstr "Créer un nouveau projet"
 
-#: ncam.glade:83
-msgid "Move up"
-msgstr "Monter"
-
-#: ncam.glade:84
-msgid "Move up one row"
-msgstr "Remonter d'une ligne"
-
-#: ncam.glade:92
-#: ncam.glade:304
-msgid "Redo"
-msgstr "Rétablir"
-
-#: ncam.glade:93
-msgid "Cancel last Undo"
-msgstr "Annuler dernier Défaire"
-
-#: ncam.glade:101
-#: ncam.glade:290
-msgid "Undo"
-msgstr "Défaire"
-
-#: ncam.glade:102
-msgid "Undo last operation"
-msgstr "Annuler la dernière opération"
-
-#: ncam.glade:110
-#: ncam.glade:111
-#: ncam.glade:266
-msgid "Remove selected subroutine"
-msgstr "Supprimer le sous-programme"
-
-#: ncam.glade:119
-#: ncam.glade:120
-#: ncam.glade:252
-msgid "Duplicate selected subroutine"
-msgstr "Dupliquer le sous-programme"
-
-#: ncam.glade:128
 #: ncam.glade:129
-msgid "Collapse all other nodes"
-msgstr "Réduire tous les autre noeuds"
+#: ncam.py:982
+msgid "Open"
+msgstr "Ouvrir"
+
+#: ncam.glade:130
+msgid "Open a saved project xml file"
+msgstr "Ouvrir un fichier projet xml"
 
 #: ncam.glade:137
-msgid "Add a subroutine"
-msgstr "Ajouter un sous-programme"
+msgid "Save"
+msgstr "Enregistrer"
 
-#: ncam.glade:183
+#: ncam.glade:138
+msgid "Save project as xml file"
+msgstr "Enregistrer le projet au format xml"
+
+#: ncam.glade:182
 msgid "NativeCAM"
 msgstr "NativeCAM"
 
+#: ncam.glade:197
 #: ncam.glade:199
-#: ncam.glade:200
 msgid "Save current work"
 msgstr "Enregistrer le projet actuel"
 
-#: ncam.glade:215
+#: ncam.glade:214
 msgid "Build"
 msgstr "Créer"
 
-#: ncam.glade:328
+#: ncam.glade:327
 msgid "Move Up"
 msgstr "Monter"
 
-#: ncam.glade:342
+#: ncam.glade:341
 msgid "Move Down"
 msgstr "Descendre"
 
+#: ncam.glade:535
 #: ncam.glade:537
-#: ncam.glade:538
 msgid "Cancel add"
 msgstr "Annuler ajout"
 
+#: ncam.glade:551
 #: ncam.glade:553
-#: ncam.glade:554
 msgid "Add cfg file"
 msgstr "Ajouter un fichier sous-programme"
 
+#: ncam.glade:568
 #: ncam.glade:570
-#: ncam.glade:571
 msgid "Import XML file"
 msgstr "Importer un fichier XML"
 
-#: ncam_pref.glade:267
+#: ncam_pref.glade:223
+#: ncam_pref.glade:243
+#: ncam.py:469
+#: ncam.py:481
+msgid "None"
+msgstr "Aucun"
+
+#: ncam_pref.glade:226
+#: ncam_pref.glade:246
+msgid "Beginning"
+msgstr "Début"
+
+#: ncam_pref.glade:229
+#: ncam_pref.glade:249
+msgid "Center"
+msgstr "Milieu"
+
+#: ncam_pref.glade:232
+#: ncam_pref.glade:252
+msgid "End"
+msgstr "Fin"
+
+#: ncam_pref.glade:295
 msgid "Loop back"
 msgstr "Boucle retour"
 
-#: ncam_pref.glade:270
+#: ncam_pref.glade:298
 msgid "Spiral"
 msgstr "Spirale"
 
-#: ncam_pref.glade:281
+#: ncam_pref.glade:309
 msgid "G38.2 - toward workpiece, stop on contact, signal failure"
 msgstr "G38.2 - palpe vers la pièce, arrêt au contact, signale si erreur"
 
-#: ncam_pref.glade:284
+#: ncam_pref.glade:312
 msgid "G38.3 - toward workpiece, stop on contact"
 msgstr "G38.3 - palpe vers la pièce, arrêt au contact"
 
-#: ncam_pref.glade:287
+#: ncam_pref.glade:315
 msgid "G38.4 - away from workpiece, stop on loss of contact, signal failure"
 msgstr "G38.4 - palpe en quittant la pièce, arrêt sur perte de contact, signal si  erreur"
 
-#: ncam_pref.glade:290
+#: ncam_pref.glade:318
 msgid "G38.5 - away from workpiece, stop on loss of contact"
 msgstr "G38.5 - palpe en quittant la pièce, arrêt sur perte de contact"
 
-#: ncam_pref.glade:301
+#: ncam_pref.glade:329
 msgid "Imperial"
 msgstr "Impérial"
 
-#: ncam_pref.glade:304
+#: ncam_pref.glade:332
 #: cfg/mill/SHCS.cfg:68
 #: cfg/mill/SHCS_slot-arc.cfg:106
 #: cfg/mill/SHCS_slot.cfg:83
@@ -215,260 +237,833 @@ msgstr "Impérial"
 msgid "Metric"
 msgstr "Métrique"
 
-#: ncam_pref.glade:311
+#: ncam_pref.glade:365
 msgid "NativeCAM Preferences"
 msgstr "Préférences de NativeCAM"
 
-#: ncam_pref.glade:348
+#: ncam_pref.glade:403
 msgid "Auto-refresh time-out"
 msgstr "Délai d'auto-rafraîchissement"
 
-#: ncam_pref.glade:383
+#: ncam_pref.glade:439
 msgid "Default decimals"
 msgstr "Décimales par défaut"
 
-#: ncam_pref.glade:412
+#: ncam_pref.glade:450
 msgid "Delay on faster rpm"
 msgstr "Délai pour accélération de broche"
 
-#: ncam_pref.glade:414
+#: ncam_pref.glade:452
 msgid "Spindle full speed delay"
 msgstr "Délai pour accélération de la broche"
 
-#: ncam_pref.glade:448
-#: ncam_pref.glade:491
+#: ncam_pref.glade:487
+#: ncam_pref.glade:530
 msgid "Units are auto-detected"
 msgstr "Unités auto-détectées"
 
-#: ncam_pref.glade:450
+#: ncam_pref.glade:489
 msgid "Initialization"
 msgstr "Initialisation"
 
-#: ncam_pref.glade:464
+#: ncam_pref.glade:503
 msgid "Post-amble"
 msgstr "Post-traitement"
 
-#: ncam_pref.glade:478
+#: ncam_pref.glade:517
 msgid "Coordinates for offsetting and rotation"
 msgstr "Coordonnées de décalage et rotation"
 
-#: ncam_pref.glade:548
+#: ncam_pref.glade:589
 msgid "Increase if gmoccapy auto-refresh is intermittent or some input windows do not show"
 msgstr "Augmenter si gmoccapy cause rafraîchissement intermittent ou que des fenêtres de saisie ne s'affiche pas"
 
-#: ncam_pref.glade:550
+#: ncam_pref.glade:591
 msgid "Gmoccapy input time-out delay"
 msgstr "Délai d'entrée pour gmoccapy"
 
-#: ncam_pref.glade:605
+#: ncam_pref.glade:647
 msgid "Spiral mode not supported yet"
 msgstr "Mode en spirale non-supporté"
 
-#: ncam_pref.glade:607
+#: ncam_pref.glade:649
 msgid "Pocket expanding mode"
 msgstr "Mode d'expansion de pochette"
 
-#: ncam_pref.glade:624
+#: ncam_pref.glade:684
 msgid "General"
 msgstr "Général"
 
-#: ncam_pref.glade:651
-msgid "Window minimum width"
+#: ncam_pref.glade:711
+msgid "Window minimal width"
 msgstr "Largeur minimale de la fenêtre"
 
-#: ncam_pref.glade:663
-msgid "Master treeview minimum width"
+#: ncam_pref.glade:723
+msgid "Master treeview minimal width"
 msgstr "Largeur minimale du Treeview maître"
 
-#: ncam_pref.glade:677
-msgid "Name column minimum width"
-msgstr "Largeur minimum de la colonne 'nom'"
+#: ncam_pref.glade:737
+msgid "Name column ellipsize"
+msgstr "Ellipse le nom"
 
-#: ncam_pref.glade:736
-msgid "When loading files or copying/duplicating/moving"
-msgstr "Lors de copie, duplication, déplacement ou chargement"
-
-#: ncam_pref.glade:738
+#: ncam_pref.glade:868
 msgid "Restore treeview expand state"
 msgstr "Rétablir l'état du treeview"
 
-#: ncam_pref.glade:768
-msgid "Show design lines"
-msgstr "Montrer résultat"
-
-#: ncam_pref.glade:782
-msgid "Show bottom lines"
-msgstr "Montrer lignes basses"
-
-#: ncam_pref.glade:828
+#: ncam_pref.glade:882
 msgid "Developer menu"
 msgstr "Menu développeur"
 
-#: ncam_pref.glade:865
+#: ncam_pref.glade:896
+msgid "Show bottom lines"
+msgstr "Montrer lignes basses"
+
+#: ncam_pref.glade:910
+msgid "Show design lines"
+msgstr "Montrer résultat"
+
+#: ncam_pref.glade:924
+msgid "Name column minimal width"
+msgstr "Largeur minimale de la colonne 'nom'"
+
+#: ncam_pref.glade:961
 msgid "Display"
 msgstr "Affichage"
 
-#: ncam_pref.glade:893
+#: ncam_pref.glade:989
 msgid "Menu"
 msgstr "Menu"
 
-#: ncam_pref.glade:1003
+#: ncam_pref.glade:1045
 msgid "Treeview"
 msgstr "TreeView"
 
-#: ncam_pref.glade:1016
+#: ncam_pref.glade:1059
 msgid "Add menu"
 msgstr "Menu 'Ajouter'"
 
-#: ncam_pref.glade:1029
+#: ncam_pref.glade:1073
 msgid "Quick access toolbar"
 msgstr "Barre d'accès rapide"
 
-#: ncam_pref.glade:1042
+#: ncam_pref.glade:1087
 msgid "Add dialog"
 msgstr "Dialogue 'Ajouter'"
 
-#: ncam_pref.glade:1123
-msgid "Some changes will take effect only after a restart"
-msgstr "Certains changements prendront effet seulement après un redémarrage"
-
-#: ncam_pref.glade:1136
+#: ncam_pref.glade:1132
 msgid "Main toolbar"
 msgstr "Barre principale"
 
-#: ncam_pref.glade:1189
+#: ncam_pref.glade:1257
 msgid "Icons Size"
 msgstr "Taille des icônes"
 
-#: ncam_pref.glade:1217
+#: ncam_pref.glade:1285
 msgid "Minimum width"
 msgstr "Largeur minimum"
 
-#: ncam_pref.glade:1243
+#: ncam_pref.glade:1312
 #: cfg/mill/rectangle.cfg:95
 #: cfg/plasma/rectangle.cfg:76
 msgid "Height"
 msgstr "Hauteur"
 
-#: ncam_pref.glade:1289
+#: ncam_pref.glade:1359
 msgid "Cancel on focusing out"
 msgstr "Annuler sur perte de focus"
 
-#: ncam_pref.glade:1309
+#: ncam_pref.glade:1379
 msgid "Virtual Keyboard"
 msgstr "Clavier virtuel"
 
-#: ncam_pref.glade:1609
+#: ncam_pref.glade:1679
 msgid "Tool engagement up to"
 msgstr "Engagement jusqu'à"
 
-#: ncam_pref.glade:1621
+#: ncam_pref.glade:1691
 msgid "Feed factor"
 msgstr "Facteur alimentation"
 
-#: ncam_pref.glade:1635
+#: ncam_pref.glade:1705
 msgid "Spindle speed factor"
 msgstr "Facteur vitesse broche"
 
-#: ncam_pref.glade:1668
+#: ncam_pref.glade:1738
 msgid "unspecified or 0"
 msgstr "non spécifié ou 0"
 
-#: ncam_pref.glade:1698
+#: ncam_pref.glade:1768
 msgid "Optimizing"
 msgstr "Optimisation"
 
-#: ncam_pref.glade:1726
+#: ncam_pref.glade:1796
 msgid "Function"
 msgstr "Fonction"
 
-#: ncam_pref.glade:1755
-#: ncam_pref.glade:1770
+#: ncam_pref.glade:1826
+#: ncam_pref.glade:1841
 msgid "If Latch Distance is greater than 0 then probe will go back and Latch in the same direction, else Latch will be done in opposite direction (stop on loss of contact)."
 msgstr "Si la distance d'enclanchement > 0, la sonde reculera et enclanchera dans la même direction, sinon ce sera fait au retour sur la perte de contact"
 
-#: ncam_pref.glade:1757
+#: ncam_pref.glade:1828
 msgid "Latch distance"
 msgstr "Distance enclanchement"
 
-#: ncam_pref.glade:1793
+#: ncam_pref.glade:1864
 msgid "Latch feed"
 msgstr "Vitesse d'enclanchement"
 
-#: ncam_pref.glade:1828
+#: ncam_pref.glade:1899
 msgid "Probe tip diameter"
 msgstr "Diamètre de la pointe de la sonde"
 
-#: ncam_pref.glade:1863
+#: ncam_pref.glade:1934
 #: cfg/lathe/cutting-params.cfg:73
 #: cfg/lathe/cutting-params.cfg:76
 #: cfg/lathe/thread-adv.cfg:102
 #: cfg/lathe/thread-adv.cfg:105
 #: cfg/lathe/threading-params.cfg:67
 #: cfg/lathe/threading-params.cfg:70
-#: cfg/mill/tool-change.cfg:168
+#: cfg/mill/tool-change.cfg:164
 #: cfg/plasma/cutting-params2d.cfg:57
 #: cfg/plasma/cutting-params3d.cfg:55
 msgid "Feed"
 msgstr "Alimentation"
 
-#: ncam_pref.glade:1898
+#: ncam_pref.glade:1969
 msgid "Probe safety margin"
 msgstr "Marge sécuritaire"
 
-#: ncam_pref.glade:1932
+#: ncam_pref.glade:2003
 msgid "Uses tool length compensation after probing"
 msgstr "Utilise compensation longueur d'outil après mesure"
 
-#: ncam_pref.glade:1934
+#: ncam_pref.glade:2005
 msgid "Probe tool length"
 msgstr "Mesure longueur d'outil"
 
-#: ncam_pref.glade:1970
+#: ncam_pref.glade:2044
 #: catalogs/mill/menu.xml:57
 msgid "Probing"
 msgstr "Palpage"
 
-#: ncam_pref.glade:1998
+#: ncam_pref.glade:2072
 msgid "Center drill depth"
 msgstr "Profondeur de forage initial"
 
-#: ncam_pref.glade:2009
+#: ncam_pref.glade:2083
 msgid "Relative to drill start"
 msgstr "Relatif au début forage"
 
-#: ncam_pref.glade:2072
+#: ncam_pref.glade:2146
+#: catalogs/mill/menu.xml:43
 #: cfg/mill/drill-array.cfg:33
 #: cfg/mill/drill-circle.cfg:30
 #: cfg/mill/drill-single.cfg:43
-#: cfg/mill/tool-change.cfg:47
-#: catalogs/mill/menu.xml:43
+#: cfg/mill/tool-change.cfg:43
 msgid "Drilling"
 msgstr "Forage"
 
-#: ncam_pref.glade:2098
+#: ncam_pref.glade:2172
 msgid "Not supported yet"
 msgstr "Non-supporté encore"
 
-#: ncam_pref.glade:2130
+#: ncam_pref.glade:2204
 msgid "Lathe"
 msgstr "Tour"
 
-#: ncam_pref.glade:2159
+#: ncam_pref.glade:2233
 msgid "Test mode"
 msgstr "Mode test"
 
-#: ncam_pref.glade:2223
+#: ncam_pref.glade:2297
 msgid "Plasma"
 msgstr "Plasma"
 
-#: cfg/change-units.cfg:3
+#: catalogs/lathe/menu.xml:3
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: catalogs/lathe/menu.xml:4
+#: catalogs/plasma/_menu-custom.xml:41
+#: catalogs/plasma/menu.xml:41
+#: cfg/plasma/cutting-params2d.cfg:3
+#: cfg/plasma/cutting-params3d.cfg:3
+msgid "Cutting Params"
+msgstr "Paramètres coupe"
+
+#: catalogs/lathe/menu.xml:4
+#: catalogs/plasma/_menu-custom.xml:41
+#: catalogs/plasma/menu.xml:41
+msgid "Set cutting parameters"
+msgstr "Paramètres de coupe"
+
+#: catalogs/lathe/menu.xml:5
+msgid "Threading Params"
+msgstr "Paramètres filetage"
+
+#: catalogs/lathe/menu.xml:5
+msgid "Set thread cutting params"
+msgstr "Paramètres filetage"
+
+#: catalogs/lathe/menu.xml:7
+msgid "Tool"
+msgstr "Outil"
+
+#: catalogs/lathe/menu.xml:8
+#: catalogs/mill/menu.xml:56
+msgid "Change Tool"
+msgstr "Changer Outil"
+
+#: catalogs/lathe/menu.xml:8
+msgid "Change cutter"
+msgstr "Changer couteau"
+
+#: catalogs/lathe/menu.xml:10
+#: cfg/plasma/circle-2.cfg:85
+#: cfg/plasma/circle.cfg:96
+#: cfg/plasma/ellipse.cfg:107
+#: cfg/plasma/polygon.cfg:78
+#: cfg/plasma/polyline-mirror-p.cfg:19
+#: cfg/plasma/polyline.cfg:24
+#: cfg/plasma/rectangle.cfg:120
+#: cfg/plasma/slot-2.cfg:72
+#: cfg/plasma/slot-arc.cfg:101
+#: cfg/plasma/slot.cfg:88
+msgid "Cutting"
+msgstr "Coupe"
+
+#: catalogs/lathe/menu.xml:11
+msgid "Threads"
+msgstr "Filetage"
+
+#: catalogs/lathe/menu.xml:11
+msgid "Cut regular threads"
+msgstr "Filetage régulier"
+
+#: catalogs/lathe/menu.xml:12
+msgid "Face"
+msgstr "Face"
+
+#: catalogs/lathe/menu.xml:12
+msgid "Cut face"
+msgstr "Couper face"
+
+#: catalogs/lathe/menu.xml:14
+#: catalogs/mill/menu.xml:62
+#: catalogs/plasma/_menu-custom.xml:42
+#: catalogs/plasma/menu.xml:42
+msgid "Miscellaneous"
+msgstr "Divers"
+
+#: catalogs/lathe/menu.xml:15
+#: catalogs/mill/menu.xml:65
+#: catalogs/plasma/_menu-custom.xml:45
+#: catalogs/plasma/menu.xml:45
+msgid "Insert a G Code File"
+msgstr "Insérer un fichier de g-code"
+
+#: catalogs/lathe/menu.xml:15
+#: catalogs/mill/menu.xml:65
+#: catalogs/plasma/_menu-custom.xml:45
+#: catalogs/plasma/menu.xml:45
+msgid "Include a custom gcode file"
+msgstr "Insérer un fichier gcode personnalisé"
+
+#: catalogs/lathe/menu.xml:16
+#: catalogs/mill/menu.xml:64
+#: catalogs/plasma/_menu-custom.xml:44
+#: catalogs/plasma/menu.xml:44
+msgid "Custom G Code"
+msgstr "G Code personnalisé"
+
+#: catalogs/lathe/menu.xml:16
+#: catalogs/mill/menu.xml:64
+#: catalogs/plasma/_menu-custom.xml:44
+#: catalogs/plasma/menu.xml:44
+msgid "Write custom gcode"
+msgstr "Écrire code personnalisé"
+
 #: catalogs/lathe/menu.xml:17
 #: catalogs/mill/menu.xml:67
 #: catalogs/plasma/_menu-custom.xml:47
 #: catalogs/plasma/menu.xml:47
+#: cfg/change-units.cfg:3
 msgid "Change Units"
 msgstr "Changer d'unités"
+
+#: catalogs/lathe/menu.xml:17
+msgid "Change from inch to metric or inverse"
+msgstr "Changer de pouces à métrique ou inverse"
+
+#: catalogs/mill/menu.xml:2
+#: catalogs/plasma/_menu-custom.xml:2
+#: catalogs/plasma/menu.xml:2
+msgid "Basic Shapes"
+msgstr "Formes de base"
+
+#: catalogs/mill/menu.xml:3
+#: catalogs/plasma/_menu-custom.xml:3
+#: catalogs/plasma/menu.xml:3
+#: cfg/mill/rectangle.cfg:3
+#: cfg/plasma/rectangle.cfg:3
+msgid "Rectangle"
+msgstr "Rectangle"
+
+#: catalogs/mill/menu.xml:3
+#: catalogs/plasma/_menu-custom.xml:3
+#: catalogs/plasma/menu.xml:3
+msgid "Create a rectangle with optional corner types"
+msgstr "Créer un rectangle avec options de sommets"
+
+#: catalogs/mill/menu.xml:5
+#: catalogs/plasma/_menu-custom.xml:5
+#: catalogs/plasma/menu.xml:5
+msgid "Circle"
+msgstr "Cercle"
+
+#: catalogs/mill/menu.xml:5
+#: catalogs/plasma/_menu-custom.xml:5
+#: catalogs/plasma/menu.xml:5
+msgid "Create a circle with optional D flat"
+msgstr "Créer un cercle avec option d'un plat"
+
+#: catalogs/mill/menu.xml:6
+#: catalogs/plasma/_menu-custom.xml:6
+#: catalogs/plasma/menu.xml:6
+msgid "Circle From 2 Points"
+msgstr "Cercle par diamètre"
+
+#: catalogs/mill/menu.xml:6
+#: catalogs/plasma/_menu-custom.xml:6
+#: catalogs/plasma/menu.xml:6
+msgid "Define ends of diameter"
+msgstr "Définir les extrémités du diamètre"
+
+#: catalogs/mill/menu.xml:8
+#: catalogs/plasma/_menu-custom.xml:8
+#: catalogs/plasma/menu.xml:8
+msgid "Slot/Oval From 1 Point"
+msgstr "Coulisse/Ovale depuis 1 point"
+
+#: catalogs/mill/menu.xml:8
+#: catalogs/mill/menu.xml:37
+#: catalogs/plasma/_menu-custom.xml:8
+#: catalogs/plasma/menu.xml:8
+msgid "Define a point, angle and length"
+msgstr "Définir un point, un angle et la longueur"
+
+#: catalogs/mill/menu.xml:9
+#: catalogs/plasma/_menu-custom.xml:9
+#: catalogs/plasma/menu.xml:9
+msgid "Slot/Oval From 2 Points"
+msgstr "Coulisse/Ovale depuis 2 points"
+
+#: catalogs/mill/menu.xml:9
+#: catalogs/plasma/_menu-custom.xml:9
+#: catalogs/plasma/menu.xml:9
+msgid "Define center of ends"
+msgstr "Définir le centre des bouts"
+
+#: catalogs/mill/menu.xml:10
+#: catalogs/mill/menu.xml:39
+#: catalogs/plasma/_menu-custom.xml:10
+#: catalogs/plasma/menu.xml:10
+#: cfg/mill/slot-arc.cfg:3
+#: cfg/plasma/slot-arc.cfg:3
+msgid "Radial Slot"
+msgstr "Coulisse arquée"
+
+#: catalogs/mill/menu.xml:10
+#: catalogs/mill/menu.xml:39
+#: catalogs/plasma/_menu-custom.xml:10
+#: catalogs/plasma/menu.xml:10
+msgid "Create a radial slot"
+msgstr "Créer une coulisse arquée"
+
+#: catalogs/mill/menu.xml:12
+#: catalogs/plasma/_menu-custom.xml:12
+#: catalogs/plasma/menu.xml:12
+#: cfg/mill/ellipse.cfg:3
+#: cfg/plasma/ellipse.cfg:3
+msgid "Ellipse"
+msgstr "Ellipse"
+
+#: catalogs/mill/menu.xml:12
+#: catalogs/plasma/_menu-custom.xml:12
+#: catalogs/plasma/menu.xml:12
+msgid "Create an ellipse"
+msgstr "Créer un ellipse"
+
+#: catalogs/mill/menu.xml:13
+#: catalogs/plasma/_menu-custom.xml:13
+#: catalogs/plasma/menu.xml:13
+#: cfg/mill/polygon.cfg:3
+#: cfg/plasma/polygon.cfg:3
+msgid "Polygon"
+msgstr "Polygone"
+
+#: catalogs/mill/menu.xml:13
+#: catalogs/plasma/_menu-custom.xml:13
+#: catalogs/plasma/menu.xml:13
+msgid "Polygon of N edges"
+msgstr "Polygone de N côtés"
+
+#: catalogs/mill/menu.xml:15
+msgid "Surface Finishing"
+msgstr "Finition surface"
+
+#: catalogs/mill/menu.xml:15
+msgid "Uni or Bi-directional"
+msgstr "Uni/Bi directionnel"
+
+#: catalogs/mill/menu.xml:17
+#: catalogs/plasma/_menu-custom.xml:15
+#: catalogs/plasma/menu.xml:15
+msgid "Advanced"
+msgstr "Avancés"
+
+#: catalogs/mill/menu.xml:18
+#: catalogs/plasma/_menu-custom.xml:16
+#: catalogs/plasma/menu.xml:16
+#: cfg/mill/polyline.cfg:3
+#: cfg/plasma/polyline.cfg:3
+msgid "Polyline"
+msgstr "Polyligne"
+
+#: catalogs/mill/menu.xml:19
+#: cfg/circular-array.cfg:69
+#: cfg/mill/drill-circle.cfg:80
+msgid "Start"
+msgstr "Début"
+
+#: catalogs/mill/menu.xml:19
+#: catalogs/plasma/_menu-custom.xml:17
+#: catalogs/plasma/menu.xml:17
+msgid "Starts a polyline"
+msgstr "Démarer polyligne"
+
+#: catalogs/mill/menu.xml:21
+#: catalogs/plasma/_menu-custom.xml:19
+#: catalogs/plasma/menu.xml:19
+#: cfg/mill/polyline-to.cfg:3
+#: cfg/plasma/polyline-to.cfg:3
+msgid "Line To"
+msgstr "Ligne vers"
+
+#: catalogs/mill/menu.xml:21
+#: catalogs/plasma/_menu-custom.xml:19
+#: catalogs/plasma/menu.xml:19
+#: cfg/mill/polyline-arc-to.cfg:74
+#: cfg/mill/polyline-to.cfg:17
+#: cfg/plasma/polyline-arc-to.cfg:49
+#: cfg/plasma/polyline-to.cfg:17
+msgid "Relative or absolute position"
+msgstr "Position relative ou absolue"
+
+#: catalogs/mill/menu.xml:22
+#: catalogs/plasma/_menu-custom.xml:20
+#: catalogs/plasma/menu.xml:20
+#: cfg/mill/polyline-polar.cfg:3
+#: cfg/plasma/polyline-polar.cfg:3
+msgid "Line Polar"
+msgstr "Droite polaire"
+
+#: catalogs/mill/menu.xml:22
+#: catalogs/plasma/_menu-custom.xml:20
+#: catalogs/plasma/menu.xml:20
+msgid "Define angle and length"
+msgstr "Définir l'angle et la longueur"
+
+#: catalogs/mill/menu.xml:24
+#: catalogs/plasma/_menu-custom.xml:22
+#: catalogs/plasma/menu.xml:22
+#: cfg/mill/polyline-arc-ij.cfg:3
+#: cfg/plasma/polyline-arc-ij.cfg:3
+msgid "Arc I,J"
+msgstr "Arc I,J"
+
+#: catalogs/mill/menu.xml:24
+#: catalogs/plasma/_menu-custom.xml:22
+#: catalogs/plasma/menu.xml:22
+msgid "Defined center by offsets or absolute position"
+msgstr "Définir centre par décalage ou position absolue"
+
+#: catalogs/mill/menu.xml:25
+#: catalogs/plasma/_menu-custom.xml:23
+#: catalogs/plasma/menu.xml:23
+msgid "Arc Polar Center"
+msgstr "Arc Centre Polaire"
+
+#: catalogs/mill/menu.xml:25
+#: catalogs/plasma/_menu-custom.xml:23
+#: catalogs/plasma/menu.xml:23
+msgid "Define center at angle and distance"
+msgstr "Définir le centre à un angle et distance"
+
+#: catalogs/mill/menu.xml:26
+#: catalogs/plasma/_menu-custom.xml:24
+#: catalogs/plasma/menu.xml:24
+#: cfg/mill/polyline-arc-to.cfg:3
+#: cfg/plasma/polyline-arc-to.cfg:3
+msgid "Arc To Coords"
+msgstr "Arc vers coords"
+
+#: catalogs/mill/menu.xml:26
+#: catalogs/mill/menu.xml:27
+#: catalogs/plasma/_menu-custom.xml:24
+#: catalogs/plasma/_menu-custom.xml:25
+#: catalogs/plasma/menu.xml:24
+#: catalogs/plasma/menu.xml:25
+msgid "Define end point, arc height or radius"
+msgstr "Définir destination, hauteur de l'arc ou le rayon"
+
+#: catalogs/mill/menu.xml:27
+#: catalogs/plasma/_menu-custom.xml:25
+#: catalogs/plasma/menu.xml:25
+#: cfg/mill/polyline-arc-top.cfg:3
+#: cfg/plasma/polyline-arc-top.cfg:3
+msgid "Arc To Polar"
+msgstr "Arc à Polaire"
+
+#: catalogs/mill/menu.xml:28
+#: catalogs/plasma/_menu-custom.xml:26
+#: catalogs/plasma/menu.xml:26
+msgid "Arc Mirror End"
+msgstr "Arc en mirroir"
+
+#: catalogs/mill/menu.xml:28
+#: catalogs/plasma/_menu-custom.xml:26
+#: catalogs/plasma/menu.xml:26
+msgid "Define I,J and mirror line"
+msgstr "Définir I,J et la ligne de référence"
+
+#: catalogs/mill/menu.xml:30
+#: catalogs/plasma/_menu-custom.xml:28
+#: catalogs/plasma/menu.xml:28
+msgid "Repeat Items"
+msgstr "Répétition d'éléments"
+
+#: catalogs/mill/menu.xml:30
+#: catalogs/plasma/_menu-custom.xml:28
+#: catalogs/plasma/menu.xml:28
+msgid "Repeat a group of polyline items"
+msgstr "Répéter des éléments de polyligne"
+
+#: catalogs/mill/menu.xml:31
+#: catalogs/plasma/_menu-custom.xml:29
+#: catalogs/plasma/menu.xml:29
+#: cfg/mill/polyline-mirror-i.cfg:3
+#: cfg/plasma/polyline-mirror-i.cfg:3
+msgid "Mirror Items"
+msgstr "Miroir d'éléments"
+
+#: catalogs/mill/menu.xml:31
+#: catalogs/plasma/_menu-custom.xml:29
+#: catalogs/plasma/menu.xml:29
+msgid "Duplicate and reverse polyline items"
+msgstr "Dupliquer et inversser les éléments"
+
+#: catalogs/mill/menu.xml:33
+#: catalogs/plasma/_menu-custom.xml:31
+#: catalogs/plasma/menu.xml:31
+#: cfg/mill/polyline-mirror-p.cfg:3
+#: cfg/plasma/polyline-mirror-p.cfg:3
+msgid "Mirror Polyline"
+msgstr "Polyligne mirroir"
+
+#: catalogs/mill/menu.xml:33
+#: catalogs/plasma/_menu-custom.xml:31
+#: catalogs/plasma/menu.xml:31
+msgid "Create a reversed polyline from previous one"
+msgstr "Créer une polyligne inversée de la précédente"
+
+#: catalogs/mill/menu.xml:35
+msgid "Counterbore"
+msgstr "Contre-alésage"
+
+#: catalogs/mill/menu.xml:35
+msgid "For Socket Head Cap Screw"
+msgstr "Pour vis à chapeau à tête creuse (SHCS)"
+
+#: catalogs/mill/menu.xml:36
+#: catalogs/mill/menu.xml:44
+msgid "Single Hole"
+msgstr "Trou unique"
+
+#: catalogs/mill/menu.xml:36
+msgid "No slot"
+msgstr "Pas de coulisse"
+
+#: catalogs/mill/menu.xml:37
+msgid "Slot From 1 Point"
+msgstr "Contre-alésage 1 point"
+
+#: catalogs/mill/menu.xml:38
+msgid "Slot From 2 Points"
+msgstr "Contre-alésage 2 points"
+
+#: catalogs/mill/menu.xml:38
+msgid "Define 2 points"
+msgstr "Définir deux points"
+
+#: catalogs/mill/menu.xml:41
+#: cfg/mill/thread-milling.cfg:3
+msgid "Thread Milling"
+msgstr "Filetage"
+
+#: catalogs/mill/menu.xml:41
+msgid "True thread mill needed"
+msgstr "Requière un outil spécial"
+
+#: catalogs/mill/menu.xml:44
+msgid "Drill a single hole"
+msgstr "Forage unique"
+
+#: catalogs/mill/menu.xml:45
+msgid "Array Of Holes"
+msgstr "Ensemble De Trous"
+
+#: catalogs/mill/menu.xml:45
+msgid "Drill lines of holes"
+msgstr "Forer en ligne"
+
+#: catalogs/mill/menu.xml:46
+msgid "Regular Circle"
+msgstr "Cercle régulier"
+
+#: catalogs/mill/menu.xml:46
+msgid "Create a regular spaced holes circle"
+msgstr "Créer un cercle de trous régulier"
+
+#: catalogs/mill/menu.xml:47
+msgid "Irregular Circle"
+msgstr "Cercle irrégulier"
+
+#: catalogs/mill/menu.xml:47
+msgid "Create a hole circle of different angle spacing"
+msgstr "Créer un cercle de trous irrégulier"
+
+#: catalogs/mill/menu.xml:49
+#: catalogs/plasma/_menu-custom.xml:34
+#: catalogs/plasma/menu.xml:34
+msgid "Group, Offset And Rotation"
+msgstr "Groupement, décalage et rotation"
+
+#: catalogs/mill/menu.xml:50
+#: catalogs/plasma/_menu-custom.xml:35
+#: catalogs/plasma/menu.xml:35
+msgid "Standard Group"
+msgstr "Groupe standard"
+
+#: catalogs/mill/menu.xml:50
+#: catalogs/plasma/_menu-custom.xml:35
+#: catalogs/plasma/menu.xml:35
+msgid "Group subroutines"
+msgstr "Groupement de sous-programme"
+
+#: catalogs/mill/menu.xml:51
+#: catalogs/plasma/_menu-custom.xml:36
+#: catalogs/plasma/menu.xml:36
+msgid "Offset/Rotate"
+msgstr "Décalage/Rotation"
+
+#: catalogs/mill/menu.xml:51
+#: catalogs/plasma/_menu-custom.xml:36
+#: catalogs/plasma/menu.xml:36
+msgid "Group subroutines, offset and rotate"
+msgstr "Groupement sous-programme, décalage et rotation"
+
+#: catalogs/mill/menu.xml:53
+#: catalogs/plasma/_menu-custom.xml:38
+#: catalogs/plasma/menu.xml:38
+#: cfg/circular-array.cfg:3
+msgid "Radial Array"
+msgstr "Ensemble circulaire"
+
+#: catalogs/mill/menu.xml:53
+#: catalogs/plasma/_menu-custom.xml:38
+#: catalogs/plasma/menu.xml:38
+msgid "Define diameter or distance between groups"
+msgstr "Définir le diamètre ou la distance entre les groupes"
+
+#: catalogs/mill/menu.xml:54
+#: catalogs/plasma/_menu-custom.xml:39
+#: catalogs/plasma/menu.xml:39
+#: cfg/rectangular-array.cfg:3
+msgid "Rectangular Array"
+msgstr "Ensemble rectangulaire"
+
+#: catalogs/mill/menu.xml:54
+#: catalogs/plasma/_menu-custom.xml:39
+#: catalogs/plasma/menu.xml:39
+msgid "Array of rows and columns"
+msgstr "Ensemble de rangs et colonnes"
+
+#: catalogs/mill/menu.xml:56
+msgid "Select end mill or drill and set parameters"
+msgstr "Choix de fraise ou foret et établir paramètres"
+
+#: catalogs/mill/menu.xml:58
+#: cfg/mill/probe-edge.cfg:3
+msgid "Probe Edges"
+msgstr "Palpage bordures"
+
+#: catalogs/mill/menu.xml:58
+msgid "Find workpiece edges"
+msgstr "Trouver bordures de pièce"
+
+#: catalogs/mill/menu.xml:59
+msgid "Probe Stock"
+msgstr "Palpage pièce"
+
+#: catalogs/mill/menu.xml:59
+msgid "Find the center of a cube or cylinder"
+msgstr "Trouver le centre d'un cylindre ou cube"
+
+#: catalogs/mill/menu.xml:60
+msgid "Probe Array"
+msgstr "Palpage grille"
+
+#: catalogs/mill/menu.xml:60
+msgid "Probe a array of points and save to file"
+msgstr "Palpe un ensemble de points et sauvegarde dans un fichier"
+
+#: catalogs/mill/menu.xml:63
+#: catalogs/plasma/_menu-custom.xml:43
+#: catalogs/plasma/menu.xml:43
+msgid "Raw Material"
+msgstr "Matériel de base"
+
+#: catalogs/mill/menu.xml:63
+#: catalogs/plasma/_menu-custom.xml:43
+#: catalogs/plasma/menu.xml:43
+msgid "Show a temporary image of rough material"
+msgstr "Montre une image temporaire du matériel utilisé"
+
+#: catalogs/mill/menu.xml:66
+#: catalogs/plasma/_menu-custom.xml:46
+#: catalogs/plasma/menu.xml:46
+#: cfg/comment.cfg:4
+msgid "Comment"
+msgstr "Commentaire"
+
+#: catalogs/mill/menu.xml:66
+#: catalogs/plasma/_menu-custom.xml:46
+#: catalogs/plasma/menu.xml:46
+msgid "Add comments"
+msgstr "Ajouter notes"
+
+#: catalogs/mill/menu.xml:67
+#: catalogs/plasma/_menu-custom.xml:47
+#: catalogs/plasma/menu.xml:47
+msgid "Temporarily change units"
+msgstr "Changement temporaire d'unités"
+
+#: catalogs/plasma/_menu-custom.xml:17
+#: catalogs/plasma/menu.xml:17
+msgid "Begin"
+msgstr "Départ"
 
 #: cfg/change-units.cfg:6
 msgid "<b>Change Units for items only and revert back after</b>"
@@ -578,13 +1173,6 @@ msgstr "Éléments"
 msgid "If active, these items will use alternate units"
 msgstr "Si actif, ces éléments utiliseront les unités alternatives"
 
-#: cfg/circular-array.cfg:3
-#: catalogs/mill/menu.xml:53
-#: catalogs/plasma/_menu-custom.xml:38
-#: catalogs/plasma/menu.xml:38
-msgid "Radial Array"
-msgstr "Ensemble circulaire"
-
 #: cfg/circular-array.cfg:6
 msgid "<b>Create a Radial Array of items</b>"
 msgstr "<b>Créer un ensemble radial d'éléments</b>"
@@ -688,12 +1276,6 @@ msgstr "Taille"
 msgid "Diameter of array or distance between group of items"
 msgstr "Diamètre de l'ensemble ou distance entre les groupes d'éléments"
 
-#: cfg/circular-array.cfg:69
-#: cfg/mill/drill-circle.cfg:80
-#: catalogs/mill/menu.xml:19
-msgid "Start"
-msgstr "Début"
-
 #: cfg/circular-array.cfg:73
 msgid "Angle of the first item"
 msgstr "Angle du premier élément"
@@ -718,13 +1300,6 @@ msgstr "Tourner chaque groupe d'éléments"
 #: cfg/rectangular-array.cfg:143
 msgid "Items to copy"
 msgstr "Éléments à dupliquer"
-
-#: cfg/comment.cfg:4
-#: catalogs/mill/menu.xml:66
-#: catalogs/plasma/_menu-custom.xml:46
-#: catalogs/plasma/menu.xml:46
-msgid "Comment"
-msgstr "Commentaire"
 
 #: cfg/comment.cfg:8
 msgid "<b>Add a comment</b>"
@@ -764,6 +1339,11 @@ msgstr "Ligne 1"
 #: cfg/gcode.cfg:40
 #: cfg/gcode.cfg:48
 #: cfg/gcode.cfg:56
+#: cfg/gcode.cfg:64
+#: cfg/gcode.cfg:72
+#: cfg/gcode.cfg:80
+#: cfg/gcode.cfg:88
+#: cfg/gcode.cfg:96
 msgid "Gcode line"
 msgstr "Ligne de gcode"
 
@@ -782,6 +1362,26 @@ msgstr "Ligne 4"
 #: cfg/gcode.cfg:52
 msgid "Line 5"
 msgstr "Ligne 5"
+
+#: cfg/gcode.cfg:60
+msgid "Line 6"
+msgstr "Ligne 6"
+
+#: cfg/gcode.cfg:68
+msgid "Line 7"
+msgstr "Ligne 7"
+
+#: cfg/gcode.cfg:76
+msgid "Line 8"
+msgstr "Ligne 8"
+
+#: cfg/gcode.cfg:84
+msgid "Line 9"
+msgstr "Ligne 9"
+
+#: cfg/gcode.cfg:92
+msgid "Line 10"
+msgstr "Ligne 10"
 
 #: cfg/group-off.cfg:3
 msgid "Group Offset"
@@ -980,7 +1580,7 @@ msgstr ""
 #: cfg/lathe/cutting-params.cfg:83
 #: cfg/lathe/cutting-params.cfg:90
 #: cfg/lathe/thread-adv.cfg:112
-#: cfg/mill/tool-change.cfg:141
+#: cfg/mill/tool-change.cfg:137
 msgid "Spindle speed"
 msgstr "Vitesse broche"
 
@@ -1122,7 +1722,7 @@ msgstr ""
 
 #: cfg/lathe/tool-change.cfg:10
 #: cfg/lathe/tool-change.cfg:13
-#: cfg/mill/tool-change.cfg:52
+#: cfg/mill/tool-change.cfg:48
 msgid "Tool number"
 msgstr "Numéro d'outil"
 
@@ -1249,7 +1849,7 @@ msgstr "Fractionnel"
 #: cfg/mill/SHCS_slot-arc.cfg:103
 #: cfg/mill/SHCS_slot.cfg:80
 #: cfg/mill/SHCS_slot2.cfg:77
-#: cfg/mill/tool-change.cfg:111
+#: cfg/mill/tool-change.cfg:107
 msgid "inch"
 msgstr "pouce"
 
@@ -1257,7 +1857,7 @@ msgstr "pouce"
 #: cfg/mill/SHCS_slot-arc.cfg:112
 #: cfg/mill/SHCS_slot.cfg:89
 #: cfg/mill/SHCS_slot2.cfg:86
-#: cfg/mill/tool-change.cfg:120
+#: cfg/mill/tool-change.cfg:116
 msgid "mm"
 msgstr "mm"
 
@@ -2409,14 +3009,6 @@ msgstr "Coordonnée X"
 msgid "Y coordinate"
 msgstr "Coordonnée Y"
 
-#: cfg/mill/ellipse.cfg:3
-#: cfg/plasma/ellipse.cfg:3
-#: catalogs/mill/menu.xml:12
-#: catalogs/plasma/_menu-custom.xml:12
-#: catalogs/plasma/menu.xml:12
-msgid "Ellipse"
-msgstr "Ellipse"
-
 #: cfg/mill/ellipse.cfg:6
 #: cfg/plasma/ellipse.cfg:6
 msgid "<b>Create an Ellipse</b>"
@@ -2643,14 +3235,6 @@ msgstr "Épaisseur coque"
 msgid "Define if hollow"
 msgstr "Définir si cavité"
 
-#: cfg/mill/polygon.cfg:3
-#: cfg/plasma/polygon.cfg:3
-#: catalogs/mill/menu.xml:13
-#: catalogs/plasma/_menu-custom.xml:13
-#: catalogs/plasma/menu.xml:13
-msgid "Polygon"
-msgstr "Polygone"
-
 #: cfg/mill/polygon.cfg:6
 #: cfg/plasma/polygon.cfg:6
 msgid "<b>Create a Polygon with n edges</b>"
@@ -2675,14 +3259,6 @@ msgstr "Nombre côtés"
 #: cfg/plasma/polygon.cfg:52
 msgid "Number of edges"
 msgstr "Nombre de côtés"
-
-#: cfg/mill/polyline-arc-ij.cfg:3
-#: cfg/plasma/polyline-arc-ij.cfg:3
-#: catalogs/mill/menu.xml:24
-#: catalogs/plasma/_menu-custom.xml:22
-#: catalogs/plasma/menu.xml:22
-msgid "Arc I,J"
-msgstr "Arc I,J"
 
 #: cfg/mill/polyline-arc-ij.cfg:6
 #: cfg/plasma/polyline-arc-ij.cfg:6
@@ -3067,14 +3643,6 @@ msgstr "Absolu=8:Relatif à la ligne précédente ou corde=9:Relatif au centre d
 msgid "Angle relative to previous line or absolute"
 msgstr "Angle relatif à la ligne précédente ou absolu"
 
-#: cfg/mill/polyline-arc-to.cfg:3
-#: cfg/plasma/polyline-arc-to.cfg:3
-#: catalogs/mill/menu.xml:26
-#: catalogs/plasma/_menu-custom.xml:24
-#: catalogs/plasma/menu.xml:24
-msgid "Arc To Coords"
-msgstr "Arc vers coords"
-
 #: cfg/mill/polyline-arc-to.cfg:6
 #: cfg/plasma/polyline-arc-to.cfg:6
 msgid "<b>Add an arc to a polyline</b>&#10;Define destination, dir and arc height or radius"
@@ -3084,16 +3652,6 @@ msgstr "<b>Ajouter un arc à une polyligne</b>&#10;Définir la destination, la d
 #: cfg/plasma/polyline-arc-to.cfg:47
 msgid "Arc end coords"
 msgstr "Coords fin d'arc"
-
-#: cfg/mill/polyline-arc-to.cfg:74
-#: cfg/mill/polyline-to.cfg:17
-#: cfg/plasma/polyline-arc-to.cfg:49
-#: cfg/plasma/polyline-to.cfg:17
-#: catalogs/mill/menu.xml:21
-#: catalogs/plasma/_menu-custom.xml:19
-#: catalogs/plasma/menu.xml:19
-msgid "Relative or absolute position"
-msgstr "Position relative ou absolue"
 
 #: cfg/mill/polyline-arc-to.cfg:81
 #: cfg/mill/polyline-to.cfg:24
@@ -3175,14 +3733,6 @@ msgstr "Permuter centre"
 msgid "Center opposite side of chord"
 msgstr "Permuter le centre au côté opposé de la corde"
 
-#: cfg/mill/polyline-arc-top.cfg:3
-#: cfg/plasma/polyline-arc-top.cfg:3
-#: catalogs/mill/menu.xml:27
-#: catalogs/plasma/_menu-custom.xml:25
-#: catalogs/plasma/menu.xml:25
-msgid "Arc To Polar"
-msgstr "Arc à Polaire"
-
 #: cfg/mill/polyline-arc-top.cfg:6
 #: cfg/plasma/polyline-arc-top.cfg:6
 msgid "<b>Add an arc to a polyline</b>&#10;Define polar destination, dir and arc height or radius"
@@ -3202,14 +3752,6 @@ msgstr "Longueur corde"
 #: cfg/plasma/polyline-arc-top.cfg:56
 msgid "Center of arc will be calculated"
 msgstr "Le centre de l'arc sera calculé"
-
-#: cfg/mill/polyline-mirror-i.cfg:3
-#: cfg/plasma/polyline-mirror-i.cfg:3
-#: catalogs/mill/menu.xml:31
-#: catalogs/plasma/_menu-custom.xml:29
-#: catalogs/plasma/menu.xml:29
-msgid "Mirror Items"
-msgstr "Miroir d'éléments"
 
 #: cfg/mill/polyline-mirror-i.cfg:6
 #: cfg/plasma/polyline-mirror-i.cfg:6
@@ -3254,14 +3796,6 @@ msgstr "Ligne droite=1:Arc horaire=2:Arc anti-horaire=3"
 #: cfg/plasma/polyline-mirror-i.cfg:108
 msgid "Arc height"
 msgstr "Hauteur de l'arc"
-
-#: cfg/mill/polyline-mirror-p.cfg:3
-#: cfg/plasma/polyline-mirror-p.cfg:3
-#: catalogs/mill/menu.xml:33
-#: catalogs/plasma/_menu-custom.xml:31
-#: catalogs/plasma/menu.xml:31
-msgid "Mirror Polyline"
-msgstr "Polyligne mirroir"
 
 #: cfg/mill/polyline-mirror-p.cfg:6
 #: cfg/plasma/polyline-mirror-p.cfg:6
@@ -3347,14 +3881,6 @@ msgstr "Fraisage selon conception ou inverse"
 msgid "Global tool engagement"
 msgstr "Engag. outil global"
 
-#: cfg/mill/polyline-polar.cfg:3
-#: cfg/plasma/polyline-polar.cfg:3
-#: catalogs/mill/menu.xml:22
-#: catalogs/plasma/_menu-custom.xml:20
-#: catalogs/plasma/menu.xml:20
-msgid "Line Polar"
-msgstr "Droite polaire"
-
 #: cfg/mill/polyline-polar.cfg:6
 #: cfg/plasma/polyline-polar.cfg:6
 msgid "<b>Trace a line to a polar position</b>&#10;Relative with optional styled corner"
@@ -3410,14 +3936,6 @@ msgstr "Nombre de répétitions"
 msgid "Disabling will disable ALL items in group"
 msgstr "Désactivera tous les éléments du groupe"
 
-#: cfg/mill/polyline-to.cfg:3
-#: cfg/plasma/polyline-to.cfg:3
-#: catalogs/mill/menu.xml:21
-#: catalogs/plasma/_menu-custom.xml:19
-#: catalogs/plasma/menu.xml:19
-msgid "Line To"
-msgstr "Ligne vers"
-
 #: cfg/mill/polyline-to.cfg:6
 #: cfg/plasma/polyline-to.cfg:6
 msgid "<b>Create a line to X, Y</b>&#10;Absolute or Relative with optional styled corner"
@@ -3427,14 +3945,6 @@ msgstr "<b>Créer une ligne jusqu'à X, Y</b>&#10;Point absolu ou relatif, avec 
 #: cfg/plasma/polyline-to.cfg:41
 msgid "Relative=0:Absolute=1"
 msgstr "Relatif=0:Absolu=1"
-
-#: cfg/mill/polyline.cfg:3
-#: cfg/plasma/polyline.cfg:3
-#: catalogs/mill/menu.xml:18
-#: catalogs/plasma/_menu-custom.xml:16
-#: catalogs/plasma/menu.xml:16
-msgid "Polyline"
-msgstr "Polyligne"
 
 #: cfg/mill/polyline.cfg:6
 #: cfg/plasma/polyline.cfg:6
@@ -3546,11 +4056,6 @@ msgstr "Prof. maximale"
 msgid "Reverse latch dir"
 msgstr "Inverser direction"
 
-#: cfg/mill/probe-edge.cfg:3
-#: catalogs/mill/menu.xml:58
-msgid "Probe Edges"
-msgstr "Palpage bordures"
-
 #: cfg/mill/probe-edge.cfg:6
 msgid "<b>Probe Edges with touch-off options</b>&#10;When done, the probe will be above the edge"
 msgstr "<b>Sonde bordure avec option de mise à zéro</b>&#10;À la fin la sonde sera au-dessus du bord sondé"
@@ -3629,8 +4134,8 @@ msgstr "Montrer info de calibration machine"
 #: cfg/mill/probe-stock.cfg:70
 #: cfg/mill/probe-stock.cfg:79
 #: cfg/mill/surf_finish.cfg:28
-#: cfg/mill/tool-change.cfg:197
-#: cfg/mill/tool-change.cfg:225
+#: cfg/mill/tool-change.cfg:193
+#: cfg/mill/tool-change.cfg:221
 msgid "Mode"
 msgstr "Mode"
 
@@ -3656,14 +4161,6 @@ msgstr "Calibrer X,Y"
 #: cfg/mill/probe-stock.cfg:109
 msgid "Set center to X0 and Y0"
 msgstr "Établir centre à X0 et Y0"
-
-#: cfg/mill/rectangle.cfg:3
-#: cfg/plasma/rectangle.cfg:3
-#: catalogs/mill/menu.xml:3
-#: catalogs/plasma/_menu-custom.xml:3
-#: catalogs/plasma/menu.xml:3
-msgid "Rectangle"
-msgstr "Rectangle"
 
 #: cfg/mill/rectangle.cfg:6
 #: cfg/plasma/rectangle.cfg:6
@@ -3727,15 +4224,6 @@ msgstr "<b>Créer une coulisse droite entre deux points</b>"
 #: cfg/plasma/slot.cfg:60
 msgid "Width of slot"
 msgstr "Largeur de coulisse"
-
-#: cfg/mill/slot-arc.cfg:3
-#: cfg/plasma/slot-arc.cfg:3
-#: catalogs/mill/menu.xml:10
-#: catalogs/mill/menu.xml:39
-#: catalogs/plasma/_menu-custom.xml:10
-#: catalogs/plasma/menu.xml:10
-msgid "Radial Slot"
-msgstr "Coulisse arquée"
 
 #: cfg/mill/slot-arc.cfg:6
 #: cfg/plasma/slot-arc.cfg:6
@@ -3839,11 +4327,6 @@ msgstr "Distance dépassé la pièce"
 #: cfg/mill/surf_finish.cfg:67
 msgid "User defined=0:Surface=1"
 msgstr "Utilisateur=0:Surface=1"
-
-#: cfg/mill/thread-milling.cfg:3
-#: catalogs/mill/menu.xml:41
-msgid "Thread Milling"
-msgstr "Filetage"
 
 #: cfg/mill/thread-milling.cfg:6
 msgid "<b>Create internal or external threads</b>"
@@ -3949,260 +4432,225 @@ msgid "Feed and speed"
 msgstr "Alim., vit. broche"
 
 #: cfg/mill/tool-change.cfg:34
-msgid "Leading in/out"
-msgstr "Attaque"
-
-#: cfg/mill/tool-change.cfg:38
 msgid "Milling penetration"
 msgstr "Pénétr., fraisage"
 
-#: cfg/mill/tool-change.cfg:42
+#: cfg/mill/tool-change.cfg:38
 msgid "Milling step over"
 msgstr "Step over"
 
-#: cfg/mill/tool-change.cfg:44
+#: cfg/mill/tool-change.cfg:40
 msgid "Step over for pocketing"
 msgstr "Enjambage(step over) pour pochette"
 
-#: cfg/mill/tool-change.cfg:49
+#: cfg/mill/tool-change.cfg:45
 msgid "Set these when usage is drilling"
 msgstr "Paramètres requis lors du forage"
 
-#: cfg/mill/tool-change.cfg:56
+#: cfg/mill/tool-change.cfg:52
 msgid "Select from tool table"
 msgstr "Sélectionnez de la table d'outils"
 
-#: cfg/mill/tool-change.cfg:60
+#: cfg/mill/tool-change.cfg:56
 msgid "Usage"
 msgstr "Utilisation"
 
-#: cfg/mill/tool-change.cfg:63
+#: cfg/mill/tool-change.cfg:59
 msgid "Roughing and finishing=0:Roughing=1:Finishing=2:Drilling=3:Threading=4"
 msgstr "Dégrossir et finition=0:Dégrossir=1:Finition=2:Forage=3:Filetage=4"
 
-#: cfg/mill/tool-change.cfg:64
+#: cfg/mill/tool-change.cfg:60
 msgid "Select usage for this tool"
 msgstr "Sélectionnez l'utilisation de cet outil"
 
-#: cfg/mill/tool-change.cfg:69
+#: cfg/mill/tool-change.cfg:65
 msgid "Select drill size"
 msgstr "Dimension foret"
 
-#: cfg/mill/tool-change.cfg:72
+#: cfg/mill/tool-change.cfg:68
 msgid "User defined=0:Fractional=1:Metric=2:Letter=3:Wire gauge=4"
 msgstr "Utilisateur=0:Fractionnel=1:Métrique=2:Lettre=3:Wire gauge=4"
 
-#: cfg/mill/tool-change.cfg:75
+#: cfg/mill/tool-change.cfg:71
 msgid "Select defined drill or enter size"
 msgstr "Sélection pré-défini ou utilisateur"
 
-#: cfg/mill/tool-change.cfg:79
+#: cfg/mill/tool-change.cfg:75
 msgid "User defined size"
 msgstr "Utilisateur"
 
-#: cfg/mill/tool-change.cfg:88
+#: cfg/mill/tool-change.cfg:84
 msgid "Wire gauge drill"
 msgstr "Foret de jauge filaire"
 
-#: cfg/mill/tool-change.cfg:97
+#: cfg/mill/tool-change.cfg:93
 msgid "Lettered drill"
 msgstr "Foret lettré"
 
-#: cfg/mill/tool-change.cfg:105
+#: cfg/mill/tool-change.cfg:101
 msgid "Fractional drill"
 msgstr "Foret fractionnel"
 
-#: cfg/mill/tool-change.cfg:114
+#: cfg/mill/tool-change.cfg:110
 msgid "Metric drill"
 msgstr "Foret métrique"
 
-#: cfg/mill/tool-change.cfg:123
+#: cfg/mill/tool-change.cfg:119
 msgid "Use length comp"
 msgstr "Comp. longueur"
 
-#: cfg/mill/tool-change.cfg:126
+#: cfg/mill/tool-change.cfg:122
 msgid "No=0:From tool table=1:Table and probe=2"
 msgstr "Non=0:Depuis la table=1:Table et palpage=2"
 
-#: cfg/mill/tool-change.cfg:129
+#: cfg/mill/tool-change.cfg:125
 msgid "Use G43 and probe if setup"
 msgstr "Utilise G43 et palpage si configuré"
 
-#: cfg/mill/tool-change.cfg:132
+#: cfg/mill/tool-change.cfg:128
 msgid "Use cooling"
 msgstr "Refroidissement"
 
-#: cfg/mill/tool-change.cfg:135
+#: cfg/mill/tool-change.cfg:131
 msgid "None=9:Flood=8:Mist=7"
 msgstr "Aucun=9:Flot=8:Brume=7"
 
-#: cfg/mill/tool-change.cfg:137
+#: cfg/mill/tool-change.cfg:133
 msgid "Use flood, mist or none"
 msgstr "Utiliser flot, brume ou aucun"
 
-#: cfg/mill/tool-change.cfg:146
+#: cfg/mill/tool-change.cfg:142
 msgid "Set spindle speed"
 msgstr "Vitesse broche"
 
-#: cfg/mill/tool-change.cfg:150
+#: cfg/mill/tool-change.cfg:146
 msgid "Point angle"
 msgstr "Angle de pointe"
 
-#: cfg/mill/tool-change.cfg:152
-msgid "118° Medium hard material=118:135° Hard material=135:90° Plastic=90:60° Plastic=60:Flat end=180"
-msgstr "118° pour matériel moyen dur=118:135° pour matériel dur=135:90° plastique=90:60° plastique=60:Bout plat=180"
+#: cfg/mill/tool-change.cfg:148
+msgid "118&#176; Medium hard material=118:135&#176; Hard material=135:90&#176; Plastic=90:60&#176; Plastic=60:Flat end=180"
+msgstr "118&#176; pour matériel moyen dur=118:135&#176; pour matériel dur=135:90&#176; plastique=90:60&#176; plastique=60:Bout plat=180"
 
-#: cfg/mill/tool-change.cfg:154
+#: cfg/mill/tool-change.cfg:150
 msgid "Drill point angle"
 msgstr "Angle de la pointe"
 
-#: cfg/mill/tool-change.cfg:159
+#: cfg/mill/tool-change.cfg:155
 msgid "Start spindle"
 msgstr "Marche broche"
 
-#: cfg/mill/tool-change.cfg:162
+#: cfg/mill/tool-change.cfg:158
 msgid "No=0:Clockwise=3:Counter-clockwise=4"
 msgstr "Non=0:Horaire=3:Anti-horaire=4"
 
-#: cfg/mill/tool-change.cfg:164
+#: cfg/mill/tool-change.cfg:160
 msgid "Select drill rotation"
 msgstr "Choix de la rotation de broche"
 
-#: cfg/mill/tool-change.cfg:172
+#: cfg/mill/tool-change.cfg:168
 #, python-format
 msgid "Feed at 100% engagement"
 msgstr "Alim. à 100% engagement"
 
-#: cfg/mill/tool-change.cfg:178
+#: cfg/mill/tool-change.cfg:174
 msgid "Vertical"
 msgstr "Verticale"
 
-#: cfg/mill/tool-change.cfg:182
+#: cfg/mill/tool-change.cfg:178
 msgid "Plunge or drill feed"
 msgstr "Alim. en plongée ou percage"
 
-#: cfg/mill/tool-change.cfg:188
+#: cfg/mill/tool-change.cfg:184
 msgid "Retract (R)"
 msgstr "Retrait (R)"
 
-#: cfg/mill/tool-change.cfg:191
+#: cfg/mill/tool-change.cfg:187
 msgid "Retract height"
 msgstr "Hauteur retrait"
 
-#: cfg/mill/tool-change.cfg:199
+#: cfg/mill/tool-change.cfg:195
 msgid "With Chip Breaking - G73=73:Standard - G81=81:Dwell at bottom - G82=82:Peck Drilling Cycle - G83=83"
 msgstr "Mode brise copeaux - G73=73:Standard - G81=81:Arrêt temporisé - G82=82:Débourrage - G83=83"
 
-#: cfg/mill/tool-change.cfg:201
+#: cfg/mill/tool-change.cfg:197
 msgid "G73 requires Q>0 and R&#10;G81 requires R&#10;G82 requires R and P&#10;G83 requires Q>0 and R"
 msgstr "G73 requière Q>0 et R&#10;G81 requière R&#10;G82 requière R et P&#10;G83 requière Q>0 et R"
 
-#: cfg/mill/tool-change.cfg:206
+#: cfg/mill/tool-change.cfg:202
 msgid "Dwell (P)"
 msgstr "Dwell (P)"
 
-#: cfg/mill/tool-change.cfg:209
+#: cfg/mill/tool-change.cfg:205
 msgid "Dwell in seconds"
 msgstr "Temporisation en secondes"
 
-#: cfg/mill/tool-change.cfg:215
+#: cfg/mill/tool-change.cfg:211
 msgid "Delta (Q)"
 msgstr "Delta (Q)"
 
-#: cfg/mill/tool-change.cfg:229
+#: cfg/mill/tool-change.cfg:225
 msgid "Ramp down=0:Plunge=1"
 msgstr "Rampant=0:En plongée=1"
 
-#: cfg/mill/tool-change.cfg:231
+#: cfg/mill/tool-change.cfg:227
 msgid "How Z position is attained"
 msgstr "Comment atteindre position Z"
 
-#: cfg/mill/tool-change.cfg:234
+#: cfg/mill/tool-change.cfg:230
 msgid "Step down"
 msgstr "Pas vertical"
 
-#: cfg/mill/tool-change.cfg:239
+#: cfg/mill/tool-change.cfg:235
 msgid "Step down on each pass"
 msgstr "Pas vertical par cycle"
 
-#: cfg/mill/tool-change.cfg:244
+#: cfg/mill/tool-change.cfg:240
 msgid "Ramp down rate"
 msgstr "Taux de descente"
 
-#: cfg/mill/tool-change.cfg:251
+#: cfg/mill/tool-change.cfg:247
 msgid "Z versus XY move"
 msgstr "Mouvement vertical versus latéral"
 
-#: cfg/mill/tool-change.cfg:256
+#: cfg/mill/tool-change.cfg:252
 msgid "Minimum"
 msgstr "Minimum"
 
-#: cfg/mill/tool-change.cfg:266
+#: cfg/mill/tool-change.cfg:262
 msgid "Expanding engagement"
 msgstr "Engagement pocket"
 
-#: cfg/mill/tool-change.cfg:273
+#: cfg/mill/tool-change.cfg:269
 msgid "Not to exceed for pocketing"
 msgstr "Ne pas dépasser pour pochette"
 
-#: cfg/mill/tool-change.cfg:278
+#: cfg/mill/tool-change.cfg:274
 msgid "Threading"
 msgstr "Filetage"
 
-#: cfg/mill/tool-change.cfg:282
+#: cfg/mill/tool-change.cfg:278
 msgid "Cutter engagement"
 msgstr "Engagement outil"
 
-#: cfg/mill/tool-change.cfg:285
+#: cfg/mill/tool-change.cfg:281
 msgid "Depth of cutter engagment in machine units per pass"
 msgstr "Profondeur d'engagement de l'outil par cycle"
 
-#: cfg/mill/tool-change.cfg:293
+#: cfg/mill/tool-change.cfg:289
 msgid "Cutter teeth"
 msgstr "Nombre dents"
 
-#: cfg/mill/tool-change.cfg:296
+#: cfg/mill/tool-change.cfg:292
 msgid "Number of cutter teeth"
 msgstr "Nombre de dents de l'outil"
 
-#: cfg/mill/tool-change.cfg:302
+#: cfg/mill/tool-change.cfg:298
 msgid "Lead-in clearance"
 msgstr "Pré-dégagement"
 
-#: cfg/mill/tool-change.cfg:304
+#: cfg/mill/tool-change.cfg:300
 msgid "Distance from face in machine units before engaging cutter"
 msgstr "Distance du matériel en unité machine avant l'engagement de l'outil"
-
-#: cfg/mill/tool-change.cfg:312
-#: cfg/plasma/cutting-params2d.cfg:90
-#: cfg/plasma/cutting-params3d.cfg:85
-msgid "Lead in factor"
-msgstr "Facteur d'entrée"
-
-#: cfg/mill/tool-change.cfg:314
-#: cfg/mill/tool-change.cfg:323
-msgid "Times tool diameter"
-msgstr "Multiple du diamètre de l'outil"
-
-#: cfg/mill/tool-change.cfg:321
-#: cfg/plasma/cutting-params2d.cfg:99
-#: cfg/plasma/cutting-params3d.cfg:94
-msgid "Lead out factor"
-msgstr "Facteur sortie"
-
-#: cfg/plasma/circle-2.cfg:85
-#: cfg/plasma/circle.cfg:96
-#: cfg/plasma/ellipse.cfg:107
-#: cfg/plasma/polygon.cfg:78
-#: cfg/plasma/polyline-mirror-p.cfg:19
-#: cfg/plasma/polyline.cfg:24
-#: cfg/plasma/rectangle.cfg:120
-#: cfg/plasma/slot-2.cfg:72
-#: cfg/plasma/slot-arc.cfg:101
-#: cfg/plasma/slot.cfg:88
-#: catalogs/lathe/menu.xml:10
-msgid "Cutting"
-msgstr "Coupe"
 
 #: cfg/plasma/circle-2.cfg:91
 #: cfg/plasma/circle.cfg:102
@@ -4214,14 +4662,6 @@ msgstr "Coupe"
 #: cfg/plasma/slot.cfg:95
 msgid "Inside=0:On the line=2:Outside=3"
 msgstr "Intérieur normal=0:Sans compensation=2:Extérieur=3"
-
-#: cfg/plasma/cutting-params2d.cfg:3
-#: cfg/plasma/cutting-params3d.cfg:3
-#: catalogs/lathe/menu.xml:4
-#: catalogs/plasma/_menu-custom.xml:41
-#: catalogs/plasma/menu.xml:41
-msgid "Cutting Params"
-msgstr "Paramètres coupe"
 
 #: cfg/plasma/cutting-params2d.cfg:6
 #: cfg/plasma/cutting-params3d.cfg:6
@@ -4273,12 +4713,22 @@ msgstr "Paramètres rapide"
 msgid "Above cut start"
 msgstr "Au-dessus début coupe"
 
+#: cfg/plasma/cutting-params2d.cfg:90
+#: cfg/plasma/cutting-params3d.cfg:85
+msgid "Lead in factor"
+msgstr "Facteur d'entrée"
+
 #: cfg/plasma/cutting-params2d.cfg:93
 #: cfg/plasma/cutting-params2d.cfg:102
 #: cfg/plasma/cutting-params3d.cfg:88
 #: cfg/plasma/cutting-params3d.cfg:97
 msgid "Times kerf"
 msgstr "Multiple du trait"
+
+#: cfg/plasma/cutting-params2d.cfg:99
+#: cfg/plasma/cutting-params3d.cfg:94
+msgid "Lead out factor"
+msgstr "Facteur sortie"
 
 #: cfg/plasma/cutting-params2d.cfg:108
 #: cfg/plasma/cutting-params3d.cfg:103
@@ -4306,13 +4756,6 @@ msgstr "Comp. de largeur du trait"
 #: cfg/plasma/polyline.cfg:116
 msgid "Which side torch will travel"
 msgstr "Quel côté la torche se déplace"
-
-#: cfg/rectangular-array.cfg:3
-#: catalogs/mill/menu.xml:54
-#: catalogs/plasma/_menu-custom.xml:39
-#: catalogs/plasma/menu.xml:39
-msgid "Rectangular Array"
-msgstr "Ensemble rectangulaire"
 
 #: cfg/rectangular-array.cfg:7
 msgid "<b>Create a Rectangular Array of items</b>"
@@ -4355,417 +4798,6 @@ msgstr "Pas Y"
 msgid "Y items rotation"
 msgstr "Rotation élé. Y"
 
-#: catalogs/lathe/menu.xml:3
-msgid "Parameters"
-msgstr "Paramètres"
-
-#: catalogs/lathe/menu.xml:4
-#: catalogs/plasma/_menu-custom.xml:41
-#: catalogs/plasma/menu.xml:41
-msgid "Set cutting parameters"
-msgstr "Paramètres de coupe"
-
-#: catalogs/lathe/menu.xml:5
-msgid "Threading Params"
-msgstr "Paramètres filetage"
-
-#: catalogs/lathe/menu.xml:5
-msgid "Set thread cutting params"
-msgstr "Paramètres filetage"
-
-#: catalogs/lathe/menu.xml:7
-msgid "Tool"
-msgstr "Outil"
-
-#: catalogs/lathe/menu.xml:8
-#: catalogs/mill/menu.xml:56
-msgid "Change Tool"
-msgstr "Changer Outil"
-
-#: catalogs/lathe/menu.xml:8
-msgid "Change cutter"
-msgstr "Changer couteau"
-
-#: catalogs/lathe/menu.xml:11
-msgid "Threads"
-msgstr "Filetage"
-
-#: catalogs/lathe/menu.xml:11
-msgid "Cut regular threads"
-msgstr "Filetage régulier"
-
-#: catalogs/lathe/menu.xml:12
-msgid "Face"
-msgstr "Face"
-
-#: catalogs/lathe/menu.xml:12
-msgid "Cut face"
-msgstr "Couper face"
-
-#: catalogs/lathe/menu.xml:14
-#: catalogs/mill/menu.xml:62
-#: catalogs/plasma/_menu-custom.xml:42
-#: catalogs/plasma/menu.xml:42
-msgid "Miscellaneous"
-msgstr "Divers"
-
-#: catalogs/lathe/menu.xml:15
-#: catalogs/mill/menu.xml:65
-#: catalogs/plasma/_menu-custom.xml:45
-#: catalogs/plasma/menu.xml:45
-msgid "Insert a G Code File"
-msgstr "Insérer un fichier de g-code"
-
-#: catalogs/lathe/menu.xml:15
-#: catalogs/mill/menu.xml:65
-#: catalogs/plasma/_menu-custom.xml:45
-#: catalogs/plasma/menu.xml:45
-msgid "Include a custom gcode file"
-msgstr "Insérer un fichier gcode personnalisé"
-
-#: catalogs/lathe/menu.xml:16
-#: catalogs/mill/menu.xml:64
-#: catalogs/plasma/_menu-custom.xml:44
-#: catalogs/plasma/menu.xml:44
-msgid "Custom G Code"
-msgstr "G Code personnalisé"
-
-#: catalogs/lathe/menu.xml:16
-#: catalogs/mill/menu.xml:64
-#: catalogs/plasma/_menu-custom.xml:44
-#: catalogs/plasma/menu.xml:44
-msgid "Write custom gcode"
-msgstr "Écrire code personnalisé"
-
-#: catalogs/lathe/menu.xml:17
-msgid "Change from inch to metric or inverse"
-msgstr "Changer de pouces à métrique ou inverse"
-
-#: catalogs/mill/menu.xml:2
-#: catalogs/plasma/_menu-custom.xml:2
-#: catalogs/plasma/menu.xml:2
-msgid "Basic Shapes"
-msgstr "Formes de base"
-
-#: catalogs/mill/menu.xml:3
-#: catalogs/plasma/_menu-custom.xml:3
-#: catalogs/plasma/menu.xml:3
-msgid "Create a rectangle with optional corner types"
-msgstr "Créer un rectangle avec options de sommets"
-
-#: catalogs/mill/menu.xml:5
-#: catalogs/plasma/_menu-custom.xml:5
-#: catalogs/plasma/menu.xml:5
-msgid "Circle"
-msgstr "Cercle"
-
-#: catalogs/mill/menu.xml:5
-#: catalogs/plasma/_menu-custom.xml:5
-#: catalogs/plasma/menu.xml:5
-msgid "Create a circle with optional D flat"
-msgstr "Créer un cercle avec option d'un plat"
-
-#: catalogs/mill/menu.xml:6
-#: catalogs/plasma/_menu-custom.xml:6
-#: catalogs/plasma/menu.xml:6
-msgid "Circle From 2 Points"
-msgstr "Cercle par diamètre"
-
-#: catalogs/mill/menu.xml:6
-#: catalogs/plasma/_menu-custom.xml:6
-#: catalogs/plasma/menu.xml:6
-msgid "Define ends of diameter"
-msgstr "Définir les extrémités du diamètre"
-
-#: catalogs/mill/menu.xml:8
-#: catalogs/plasma/_menu-custom.xml:8
-#: catalogs/plasma/menu.xml:8
-msgid "Slot/Oval From 1 Point"
-msgstr "Coulisse/Ovale depuis 1 point"
-
-#: catalogs/mill/menu.xml:8
-#: catalogs/mill/menu.xml:37
-#: catalogs/plasma/_menu-custom.xml:8
-#: catalogs/plasma/menu.xml:8
-msgid "Define a point, angle and length"
-msgstr "Définir un point, un angle et la longueur"
-
-#: catalogs/mill/menu.xml:9
-#: catalogs/plasma/_menu-custom.xml:9
-#: catalogs/plasma/menu.xml:9
-msgid "Slot/Oval From 2 Points"
-msgstr "Coulisse/Ovale depuis 2 points"
-
-#: catalogs/mill/menu.xml:9
-#: catalogs/plasma/_menu-custom.xml:9
-#: catalogs/plasma/menu.xml:9
-msgid "Define center of ends"
-msgstr "Définir le centre des bouts"
-
-#: catalogs/mill/menu.xml:10
-#: catalogs/mill/menu.xml:39
-#: catalogs/plasma/_menu-custom.xml:10
-#: catalogs/plasma/menu.xml:10
-msgid "Create a radial slot"
-msgstr "Créer une coulisse arquée"
-
-#: catalogs/mill/menu.xml:12
-#: catalogs/plasma/_menu-custom.xml:12
-#: catalogs/plasma/menu.xml:12
-msgid "Create an ellipse"
-msgstr "Créer un ellipse"
-
-#: catalogs/mill/menu.xml:13
-#: catalogs/plasma/_menu-custom.xml:13
-#: catalogs/plasma/menu.xml:13
-msgid "Polygon of N edges"
-msgstr "Polygone de N côtés"
-
-#: catalogs/mill/menu.xml:15
-msgid "Surface Finishing"
-msgstr "Finition surface"
-
-#: catalogs/mill/menu.xml:15
-msgid "Uni or Bi-directional"
-msgstr "Uni/Bi directionnel"
-
-#: catalogs/mill/menu.xml:17
-#: catalogs/plasma/_menu-custom.xml:15
-#: catalogs/plasma/menu.xml:15
-msgid "Advanced"
-msgstr "Avancés"
-
-#: catalogs/mill/menu.xml:19
-#: catalogs/plasma/_menu-custom.xml:17
-#: catalogs/plasma/menu.xml:17
-msgid "Starts a polyline"
-msgstr "Démarer polyligne"
-
-#: catalogs/mill/menu.xml:22
-#: catalogs/plasma/_menu-custom.xml:20
-#: catalogs/plasma/menu.xml:20
-msgid "Define angle and length"
-msgstr "Définir l'angle et la longueur"
-
-#: catalogs/mill/menu.xml:24
-#: catalogs/plasma/_menu-custom.xml:22
-#: catalogs/plasma/menu.xml:22
-msgid "Defined center by offsets or absolute position"
-msgstr "Définir centre par décalage ou position absolue"
-
-#: catalogs/mill/menu.xml:25
-#: catalogs/plasma/_menu-custom.xml:23
-#: catalogs/plasma/menu.xml:23
-msgid "Arc Polar Center"
-msgstr "Arc Centre Polaire"
-
-#: catalogs/mill/menu.xml:25
-#: catalogs/plasma/_menu-custom.xml:23
-#: catalogs/plasma/menu.xml:23
-msgid "Define center at angle and distance"
-msgstr "Définir le centre à un angle et distance"
-
-#: catalogs/mill/menu.xml:26
-#: catalogs/mill/menu.xml:27
-#: catalogs/plasma/_menu-custom.xml:24
-#: catalogs/plasma/_menu-custom.xml:25
-#: catalogs/plasma/menu.xml:24
-#: catalogs/plasma/menu.xml:25
-msgid "Define end point, arc height or radius"
-msgstr "Définir destination, hauteur de l'arc ou le rayon"
-
-#: catalogs/mill/menu.xml:28
-#: catalogs/plasma/_menu-custom.xml:26
-#: catalogs/plasma/menu.xml:26
-msgid "Arc Mirror End"
-msgstr "Arc en mirroir"
-
-#: catalogs/mill/menu.xml:28
-#: catalogs/plasma/_menu-custom.xml:26
-#: catalogs/plasma/menu.xml:26
-msgid "Define I,J and mirror line"
-msgstr "Définir I,J et la ligne de référence"
-
-#: catalogs/mill/menu.xml:30
-#: catalogs/plasma/_menu-custom.xml:28
-#: catalogs/plasma/menu.xml:28
-msgid "Repeat Items"
-msgstr "Répétition d'éléments"
-
-#: catalogs/mill/menu.xml:30
-#: catalogs/plasma/_menu-custom.xml:28
-#: catalogs/plasma/menu.xml:28
-msgid "Repeat a group of polyline items"
-msgstr "Répéter des éléments de polyligne"
-
-#: catalogs/mill/menu.xml:31
-#: catalogs/plasma/_menu-custom.xml:29
-#: catalogs/plasma/menu.xml:29
-msgid "Duplicate and reverse polyline items"
-msgstr "Dupliquer et inversser les éléments"
-
-#: catalogs/mill/menu.xml:33
-#: catalogs/plasma/_menu-custom.xml:31
-#: catalogs/plasma/menu.xml:31
-msgid "Create a reversed polyline from previous one"
-msgstr "Créer une polyligne inversée de la précédente"
-
-#: catalogs/mill/menu.xml:35
-msgid "Counterbore"
-msgstr "Contre-alésage"
-
-#: catalogs/mill/menu.xml:35
-msgid "For Socket Head Cap Screw"
-msgstr "Pour vis à chapeau à tête creuse (SHCS)"
-
-#: catalogs/mill/menu.xml:36
-#: catalogs/mill/menu.xml:44
-msgid "Single Hole"
-msgstr "Trou unique"
-
-#: catalogs/mill/menu.xml:36
-msgid "No slot"
-msgstr "Pas de coulisse"
-
-#: catalogs/mill/menu.xml:37
-msgid "Slot From 1 Point"
-msgstr "Contre-alésage 1 point"
-
-#: catalogs/mill/menu.xml:38
-msgid "Slot From 2 Points"
-msgstr "Contre-alésage 2 points"
-
-#: catalogs/mill/menu.xml:38
-msgid "Define 2 points"
-msgstr "Définir deux points"
-
-#: catalogs/mill/menu.xml:41
-msgid "True thread mill needed"
-msgstr "Requière un outil spécial"
-
-#: catalogs/mill/menu.xml:44
-msgid "Drill a single hole"
-msgstr "Forage unique"
-
-#: catalogs/mill/menu.xml:45
-msgid "Array Of Holes"
-msgstr "Ensemble De Trous"
-
-#: catalogs/mill/menu.xml:45
-msgid "Drill lines of holes"
-msgstr "Forer en ligne"
-
-#: catalogs/mill/menu.xml:46
-msgid "Regular Circle"
-msgstr "Cercle régulier"
-
-#: catalogs/mill/menu.xml:46
-msgid "Create a regular spaced holes circle"
-msgstr "Créer un cercle de trous régulier"
-
-#: catalogs/mill/menu.xml:47
-msgid "Irregular Circle"
-msgstr "Cercle irrégulier"
-
-#: catalogs/mill/menu.xml:47
-msgid "Create a hole circle of different angle spacing"
-msgstr "Créer un cercle de trous irrégulier"
-
-#: catalogs/mill/menu.xml:49
-#: catalogs/plasma/_menu-custom.xml:34
-#: catalogs/plasma/menu.xml:34
-msgid "Group, Offset And Rotation"
-msgstr "Groupement, décalage et rotation"
-
-#: catalogs/mill/menu.xml:50
-#: catalogs/plasma/_menu-custom.xml:35
-#: catalogs/plasma/menu.xml:35
-msgid "Standard Group"
-msgstr "Groupe standard"
-
-#: catalogs/mill/menu.xml:50
-#: catalogs/plasma/_menu-custom.xml:35
-#: catalogs/plasma/menu.xml:35
-msgid "Group subroutines"
-msgstr "Groupement de sous-programme"
-
-#: catalogs/mill/menu.xml:51
-#: catalogs/plasma/_menu-custom.xml:36
-#: catalogs/plasma/menu.xml:36
-msgid "Offset/Rotate"
-msgstr "Décalage/Rotation"
-
-#: catalogs/mill/menu.xml:51
-#: catalogs/plasma/_menu-custom.xml:36
-#: catalogs/plasma/menu.xml:36
-msgid "Group subroutines, offset and rotate"
-msgstr "Groupement sous-programme, décalage et rotation"
-
-#: catalogs/mill/menu.xml:53
-#: catalogs/plasma/_menu-custom.xml:38
-#: catalogs/plasma/menu.xml:38
-msgid "Define diameter or distance between groups"
-msgstr "Définir le diamètre ou la distance entre les groupes"
-
-#: catalogs/mill/menu.xml:54
-#: catalogs/plasma/_menu-custom.xml:39
-#: catalogs/plasma/menu.xml:39
-msgid "Array of rows and columns"
-msgstr "Ensemble de rangs et colonnes"
-
-#: catalogs/mill/menu.xml:56
-msgid "Select end mill or drill and set parameters"
-msgstr "Choix de fraise ou foret et établir paramètres"
-
-#: catalogs/mill/menu.xml:58
-msgid "Find workpiece edges"
-msgstr "Trouver bordures de pièce"
-
-#: catalogs/mill/menu.xml:59
-msgid "Probe Stock"
-msgstr "Palpage pièce"
-
-#: catalogs/mill/menu.xml:59
-msgid "Find the center of a cube or cylinder"
-msgstr "Trouver le centre d'un cylindre ou cube"
-
-#: catalogs/mill/menu.xml:60
-msgid "Probe Array"
-msgstr "Palpage grille"
-
-#: catalogs/mill/menu.xml:60
-msgid "Probe a array of points and save to file"
-msgstr "Palpe un ensemble de points et sauvegarde dans un fichier"
-
-#: catalogs/mill/menu.xml:63
-#: catalogs/plasma/_menu-custom.xml:43
-#: catalogs/plasma/menu.xml:43
-msgid "Raw Material"
-msgstr "Matériel de base"
-
-#: catalogs/mill/menu.xml:63
-#: catalogs/plasma/_menu-custom.xml:43
-#: catalogs/plasma/menu.xml:43
-msgid "Show a temporary image of rough material"
-msgstr "Montre une image temporaire du matériel utilisé"
-
-#: catalogs/mill/menu.xml:66
-#: catalogs/plasma/_menu-custom.xml:46
-#: catalogs/plasma/menu.xml:46
-msgid "Add comments"
-msgstr "Ajouter notes"
-
-#: catalogs/mill/menu.xml:67
-#: catalogs/plasma/_menu-custom.xml:47
-#: catalogs/plasma/menu.xml:47
-msgid "Temporarily change units"
-msgstr "Changement temporaire d'unités"
-
-#: catalogs/plasma/_menu-custom.xml:17
-#: catalogs/plasma/menu.xml:17
-msgid "Begin"
-msgstr "Départ"
-
 #: ncam.py:74
 msgid "NativeCAM for LinuxCNC"
 msgstr "NativeCAM pour LinuxCNC"
@@ -4788,29 +4820,18 @@ msgstr ""
 "\n"
 "Il est recommandé d'installer le package deb\n"
 
-#: ncam.py:176
-#: ncam.py:179
+#: ncam.py:180
+#: ncam.py:183
 #, python-format
 msgid "Can not find file %(filename)s"
 msgstr "Fichier %(filename)s introuvable"
 
-#: ncam.py:199
-#, python-format
-msgid "Image file not found : %(filename)s"
-msgstr "Fichier image : %(filename)s introuvable"
-
-#: ncam.py:218
-#: pref_edit.py:265
-#, python-format
-msgid "Image file not valid : %(filename)s"
-msgstr "Fichier image : %(filename)s non valide"
-
-#: ncam.py:305
+#: ncam.py:307
 #, python-format
 msgid "Keeping modified local file %(filename)s"
 msgstr "Conserve le fichier local modifié %(filename)s"
 
-#: ncam.py:322
+#: ncam.py:324
 #, python-format
 msgid ""
 "\n"
@@ -4833,11 +4854,11 @@ msgstr ""
 "Actualiser -> Remplacer tous les fichiers sans autre confirmation\n"
 "Annuler    -> Ne faire aucun remplacement pour cette version\n"
 
-#: ncam.py:329
+#: ncam.py:331
 msgid "NEW file version available"
 msgstr "Nouvelle version disponible"
 
-#: ncam.py:364
+#: ncam.py:366
 #, python-format
 msgid ""
 "Error importing linuxcnc\n"
@@ -4846,7 +4867,7 @@ msgstr ""
 "Erreur d'importation de linuxcnc\n"
 "%(err_details)s"
 
-#: ncam.py:371
+#: ncam.py:373
 #, python-format
 msgid ""
 "Ini file <%(inifilename)s>\n"
@@ -4855,7 +4876,7 @@ msgstr ""
 "Le fichier ini <%(inifilename)s>\n"
 "doit avoir une entrée pour [DISPLAY]NCAM_DIR"
 
-#: ncam.py:383
+#: ncam.py:385
 msgid ""
 "There is no PROGRAM_PREFIX in ini file\n"
 "Edit to add in DISPLAY section\n"
@@ -4869,7 +4890,7 @@ msgstr ""
 "PROGRAM_PREFIX = chemin absolu/relatif vers le rép. de scripts\n"
 "i.e. PROGRAM_PREFIX = ./scripts ou ~/ncam/scripts"
 
-#: ncam.py:405
+#: ncam.py:407
 msgid ""
 "Required lib missing:\n"
 "\n"
@@ -4879,7 +4900,7 @@ msgstr ""
 "\n"
 "[RS274NGC]SUBROUTINE_PATH"
 
-#: ncam.py:427
+#: ncam.py:429
 #, python-format
 msgid ""
 "\n"
@@ -4900,7 +4921,7 @@ msgstr ""
 "\n"
 "Éditer le fichier ini pour corriger\n"
 
-#: ncam.py:433
+#: ncam.py:435
 #, python-format
 msgid ""
 "Required NativeCAM lib\n"
@@ -4909,24 +4930,19 @@ msgstr ""
 "Librairie NativeCAM requise\n"
 "%(err_details)s"
 
-#: ncam.py:465
+#: ncam.py:467
 msgid "no description"
 msgstr "aucune description"
 
-#: ncam.py:467
-#: ncam.py:479
-msgid "None"
-msgstr "Aucun"
-
-#: ncam.py:585
+#: ncam.py:591
 msgid "Alpha"
 msgstr "Alpha"
 
-#: ncam.py:586
+#: ncam.py:592
 msgid "Change to alphanumeric"
 msgstr "Changer pour alphanumérique"
 
-#: ncam.py:772
+#: ncam.py:778
 #, python-format
 msgid ""
 "Value can not be '%(value)s' for\n"
@@ -4937,16 +4953,12 @@ msgstr ""
 "\n"
 "%(tooltip)s"
 
-#: ncam.py:976
-msgid "Open"
-msgstr "Ouvrir"
-
-#: ncam.py:993
-#: ncam.py:4012
+#: ncam.py:999
+#: ncam.py:4067
 msgid "All files"
 msgstr "Tous les fichiers"
 
-#: ncam.py:1419
+#: ncam.py:1425
 #, python-format
 msgid ""
 "Error with subprocess: returncode = %(errcode)s\n"
@@ -4957,7 +4969,7 @@ msgstr ""
 "sortie = %(output)s\n"
 "e= %(e)s\n"
 
-#: ncam.py:1643
+#: ncam.py:1682
 msgid ""
 "(*** GCode generated by NativeCAM for LinuxCNC ***)\n"
 "\n"
@@ -4965,23 +4977,23 @@ msgstr ""
 "(*** GCode généré par NativeCAM pour LinuxCNC ***)\n"
 "\n"
 
-#: ncam.py:1644
+#: ncam.py:1683
 msgid "(*.ngc files are best viewed with Syntax Highlighting)\n"
 msgstr "(les fichiers *.ngc sont mieux compris avec la coloration syntaxique)\n"
 
-#: ncam.py:1650
+#: ncam.py:1689
 msgid "G21  (metric)"
 msgstr "G21  (métrique)"
 
-#: ncam.py:1652
+#: ncam.py:1691
 msgid "G20  (imperial/inches)"
 msgstr "G20  (impérial/pouces)"
 
-#: ncam.py:1686
+#: ncam.py:1725
 msgid "(optimization values)\n"
 msgstr "(valeurs d'optimisation)\n"
 
-#: ncam.py:1707
+#: ncam.py:1746
 msgid ""
 "(end defaults)\n"
 "\n"
@@ -4989,15 +5001,15 @@ msgstr ""
 "(fin des valeurs paramétrées en préférence)\n"
 "\n"
 
-#: ncam.py:1709
+#: ncam.py:1748
 msgid "(This is a built-in safety to help avoid gouging into your work piece)\n"
 msgstr "(Ceci est une sécurité pour éviter le gougeage involontaire de votre pièce)\n"
 
-#: ncam.py:1716
+#: ncam.py:1755
 msgid "(sub definitions)\n"
 msgstr "(définitions de sous-programmes)\n"
 
-#: ncam.py:1764
+#: ncam.py:1803
 #, python-format
 msgid ""
 "Open fails for ini file : %(inifilename)s\n"
@@ -5008,28 +5020,28 @@ msgstr ""
 "\n"
 "%(detail)s"
 
-#: ncam.py:1771
-#: ncam.py:4152
+#: ncam.py:1810
+#: ncam.py:4207
 msgid "DISPLAY can only be 'axis' or 'gmoccapy'"
 msgstr "DISPLAY doit être 'axis' ou 'gmoccapy'"
 
-#: ncam.py:1830
+#: ncam.py:1869
 #, python-format
 msgid "Using %s\n"
 msgstr "Utilisant %s\n"
 
-#: ncam.py:1834
+#: ncam.py:1873
 #, python-format
 msgid "Using standard %(mnu)s,  no %(dir)s/menu-custom.xml found\n"
 msgstr "Utilise le standard %(mnu)s,  pas de %(dir)s/menu-custom.xml existant\n"
 
-#: ncam.py:1850
-#: pref_edit.py:67
+#: ncam.py:1889
+#: pref_edit.py:102
 #, python-format
 msgid "Expected file not found : %s"
 msgstr "Fichier requis non trouvé : %s"
 
-#: ncam.py:1909
+#: ncam.py:1947
 #, python-format
 msgid ""
 "Standalone Directory :\n"
@@ -5044,86 +5056,86 @@ msgstr ""
 "\n"
 "Poursuivre ?"
 
-#: ncam.py:1910
+#: ncam.py:1948
 msgid "NativeCAM CREATE"
 msgstr "Création pour NativeCAM"
 
-#: ncam.py:1929
+#: ncam.py:1967
 #, python-format
 msgid "Updated %(qty)3d files in %(dir)s"
 msgstr "%(qty)3d fichiers mis à jour dans %(dir)s"
 
-#: ncam.py:1931
+#: ncam.py:1969
 #, python-format
 msgid "Created %(qty)3d files in %(dir)s"
 msgstr "%(qty)3d fichiers créés dans %(dir)s"
 
-#: ncam.py:1955
-msgid "_File"
-msgstr "_Fichier"
+#: ncam.py:1993
+msgid "_Projects"
+msgstr "_Projets"
 
-#: ncam.py:1971
+#: ncam.py:2009
 msgid "_Edit"
 msgstr "É_dition"
 
-#: ncam.py:2002
-#: ncam.py:2501
+#: ncam.py:2040
+#: ncam.py:2543
 msgid "Set digits"
 msgstr "Décimales"
 
-#: ncam.py:2023
+#: ncam.py:2061
 msgid "_View"
 msgstr "_Affichage"
 
-#: ncam.py:2063
+#: ncam.py:2101
 msgid "_Add"
 msgstr "_Ajouter"
 
-#: ncam.py:2070
+#: ncam.py:2108
 msgid "_Utilities"
 msgstr "_Utilitaires"
 
-#: ncam.py:2073
+#: ncam.py:2111
 msgid "_Auto-Refresh"
 msgstr "_Auto-Rafraîchissement"
 
-#: ncam.py:2078
+#: ncam.py:2116
 msgid "_Reload tools table"
 msgstr "_Recharger la table d'outils"
 
-#: ncam.py:2085
+#: ncam.py:2123
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#: ncam.py:2095
+#: ncam.py:2133
 msgid "_Help"
 msgstr "A_ide"
 
-#: ncam.py:2098
+#: ncam.py:2136
 msgid "NativeCAM on YouTube"
 msgstr "NativeCAM sur YouTube"
 
-#: ncam.py:2105
+#: ncam.py:2143
 msgid "How to translate NativeCAM"
 msgstr "Comment traduire NativeCAM"
 
-#: ncam.py:2112
+#: ncam.py:2150
 msgid "LinuxCNC Home"
 msgstr "Site web LinuxCNC"
 
-#: ncam.py:2119
+#: ncam.py:2157
 msgid "LinuxCNC Forum"
 msgstr "Forum LinuxCNC"
 
-#: ncam.py:2126
+#: ncam.py:2164
 msgid "_About"
 msgstr "A _propos"
 
-#: ncam.py:2261
+#: ncam.py:2296
 msgid "Back..."
 msgstr "Retour..."
 
-#: ncam.py:2330
+#: ncam.py:2370
 #, python-format
 msgid ""
 "WARNING:\n"
@@ -5132,122 +5144,125 @@ msgstr ""
 "AVERTISSEMENT:\n"
 "Impossible d'enregistrer le fichier de configuration de barre d'outils %(filename)s"
 
-#: ncam.py:2381
+#: ncam.py:2421
 msgid "Problem adding catalog to menu"
 msgstr "Problème lors de l'ajout du catalogue au menu"
 
-#: ncam.py:2385
+#: ncam.py:2425
 msgid "Import _XML file"
 msgstr "Importer fichier _XML"
 
-#: ncam.py:2392
+#: ncam.py:2432
 msgid "_Open cfg file"
 msgstr "_Ouvrir un fichier cfg"
 
-#: ncam.py:2397
+#: ncam.py:2437
 msgid "Select a valid or prototype cfg file"
 msgstr "Sélectionnez un fichier 'cfg' valide ou prototype"
 
-#: ncam.py:2414
-#: ncam.py:2578
+#: ncam.py:2453
+#: ncam.py:2620
 msgid "Name"
 msgstr "Nom"
 
-#: ncam.py:2429
-#: ncam.py:2594
+#: ncam.py:2471
+#: ncam.py:2638
 msgid "Value"
 msgstr "Valeur"
 
-#: ncam.py:2629
+#: ncam.py:2673
 #, python-format
 msgid "Create %(filename)s"
 msgstr "Créer %(filename)s"
 
-#: ncam.py:2630
+#: ncam.py:2674
 #, python-format
 msgid "Build gcode and save to %(filename)s"
 msgstr "Créer gcode et enregistrer sous %(filename)s"
 
-#: ncam.py:2633
-#: ncam.py:2634
+#: ncam.py:2677
+#: ncam.py:2678
 msgid "Dual Views"
 msgstr "Arborescence double"
 
-#: ncam.py:2637
-#: ncam.py:2638
+#: ncam.py:2681
+#: ncam.py:2682
 msgid "Single View"
 msgstr "Arborescence unique"
 
-#: ncam.py:2642
-#: ncam.py:2643
+#: ncam.py:2686
+#: ncam.py:2687
 msgid "Edit Current Subroutine"
 msgstr "Modifier le sous-programme"
 
-#: ncam.py:2647
+#: ncam.py:2691
 msgid "Hide Master Tree Value Column"
 msgstr "Cacher la colonne 'Valeur'"
 
-#: ncam.py:2651
+#: ncam.py:2695
 msgid "Reload Current Subroutine"
 msgstr "Recharger le sous-programme"
 
-#: ncam.py:2654
-#: ncam.py:2655
+#: ncam.py:2698
+#: ncam.py:2699
 msgid "Save As Default Layout"
 msgstr "Enregistrer  comme disposition par défaut"
 
-#: ncam.py:2658
-#: ncam.py:2659
+#: ncam.py:2702
+#: ncam.py:2703
 msgid "Export gcode as RS274NGC"
 msgstr "Exporter en gcode RS274NGC"
 
-#: ncam.py:2663
+#: ncam.py:2707
 msgid "Save as Default Template"
 msgstr "Enregistrer comme modèle par défaut"
 
-#: ncam.py:2667
+#: ncam.py:2711
 msgid "Side By Side Layout"
 msgstr "Disposition côte à côte"
 
-#: ncam.py:2671
+#: ncam.py:2715
 msgid "Top / Bottom Layout"
 msgstr "Disposition haut / bas"
 
-#: ncam.py:2676
+#: ncam.py:2720
 msgid "Sub-Groups In Master Tree"
 msgstr "Sous-groupe dans le Treeview maître"
 
-#: ncam.py:2680
+#: ncam.py:2724
 msgid "Rename"
 msgstr "Renommer"
 
-#: ncam.py:2680
+#: ncam.py:2724
 msgid "Rename selected subroutine"
 msgstr "Renommer le sous-programme"
 
-#: ncam.py:2683
+#: ncam.py:2727
 msgid "Save values as defaults"
 msgstr "Enregistrer les valeur comme défaut"
 
-#: ncam.py:2684
+#: ncam.py:2728
 msgid "Save values of this subroutine as defaults"
 msgstr "Enregistrer les valeur de ce sous-programme comme défaut"
 
-#: ncam.py:2687
-#: ncam.py:2688
-#: ncam.py:4065
+#: ncam.py:2731
+msgid "Open example"
+msgstr "Ouvrir un projet exemple"
+
+#: ncam.py:2732
+#: ncam.py:4120
 msgid "Open example project"
 msgstr "Ouvrir un projet exemple"
 
-#: ncam.py:3123
+#: ncam.py:3174
 msgid "Parameters treeview focused"
 msgstr "Treeview des paramètres focalisé"
 
-#: ncam.py:3220
+#: ncam.py:3271
 msgid "Master treeview focused"
 msgstr "Treeview maître focalisé"
 
-#: ncam.py:3361
+#: ncam.py:3413
 msgid ""
 "(end sub definitions)\n"
 "\n"
@@ -5255,7 +5270,7 @@ msgstr ""
 "(fin des définitions de sous-programmes)\n"
 "\n"
 
-#: ncam.py:3366
+#: ncam.py:3418
 msgid ""
 "LinuxCNC not running\n"
 "\n"
@@ -5267,55 +5282,59 @@ msgstr ""
 "Démarrer LinuxCNC et\n"
 "cliquez le bouton 'Créer' à nouveau"
 
-#: ncam.py:3370
+#: ncam.py:3422
 msgid "Save as ngc..."
 msgstr "Enregistrer au format ngc..."
 
-#: ncam.py:3489
+#: ncam.py:3541
 msgid "Enter new name for"
 msgstr "Entrez un nouveau nom pour"
 
-#: ncam.py:3580
+#: ncam.py:3632
 #, python-format
 msgid "'%(source_file)s' is not a valid cfg or xml file"
 msgstr "'%(source_file)s' n'est pas un fichier cfg ou xml valide"
 
-#: ncam.py:3710
-#: ncam.py:3732
+#: ncam.py:3763
+#: ncam.py:3785
 msgid "Untitle.xml"
 msgstr "sansnom.xml"
 
-#: ncam.py:3714
+#: ncam.py:3767
 msgid "Previous work not saved as current work"
 msgstr "Aucun projet sauvegardé comme travail en cours"
 
-#: ncam.py:3725
+#: ncam.py:3778
 msgid "No default template saved"
 msgstr "Aucun modèle défini par défaut"
 
-#: ncam.py:4002
+#: ncam.py:4057
 msgid "Import project"
 msgstr "Importer projet"
 
-#: ncam.py:4007
-#: ncam.py:4032
 #: ncam.py:4062
+#: ncam.py:4087
+#: ncam.py:4117
 msgid "NativeCAM projects"
 msgstr "Projets NativeCAM"
 
-#: ncam.py:4027
+#: ncam.py:4082
 msgid "Save project as..."
 msgstr "Enregistrer le projet sous..."
 
-#: ncam.py:4066
+#: ncam.py:4116
+msgid "Open project"
+msgstr "Ouvrir un projet"
+
+#: ncam.py:4121
 msgid "NativeCAM example projects"
 msgstr "Projets exemples NativeCAM"
 
-#: ncam.py:4096
+#: ncam.py:4151
 msgid "Open a cfg file"
 msgstr "Ouvrir un fichier cfg"
 
-#: ncam.py:4216
+#: ncam.py:4271
 #, python-format
 msgid ""
 "Error modifying ini file\n"

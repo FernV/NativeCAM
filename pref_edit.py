@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+
 # coding: utf-8
 '''
 Created on 2017-03-06
@@ -8,10 +8,44 @@ Created on 2017-03-06
 
 import gtk
 import sys, os
+from gtk import gdk
 import pygtk
 pygtk.require('2.0')
 import ConfigParser
-import tr_glade
+import gettext, re
+
+translate_test = True
+
+if __name__ == '__main__':
+
+    APP_NAME = 'nativecam'
+    nativecam_locale = os.getenv('NATIVECAM_LOCALE')
+    if nativecam_locale is not None :
+        translate_test = True
+    else :
+        translate_test = False
+        nativecam_locale = '/usr/share/locale'
+    gettext.bindtextdomain(APP_NAME, nativecam_locale)
+    gettext.textdomain(APP_NAME)
+    try :
+        lang = gettext.translation(APP_NAME, nativecam_locale, fallback = True)
+        lang.install()
+    except :
+        gettext.install(APP_NAME, None, unicode = True)
+
+def translate(fstring):
+    # translate the file when testing translation
+    txt2 = fstring.split('\n')
+    fstring = ''
+    for line in txt2 :
+        inx = line.find('translatable="yes">')
+        if inx > -1 :
+            inx2 = line.find('</')
+            txt = line[inx + 19:inx2]
+            line = re.sub(r'%s' % txt, '%s' % _(txt), line)
+        fstring += (line + '\n')
+    return fstring
+
 
 class PrefEditor():
 
@@ -49,7 +83,8 @@ class PrefEditor():
     def read_int(self, cf, section, key, default):
         return int(self.read_float(cf, section, key, default))
 
-    def __init__(self, ncam, is_metric, catalog, path, pre_amble, post_amble, sysdir, translate_test) :
+    def __init__(self, ncam, is_metric, catalog, path, pre_amble, post_amble, sysdir) :
+        global translate_test
 
         self.path = path
         self.default_metric = is_metric
@@ -68,7 +103,7 @@ class PrefEditor():
 
         builder = gtk.Builder()
         if translate_test :
-            gf = tr_glade.translate(gf)
+            gf = translate(gf)
         else :
             builder.set_translation_domain('nativecam')
 
@@ -90,7 +125,10 @@ class PrefEditor():
         if ncam is None :
             self.adj_WindowWidth.set_value(self.read_int('p', 'display', 'width', 550))
             self.adj_tvWidth.set_value(self.read_int('p', 'display', 'master_tv_width', 175))
-            self.adj_nameColWidth.set_value(self.read_int('p', 'display', 'col_width', 175))
+            self.adj_nameColWidth.set_value(self.read_int('p', 'display', 'name_col_width', 160))
+
+        self.ellip_name_combo = builder.get_object("ellip_name_combo")
+        self.ellip_name_combo.set_active(self.read_int('p', 'display', 'name-ellipsis', 2))
 
         self.adj_vkbwidth = builder.get_object("adj_vkbwidth")
         self.adj_vkbwidth.set_value(self.read_int('p', 'virtual_kb', 'minimum_width', 260))
@@ -172,8 +210,8 @@ class PrefEditor():
 
         self.adj_timeout_value = builder.get_object("adj_timeout_value")
         self.adj_timeout_value.set_value(self.read_float('d', 'general', 'time_out', 0.300))
-        self.adj_digits = builder.get_object("adj_digits")
-        self.adj_digits.set_value(self.read_float('d', 'general', 'digits', 3))
+        self.digits_combo = builder.get_object("digits_combo")
+        self.digits_combo.set_active(self.read_int('d', 'general', 'digits', 3))
         self.adj_spindledelay = builder.get_object("adj_spindledelay")
         self.adj_spindledelay.set_value(self.read_float('d', 'ngc', 'spindle_acc_time', 1))
 
@@ -232,6 +270,38 @@ class PrefEditor():
         self.plasma_tmode_chk = builder.get_object("plasma_tmode_chk")
         self.plasma_tmode_chk.set_active(self.read_boolean('d', 'plasma', 'test_mode', True))
 
+        builder.get_object("spinbutton31").set_icon_from_pixbuf(0, self.get_pixbuf('zoom-fit.png', 22))
+        builder.get_object("spinbutton16").set_icon_from_pixbuf(0, self.get_pixbuf('zoom-fit.png', 22))
+        builder.get_object("spinbutton28").set_icon_from_pixbuf(0, self.get_pixbuf('zoom-fit.png', 22))
+        builder.get_object("entry1").set_icon_from_pixbuf(0, self.get_pixbuf('zoom-100.png', 22))
+
+        builder.get_object("spinbutton17").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+        builder.get_object("spinbutton18").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+        builder.get_object("spinbutton19").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+        builder.get_object("spinbutton20").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+        builder.get_object("spinbutton21").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+
+        builder.get_object("spinbutton22").set_icon_from_pixbuf(0, self.get_pixbuf('spindle-sf.png', 22))
+        builder.get_object("spinbutton24").set_icon_from_pixbuf(0, self.get_pixbuf('spindle-sf.png', 22))
+        builder.get_object("spinbutton25").set_icon_from_pixbuf(0, self.get_pixbuf('spindle-sf.png', 22))
+        builder.get_object("spinbutton26").set_icon_from_pixbuf(0, self.get_pixbuf('spindle-sf.png', 22))
+        builder.get_object("spinbutton27").set_icon_from_pixbuf(0, self.get_pixbuf('spindle-sf.png', 22))
+
+        builder.get_object("spin_autorefresh").set_icon_from_pixbuf(0, self.get_pixbuf('time-out.png', 22))
+        builder.get_object("spinbutton14").set_icon_from_pixbuf(0, self.get_pixbuf('time-out.png', 22))
+        builder.get_object("spin_gmoccapy").set_icon_from_pixbuf(0, self.get_pixbuf('time-out.png', 22))
+
+        builder.get_object("entryInit").set_icon_from_pixbuf(0, self.get_pixbuf('pre-amble.png', 22))
+        builder.get_object("entryPost").set_icon_from_pixbuf(0, self.get_pixbuf('post-amble.png', 22))
+
+        builder.get_object("spinbutton9").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+        builder.get_object("spinbutton10").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+        builder.get_object("spinbutton8").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+        builder.get_object("spinbutton11").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+        builder.get_object("spinbutton12").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+
+        builder.get_object("spinbutton13").set_icon_from_pixbuf(0, self.get_pixbuf('feed-fact.png', 22))
+
         builder.get_object("buttonSave").connect('clicked', self.save_click)
         prefdlg.set_transient_for(parent)
         prefdlg.set_keep_above(True)
@@ -247,35 +317,28 @@ class PrefEditor():
         prefdlg.run()
         prefdlg.destroy()
 
-    def get_pixbuf(self, size) :
+    def get_pixbuf(self, icon, size) :
         if size < 16 :
             size = 16
-        imgfile = os.path.join(self.path, 'graphics', 'circle.png')
-        try :
-            pix_buf = gtk.gdk.pixbuf_new_from_file(imgfile)
-            h = pix_buf.get_height()
-            w = pix_buf.get_width()
-            if w > h :
-                w, h = size, size * h / w
-            else :
-                h, w = size, size * w / h
-            pix_buf = pix_buf.scale_simple(w, h, gtk.gdk.INTERP_BILINEAR)
-            return pix_buf
-        except :
-            print(_('Image file not valid : %(filename)s') % {"filename":imgfile})
-            return None
+        imgfile = os.path.join(self.path, 'graphics', icon)
+        if imgfile is not None :
+            try :
+                return gdk.pixbuf_new_from_file_at_size(imgfile, size, size)
+            except gdk.PixbufError as err :
+                print(err)
+        return None
 
     def tv_isize(self, *args):
-        self.imgTV.set_from_pixbuf(self.get_pixbuf(int(self.adj_tviconsize.get_value())))
+        self.imgTV.set_from_pixbuf(self.get_pixbuf('circle.png', int(self.adj_tviconsize.get_value())))
 
     def adddlg_isize(self, *args):
-        self.imgAddDlg.set_from_pixbuf(self.get_pixbuf(int(self.adj_adddlgimgsize.get_value())))
+        self.imgAddDlg.set_from_pixbuf(self.get_pixbuf('circle.png', int(self.adj_adddlgimgsize.get_value())))
 
     def imgHist_isize(self, *args):
-        self.imgHistTB.set_from_pixbuf(self.get_pixbuf(int(self.adj_histiconsize.get_value())))
+        self.imgHistTB.set_from_pixbuf(self.get_pixbuf('circle.png', int(self.adj_histiconsize.get_value())))
 
     def addmenu_isize(self, *args):
-        self.imgAddMenu.set_from_pixbuf(self.get_pixbuf(int(self.adj_addmenuiconsize.get_value())))
+        self.imgAddMenu.set_from_pixbuf(self.get_pixbuf('circle.png', int(self.adj_addmenuiconsize.get_value())))
 
     def toolbar_isize(self, *args):
         self.imgToolbar.set_from_stock('gtk-save', int(self.adj_tbIconSize.get_value()))
@@ -292,7 +355,8 @@ class PrefEditor():
         if not self.config_pref.has_section('display') :
             self.config_pref.add_section('display')
         self.config_pref.set('display', 'width', self.adj_WindowWidth.get_value())
-        self.config_pref.set('display', 'col_width', self.adj_nameColWidth.get_value())
+        self.config_pref.set('display', 'name-ellipsis', self.ellip_name_combo.get_active())
+        self.config_pref.set('display', 'name_col_width', self.adj_nameColWidth.get_value())
         self.config_pref.set('display', 'master_tv_width', self.adj_tvWidth.get_value())
         self.config_pref.set('display', 'restore_expand_state', self.restore_tvstate.get_active())
         self.config_pref.set('display', 'developer_menu', self.dev_chk.get_active())
@@ -319,7 +383,7 @@ class PrefEditor():
         if not self.config_def.has_section('general') :
             self.config_def.add_section('general')
         self.config_def.set('general', 'time_out', self.adj_timeout_value.get_value())
-        self.config_def.set('general', 'digits', int(self.adj_digits.get_value()))
+        self.config_def.set('general', 'digits', int(self.digits_combo.get_active()))
         self.config_def.set('general', 'show_final_cut', self.finalcut_chk.get_active())
         self.config_def.set('general', 'show_bottom_cut', self.finalbottom_chk.get_active())
         self.config_def.set('general', 'gmoccapy_time_out', self.adj_gmoccapy.get_value())
@@ -388,9 +452,9 @@ class PrefEditor():
         self.saved = True
 
 def edit_preferences(ncam = None, default_metric = True, catalog = 'mill', path = '', \
-        pre_amble = '', post_amble = '', sysdir = '', translate_test = False):
+        pre_amble = '', post_amble = '', sysdir = ''):
     ed = PrefEditor(ncam, default_metric, catalog, path, pre_amble.strip(), \
-        post_amble.strip(), sysdir, translate_test)
+        post_amble.strip(), sysdir)
     return ed.saved
 
 if __name__ == '__main__':

@@ -14,6 +14,7 @@ import gtk
 import sys
 import pygtk
 pygtk.require('2.0')
+from gtk import gdk
 
 import pango
 from lxml import etree
@@ -32,12 +33,11 @@ import time
 import locale
 import platform
 import pref_edit
-import tr_glade
 
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
 locale.setlocale(locale.LC_NUMERIC, '')
-localeDICT = {}
+# localeDICT = {}
 localeDICT = locale.localeconv()
 decimal_point = localeDICT['decimal_point']
 
@@ -124,7 +124,7 @@ XML_TAG = "lcnc-ncam"
 HOME_PAGE = 'https://github.com/FernV/NativeCAM'
 
 class tv_select :  # 'enum' items
-    none, feature, items, header, param = range(5)
+    none, feature, items, header, param = list(range(5))
 
 INCLUDE = []
 DEFINITIONS = []
@@ -189,36 +189,34 @@ def get_pixbuf(icon, size) :
         else :
             icon = NO_ICON_FILE
 
-    s = icon.split("/")
-    icon = s[-1]
     icon_id = icon + str(size)
+
     if (icon_id) in PIXBUF_DICT :
         return PIXBUF_DICT[icon_id]
 
-    icon = search_path(0, icon, GRAPHICS_DIR)
-    if (icon is None) :
-        print(_('Image file not found : %(filename)s') % {"filename":icon})
-        if DEFAULT_USE_NO_ICON:
-            return None
-        else :
-            icon = NO_ICON_FILE
+    icon_fname = search_path(0, icon, GRAPHICS_DIR)
+    if icon_fname is not None :
+        try :
+            pix_buf = gdk.pixbuf_new_from_file_at_size(icon_fname, size, size)
+            PIXBUF_DICT[icon_id] = pix_buf
+            return pix_buf
+        except gdk.PixbufError as err :
+            print(err)
+            PIXBUF_DICT[icon_id] = None
+    return None
 
-    try :
-        pix_buf = gtk.gdk.pixbuf_new_from_file(icon)
-        h = pix_buf.get_height()
-        w = pix_buf.get_width()
-        if w > h :
-            w, h = size, size * h / w
-        else :
-            h, w = size, size * w / h
-        pix_buf = pix_buf.scale_simple(w, h, gtk.gdk.INTERP_BILINEAR)
-
-        PIXBUF_DICT[icon_id] = pix_buf
-        return pix_buf
-    except :
-        print(_('Image file not valid : %(filename)s') % {"filename":icon})
-        PIXBUF_DICT[icon_id] = None
-        return None
+def translate(fstring):
+    # translate the file when testing translation
+    txt2 = fstring.split('\n')
+    fstring = ''
+    for line in txt2 :
+        inx = line.find('translatable="yes">')
+        if inx > -1 :
+            inx2 = line.find('</')
+            txt = line[inx + 19:inx2]
+            line = re.sub(r'%s' % txt, '%s' % _(txt), line)
+        fstring += (line + '\n')
+    return fstring
 
 def mess_dlg(mess, title = "NativeCAM"):
     dlg = gtk.MessageDialog(parent = None,
@@ -445,7 +443,7 @@ class Tools():
             self.table_fname = fn
             self.load_table()
 
-    def load_table(self, *args):
+    def load_table(self, *arg):
         self.table = None
         self.table = []
         if self.table_fname is not None :
@@ -483,6 +481,9 @@ class CellRendererMx(gtk.CellRendererText):
 
     def __init__(self) :
         gtk.CellRendererText.__init__(self)
+        self.set_property('xpad', 2)
+        self.set_property("wrap-mode", 2)
+
         self.max_value = 999999.9
         self.min_value = -999999.9
         self.data_type = 'string'
@@ -498,6 +499,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.new_dt = ''
         self.dt_change = '1'
         self.not_zero = '0'
+
 
     def set_tooltip(self, value):
         self.tooltip = value
@@ -532,7 +534,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.tool_list = toollist
 
     def set_options(self, value):
-        self.options = value
+        self.options = value.replace('&#176;', '°')
 
     def set_digits(self, value):
         self.digits = value
@@ -637,7 +639,7 @@ class CellRendererMx(gtk.CellRendererText):
 
         x = tree_x + tree_w - vkb_w
         y = tree_y + cell_area.y + cell_area.height
-        self.vkb.move(x, y)
+        self.vkb.move(x + 2, y)
 
         self.vkb.set_keep_above(True)
 
@@ -685,8 +687,8 @@ class CellRendererMx(gtk.CellRendererText):
             self.result_entry.set_markup('<big><b>%s</b></big>' % value[0:10])
 
     def vkb_key_press_event(self, win, event):
-        if event.type == gtk.gdk.KEY_PRESS:
-            k_name = gtk.gdk.keyval_name(event.keyval)
+        if event.type == gdk.KEY_PRESS:
+            k_name = gdk.keyval_name(event.keyval)
             lbl = self.result_entry.get_text()
             if k_name >= 'KP_0' and k_name <= 'KP_9':
                 if self.vkb_initialize :
@@ -827,8 +829,8 @@ class CellRendererMx(gtk.CellRendererText):
         (tree_w, tree_h) = self.tv.get_bin_window().get_geometry()[2:4]
         y = tree_y + min(self.cell_area.y, tree_h - lw_height)
 
-        self.list_window.move(tree_x + self.cell_area.x, y)
-        self.list_window.resize(tree_w - self.cell_area.x, lw_height)
+        self.list_window.move(tree_x + self.cell_area.x - 5, y - 2)
+        self.list_window.resize(tree_w - self.cell_area.x + 5, lw_height)
         position = int(sw.get_vadjustment().get_upper() * active_row / count)
         sw.get_vadjustment().set_value(position)
 
@@ -872,8 +874,8 @@ class CellRendererMx(gtk.CellRendererText):
         (tree_w, tree_h) = self.tv.window.get_geometry()[2:4]
         x = tree_x + self.cell_area.x
         y = tree_y + self.cell_area.y
-        self.stringedit_window.move(x, y - 3)
-        self.stringedit_window.resize(tree_w - self.cell_area.x, self.cell_area.height)
+        self.stringedit_window.move(x - 4, y - 2)
+        self.stringedit_window.resize(tree_w - self.cell_area.x + 4, self.cell_area.height)
         self.stringedit_window.show_all()
         time.sleep(time_out)
 
@@ -907,7 +909,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.stringedit_window.response(gtk.RESPONSE_OK)
 
     def list_keypress(self, widget, event) :
-        keyname = gtk.gdk.keyval_name(event.keyval)
+        keyname = gdk.keyval_name(event.keyval)
         if keyname in ["Return", "KP_Enter", "space"] :
             self.list_window.response(gtk.RESPONSE_OK)
 
@@ -1051,16 +1053,16 @@ class CellRendererMx(gtk.CellRendererText):
             self.textedit_window.destroy()
             return None
 
-    def do_render(self, window, widget, background_area, cell_area,
+    def do_render(self, win, widget, background_area, cell_area,
                   expose_area, flags):
         if self.data_type in ['bool', 'boolean'] :
             cell_area.width = 30
             chk = gtk.CellRendererToggle()
             chk.set_active(get_int(self.param_value) != 0)
-            chk.render(window, widget, background_area, cell_area,
+            chk.render(win, widget, background_area, cell_area,
                        expose_area, flags)
         else :
-            gtk.CellRendererText.do_render(self, window, widget,
+            gtk.CellRendererText.do_render(self, win, widget,
                                            background_area,
                                            cell_area, expose_area, flags)
 
@@ -1068,7 +1070,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.stringedit_window.response(gtk.RESPONSE_OK)
 
     def _str_keyhandler(self, widget, event):
-        keyname = gtk.gdk.keyval_name(event.keyval)
+        keyname = gdk.keyval_name(event.keyval)
         if keyname in ['Return', 'KP_Enter']:
             self.stringedit_window.response(gtk.RESPONSE_OK)
 
@@ -1076,9 +1078,9 @@ class CellRendererMx(gtk.CellRendererText):
         self.textedit_window.response(gtk.RESPONSE_OK)
 
     def _keyhandler(self, widget, event):
-        keyname = gtk.gdk.keyval_name(event.keyval)
-        if gtk.gdk.keyval_name(event.keyval) in ['Return', 'KP_Enter'] :
-            if event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.CONTROL_MASK) :
+        keyname = gdk.keyval_name(event.keyval)
+        if gdk.keyval_name(event.keyval) in ['Return', 'KP_Enter'] :
+            if event.state & (gdk.SHIFT_MASK | gdk.CONTROL_MASK) :
                 pass
             else :
                 event.keyval = 0
@@ -1543,7 +1545,7 @@ class Preferences():
         config.read(self.cfg_file)
 
         self.w_adj_value = read_float(config, 'display', 'width', 550)
-        self.col_width_adj_value = read_float(config, 'display', 'col_width', 175)
+        self.col_width_adj_value = read_float(config, 'display', 'name_col_width', 160)
         self.tv_w_adj_value = read_float(config, 'display', 'master_tv_width', 175)
         self.sub_hdrs_in_tv1 = read_boolean(config, 'display', 'subheaders_in_master', False)
         self.restore_expand_state = read_boolean(config, 'display', 'restore_expand_state', False)
@@ -1559,6 +1561,7 @@ class Preferences():
         vkb_width = read_int(config, 'virtual_kb', 'minimum_width', 260)
         vkb_height = read_int(config, 'virtual_kb', 'height', 260)
         vkb_cancel_on_out = read_boolean(config, 'virtual_kb', 'cancel_on_focus_out', True)
+        self.name_ellipsis = read_int(config, 'display', 'name-ellipsis', 2)
 
         self.pref_file = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, PREFERENCES_FILE)
         config.read(self.pref_file)
@@ -1642,7 +1645,7 @@ class Preferences():
         old_view = natcam.pref.use_dual_views
 
         if pref_edit.edit_preferences(natcam, default_metric, self.cat_name, NCAM_DIR, \
-                self.ngc_init_str, self.ngc_post_amble, SYS_DIR, translate_test) :
+                self.ngc_init_str, self.ngc_post_amble, SYS_DIR) :
             self.read(None)
             if old_toolbar_icon_size <> toolbar_icon_size :
                 natcam.button_tb.set_icon_size(toolbar_icon_size)
@@ -1662,7 +1665,12 @@ class Preferences():
             if old_add_dlg_icon_size <> add_dlg_icon_size :
                 natcam.update_catalog()
 
-            ncam.autorefresh_call()
+            natcam.name_cell.set_property('ellipsize', self.pref.name_ellipsis)
+
+            if natcam.treeview2 is not None :
+                natcam.name_cell2.set_property('ellipsize', self.pref.name_ellipsis)
+
+            natcam.autorefresh_call()
 
 
     def create_defaults(self):
@@ -1816,13 +1824,11 @@ class NCam(gtk.VBox):
             if val is not None :
                 self.pref.has_Z_axis = val.find('Z') > -1
 
-        print ""
-        print "NativeCAM info:"
-        print "   inifile =", inifilename
-        print "   SYS_DIR =", SYS_DIR
-        print "  NCAM_DIR =", NCAM_DIR
-        print "   program =", __file__
-        print ""
+        print("\nNativeCAM info:")
+        print("   inifile = %s" % inifilename)
+        print("   SYS_DIR = %s" % SYS_DIR)
+        print("  NCAM_DIR = %s" % NCAM_DIR)
+        print("   program = %s\n" % __file__)
 
         fromdirs = [CATALOGS_DIR, CFG_DIR, LIB_DIR, GRAPHICS_DIR]
 
@@ -1876,7 +1882,7 @@ class NCam(gtk.VBox):
             raise IOError(_("Expected file not found : %s") % "ncam.glade")
 
         if translate_test :
-            gf = tr_glade.translate(gf)
+            gf = translate(gf)
         else :
             self.builder.set_translation_domain('nativecam')
 
@@ -1922,7 +1928,7 @@ class NCam(gtk.VBox):
 
         self.set_layout(self.pref.use_dual_views)
         self.treeview.grab_focus()
-        self.clipboard = gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD)
+        self.clipboard = gtk.clipboard_get(gdk.SELECTION_CLIPBOARD)
 
     def ask_to_create_standalone(self, fromdirs) :
         dir_exists = False
@@ -1977,7 +1983,7 @@ class NCam(gtk.VBox):
         menu_bar = gtk.MenuBar()
 
         file_menu = gtk.Menu()
-        f_menu = gtk.MenuItem(_("_File"))
+        f_menu = gtk.MenuItem(_("_Projects"))
         f_menu.connect("activate", self.menu_file_activate)
         f_menu.set_submenu(file_menu)
         menu_bar.append(f_menu)
@@ -2162,35 +2168,35 @@ class NCam(gtk.VBox):
 
         self.menubar = menu_bar
 
-    def chng_dt_activate(self, *args):
-        if args[1] < 10 :
-            self.treestore.get(self.selected_param, 0)[0].attr["digits"] = str(args[1])
-            fmt = '{0:0.' + str(args[1]) + 'f}'
+    def chng_dt_activate(self, *arg):
+        if arg[1] < 10 :
+            self.treestore.get(self.selected_param, 0)[0].attr["digits"] = str(arg[1])
+            fmt = '{0:0.' + str(arg[1]) + 'f}'
             v = get_float(self.treestore.get(self.selected_param, 0)[0].get_value())
             self.treestore.get(self.selected_param, 0)[0].set_value(fmt.format(v))
 
-        elif args[1] == 11 :
+        elif arg[1] == 11 :
             self.treestore.get(self.selected_param, 0)[0].attr["type"] = 'string'
         self.selected_type = self.treestore.get(self.selected_param, 0)[0].attr["type"]
         self.action()
 
-    def edit_cut(self, *args):
+    def edit_cut(self, *arg):
         self.edit_copy()
         self.delete_clicked()
 
-    def edit_copy(self, *args):
+    def edit_copy(self, *arg):
         self.get_expand()
         xml = etree.Element(XML_TAG)
         self.treestore_to_xml_recursion(self.selected_feature_ts_itr, xml, False)
         self.clipboard.set_text(etree.tostring(xml), len = -1)
 
-    def edit_paste(self, *args):
+    def edit_paste(self, *arg):
         txt = self.clipboard.wait_for_text()
         if txt and txt.find(XML_TAG) > -1 :
             xml = etree.fromstring(txt)
             self.import_xml(xml)
 
-    def menu_edit_activate(self, *args):
+    def menu_edit_activate(self, *arg):
         txt = self.clipboard.wait_for_text()
         if txt:
             self.actionPaste.set_sensitive(txt.find(XML_TAG) > -1)
@@ -2208,25 +2214,25 @@ class NCam(gtk.VBox):
 
         self.actionSaveUserDef.set_sensitive(self.selected_feature is not None)
 
-    def menu_html_cnc_activate(self, *args):
+    def menu_html_cnc_activate(self, *arg):
         webbrowser.open('http://www.linuxcnc.org')
 
-    def menu_html_forum_activate(self, *args):
+    def menu_html_forum_activate(self, *arg):
         webbrowser.open('http://www.linuxcnc.org/index.php/english/forum/40-subroutines-and-ngcgui')
 
-    def edit_feature(self, *args):
+    def edit_feature(self, *arg):
         subprocess.Popen(self.editor + ' ' +
                          self.selected_feature.get_attr('src'),
                          shell = True, stdin = open(os.devnull, 'r'))
 
-    def menu_tutorial_activate(self, *args):
+    def menu_tutorial_activate(self, *arg):
         webbrowser.open('https://www.youtube.com/channel/UCjOe4VxKL86HyVrshTmiUBQ')
 
-    def menu_translate_activate(self, *args):
+    def menu_translate_activate(self, *arg):
 #        webbrowser.open('https://www.youtube.com/channel/UCjOe4VxKL86HyVrshTmiUBQ')
         pass
 
-    def btn_cancel_add_clicked(self, *args):
+    def btn_cancel_add_clicked(self, *arg):
         self.addVBox.hide()
         self.feature_Hpane.show()
         self.menubar.set_sensitive(True)
@@ -2234,13 +2240,13 @@ class NCam(gtk.VBox):
         self.quick_access_tb.set_sensitive(True)
 
     def on_add_iconview_key_press(self, widget, event):
-        keyname = gtk.gdk.keyval_name(event.keyval)
+        keyname = gdk.keyval_name(event.keyval)
         if keyname == ['Escape'] :
             self.btn_cancel_add_clicked()
             event.keyval = 0
 
     def create_add_dialog(self):
-        self.icon_store = gtk.ListStore(gtk.gdk.Pixbuf, str, str, str, int, str)
+        self.icon_store = gtk.ListStore(gdk.Pixbuf, str, str, str, int, str)
         self.add_iconview.set_model(self.icon_store)
         self.add_iconview.set_pixbuf_column(0)
         self.add_iconview.set_text_column(2)
@@ -2427,11 +2433,10 @@ class NCam(gtk.VBox):
     def create_treeview(self):
         self.treeview = gtk.TreeView(self.treestore)
         self.treeview.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_VERTICAL)
-        self.treeview.set_size_request(int(self.col_width_adj.value) + 50, -1)
 
         self.builder.get_object("feat_scrolledwindow").add(self.treeview)
 
-        self.treeview.add_events(gtk.gdk.BUTTON_PRESS_MASK)
+        self.treeview.add_events(gdk.BUTTON_PRESS_MASK)
         self.treeview.connect('button-press-event', self.pop_menu)
 
         self.treeview.connect('row_activated', self.tv_row_activated)
@@ -2439,18 +2444,20 @@ class NCam(gtk.VBox):
 
         # icon and name
         col = gtk.TreeViewColumn(_("Name"))
-        col.set_min_width(int(self.col_width_adj.value))
         cell = gtk.CellRendererPixbuf()
         cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
         self.tv1_icon_cell = cell
         col.pack_start(cell, expand = False)
         col.set_cell_data_func(cell, self.get_col_icon)
+        col.set_min_width(int(self.col_width_adj.get_value()))
 
-        cell = gtk.CellRendererText()
-        col.pack_start(cell, expand = True)
-        col.set_cell_data_func(cell, self.get_col_name)
+        self.name_cell = gtk.CellRendererText()
+        col.pack_start(self.name_cell, expand = True)
+        col.set_cell_data_func(self.name_cell, self.get_col_name)
         col.set_resizable(True)
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+        self.name_cell.set_property('ellipsize', self.pref.name_ellipsis)
+        self.name_cell.set_property('xpad', 2)
+
         self.treeview.append_column(col)
 
         # value
@@ -2465,17 +2472,16 @@ class NCam(gtk.VBox):
         self.edit_cell.set_treeview(self.treeview)
         col.pack_start(self.edit_cell, expand = True)
         col.set_cell_data_func(self.edit_cell, self.get_col_value)
+        col.set_min_width(200)
         col.set_resizable(True)
-        col.set_min_width(int(self.col_width_adj.value))
         self.treeview.append_column(col)
 
         self.treeview.set_tooltip_column(1)
         self.treeview.connect("cursor-changed", self.get_selected_feature)
 
         self.treeview.set_model(self.master_filter)
-        self.treeview.set_size_request(int(self.col_width_adj.value), 100)
 
-    def save_user_values(self, *args) :
+    def save_user_values(self, *arg) :
         fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, USER_DEFAULT_FILE)
         parser = ConfigParser.ConfigParser()
         parser.read(fname)
@@ -2494,7 +2500,7 @@ class NCam(gtk.VBox):
 
         self.pref.read_user_values()
 
-    def save_work(self, *args):
+    def save_work(self, *arg):
         fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, CURRENT_WORK)
         if self.treestore.get_iter_root() is not None :
             xml = self.treestore_to_xml()
@@ -2587,16 +2593,16 @@ class NCam(gtk.VBox):
             self.pop_up.popup(None, None, None, event.button, event.time, None)
             return True
 
-    def pop_set_digits_activate(self, callback = None, *args) :
-        self.treestore.get(args[0], 0)[0].attr["digits"] = str(args[1])
-        fmt = '{0:0.' + str(args[1]) + 'f}'
-        v = get_float(self.treestore.get(args[0], 0)[0].get_value())
-        self.treestore.get(args[0], 0)[0].set_value(fmt.format(v))
+    def pop_set_digits_activate(self, callback = None, *arg) :
+        self.treestore.get(arg[0], 0)[0].attr["digits"] = str(arg[1])
+        fmt = '{0:0.' + str(arg[1]) + 'f}'
+        v = get_float(self.treestore.get(arg[0], 0)[0].get_value())
+        self.treestore.get(arg[0], 0)[0].set_value(fmt.format(v))
         self.action()
 
     def create_second_treeview(self):
         self.treeview2 = gtk.TreeView()
-        self.treeview2.add_events(gtk.gdk.BUTTON_PRESS_MASK)
+        self.treeview2.add_events(gdk.BUTTON_PRESS_MASK)
         self.treeview2.connect('button-press-event', self.pop_menu)
         self.treeview2.connect('cursor-changed', self.tv2_selected)
         self.treeview2.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_VERTICAL)
@@ -2611,12 +2617,13 @@ class NCam(gtk.VBox):
         col.pack_start(cell, expand = False)
         col.set_cell_data_func(cell, self.get_col_icon)
 
-        cell = gtk.CellRendererText()
-        col.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-        col.pack_start(cell, expand = True)
-        col.set_cell_data_func(cell, self.get_col_name)
+        self.name_cell2 = gtk.CellRendererText()
+        self.name_cell2.set_property('xpad', 2)
+        self.name_cell2.set_property('ellipsize', self.pref.name_ellipsis)
+        col.pack_start(self.name_cell2, expand = True)
+        col.set_cell_data_func(self.name_cell2, self.get_col_name)
         col.set_resizable(True)
-        col.set_min_width(int(self.col_width_adj.value))
+        col.set_min_width(int(self.col_width_adj.get_value()))
         self.treeview2.append_column(col)
 
         # value
@@ -2631,7 +2638,7 @@ class NCam(gtk.VBox):
         self.col_value2.pack_start(self.cell_value2, expand = False)
         self.col_value2.set_cell_data_func(self.cell_value2, self.get_col_value)
         self.col_value2.set_resizable(True)
-        self.col_value2.set_min_width(int(self.col_width_adj.value))
+        self.col_value2.set_min_width(200)
         self.treeview2.append_column(self.col_value2)
 
         self.treeview2.set_tooltip_column(1)
@@ -2640,7 +2647,7 @@ class NCam(gtk.VBox):
         self.params_scroll.add(self.treeview2)
         self.treeview2.connect('key-press-event', self.tv2_kp_event)
 
-    def tv2_selected(self, tv, *args):
+    def tv2_selected(self, tv, *arg):
         (model, itr) = tv.get_selection().get_selected()
         if itr is None :
             self.selected_type = 'xxx'
@@ -2712,7 +2719,7 @@ class NCam(gtk.VBox):
                 _('Save values of this subroutine as defaults'), 'gtk-save')
         self.actionSaveUserDef.connect('activate', self.save_user_values)
 
-        self.actionOpenExample = gtk.Action("actionOpenExample", _('Open example project'),
+        self.actionOpenExample = gtk.Action("actionOpenExample", _('Open example'),
                 _('Open example project'), 'gtk-open')
         self.actionOpenExample.connect('activate', self.menu_open_example_activate)
 
@@ -3001,11 +3008,16 @@ class NCam(gtk.VBox):
         else:
             tv.expand_row(path, False)
 
-    def tv_w_adj_value_changed(self, *args):
-        self.feature_pane.set_size_request(int(self.tv_w_adj.value), 100)
+    def tv_w_adj_value_changed(self, *arg):
+        self.feature_pane.set_size_request(int(self.tv_w_adj.get_value()), 100)
+
+    def col_width_adj_value_changed(self, *arg):
+        self.treeview.get_column(0).set_min_width(int(self.col_width_adj.get_value()))
+        if self.treeview2 is not None :
+            self.treeview2.get_column(0).set_min_width(int(self.col_width_adj.get_value()))
 
     def tv_key_pressed_event(self, widget, event) :
-        keyname = gtk.gdk.keyval_name(event.keyval)
+        keyname = gdk.keyval_name(event.keyval)
         model, itr = self.treeview.get_selection().get_selected()
 
         self.focused_widget = self.treeview
@@ -3016,13 +3028,13 @@ class NCam(gtk.VBox):
             path = None
 
         if self.embedded :
-            if event.state & gtk.gdk.SHIFT_MASK :
-                if event.state & gtk.gdk.CONTROL_MASK :
+            if event.state & gdk.SHIFT_MASK :
+                if event.state & gdk.CONTROL_MASK :
                     if keyname in ['z', 'Z'] :
                         self.actionRedo.activate()
                         return True
 
-            elif event.state & gtk.gdk.CONTROL_MASK :
+            elif event.state & gdk.CONTROL_MASK :
                 if keyname in ['z', 'Z'] :
                     self.actionUndo.activate()
                     return True
@@ -3184,7 +3196,7 @@ class NCam(gtk.VBox):
             return False
 
     def tv2_kp_event(self, widget, event) :
-        keyname = gtk.gdk.keyval_name(event.keyval)
+        keyname = gdk.keyval_name(event.keyval)
         model, itr = self.treeview2.get_selection().get_selected()
 
         if itr is None :
@@ -3259,8 +3271,9 @@ class NCam(gtk.VBox):
             self.treeview2.set_cursor_on_cell(path, focus_column = self.col_value2, start_editing = True)
             return True
 
-        if (keyname >= "0" and keyname <= "9") or (keyname >= "KP_0" and keyname <= "KP_9") :
-            self.cell_value2.set_Input(keyname[-1])
+        aKey = keyname[-1]
+        if (aKey >= "0" and aKey <= "9") :
+            self.cell_value2.set_Input(aKey)
             self.treeview2.set_cursor_on_cell(path, focus_column = self.col_value2, start_editing = True)
             return True
 
@@ -3505,12 +3518,12 @@ class NCam(gtk.VBox):
         self.treeview.set_cursor(path)
         self.treeview.grab_focus()
 
-    def action_SubHdrs(self, *args):
+    def action_SubHdrs(self, *arg):
         self.pref.sub_hdrs_in_tv1 = self.actionSubHdrs.get_active()
         self.treestore_from_xml(self.treestore_to_xml())
         self.expand_and_select(self.path_to_old_selected)
 
-    def rename_selected_feature(self, *args):
+    def rename_selected_feature(self, *arg):
         self.newnamedlg = gtk.MessageDialog(parent = None,
             flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
             type = gtk.MESSAGE_QUESTION,
@@ -3538,7 +3551,7 @@ class NCam(gtk.VBox):
         self.newnamedlg.destroy()
 
     def rename_keyhandler(self, widget, event):
-        keyname = gtk.gdk.keyval_name(event.keyval)
+        keyname = gdk.keyval_name(event.keyval)
         if keyname in ['Return', 'KP_Enter']:
             self.newnamedlg.response(gtk.RESPONSE_OK)
 
@@ -3705,7 +3718,8 @@ class NCam(gtk.VBox):
 
         try :
             ver = subprocess.check_output(["dpkg-query", "--show", "--showformat='${Version}'", "nativecam"])
-            dialog.set_version(ver.strip("'"))
+            s = ver[0]
+            dialog.set_version(s.strip("'"))
         except :
             dialog.set_version(APP_VERSION)
 
@@ -3744,7 +3758,7 @@ class NCam(gtk.VBox):
             print (_('Previous work not saved as current work'))
             self.menu_new_activate()
 
-    def menu_new_activate(self, *args):
+    def menu_new_activate(self, *arg):
         global UNIQUE_ID
 
         UNIQUE_ID = 10
@@ -3784,10 +3798,10 @@ class NCam(gtk.VBox):
         self.actionSideBySide.set_sensitive(self.pref.use_dual_views)
         self.actionSubHdrs.set_sensitive(self.pref.use_dual_views)
 
-    def dual_view_activate(self, *args) :
+    def dual_view_activate(self, *arg) :
         self.set_layout(True)
 
-    def single_view_activate(self, *args) :
+    def single_view_activate(self, *arg) :
         self.set_layout(False)
 
     def hide_value_col(self, callback = None):
@@ -3799,18 +3813,13 @@ class NCam(gtk.VBox):
     def on_scale_change_value(self, widget):
         self.main_box.set_size_request(int(self.w_adj.value), 100)
 
-    def col_width_adj_value_changed(self, widget):
-        self.col_value.set_min_width(int(self.col_width_adj.value))
-        if self.col_value2 is not None:
-            self.col_value2.set_min_width(int(self.col_width_adj.value))
-
     def move_up_clicked(self, *arg) :
         self.move(-1)
 
     def move_down_clicked(self, *arg) :
         self.move(1)
 
-    def get_col_name(self, column, cell, model, itr) :
+    def get_col_name(self, column, cell, model, itr, *arg) :
         data_type = model.get_value(itr, 0).get_type()
         val = model.get_value(itr, 0).get_name()
         if data_type == 'header' :
@@ -3853,7 +3862,7 @@ class NCam(gtk.VBox):
                             model.get_value(itr, 0).attr['filter_name'])
 
 
-    def get_col_value(self, column, cell, model, itr) :
+    def get_col_value(self, column, cell, model, itr, *arg) :
         f = model.get_value(itr, 0)
         val = f.get_value()
         cell.set_param_value(val)
@@ -3936,6 +3945,12 @@ class NCam(gtk.VBox):
         if ps is not None :
             val += ' ' + ps
 
+        val = val.replace('&#176;', '°')
+
+        if data_type == 'text' :
+            cell.set_property("wrap-width", 180)
+        else :
+            cell.set_property("wrap-width", -1)
         cell.set_property('text', val)
 
 
@@ -4091,11 +4106,11 @@ class NCam(gtk.VBox):
         if option == 0 :  # user project
             dlg_title = _("Open project")
             flt_name = _("NativeCAM projects")
-            dir = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR)
+            dir_ = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR)
         else :  # example
             dlg_title = _("Open example project")
             flt_name = _("NativeCAM example projects")
-            dir = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR, EXAMPLES_DIR)
+            dir_ = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR, EXAMPLES_DIR)
 
         filechooserdialog = gtk.FileChooserDialog(dlg_title, None,
                 gtk.FILE_CHOOSER_ACTION_OPEN, (gtk.STOCK_CANCEL, \
@@ -4106,7 +4121,7 @@ class NCam(gtk.VBox):
             filt.add_mime_type("text/xml")
             filt.add_pattern("*.xml")
             filechooserdialog.add_filter(filt)
-            filechooserdialog.set_current_folder(dir)
+            filechooserdialog.set_current_folder(dir_)
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 filename = filechooserdialog.get_filename()
@@ -4140,7 +4155,7 @@ class NCam(gtk.VBox):
         finally :
             filechooserdialog.destroy()
 
-    def reload_subroutine(self, *args):
+    def reload_subroutine(self, *arg):
         src = self.selected_feature.get_attr('src')
         self.auto_refresh.set_active(False)
         self.add_feature(src)
@@ -4157,7 +4172,7 @@ class NCam(gtk.VBox):
         self.actionCut.set_sensitive(self.can_delete_duplicate)
         self.actionCopy.set_sensitive(self.can_delete_duplicate)
 
-def verify_ini(fname, catalog) :
+def verify_ini(fname, ctlog) :
     path2ui = os.path.join(SYS_DIR, 'ncam.ui')
     req = '# required NativeCAM item :\n'
 
@@ -4186,12 +4201,12 @@ def verify_ini(fname, catalog) :
             try :
                 c = parser.get('DISPLAY', 'LATHE')
                 if c == '1' :
-                    catalog = 'lathe'
+                    ctlog = 'lathe'
             except :
                 pass
 
             if dp == 'axis' :
-                newstr = '%sGLADEVCP = -U --catalog=%s %s\n' % (req, catalog, path2ui)
+                newstr = '%sGLADEVCP = -U --catalog=%s %s\n' % (req, ctlog, path2ui)
                 try :
                     oldstr = 'GLADEVCP = %s' % parser.get('DISPLAY', 'gladevcp')
                     txt = re.sub(r"%s" % oldstr, newstr, txt)
@@ -4199,7 +4214,7 @@ def verify_ini(fname, catalog) :
                     txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
             else :
-                newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=%s %s\n' % (req, catalog, path2ui)
+                newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=%s %s\n' % (req, ctlog, path2ui)
                 try :
                     oldstr = 'EMBED_TAB_COMMAND = %s' % parser.get('DISPLAY', 'embed_tab_command')
                     txt = re.sub(r"%s" % oldstr, newstr, txt)
@@ -4234,7 +4249,7 @@ def verify_ini(fname, catalog) :
             except :
                 txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
-            newstr = '%sSUBROUTINE_PATH = ncam/lib/%s:ncam/lib/utilities\n' % (req, catalog)
+            newstr = '%sSUBROUTINE_PATH = ncam/lib/%s:ncam/lib/utilities\n' % (req, ctlog)
             try :
                 oldstr = 'SUBROUTINE_PATH = ' + parser.get('RS274NGC', 'subroutine_path')
                 txt = re.sub(r"%s" % oldstr, newstr, txt)

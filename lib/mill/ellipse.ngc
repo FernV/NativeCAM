@@ -44,7 +44,8 @@ o<ellipse> sub
 	o234 else
 		o<get_max> CALL [41] [2] [#15] [#5410 * #<_stepover_min> / 2]
 	o234 endif
-	
+	#<fcut> = #41
+
 (change coords system to offset/rotate)
 	#<old_coord_system> = [#<_coord_system> / 10]
 	o<get_offsets> CALL
@@ -159,7 +160,11 @@ o<ellipse> sub
 	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<ellipse_create> CALL [#<_mill_data_start>] [#<xr>] [#<yr>] [#<fin_dir>] [#<segments>]
 		o<set_feed_rate_and_speed> CALL [#41 * #5410]
-		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1] ;[-3] ;?
+		o15 if [#<fin_dir> GT 10]
+			o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_depth>] [-1] [#<fcut>]
+		o15 else
+			o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
+		o15 endif
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>]
 			o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [2] ;[3] (will force an arc to clear workpiece when completed)

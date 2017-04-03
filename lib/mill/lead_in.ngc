@@ -1,14 +1,22 @@
 (will set compensation and bring cutter to x, y then z, ready to start cutting)
 (author : Fernand Veilleux)
 o<lead_in> sub
-(CALL with data ptr[1] dir[2] comp or opt[3] cut_start[4] _depth_reached[5])
+(CALL with data ptr[1] dir[2] comp or opt[3] cut_start[4] _depth_reached[5] final_cut#6)
 
 	#<ptr>               = [#1 + #[#1] * 8 - 7] ;[#1 + [#[#1] - 1] * 8 + 1] 
-	#<dir>               = #2 (2:cw, 3:ccw)
+	#<dir>               = [#2 MOD 10] (2:cw, 3:ccw)
+	#<full_depth>        = [#2 - #<dir>]
 	#<opt>               = #3 (Inside = 0, Pocket = 1, On the line = 2 or 40, Outside = 3, left = 41, right = 42)
 	#<_cut_current_z>    = #4 (this is cut_start)
 	#<_cut_loop_final_z> = #4
 	#<_depth_reached>    = #5
+	
+	o11 if [#<full_depth>]
+		#<tool_radius> = [[#5410 * 0.501] + [#6 * 1]]
+	o11 else
+		#<tool_radius> = [#5410 * 0.501]
+	o11 endif
+;(print,dir = #<dir>, full depth=#<full_depth>, tool_radius = #<tool_radius>, no6 = #6)
 
 	#<_cut_current_x>    = #[#<ptr>] (entry x)
 	#<_cut_current_y>    = #[#<ptr> + 1] (entry y)
@@ -25,9 +33,7 @@ o<lead_in> sub
 		G0 Z#<_rapid_z>
 	o<comp0> endif	
 	G40
-	
-	#<tool_radius> = [#5410 * #<_lead_in_fact>]
-	
+		
 	o16 if [#<opt> LE 1] (inside or pocket)
 		o17 if [#<dir> EQ 2]
 			#<opt> = 42
@@ -242,11 +248,11 @@ o<lead_in> sub
 			#<py>  = [#<_cut_current_y> - #<i> - #<j>]
 			#<entry_dir> = 2
 		o26 endif
-		
+;		(print,pre-xy = #<px>, #<py>)
 		G0 X#<px> Y#<py>  (preentry)
 		G#<opt>
 		G#<entry_dir> X#<_cut_current_x> Y#<_cut_current_y> I#<i> J#<j>
-
+;		(print,xy = #<_cut_current_x>, #<_cut_current_y>)
 	o<comp00> endif
 
 	G0 Z[#<_cut_current_z> + #<_z_clear>]

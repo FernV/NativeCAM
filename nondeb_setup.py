@@ -6,7 +6,7 @@ Will create links and modify files to embed NativeCAM in LinuxCNC
 should work with any linux distro save a few exceptions
 
 usage :
-    sudo python nondeb_setup.py [c]
+    sudo nondeb_setup.py [c]
 
     w/ argument c will restore files and delete links
     w/o argument will create links and modify files
@@ -78,16 +78,16 @@ if find > '' :
             os.symlink(os.path.join(os.getcwd(), 'pref_edit.py'), fn)
             print 'created link to pref_edit.py in ', head, '\n'
 
-        fn = os.path.join(head, 'tr_glade.py')
-        if os.path.islink(fn) :
-            if cls :
-                os.remove(fn)
-                print 'removed link to tr_glade.py from ', head, '\n'
-            else :
-                print 'link to tr_glade.py already exists in ', head, '\n'
-        elif not cls :
-            os.symlink(os.path.join(os.getcwd(), 'tr_glade.py'), fn)
-            print 'created link to tr_glade.py in ', head, '\n'
+#         fn = os.path.join(head, 'tr_glade.py')
+#         if os.path.islink(fn) :
+#             if cls :
+#                 os.remove(fn)
+#                 print 'removed link to tr_glade.py from ', head, '\n'
+#             else :
+#                 print 'link to tr_glade.py already exists in ', head, '\n'
+#         elif not cls :
+#             os.symlink(os.path.join(os.getcwd(), 'tr_glade.py'), fn)
+#             print 'created link to tr_glade.py in ', head, '\n'
 
 
 #        sd = os.path.join(head, 'path2ncam')
