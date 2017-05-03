@@ -9,12 +9,13 @@ o<polygon_create> sub
 	#[#1]     =  0
 	#<radius> = #2
 	#<edges>  = #3
+	#<dir>    = [#4 MOD 10]
 	
 	#<entry_x> = [[COS[180 / #<edges>]] * #<radius>]
 	#<half_p>  = [180 / #<edges>] (half of point to point angle)
 	#<step_angle> = [360 / #<edges>]
 
-	o<if01> if [#4 EQ 2]
+	o<if01> if [#<dir> EQ 2]
 		#<step_angle> = -#<step_angle>
 		#<half_p> = -#<half_p>
 	o<if01> endif

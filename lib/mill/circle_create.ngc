@@ -9,7 +9,8 @@ o<circle_create> sub
 	#[#1]     =  0
 	#<radius> = #2
 	#<flat>   = #3
-	#<dir>    = #4
+	#<dir>    = [#4 MOD 10]
+	
 	
 	o<if04> if [#<flat> EQ 0]
 		o<select> CALL [41] [#<dir> - 2] [#<radius>] [-#<radius>]
@@ -20,11 +21,11 @@ o<circle_create> sub
 		#<angle> = ACOS[[#<radius> - #<flat>] / #<radius>]
 		#<x>     = [COS[#<angle>] * #<radius>]
 		o<select> CALL [41] [#<dir> - 2] [SIN[#<angle>] * #<radius>] [-SIN[#<angle>] * #<radius>]
-		
+
 		o<add_mill_data> CALL [#1] [#<x>] [ #41] [#<dir>]
 		o<add_mill_data> CALL [#1] [#<x>] [   0] [1]
 		o<add_mill_data> CALL [#1] [#<x>] [-#41] [1]
 	o<if04> endif
 	o<add_mill_data> CALL [#1] [-#<radius>] [0] [#<dir>]
-	
+
 o<circle_create> endsub

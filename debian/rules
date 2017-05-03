@@ -19,18 +19,21 @@ override_dh_install:
 	cp -pr catalogs/ \
 		cfg/ \
 		lib/ \
-		xml/ \
+		defaults/ \
+		examples/ \
+		my-stuff/ \
 		ncam.py \
 		ncam.ui \
 		ncam.glade \
 		ncam_pref.glade \
 		pref_edit.py \
-		tr_glade.py \
 		debian/tmp/$(AUX_DIR)
+		
 	# copy only the graphic files, not the source
 	mkdir -p debian/tmp/$(AUX_DIR)/graphics
 	cp -p graphics/*.* \
 		debian/tmp/$(AUX_DIR)/graphics
+		
 	# Examples for Configuration Selector:
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/axis
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/gmoccapy
@@ -38,6 +41,7 @@ override_dh_install:
 	       debian/tmp/$(EXAMPLES_DIR)/2.7/axis
 	cp -pr configs/sim/gmoccapy/ncam_demo/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.7/gmoccapy
+	
 	# Examples for 2.8 (joints_axes)
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.8/axis
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.8/gmoccapy
@@ -45,21 +49,26 @@ override_dh_install:
 	       debian/tmp/$(EXAMPLES_DIR)/2.8/axis
 	cp -pr configs/sim/gmoccapy/ncam_demo.2.8/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.8/gmoccapy
+	
 	# Manpage:
 	$ mkdir -p debian/tmp/usr/share/man/man1/
 	cp -pr man/man1/* debian/tmp/usr/share/man/man1/
+	
 	# Make link for standalone (ncam shortname forconvenience):
 	mkdir -p debian/tmp/usr/bin/
 	(cd debian/tmp/usr/bin; \
 	    ln -sf ../../$(AUX_DIR)/ncam.py ./nativecam; \
 	    ln -sf ../../$(AUX_DIR)/ncam.py ./ncam; \
 	)
+	
 	mkdir -p debian/tmp/usr/share/locale/fr/LC_MESSAGES
 	cp -pr locale/fr/LC_MESSAGES/nativecam.mo \
 		debian/tmp/usr/share/locale/fr/LC_MESSAGES
+		
 	mkdir -p debian/tmp/usr/share/locale/de/LC_MESSAGES
 	cp -pr locale/de/LC_MESSAGES/nativecam.mo \
 		debian/tmp/usr/share/locale/de/LC_MESSAGES
+		
 	# Remove extraneous vcs-control files:
 	find debian/tmp -iname .gitignore -exec rm {} \;
 	# Install:

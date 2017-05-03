@@ -9,7 +9,7 @@ o<rectangle_create> sub
 	#<half_height>   = [#3 / 2]
 	#<corner_radius> = #4
 	#<corner_style>  = #5
-	#<dir>           = #6
+	#<dir>           = [#6 MOD 10]
 	
 	#<half_width_f>  = [#7 / 2]
 	#<half_height_f> = [#8 / 2]

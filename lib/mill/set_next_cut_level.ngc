@@ -1,8 +1,8 @@
 o<set_next_cut_level> sub
 (author : Fernand Veilleux)
-(CALL cut_depth)
+(CALL cut_depth,  [#<cut_step>])
 	o<lvl_1> if [#<_cut_current_z> GT #1]
-		#<_cut_loop_final_z> = [#<_cut_current_z> + #<_depth_step>]
+		#<_cut_loop_final_z> = [#<_cut_current_z> + #2]
 		o<too_low> if [#<_cut_loop_final_z> LT #1]
 			#<_cut_loop_final_z> = #1
 		o<too_low> endif

@@ -4,9 +4,11 @@
 # --  NO USER SETTINGS IN THIS FILE -- EDIT PREFERENCES INSTEAD  ---
 # ------------------------------------------------------------------
 
-APP_COPYRIGHT = '''Copyright © 2017 Fernand Veilleux : fernveilleux@gmail.com'''
-APP_AUTHORS = ['Fernand Veilleux, maintainer', 'Nick Drobchenko, initiator', 'Meison Kim', 'Alexander Wigen',
-               'Konstantin Navrockiy', 'Mit Zot', 'Dewey Garrett', 'Karl Jacobs', 'Philip Mullen']
+APP_COPYRIGHT = '''Copyright © 2017 Fernand Veilleux : fernveilleux@gmail.com
+Copyright © 2012 Nick Drobchenko aka Nick from cnc-club.ru'''
+APP_AUTHORS = ['Fernand Veilleux, maintainer', 'Nick Drobchenko, initiator',
+               'Meison Kim', 'Alexander Wigen', 'Konstantin Navrockiy', 'Mit Zot',
+               'Dewey Garrett', 'Karl Jacobs', 'Philip Mullen']
 
 APP_VERSION = "(non deb)"
 
@@ -34,10 +36,11 @@ import locale
 import platform
 import pref_edit
 
+
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
 locale.setlocale(locale.LC_NUMERIC, '')
-# localeDICT = {}
+
 localeDICT = locale.localeconv()
 decimal_point = localeDICT['decimal_point']
 
@@ -54,8 +57,8 @@ items_fmt_str = '<span foreground="blue" style="oblique"><b>%s</b></span>'
 
 UNDO_MAX_LEN = 200
 gmoccapy_time_out = 0.0
-developer_menu = False
 
+# use or test translation file
 APP_NAME = 'nativecam'
 nativecam_locale = os.getenv('NATIVECAM_LOCALE')
 if nativecam_locale is not None :
@@ -69,18 +72,15 @@ try :
     lang = gettext.translation(APP_NAME, nativecam_locale, fallback = True)
     lang.install()
 except :
-    gettext.install(APP_NAME, None, unicode = True)
+    gettext.install(APP_NAME, None, str = True)
 
 APP_TITLE = _("NativeCAM for LinuxCNC")
 APP_COMMENTS = _('A GUI to help create LinuxCNC NGC files.')
 APP_LICENCE = _('''This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n
 It is recommended you use the deb package
 ''')
-
-MAX_QUICK_ACCESS_BTN = 15
 
 VALID_CATALOGS = ['mill', 'plasma', 'lathe']
 DEFAULT_CATALOG = "mill"
@@ -95,6 +95,7 @@ EXAMPLES_DIR = 'examples'
 CATALOGS_DIR = 'catalogs'
 GRAPHICS_DIR = 'graphics'
 DEFAULTS_DIR = 'defaults'
+CUSTOM_DIR = 'my-stuff'
 
 # files
 DEFAULT_TEMPLATE = 'default_template.xml'
@@ -106,18 +107,14 @@ TOOLBAR_FNAME = "toolbar.conf"
 TOOLBAR_CUSTOM_FNAME = "toolbar-custom.conf"
 GENERATED_FILE = "ncam.ngc"
 
-DEFAULT_EDITOR = 'gedit'  # or any like kate, etc...
+DEFAULT_EDITOR = 'gedit'
 
-SUPPORTED_DATA_TYPES = ['sub-header', 'header', 'bool', 'boolean', 'int', 'tool',
-	'text', 'list', 'float', 'string', 'combo', 'combo-user', 'items', 'filename']
+SUPPORTED_DATA_TYPES = ['sub-header', 'header', 'bool', 'boolean', 'int', 'fontname',
+                        'tool', 'gcode', 'text', 'list', 'float', 'string',
+                        'combo', 'combo-user', 'items', 'filename']
 NUMBER_TYPES = ['float', 'int']
 NO_ICON_TYPES = ['sub-header', 'header']
 GROUP_HEADER_TYPES = ['items', 'sub-header', 'header']
-DEFAULT_ICONS = {
-    "active": "enable.png",
-    "enabled": "enable.png",
-    "items": "items.png"
-}
 
 XML_TAG = "lcnc-ncam"
 
@@ -126,17 +123,117 @@ HOME_PAGE = 'https://github.com/FernV/NativeCAM'
 class tv_select :  # 'enum' items
     none, feature, items, header, param = list(range(5))
 
+class search_warning :
+    none, print_only, dialog = list(range(3))
+
+#global variables
 INCLUDE = []
 DEFINITIONS = []
 PIXBUF_DICT = {}
 USER_VALUES = {}
-
+USER_SUBROUTINES = []
+TB_CATALOG = {}
 UNIQUE_ID = 10
+
+UI_INFO = '''
+<ui>
+    <toolbar name='dummy'>
+        <toolitem action='SingleView' />
+        <toolitem action='DualView'/>
+        <toolitem action='TopBottom'/>
+        <toolitem action='SideSide'/>
+        <toolitem action='HideCol'/>
+        <toolitem action='SubHdrs'/>
+    </toolbar>
+
+    <toolbar name='ToolBar'>
+        <toolitem action='Build' />
+        <separator />
+        <toolitem action='Add' />
+        <toolitem action='Duplicate' />
+        <toolitem action='Delete' />
+        <separator />
+        <toolitem action='Undo' />
+        <toolitem action='Redo' />
+        <separator />
+        <toolitem action='MoveUp' />
+        <toolitem action='MoveDown' />
+        <separator />
+        <toolitem action='AppendItm' />
+        <toolitem action='RemoveItm' />
+        <separator />
+        <toolitem action='Collapse' />
+    </toolbar>
+
+    <popup name='PopupMenu'>
+        <menuitem action='Rename' />
+        <menu action='SetDigits'>
+            <menuitem action='Digit1'/>
+            <menuitem action='Digit2'/>
+            <menuitem action='Digit3'/>
+            <menuitem action='Digit4'/>
+            <menuitem action='Digit5'/>
+            <menuitem action='Digit6'/>
+        </menu>
+        <menuitem action='DataType' />
+        <menuitem action='RevertType' />
+        <separator />
+        <menuitem action='Undo' />
+        <menuitem action='Redo' />
+        <separator />
+        <menuitem action='HideField' />
+        <menuitem action='ShowFields' />
+        <menuitem action='ChngGrp' />
+        <separator />
+        <menuitem action='Add' />
+        <menuitem action='Duplicate' />
+        <menuitem action='Delete' />
+        <separator />
+        <menuitem action='Cut' />
+        <menuitem action='Copy' />
+        <menuitem action='Paste' />
+        <separator />
+        <menuitem action='MoveUp' />
+        <menuitem action='MoveDown' />
+        <separator />
+        <menuitem action='AppendItm' />
+        <menuitem action='RemoveItm' />
+        <separator />
+        <menuitem action='SaveUser' />
+        <menuitem action='DeleteUser' />
+    </popup>
+
+    <popup name='PopupMenu2'>
+        <menu action='SetDigits'>
+            <menuitem action='Digit1'/>
+            <menuitem action='Digit2'/>
+            <menuitem action='Digit3'/>
+            <menuitem action='Digit4'/>
+            <menuitem action='Digit5'/>
+            <menuitem action='Digit6'/>
+        </menu>
+        <menuitem action='DataType' />
+        <menuitem action='RevertType' />
+        <separator />
+        <menuitem action='Undo' />
+        <menuitem action='Redo' />
+        <separator />
+        <menuitem action='HideField' />
+        <menuitem action='ShowFields' />
+        <menuitem action='ChngGrp' />
+        <separator />
+        <menuitem action='SaveUser' />
+        <menuitem action='DeleteUser' />
+    </popup>
+</ui>
+
+'''
+
 
 def get_int(s10) :
     index = s10.find('.')
     if index > -1 :
-        s10 = s10[:index - 1]
+        s10 = s10[:index]
     try :
         return int(s10)
     except :
@@ -149,7 +246,7 @@ def get_float(s10) :
         return 0.0
 
 def search_path(warn, f, *argsl) :
-    if f[0] == "" :
+    if f == "" :
         return None
 
     if os.path.isfile(f) :
@@ -173,10 +270,10 @@ def search_path(warn, f, *argsl) :
     if os.path.isfile(src) :
         return src
 
-    if warn > 0:
+    if warn > search_warning.none:
         print(_("Can not find file %(filename)s") % {"filename":f})
 
-    if warn == 2 :
+    if warn == search_warning.dialog :
         mess_dlg(_("Can not find file %(filename)s") % {"filename":f})
     return None
 
@@ -194,7 +291,7 @@ def get_pixbuf(icon, size) :
     if (icon_id) in PIXBUF_DICT :
         return PIXBUF_DICT[icon_id]
 
-    icon_fname = search_path(0, icon, GRAPHICS_DIR)
+    icon_fname = search_path(search_warning.none, icon, GRAPHICS_DIR)
     if icon_fname is not None :
         try :
             pix_buf = gdk.pixbuf_new_from_file_at_size(icon_fname, size, size)
@@ -206,7 +303,7 @@ def get_pixbuf(icon, size) :
     return None
 
 def translate(fstring):
-    # translate the file when testing translation
+    # translate the glade file when testing translation
     txt2 = fstring.split('\n')
     fstring = ''
     for line in txt2 :
@@ -238,26 +335,19 @@ def mess_dlg(mess, title = "NativeCAM"):
 
 
 def mess_yesno(mess, title = ""):
-    yesno = gtk.MessageDialog(parent = None,
-        flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-        type = gtk.MESSAGE_QUESTION,
-        buttons = gtk.BUTTONS_YES_NO,
-        message_format = '%s' % mess
-        )
-    yesno.set_title(title)
-    yesno.set_keep_above(True)
-    response = yesno.run()
-    yesno.destroy()
-    return response == gtk.RESPONSE_YES
+    return mess_with_buttons(mess, (gtk.STOCK_YES, gtk.RESPONSE_YES, \
+                             gtk.STOCK_NO, gtk.RESPONSE_NO), title) == gtk.RESPONSE_YES
 
 def mess_with_buttons(mess, buttons, title = ""):
-    mwb = gtk.Dialog(parent = None, buttons = buttons,
-          flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+    mwb = gtk.Dialog(parent = None,
+                     buttons = buttons,
+                     flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
           )
     mwb.set_title(title)
     finbox = mwb.get_content_area()
     l = gtk.Label(mess)
     finbox.pack_start(l)
+    mwb.set_keep_above(True)
     mwb.show_all()
     response = mwb.run()
     mwb.hide()
@@ -265,7 +355,7 @@ def mess_with_buttons(mess, buttons, title = ""):
     return response
 
 class copymode:  # 'enum' items
-    one_at_a_time, yes_to_all, no_to_all = range(3)
+    one_at_a_time, yes_to_all, no_to_all = list(range(3))
 
 def copy_dir_recursive(fromdir, todir,
                        update_ct = 0,
@@ -273,7 +363,7 @@ def copy_dir_recursive(fromdir, todir,
                        overwrite = False,
                        verbose = False) :
     if not os.path.isdir(todir) :
-        os.makedirs(todir, 0755)
+        os.makedirs(todir, 0o755)
 
     for p in os.listdir(fromdir) :
         frompath = os.path.join(fromdir, p)
@@ -296,17 +386,17 @@ def copy_dir_recursive(fromdir, todir,
                  == hashlib.md5(open(topath, 'rb').read()).digest()) :
                 # files are same
                 if verbose :
-                    print "NOT copying %s to %s" % (p, todir)
+                    print("NOT copying %s to %s" % (p, todir))
             else :  # files are different
                 if (os.path.getctime(frompath) < os.path.getctime(topath)) :
                     # different and local file most recent
                     if verbose :
-                        print (_('Keeping modified local file %(filename)s') % {"filename":p})
+                        print(_('Keeping modified local file %(filename)s') % {"filename":p})
                     pass
                 else :  # different and system file is most recent
                     if mode == copymode.yes_to_all :
                         if verbose :
-                            print "copying %s to %s" % (p, todir)
+                            print("copying %s to %s" % (p, todir))
                         shutil.copy(frompath, topath)
                         update_ct += 1
                         continue
@@ -342,7 +432,7 @@ def copy_dir_recursive(fromdir, todir,
                     # copy or touch
                     if ans == gtk.RESPONSE_YES or mode == copymode.yes_to_all :
                         if verbose:
-                            print "copying %s to %s" % (p, todir)
+                            print("copying %s to %s" % (p, todir))
                         shutil.copy(frompath, topath)
                         update_ct += 1
 
@@ -352,15 +442,15 @@ def copy_dir_recursive(fromdir, todir,
     return mode, update_ct
 
 def err_exit(errtxt):
-    print errtxt
-    mess_dlg (errtxt)
+    print(errtxt)
+    mess_dlg(errtxt)
     sys.exit(1)
 
 if platform.system() <> 'Windows' :
     try :
         import linuxcnc
-    except Exception, detail :
-        err_exit(_('Error importing linuxcnc\n%(err_details)s') % {'err_details':detail})
+    except ImportError as detail :
+        err_exit(detail)
 
 def require_ini_items(fname, ini_instance):
     global NCAM_DIR, NGC_DIR
@@ -395,7 +485,6 @@ def require_ncam_lib(fname, ini_instance):
     # presumes already checked:[DISPLAY]NCAM_DIR
     # ini file must specify a [RS274NGC]SUBROUTINE_PATH that
     # includes NCAM_DIR + LIB_DIR (typ: [DISPLAY]NCAM_DIR/lib)
-
     require_lib = os.path.join(NCAM_DIR, LIB_DIR)
     found_lib_dir = False
     try :
@@ -404,23 +493,22 @@ def require_ncam_lib(fname, ini_instance):
             err_exit(_('Required lib missing:\n\n'
                        '[RS274NGC]SUBROUTINE_PATH'))
 
-        print "[RS274NGC]SUBROUTINE_PATH =", subroutine_path
-        print "  real paths :"
+        print("[RS274NGC]SUBROUTINE_PATH = %s\n  Real paths:" % subroutine_path)
 
         for i, d in enumerate(subroutine_path.split(":")):
             d = os.path.expanduser(d)
             if os.path.isabs(d) :
                 thedir = d
             else :
-                thedir = (os.path.realpath(os.path.dirname(fname) + '/' + d))
+                thedir = os.path.join(os.path.realpath(os.path.dirname(fname)), d)
             if not os.path.isdir(thedir) :
                 continue
             else :
-                print ("   %s" % (thedir))
+                print("   %s" % (os.path.realpath(thedir)))
                 if not found_lib_dir :
                     found_lib_dir = thedir.find(require_lib) == 0
 
-        print ""
+        print("")
 
         if not found_lib_dir :
             err_exit (_('\nThe required NativeCAM lib directory :\n<%(lib)s>\n\n'
@@ -428,17 +516,18 @@ def require_ncam_lib(fname, ini_instance):
                       '<%(path)s>\n\nEdit ini and correct\n'
                     % {'lib':require_lib, 'path':subroutine_path}))
 
-    except Exception, detail :
+    except Exception as detail :
         err_exit(_('Required NativeCAM lib\n%(err_details)s') % {'err_details':detail})
 
-class Tools():
+
+class Tools(object):
 
     def __init__(self):
         self.table_fname = None
         self.list = ''
 
     def set_file(self, tool_table_file):
-        fn = search_path(2, tool_table_file)
+        fn = search_path(search_warning.dialog, tool_table_file)
         if fn is not None :
             self.table_fname = fn
             self.load_table()
@@ -477,16 +566,19 @@ class Tools():
                 return tool[1] + ' - ' + tool[2]
         return '0 - ' + _('None')
 
+
 class CellRendererMx(gtk.CellRendererText):
 
-    def __init__(self) :
+    def __init__(self, treeview) :
         gtk.CellRendererText.__init__(self)
         self.set_property('xpad', 2)
         self.set_property("wrap-mode", 2)
+        self.set_property("editable", True)
 
         self.max_value = 999999.9
         self.min_value = -999999.9
         self.data_type = 'string'
+        self.tv = treeview
         self.options = ''
         self.digits = '3'
         self.param_value = ''
@@ -496,10 +588,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.edited = None
         self.inputKey = ''
         self.tool_list = []
-        self.new_dt = ''
-        self.dt_change = '1'
         self.not_zero = '0'
-
 
     def set_tooltip(self, value):
         self.tooltip = value
@@ -510,7 +599,7 @@ class CellRendererMx(gtk.CellRendererText):
     def set_param_value(self, value):
         self.param_value = value
 
-    def set_not_zero(self, value = '0'):
+    def set_not_zero(self, value):
         self.not_zero = value
 
     def set_min_value(self, value):
@@ -542,17 +631,11 @@ class CellRendererMx(gtk.CellRendererText):
     def set_preediting(self, value):
         self.preedit = value
 
-    def set_edited_user_fn(self, value):
-        self.user_edited_fn = value
-
     def do_get_property(self, pspec):
         return getattr(self, pspec.name)
 
     def do_set_property(self, pspec, value):
         setattr(self, pspec.name, value)
-
-    def set_treeview(self, value):
-        self.tv = value
 
     def get_treeview(self):
         return self.tv
@@ -562,6 +645,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.vkb.set_decorated(False)
         self.vkb.set_transient_for(None)
         self.vkb.set_border_width(3)
+        self.vkb.set_property("skip-taskbar-hint", True)
 
         lbl = gtk.Label()
         lbl.set_line_wrap(True)
@@ -573,7 +657,7 @@ class CellRendererMx(gtk.CellRendererText):
 
         self.result_entry = gtk.Label('')
         self.result_entry.modify_font(pango.FontDescription('sans 16'))
-        tbl.attach(self.result_entry, 0, 3, 0, 1,
+        tbl.attach(self.result_entry, 0, 4, 0, 1,
                    xoptions = gtk.EXPAND | gtk.FILL,
                    yoptions = gtk.EXPAND | gtk.FILL)
 
@@ -581,26 +665,20 @@ class CellRendererMx(gtk.CellRendererText):
         img = gtk.Image()
         img.set_from_stock('gtk-clear', menu_icon_size)
         btn.set_image(img)
-        btn.connect("clicked", self.backspace_clicked)
+        btn.connect("clicked", self.vkb_backspace)
         tbl.attach(btn, 3, 4, 1, 2)
-
-        self.new_dt = ''
-        btn = gtk.Button(_('Alpha'))
-        btn.set_tooltip_text(_('Change to alphanumeric'))
-        btn.connect("clicked", self.cdt_request)
-        tbl.attach(btn, 3, 4, 0, 1)
 
         k = 10
         for i in range(1, 4) :
             k = k - 3
             for j in range(0, 3):
                 btn = gtk.Button(str(k + j))
-                btn.connect("clicked", self.numbers_clicked)
+                btn.connect("clicked", self.vkb_number)
                 tbl.attach(btn, j, j + 1, i, i + 1)
 
         if (self.min_value < 0.0) :
             btn = gtk.Button(label = '+/-')
-            btn.connect("clicked", self.change_sign_clicked)
+            btn.connect("clicked", self.vkb_change_sign)
             tbl.attach(btn, 2, 3, 4, 5)
             last_col = 2
         else :
@@ -608,47 +686,47 @@ class CellRendererMx(gtk.CellRendererText):
 
         if self.editdata_type == 'float' and get_int(self.digits) > 0 :
             btn = gtk.Button(label = decimal_point)
-            btn.connect("clicked", self.dot_clicked)
+            btn.connect("clicked", self.vkb_dot)
             tbl.attach(btn, last_col - 1, last_col, 4, 5)
             last_col = last_col - 1
 
         btn = gtk.Button(label = '0')
-        btn.connect("clicked", self.numbers_clicked)
+        btn.connect("clicked", self.vkb_number)
         tbl.attach(btn, 0, last_col, 4, 5)
 
         btn = gtk.Button()
         img = gtk.Image()
         img.set_from_stock('gtk-cancel', menu_icon_size)
         btn.set_image(img)
-        btn.connect("clicked", self.cancel_clicked)
+        btn.connect("clicked", self.vkb_cancel)
         tbl.attach(btn, 3, 4, 2, 3)
 
         btn = gtk.Button()
         img = gtk.Image()
         img.set_from_stock('gtk-apply', menu_icon_size)
         btn.set_image(img)
-        btn.connect("clicked", self.ok_clicked)
+        btn.connect("clicked", self.vkb_ok)
         tbl.attach(btn, 3, 4, 3, 5)
 
         (tree_x, tree_y) = self.tv.get_bin_window().get_origin()
         (tree_w, tree_h) = self.tv.window.get_geometry()[2:4]
 
-        vkb_w = max(tree_w - cell_area.x, vkb_width)
-        self.vkb.set_size_request(vkb_w, vkb_height)
-        self.vkb.resize(vkb_w, vkb_height)
+        self.vkb.set_size_request(vkb_width, vkb_height)
+        self.vkb.resize(vkb_width, vkb_height)
 
-        x = tree_x + tree_w - vkb_w
+        x = tree_x + tree_w - vkb_width
         y = tree_y + cell_area.y + cell_area.height
         self.vkb.move(x + 2, y)
 
         self.vkb.set_keep_above(True)
 
         self.vkb.connect('key-press-event', self.vkb_key_press_event)
-        self.vkb.connect('focus-out-event', self.vkb_focus_out, None)
+        self.vkb.connect('focus-out-event', self.vkb_focus_out)
 
         if self.inputKey > '' :
             self.vkb_initialize = False
-            if self.inputKey == 'BS' :
+            if ((self.editdata_type == 'int') and self.inputKey.find('.')) or \
+                    (self.inputKey == 'BS') :
                 self.set_vkb_result('0')
             else :
                 self.set_vkb_result(self.inputKey)
@@ -662,19 +740,15 @@ class CellRendererMx(gtk.CellRendererText):
         self.vkb.show_all()
         btn.grab_focus()
 
-    def cdt_request(self, btn):
-        self.new_dt = 'string'
+    def vkb_ok(self, btn):
         self.vkb.response(gtk.RESPONSE_OK)
 
-    def ok_clicked(self, btn):
-        self.vkb.response(gtk.RESPONSE_OK)
-
-    def cancel_clicked(self, btn):
+    def vkb_cancel(self, btn):
         self.vkb.response(gtk.RESPONSE_CANCEL)
 
     def set_vkb_result(self, value):
         if self.vkb_initialize :
-            self.result_entry.set_markup('<b>%s</b>' % value[0:10])
+            self.result_entry.set_markup('<big><b>%s</b></big>' % value[0:10])
             self.vkb_initialize = False
         else :
             old_value = self.result_entry.get_text()
@@ -701,7 +775,7 @@ class CellRendererMx(gtk.CellRendererText):
                 else :
                     self.set_vkb_result(lbl + k_name)
             elif k_name in ['KP_Enter', 'Enter', 'space']:
-                win.response(gtk.RESPONSE_OK)
+                self.vkb.response(gtk.RESPONSE_OK)
             elif k_name in ['KP_Decimal', 'period', 'comma'] :
                 if (self.editdata_type == 'float'):
                     if self.vkb_initialize :
@@ -711,23 +785,23 @@ class CellRendererMx(gtk.CellRendererText):
                             self.set_vkb_result(lbl + decimal_point)
             elif k_name in ['KP_Subtract', 'KP_Add', 'plus', 'minus']  \
                         and (self.min_value < 0.0) :
-                self.change_sign_clicked(None)
+                self.vkb_change_sign(None)
             elif k_name == 'BackSpace' :
-                self.backspace_clicked(None)
+                self.vkb_backspace(None)
 
-    def backspace_clicked(self, btn) :
+    def vkb_backspace(self, btn) :
         if self.vkb_initialize :
             self.set_vkb_result('0')
         else :
             self.set_vkb_result(self.result_entry.get_text()[0:-1])
 
-    def numbers_clicked(self, btn):
+    def vkb_number(self, btn):
         if self.vkb_initialize :
             self.set_vkb_result(btn.get_label())
         else :
             self.set_vkb_result(self.result_entry.get_text() + btn.get_label())
 
-    def dot_clicked(self, btn):
+    def vkb_dot(self, btn):
         if self.vkb_initialize :
             self.set_vkb_result(decimal_point)
         else :
@@ -735,7 +809,7 @@ class CellRendererMx(gtk.CellRendererText):
             if lbl.find(decimal_point) == -1 :
                 self.set_vkb_result(lbl + decimal_point)
 
-    def change_sign_clicked(self, btn):
+    def vkb_change_sign(self, btn):
         if self.vkb_initialize :
             self.set_vkb_result('-')
         else :
@@ -748,7 +822,7 @@ class CellRendererMx(gtk.CellRendererText):
             else :
                 self.set_vkb_result(lbl[1:])
 
-    def vkb_focus_out(self, widget, event, path):
+    def vkb_focus_out(self, widget, event):
         if vkb_cancel_on_out:
             self.vkb.response(gtk.RESPONSE_CANCEL)
         else :
@@ -758,36 +832,61 @@ class CellRendererMx(gtk.CellRendererText):
         size_tuple = gtk.CellRendererText.do_get_size(self, widget, cell_area)
         return(size_tuple)
 
-    def edit_number(self, itr = None, time_out = 0.0) :
+    def edit_number(self, time_out = 0.05) :
         self.create_VKB(self.cell_area)
         time.sleep(time_out)
+        str_val = self.param_value
 
-        if self.vkb.run() == gtk.RESPONSE_OK:
-            val = get_float(self.result_entry.get_text().replace(decimal_point, '.'))
-            if val > self.max_value :
-                val = self.max_value
-            elif val < self.min_value :
-                val = self.min_value
+        while True :
+            response = self.vkb.run()
+            if response == gtk.RESPONSE_OK:
+                str_val = self.result_entry.get_text().replace(decimal_point, '.')
+                if self.editdata_type == 'int' :
+                    a_min = int(self.min_value)
+                    a_max = int(self.max_value)
+                    val = get_int(str_val)
 
-            fmt = '{0:0.%sf}' % self.digits
-            newval = fmt.format(val)
-            if (val == 0.0) and (self.not_zero != '0'):
-                mess_dlg(_("Value can not be '%(value)s' for\n\n%(tooltip)s") % \
-                         {'value':newval, 'tooltip':self.tooltip})
-                self.vkb.destroy()
-                return None
-        else :
-            newval = None
+                    if val > a_max :
+                        str_val = str(a_max)
+                        val = a_max
+                    elif val < a_min :
+                        str_val = str(a_min)
+                        val = a_min
+
+                    if (val == 0) and (self.not_zero != '0'):
+                        mess_dlg(_("Value can not be '0' for\n\n%(tooltip)s") % \
+                                 {'tooltip':self.tooltip})
+                    else :
+                        break
+
+                else :
+                    val = get_float(str_val)
+
+                    if val > self.max_value :
+                        str_val = str(self.max_value)
+                        val = self.max_value
+                    elif val < self.min_value :
+                        str_val = str(self.min_value)
+                        val = self.min_value
+
+                    if (val == 0.0) and (self.not_zero != '0'):
+                        mess_dlg(_("Value can not be '0' for\n\n%(tooltip)s") % \
+                             {'tooltip':self.tooltip})
+                    else :
+                        break
+
+            else :
+                break
+
         self.vkb.destroy()
-        if (itr is not None) and (newval is not None) :
-            self.user_edited_fn(itr, newval, self.new_dt)
-        return newval
+        return response, str_val
 
-    def edit_list(self, itr = None, time_out = 0.0):
+    def edit_list(self, time_out = 0.0):
         self.list_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.list_window.set_border_width(0)
         self.list_window.set_decorated(False)
         self.list_window.set_transient_for(None)
+        self.list_window.set_property("skip-taskbar-hint", True)
         vp = gtk.Viewport()
         vp.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         self.list_window.vbox.add(vp)
@@ -839,23 +938,21 @@ class CellRendererMx(gtk.CellRendererText):
         ls_view.grab_focus()
 
         time.sleep(time_out)
-        if self.list_window.run() == gtk.RESPONSE_OK:
-            model, ls_itr = ls_view.get_selection().get_selected()
-            new_val = model.get_value(ls_itr, 1)
-        else :
-            new_val = None
-        self.list_window.destroy()
-        if (itr is not None) and (new_val is not None) :
-            self.user_edited_fn(itr, new_val, '')
-        return new_val
 
-    def edit_string(self, itr = None, time_out = 0.0):
+        response = self.list_window.run()
+
+        model, ls_itr = ls_view.get_selection().get_selected()
+        new_val = model.get_value(ls_itr, 1)
+        self.list_window.destroy()
+        return response, new_val
+
+    def edit_string(self, time_out = 0.0):
         self.stringedit_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.stringedit_window.hide()
         self.stringedit_window.set_decorated(False)
         self.stringedit_window.set_transient_for(None)
         self.stringedit_window.set_border_width(0)
-        self.new_dt = ''
+        self.stringedit_window.set_property("skip-taskbar-hint", True)
 
         self.stringedit_entry = gtk.Entry()
         self.stringedit_entry.set_editable(True)
@@ -863,10 +960,7 @@ class CellRendererMx(gtk.CellRendererText):
             self.stringedit_entry.set_text(self.param_value)
         self.inputKey = ''
 
-#        if (self.dt_change == '1') :
-#            self.stringedit_entry.connect('populate-popup', self.str_popup)
-        self.stringedit_entry.connect('key-press-event', self._str_keyhandler)
-        self.stringedit_entry.connect('focus-out-event', self._str_focus_out)
+        self.stringedit_entry.connect('key-press-event', self.string_edit_keyhandler)
         self.stringedit_window.vbox.add(self.stringedit_entry)
 
         # position the popup on the edited cell
@@ -877,36 +971,13 @@ class CellRendererMx(gtk.CellRendererText):
         self.stringedit_window.move(x - 4, y - 2)
         self.stringedit_window.resize(tree_w - self.cell_area.x + 4, self.cell_area.height)
         self.stringedit_window.show_all()
-        time.sleep(time_out)
+        self.stringedit_entry.grab_focus()
+        self.stringedit_entry.connect('focus-out-event', self.string_edit_focus_out)
 
-        if self.stringedit_window.run() == gtk.RESPONSE_OK:
-            new_val = self.stringedit_entry.get_text()
-        else :
-            new_val = None
+        response = self.stringedit_window.run()
+        new_val = self.stringedit_entry.get_text()
         self.stringedit_window.destroy()
-        if (itr is not None) and (new_val is not None) :
-            self.user_edited_fn(itr, new_val, self.new_dt)
-        return new_val
-
-# a bug in pygtk makes it unavailable now
-# trying to find a workaround
-#     def str_popup(self, widget, menu):
-#         menu.prepend(gtk.SeparatorMenuItem())
-#
-#         menu_item = gtk.MenuItem(_('Change to integer'))
-#         menu_item.set_size_request(-1, add_menu_icon_size)
-#         menu_item.connect("activate", self.chng_dt, 'int')
-#         menu.prepend(menu_item)
-#
-#         menu_item = gtk.MenuItem(_('Change to float'))
-#         menu_item.set_size_request(-1, add_menu_icon_size)
-#         menu_item.connect("activate", self.chng_dt, 'float')
-#         menu.prepend(menu_item)
-#         menu.show_all()
-
-    def chng_dt(self, callback = None, *arg) :
-        self.new_dt = arg[0]
-        self.stringedit_window.response(gtk.RESPONSE_OK)
+        return response, new_val
 
     def list_keypress(self, widget, event) :
         keyname = gdk.keyval_name(event.keyval)
@@ -939,42 +1010,37 @@ class CellRendererMx(gtk.CellRendererText):
         self.cell_area = cell_area
 
         if self.editdata_type in NUMBER_TYPES :
-#            if self.inputKey == '-' and self.min_value >= 0.0 :
-#                self.inputKey = ''
-#                return None
-#            else :
-            result = self.edit_number()
-            if result is not None :
-                self.edited(self, path, result, self.new_dt)
+            response, result = self.edit_number()
+            if response == gtk.RESPONSE_OK :
+                self.edited(self, path, result)
             return None
 
         elif self.editdata_type in ['bool', 'boolean']:
             if self.inputKey > '' :
                 self.inputKey = ''
                 return None
-            if get_int(self.param_value) == 0 :
-                self.edited(self, path, '1', '')
+            if self.param_value == '0' :
+                self.edited(self, path, '1')
             else :
-                self.edited(self, path, '0', '')
+                self.edited(self, path, '0')
             return None
 
         elif self.editdata_type in ['combo-user', 'combo', 'tool']:
             self.inputKey = ''
-            result = self.edit_list()
-            if result is not None :
-                self.edited(self, path, result, '')
+            response, result = self.edit_list()
+            if response == gtk.RESPONSE_OK :
+                self.edited(self, path, result)
             return None
 
-        elif self.editdata_type == 'string':
-            result = self.edit_string()
-            if result is not None :
-                self.edited(self, path, result, self.new_dt)
+        elif self.editdata_type in ['string', 'gcode'] :
+            response, result = self.edit_string()
+            if response == gtk.RESPONSE_OK :
+                self.edited(self, path, result)
             return None
 
         elif self.editdata_type == 'filename':
             if self.inputKey > '' :
                 self.inputKey = ''
-                return None
 
             filechooserdialog = gtk.FileChooserDialog(_("Open"), None,
                      gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -991,6 +1057,8 @@ class CellRendererMx(gtk.CellRendererText):
                     filt.add_pattern(option)
 
                 filechooserdialog.add_filter(filt)
+                filechooserdialog.set_keep_above(True)
+                filechooserdialog.set_transient_for(self.get_toplevel())
 
                 filt = gtk.FileFilter()
                 filt.set_name(_("All files"))
@@ -1004,9 +1072,24 @@ class CellRendererMx(gtk.CellRendererText):
 
                 response = filechooserdialog.run()
                 if response == gtk.RESPONSE_OK:
-                    self.edited(self, path, filechooserdialog.get_filename(), '')
+                    self.edited(self, path, filechooserdialog.get_filename())
             finally:
                 filechooserdialog.destroy()
+            return None
+
+        elif self.editdata_type == 'fontname':
+            dlg = gtk.FontSelectionDialog('Titre')
+            try :
+                dlg.set_font_name(self.param_value)
+                dlg.set_preview_text('NativeCAM and LinuxCNC')
+                dlg.set_keep_above(True)
+                response = dlg.run()
+                result = dlg.get_font_name()
+            finally :
+                dlg.destroy()
+
+            if response == gtk.RESPONSE_OK:
+                self.edited(self, path, result)
             return None
 
         else :  # edit multi-line text
@@ -1016,6 +1099,7 @@ class CellRendererMx(gtk.CellRendererText):
             self.textedit_window = gtk.Dialog(parent = treeview.get_toplevel())
             self.textedit_window.set_decorated(False)
             self.textedit_window.set_transient_for(None)
+            self.textedit_window.set_property("skip-taskbar-hint", True)
 
             self.textedit = gtk.TextView()
             self.textedit.set_editable(True)
@@ -1023,8 +1107,8 @@ class CellRendererMx(gtk.CellRendererText):
             self.textedit.set_wrap_mode(gtk.WRAP_WORD)
             self.textbuffer.set_property('text', self.get_property('text'))
 
-            self.textedit_window.connect('key-press-event', self._keyhandler)
-            self.textedit_window.connect('focus-out-event', self._focus_out, path)
+            self.textedit_window.connect('key-press-event', self.text_edit_keyhandler)
+            self.textedit_window.connect('focus-out-event', self.text_edit_focus_out, path)
 
             scrolled_window = gtk.ScrolledWindow()
             scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
@@ -1045,12 +1129,13 @@ class CellRendererMx(gtk.CellRendererText):
             self.textedit_window.resize(tree_w, cell_area.height + 60)
             self.textedit_window.show_all()
 
-            if self.textedit_window.run() == gtk.RESPONSE_OK:
+            response = self.textedit_window.run()
+            if response == gtk.RESPONSE_OK:
                 (iter_first, iter_last) = self.textbuffer.get_bounds()
                 text = self.textbuffer.get_text(iter_first, iter_last)
-                self.edited(self, path, text, '')
-
+                self.edited(self, path, text)
             self.textedit_window.destroy()
+#            self.tv.queue_draw()
             return None
 
     def do_render(self, win, widget, background_area, cell_area,
@@ -1058,7 +1143,7 @@ class CellRendererMx(gtk.CellRendererText):
         if self.data_type in ['bool', 'boolean'] :
             cell_area.width = 30
             chk = gtk.CellRendererToggle()
-            chk.set_active(get_int(self.param_value) != 0)
+            chk.set_active(self.param_value == '1')
             chk.render(win, widget, background_area, cell_area,
                        expose_area, flags)
         else :
@@ -1066,18 +1151,18 @@ class CellRendererMx(gtk.CellRendererText):
                                            background_area,
                                            cell_area, expose_area, flags)
 
-    def _str_focus_out(self, widget, event):
+    def string_edit_focus_out(self, widget, event):
         self.stringedit_window.response(gtk.RESPONSE_OK)
 
-    def _str_keyhandler(self, widget, event):
+    def string_edit_keyhandler(self, widget, event):
         keyname = gdk.keyval_name(event.keyval)
         if keyname in ['Return', 'KP_Enter']:
             self.stringedit_window.response(gtk.RESPONSE_OK)
 
-    def _focus_out(self, widget, event, path):
+    def text_edit_focus_out(self, widget, event, path):
         self.textedit_window.response(gtk.RESPONSE_OK)
 
-    def _keyhandler(self, widget, event):
+    def text_edit_keyhandler(self, widget, event):
         keyname = gdk.keyval_name(event.keyval)
         if gdk.keyval_name(event.keyval) in ['Return', 'KP_Enter'] :
             if event.state & (gdk.SHIFT_MASK | gdk.CONTROL_MASK) :
@@ -1088,7 +1173,7 @@ class CellRendererMx(gtk.CellRendererText):
 
 gobject.type_register(CellRendererMx)
 
-class Parameter() :
+class Parameter(object) :
     def __init__(self, ini = None, ini_id = None, xml = None) :
         self.attr = {}
         if ini is not None :
@@ -1098,6 +1183,9 @@ class Parameter() :
 
     def __repr__(self) :
         return etree.tostring(self.to_xml(), pretty_print = True)
+
+    def __delattr__(self, *args, **kwargs):
+        return object.__delattr__(self, *args, **kwargs)
 
     def from_ini(self, ini, ini_id) :
         self.attr = {}
@@ -1116,7 +1204,7 @@ class Parameter() :
         self.id = ini_id
 
     def from_xml(self, xml) :
-        for i in xml.keys() :
+        for i in list(xml.keys()) :
             self.attr[i] = xml.get(i)
 
     def to_xml(self) :
@@ -1127,43 +1215,84 @@ class Parameter() :
 
     def get_icon(self, icon_size) :
         icon = self.get_attr("icon")
-        if icon is None or icon == "" :
-            if self.get_attr('name').lower() in DEFAULT_ICONS:
-                icon = DEFAULT_ICONS[self.get_attr('name').lower()]
         return get_pixbuf(icon, icon_size)
 
-    def get_image(self) :
-        return get_pixbuf(self.get_attr("image"), add_dlg_icon_size)
-
-    def get_value(self) :
-        if default_metric and "metric_value" in self.attr :
+    def get_value(self, ngc = False) :
+        if ngc and self.get_type() == 'gcode' :
+            val = self.attr["value"] if "value" in self.attr else ""
+            if val == '' :
+                return '0'
+            else :
+                return val
+        elif default_metric and "metric_value" in self.attr :
             return self.attr["metric_value"]
+        else :
+            return self.attr["value"] if "value" in self.attr else ""
+
+    def get_strict_value(self) :
+        if (self.attr["type"] == 'float') and default_metric and ("metric_value" in self.attr) :
+            return str(get_float(self.attr["metric_value"]) / 25.4)
         else :
             return self.attr["value"] if "value" in self.attr else ""
 
     def set_user_value(self, user_value) :
         if (self.get_type() == "float") :
-            fmt = '{0:0.%sf}' % self.get_digits()
-            value = get_float(user_value)
-            if self.get_attr("metric_value") is not None :
-                self.attr['metric_value'] = fmt.format(value * 25.4)
-            self.attr['value'] = fmt.format(value)
+            a_val = get_float(user_value)
+            if "metric_value" in self.attr :
+                self.attr['metric_value'] = str(a_val * 25.4)
+            self.attr['value'] = str(a_val)
         elif self.get_type() == 'int' :
             self.attr['value'] = str(get_int(user_value))
         else :
             self.attr['value'] = user_value
 
     def set_value(self, new_val) :
-        if default_metric and "metric_value" in self.attr :
-            self.attr["metric_value"] = new_val
-            if self.get_type() == "float" :
-                fmt = '{0:0.%sf}' % self.get_digits()
-                self.attr['value'] = fmt.format(get_float(new_val) / 25.4)
+        if self.get_type() == "float" :
+            a_val = get_float(new_val)
+            if default_metric and "metric_value" in self.attr :
+                self.attr["metric_value"] = str(a_val)
+                self.attr["value"] = str(a_val / 25.4)
+            else :
+                self.attr["value"] = str(a_val)
+                if "metric_value" in self.attr :
+                    self.attr["metric_value"] = str(a_val * 25.4)
+        elif self.get_type() == 'int' :
+            self.attr['value'] = str(get_int(new_val))
         else :
             self.attr["value"] = new_val
-            if (self.get_type() == "float") and self.get_attr("metric_value") is not None :
-                fmt = '{0:0.%sf}' % self.get_digits()
-                self.attr['metric_value'] = fmt.format(get_float(new_val) * 25.4)
+
+    def get_display_string(self) :
+        if self.get_type() == "float" :
+            fmt = '{0:0.%sf}' % self.get_digits()
+            if default_metric and "metric_value" in self.attr :
+                return fmt.format(get_float(self.attr["metric_value"]))
+            else :
+                return fmt.format(get_float(self.attr["value"]))
+        else :
+            return self.attr["value"] if "value" in self.attr else ""
+
+    def set_hidden(self, hide):
+        if hide :
+            self.attr['hidden'] = '2'
+        elif self.get_hidden() :
+            self.attr['hidden'] = '0'
+            return 1
+        return 0
+
+    def change_group(self):
+        t = self.get_type()
+        if t in ['sub-header', 'header'] :
+            if t == 'sub-header' :
+                if 'header' in self.attr :
+                    return False
+                self.set_type('header')
+            else :
+                self.set_type('sub-header')
+            return True
+        return False
+
+    def get_hidden(self):
+        return ('hidden' in self.attr) and (self.attr['hidden'] == '2')
 
     def get_name(self) :
         return _(self.attr["name"]) if "name" in self.attr else ""
@@ -1172,15 +1301,35 @@ class Parameter() :
         return _(self.attr["options"]) if "options" in self.attr else ""
 
     def get_type(self):
-        return self.attr["type"] if "type" in self.attr else "string"
+        return self.attr["type"]
 
     def set_type(self, new_type):
-        if (new_type != '') and (new_type != self.get_type()) :
-            self.attr['type'] = new_type
-            self.set_value(self.get_value())
+        self.attr['old_type'] = self.attr['type']
+        self.attr['type'] = new_type
+        if new_type == 'gcode' and default_metric and "metric_value" in self.attr :
+            self.attr["value"] = self.attr["metric_value"]
+
+    def revert_type(self):
+        if 'old_type' in self.attr :
+            if self.attr['old_type'] == 'float' :
+                val = get_float(self.attr['value'])
+                if val < get_float(self.get_min_value()) :
+                    val = get_float(self.get_min_value())
+                if val > get_float(self.get_max_value()) :
+                    val = get_float(self.get_max_value())
+                self.attr['value'] = str(val)
+                self.attr['type'] = 'float'
+            elif self.attr['old_type'] == 'int' :
+                val = get_int(self.attr['value'])
+                if val < get_int(self.get_min_value()) :
+                    val = get_int(self.get_min_value())
+                if val > get_int(self.get_max_value()) :
+                    val = get_int(self.get_max_value())
+                self.attr['value'] = str(val)
+                self.attr['type'] = 'int'
 
     def get_tooltip(self):
-        return _(self.attr["tool_tip"]) if "tool_tip" in self.attr else None
+        return _(self.attr["tool_tip"]) if "tool_tip" in self.attr else self.get_name()
 
     def get_attr(self, name) :
         return self.attr[name] if name in self.attr else None
@@ -1196,7 +1345,6 @@ class Parameter() :
 
     def set_digits(self, new_digits) :
         self.attr["digits"] = new_digits
-        self.set_value(self.get_value())
 
     def get_min_value(self):
         return self.attr["minimum_value"] if "minimum_value" in self.attr \
@@ -1206,7 +1354,7 @@ class Parameter() :
         return self.attr["maximum_value"] if "maximum_value" in self.attr \
             else "999999.9"
 
-class Feature():
+class Feature(object):
     def __init__(self, src = None, xml = None) :
         self.attr = {}
         self.param = []
@@ -1221,11 +1369,11 @@ class Feature():
     def get_icon(self, icon_size) :
         return get_pixbuf(self.get_attr("icon"), icon_size)
 
-    def get_image(self) :
-        return get_pixbuf(self.get_attr("image"), add_dlg_icon_size)
-
     def get_value(self):
         return self.attr["value"] if "value" in self.attr else ""
+
+    def get_display_string(self):
+        return self.get_value()
 
     def set_value(self, new_val):
         self.attr["value"] = new_val
@@ -1241,11 +1389,12 @@ class Feature():
         return self.attr[attr] if attr in self.attr else None
 
     def get_name(self):
-        return _(self.attr["name"]) if "name" in self.attr else ""
+        return _(self.attr["name"]) if "name" in self.attr else _("unname")
 
     def from_src(self, src) :
         src_config = ConfigParser.ConfigParser()
-        f = open(src).read()
+        uf = io.open(src).read()
+        f = str(uf)
 
         # remove _(" and ")
         f = re.sub(r"_\(\"", "", f)
@@ -1266,6 +1415,8 @@ class Feature():
 
         self.attr["src"] = src
         ftype = self.attr["type"]
+        if ftype is None :
+            raise Exception(_('Type not defined for\n%s') % src)
 
         # get order
         if "order" not in self.attr :
@@ -1275,6 +1426,7 @@ class Feature():
         self.attr["order"] = [s if s[:6] == "PARAM_" else "PARAM_" + s \
                               for s in self.attr["order"]]
 
+        self.attr['hidden_count'] = '0'
         # get params
         self.param = []
         parameters = self.attr["order"] + [p for p in conf if \
@@ -1282,25 +1434,26 @@ class Feature():
         for s in parameters :
             if s in conf :
                 p = Parameter(ini = conf[s], ini_id = s.lower())
-                p.attr['tool_tip'] = (p.get_attr('tool_tip') \
-                            if "tool_tip" in p.attr else p.get_attr('name'))
+
+                p_id = "%s:%s" % (ftype, p.id)
+                if (p_id + '--type') in USER_VALUES :
+                    p.set_type(USER_VALUES[p_id + '--type'])
+
+                # set hidden as per user preferences
+                if (p_id + '--hidden') in USER_VALUES :
+                    p.set_hidden(True)
+                    self.hide_field()
 
                 # set the value to user preference
-                if ('call' in p.attr) and (ftype + p.attr['call']) in USER_VALUES :
-                    p.set_user_value(USER_VALUES[ftype + p.attr['call']])
-                else :
-                    if p.get_type() == 'float' :
-                        fmt = '{0:0.%sf}' % p.get_digits()
-                        p.set_value(fmt.format(get_float(p.get_value())))
-                    elif p.get_type() == 'int' :
-                        p.set_value(str(get_int(p.get_value())))
+                if (p_id + '--value') in USER_VALUES :
+                    p.set_user_value(USER_VALUES[p_id + '--value'])
+
                 self.param.append(p)
 
         self.attr["id"] = ftype + '_000'
 
         # get gcode parameters
-        for l in ["definitions", "before", "call", "after"] :
-            l = l.upper()
+        for l in ["DEFINITIONS", "BEFORE", "CALL", "AFTER"] :
             if l in conf and "content" in conf[l] :
                 self.attr[l.lower()] = re.sub(r"(?m)\r?\n\r?\.", "\n",
                                               conf[l]["content"])
@@ -1357,9 +1510,9 @@ class Feature():
         return ""
 
     def include(self, srce) :
-        src = search_path(2, srce, LIB_DIR)
+        src = search_path(search_warning.dialog, srce, LIB_DIR)
         if src is not None:
-            return open(src).read()
+            return io.open(src).read()
         return ''
 
     def include_once(self, src) :
@@ -1423,13 +1576,13 @@ class Feature():
                          'output = %(output)s\n'
                          'e= %(e)s\n') \
                          % {'errcode':e.returncode, 'output':e.output, 'e':e}
-                print msg
+                print(msg)
                 mess_dlg(msg)
                 return ''
 
         def import_callback(m) :
             fname = m.group(2)
-            fname = search_path(2, fname, PROJECTS_DIR)
+            fname = search_path(search_warning.dialog, fname, PROJECTS_DIR)
             if fname is not None :
                 return str(open(fname).read())
 
@@ -1450,7 +1603,7 @@ class Feature():
                 else :
                     s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
                        (re.escape(p.attr["call"])), r"%s\1" %
-                       p.get_value(), s)
+                       p.get_value(True), s)
 
         s = re.sub(r"%NCAM_DIR%", "%s" % NCAM_DIR, s)
         s = re.sub(r"(?i)(<import>(.*?)</import>)", import_callback, s)
@@ -1481,12 +1634,31 @@ class Feature():
         count = get_int(self.attr['indent']) if 'indent' in self.attr else 0
         return('\t' * count)
 
+    def hide_field(self):
+        if 'hidden_count' not in self.attr :
+            self.attr['hidden_count'] = '1'
+        else :
+            self.attr['hidden_count'] = str(get_int(self.attr['hidden_count']) + 1)
+
+    def show_all_fields(self):
+        result = 0
+        for p in self.param :
+            result += p.set_hidden(False)
+        self.attr['hidden_count'] = '0'
+        return result > 0
+
+    def has_hidden_fields(self):
+        if 'hidden_count' in self.attr :
+            return get_int(self.attr['hidden_count']) > 0
+        else :
+            return False
+
     def get_unique_id(self) :
         global UNIQUE_ID
         UNIQUE_ID = UNIQUE_ID + 1
         return UNIQUE_ID
 
-class Preferences():
+class Preferences(object):
 
     def __init__(self):
         global default_metric
@@ -1501,7 +1673,7 @@ class Preferences():
         global default_digits, default_metric, add_menu_icon_size, \
             add_dlg_icon_size, quick_access_icon_size, menu_icon_size, \
             treeview_icon_size, vkb_width, vkb_height, vkb_cancel_on_out, \
-            toolbar_icon_size, gmoccapy_time_out, developer_menu, NCAM_DIR
+            toolbar_icon_size, gmoccapy_time_out, NCAM_DIR
 
         def read_float(cf, section, key, default):
             try :
@@ -1532,7 +1704,7 @@ class Preferences():
                 return default
 
         def read_int(cf, section, key, default):
-            return int(read_float(cf, section, key, default))
+            return int(round(read_float(cf, section, key, default), 0))
 
         if self.cat_name is None :
             self.cat_name = cat_name
@@ -1544,20 +1716,22 @@ class Preferences():
 
         config.read(self.cfg_file)
 
-        self.w_adj_value = read_float(config, 'display', 'width', 550)
-        self.col_width_adj_value = read_float(config, 'display', 'name_col_width', 160)
-        self.tv_w_adj_value = read_float(config, 'display', 'master_tv_width', 175)
-        self.sub_hdrs_in_tv1 = read_boolean(config, 'display', 'subheaders_in_master', False)
-        self.restore_expand_state = read_boolean(config, 'display', 'restore_expand_state', False)
-        developer_menu = read_boolean(config, 'display', 'developer_menu', False)
+        self.w_adj_value = read_int(config, 'display', 'width', 550)
+        self.col_width_adj_value = read_int(config, 'display', 'name_col_width', 160)
+        self.tv_w_adj_value = read_int(config, 'display', 'master_tv_width', 175)
+        self.restore_expand_state = read_boolean(config, 'display', 'restore_expand_state', True)
+        self.tv2_expandable = read_boolean(config, 'display', 'tv2_expandable', False)
+        self.tv_expandable = read_boolean(config, 'display', 'tv_expandable', False)
         self.use_dual_views = read_boolean(config, 'layout', 'dual_view', True)
         self.side_by_side = read_boolean(config, 'layout', 'side_by_side', True)
+        self.sub_hdrs_in_tv1 = read_boolean(config, 'layout', 'subheaders_in_master', False)
+        self.hide_value_column = read_boolean(config, 'layout', 'hide_value_column', False)
         treeview_icon_size = read_int(config, 'icons_size', 'treeview', 28)
         add_menu_icon_size = read_int(config, 'icons_size', 'add_menu', 24)
         menu_icon_size = read_int(config, 'icons_size', 'menu', 4)
-        toolbar_icon_size = read_int(config, 'icons_size', 'toolbar', 4)
-        add_dlg_icon_size = read_int(config, 'icons_size', 'add_dlg', 65)
-        quick_access_icon_size = read_int(config, 'icons_size', 'quick_access_tb', 30)
+        toolbar_icon_size = read_int(config, 'icons_size', 'toolbar', 5)
+        add_dlg_icon_size = read_int(config, 'icons_size', 'add_dlg', 70)
+        quick_access_icon_size = read_int(config, 'icons_size', 'ncam_toolbar', 30)
         vkb_width = read_int(config, 'virtual_kb', 'minimum_width', 260)
         vkb_height = read_int(config, 'virtual_kb', 'height', 260)
         vkb_cancel_on_out = read_boolean(config, 'virtual_kb', 'cancel_on_focus_out', True)
@@ -1572,7 +1746,8 @@ class Preferences():
             elif self.cat_name == 'lathe' :
                 self.ngc_init_str = 'G17 G40 G49 G90 G92.1 G94 G54 G64 p0.001'
 
-        self.timeout_value = read_float(config, 'general', 'time_out', 0.300)
+        self.timeout_value = read_int(config, 'general', 'time_out', 0.300) * 1000
+        self.autosave = read_boolean(config, 'general', 'autosave', False)
         default_digits = str(read_int(config, 'general', 'digits', 3))
         self.ngc_show_final_cut = read_sbool(config, 'general', 'show_final_cut', True)
         self.ngc_show_bottom_cut = read_sbool(config, 'general', 'show_bottom_cut', True)
@@ -1625,58 +1800,29 @@ class Preferences():
         self.create_defaults()
 
     def read_user_values(self):
-        global USER_VALUES
+        global USER_VALUES, USER_SUBROUTINES
 
         USER_VALUES = {}
         fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, USER_DEFAULT_FILE)
         config = ConfigParser.ConfigParser()
         config.read(fname)
+        USER_SUBROUTINES = config.sections()
         for section in config.sections() :
             for key, val in config.items(section) :
-                USER_VALUES[section + '#' + key] = val
+                USER_VALUES[section + ':' + key] = val
 
-    def edit(self, natcam):
-        old_toolbar_icon_size = toolbar_icon_size
-        old_quick_access_icon_size = quick_access_icon_size
-        old_treeview_icon_size = treeview_icon_size
-        old_menu_icon_size = menu_icon_size
-        old_add_menu_icon_size = add_menu_icon_size
-        old_add_dlg_icon_size = add_dlg_icon_size
-        old_view = natcam.pref.use_dual_views
-
-        if pref_edit.edit_preferences(natcam, default_metric, self.cat_name, NCAM_DIR, \
+    def edit(self, nc):
+        if pref_edit.edit_preferences(nc, default_metric, self.cat_name, NCAM_DIR, \
                 self.ngc_init_str, self.ngc_post_amble, SYS_DIR) :
             self.read(None)
-            if old_toolbar_icon_size <> toolbar_icon_size :
-                natcam.button_tb.set_icon_size(toolbar_icon_size)
-                natcam.add_toolbar.set_icon_size(toolbar_icon_size)
-            if old_quick_access_icon_size <> quick_access_icon_size :
-                natcam.setup_toolbar()
-                natcam.quick_access_tb.show_all()
-            if old_treeview_icon_size <> treeview_icon_size :
-                natcam.tv1_icon_cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
-                if natcam.treeview2 is not None:
-                    natcam.tv2_icon_cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
-                natcam.set_layout(old_view)
-            if (old_menu_icon_size <> menu_icon_size) or (old_add_menu_icon_size <> add_menu_icon_size) :
-                natcam.menu.destroy()
-                natcam.create_menu_interface()
-                natcam.menu.show_all()
-            if old_add_dlg_icon_size <> add_dlg_icon_size :
-                natcam.update_catalog()
-
-            natcam.name_cell.set_property('ellipsize', self.pref.name_ellipsis)
-
-            if natcam.treeview2 is not None :
-                natcam.name_cell2.set_property('ellipsize', self.pref.name_ellipsis)
-
-            natcam.autorefresh_call()
-
+            return True
+        return False
 
     def create_defaults(self):
         self.default = _('(*** GCode generated by NativeCAM for LinuxCNC ***)\n\n')
         self.default += _('(*.ngc files are best viewed with Syntax Highlighting)\n')
-        self.default += '(visit https://forum.linuxcnc.org/forum/20-g-code/30840-new-syntax-highlighting-for-gedit)\n'
+        self.default += '(visit https://forum.linuxcnc.org/forum/20-g-code/'
+        self.default +=     '30840-new-syntax-highlighting-for-gedit)\n'
         self.default += '(or https://github.com/FernV/Gcode-highlight-for-Kate)\n\n'
 
         self.default += (self.ngc_init_str + "\n")
@@ -1737,7 +1883,6 @@ class Preferences():
         if self.cat_name == 'plasma' :
             self.default += ("#<_plasma_test_mode>        = " + self.plasma_test_mode + "\n\n")
 
-
         self.default += _("(end defaults)\n\n")
 
         self.default += _('(This is a built-in safety to help avoid gouging into your work piece)\n')
@@ -1767,7 +1912,57 @@ class NCam(gtk.VBox):
         except getopt.GetoptError as err:
             err_exit(err)
 
+        # initialize class variables
+        self.add_iconview = None
+        self.can_add_to_group = False
+        self.can_delete_duplicate = False
+        self.can_move_down = False
+        self.can_move_up = False
+        self.can_remove_from_group = False
+        self.catalog_dir = DEFAULT_CATALOG
+        self.catalog_path = None
+        self.catalog_src = None
+        self.click_x = 0
+        self.click_y = 0
+        self.current_filename = ''
+        self.details_filter = None
         self.editor = DEFAULT_EDITOR
+        self.file_changed = False
+        self.focused_widget = None
+        self.icon_store = None
+        self.items_lpath = None
+        self.items_path = None
+        self.items_ts_parent_s = None
+        self.iter_next = None
+        self.iter_previous = None
+        self.iter_selected_type = tv_select.none
+        self.LinuxCNC_connected = False
+        self.show_not_connected = False
+        self.menubar = None
+        self.name_cell = None
+        self.name_cell2 = None
+        self.nc_toolbar = None
+        self.newnamedlg = None
+        self.params_scroll = None
+        self.path_to_new_selected = None
+        self.path_to_old_selected = None
+        self.selected_feature = None
+        self.selected_feature_itr = None
+        self.selected_feature_parent_itr = None
+        self.selected_feature_path = None
+        self.selected_feature_ts_itr = None
+        self.selected_param = None
+        self.selected_type = 'xxx'
+        self.selection = None
+        self.timeout = None
+        self.treestore_selected = None
+        self.treeview = None
+        self.treeview2 = None
+        self.tv1_icon_cell = None
+        self.tv2_icon_cell = None
+        self.undo_list = []
+        self.undo_pointer = -1
+
         self.pref = Preferences()
         self.tools = Tools()
 
@@ -1775,8 +1970,6 @@ class NCam(gtk.VBox):
             self.catalog_dir = optlist["-c"]
         elif "--catalog" in optlist :
             self.catalog_dir = optlist["--catalog"]
-        else :
-            self.catalog_dir = DEFAULT_CATALOG
 
         ini = os.getenv("INI_FILE_NAME")
         if "-i" in optlist :
@@ -1794,7 +1987,7 @@ class NCam(gtk.VBox):
             try :
                 inifilename = os.path.abspath(ini)
                 ini_instance = linuxcnc.ini(ini)
-            except Exception, detail :
+            except Exception as detail :
                 err_exit(_("Open fails for ini file : %(inifilename)s\n\n%(detail)s") % \
                            {'inifilename':inifilename, 'detail':detail})
 
@@ -1826,11 +2019,11 @@ class NCam(gtk.VBox):
 
         print("\nNativeCAM info:")
         print("   inifile = %s" % inifilename)
-        print("   SYS_DIR = %s" % SYS_DIR)
         print("  NCAM_DIR = %s" % NCAM_DIR)
+        print("   SYS_DIR = %s" % SYS_DIR)
         print("   program = %s\n" % __file__)
 
-        fromdirs = [CATALOGS_DIR, CFG_DIR, LIB_DIR, GRAPHICS_DIR]
+        fromdirs = [CATALOGS_DIR, CUSTOM_DIR]
 
         if ini is None :
             self.ask_to_create_standalone(fromdirs)
@@ -1838,32 +2031,21 @@ class NCam(gtk.VBox):
         # first use:copy, subsequent: update
         if SYS_DIR != NCAM_DIR :
             self.update_user_tree(fromdirs, NCAM_DIR)
+
         if ini is not None :
             require_ncam_lib(inifilename, ini_instance)
 
         self.tools.load_table()
-        self.LinuxCNC_connected = False
-        self.treestore_selected = None
-        self.selected_feature = None
-        self.selected_feature_path = None
-        self.selected_type = None
-        self.iter_selected_type = tv_select.none
-        self.treeview2 = None
-        self.focused_widget = None
 
-        self.embedded = True
-        self.undo_list = []
-        self.undo_pointer = -1
-        self.timeout = None
-
+        # find the catalog and menu file
         catname = self.catalog_dir + '/menu-custom.xml'
-        cat_dir_name = search_path(0, catname, CATALOGS_DIR)
+        cat_dir_name = search_path(search_warning.none, catname, CATALOGS_DIR)
         if cat_dir_name is not None :
             print(_('Using %s\n') % (catname))
         else :
             catname = self.catalog_dir + '/menu.xml'
-            cat_dir_name = search_path(2, catname, CATALOGS_DIR)
-            print(_('Using standard %(mnu)s,  no %(dir)s/menu-custom.xml found\n') %
+            cat_dir_name = search_path(search_warning.dialog, catname, CATALOGS_DIR)
+            print(_('Using default %(mnu)s,  no %(dir)s/menu-custom.xml found\n') %
                   {'mnu':catname, 'dir':self.catalog_dir})
         if cat_dir_name is None :
             sys.exit(1)
@@ -1873,14 +2055,17 @@ class NCam(gtk.VBox):
         mnu_xml = re.sub(r"\)_", "", mnu_xml)
         self.catalog = etree.fromstring(mnu_xml)
 
+        self.pref.read(self.catalog_dir)
+
         # main_window
         gtk.VBox.__init__(self, *a, **kw)
         self.builder = gtk.Builder()
         try :
-            gf = open(os.path.join(SYS_DIR, "ncam.glade")).read()
-        except :
-            raise IOError(_("Expected file not found : %s") % "ncam.glade")
+            gf = io.open(os.path.join(SYS_DIR, "ncam.glade")).read()
+        except IOError as reason :
+            err_exit(reason)
 
+        # testing translation file
         if translate_test :
             gf = translate(gf)
         else :
@@ -1888,47 +2073,62 @@ class NCam(gtk.VBox):
 
         self.builder.add_from_string(gf)
 
-        self.pref.read(self.catalog_dir)
-
         self.get_widgets()
+        self.main_box.reparent(self)
 
         self.on_scale_change_value(self)
 
-        self.treestore = gtk.TreeStore(object, str, gobject.TYPE_BOOLEAN,
-                                       gobject.TYPE_BOOLEAN)
+        # create treestore and treeview
+        self.treestore = gtk.TreeStore(object, str, bool, bool)
         self.master_filter = self.treestore.filter_new()
 
         self.details_filter = self.treestore.filter_new()
         self.details_filter.set_visible_column(3)
 
-        self.main_box.reparent(self)
         self.create_treeview()
 
-        self.quick_access_tb = gtk.Toolbar()
-        self.main_box.pack_start(self.quick_access_tb, False, False, 0)
-        self.quick_access_tb.set_style(gtk.TOOLBAR_ICONS)
-        self.main_box.reorder_child(self.quick_access_tb, 1)
+        # create actions, uimanager and add menu and toolbars
+        self.action_group = gtk.ActionGroup("my_actions")
+        self.create_actions()
 
-        self.create_menu_interface()
-        self.setup_toolbar()
+        self.uimanager = gtk.UIManager()
+        self.uimanager.insert_action_group(self.action_group)
+        self.accelGroup = self.uimanager.get_accel_group()
+        self.uimanager.add_ui_from_string(UI_INFO)
+
+        self.get_actions_reference()
+        self.create_menubar()
+
+        self.main_toolbar = self.uimanager.get_widget("/ToolBar")
+        self.main_toolbar.set_can_focus(False)
+        self.main_box.pack_start(self.main_toolbar, False, False, 0)
+
+        self.get_toolbar_actions()
+        self.create_nc_toolbar()
+
+        self.pop_up = self.uimanager.get_widget("/PopupMenu")
+        self.pop_up2 = self.uimanager.get_widget("/PopupMenu2")
+
         self.create_add_dialog()
 
         self.builder.connect_signals(self)
-        self.actionSingleView.set_active(not self.pref.use_dual_views)
-        self.actionDualView.set_active(self.pref.use_dual_views)
-        self.actionTopBottom.set_active(not self.pref.side_by_side)
-        self.actionSideBySide.set_active(self.pref.side_by_side)
-        self.actionSubHdrs.set_active(self.pref.sub_hdrs_in_tv1)
+        self.set_preferences()
 
-        self.loadcurrentwork()
-        self.get_selected_feature(self)
+        self.load_currentWork()
+        self.get_selected_feature(self.treeview)
         self.show_all()
+        self.actionCurrent.set_visible(not self.pref.autosave)
         self.addVBox.hide()
-        self.feature_pane.set_size_request(int(self.tv_w_adj.value), 100)
+        self.set_layout(None)
 
-        self.set_layout(self.pref.use_dual_views)
-        self.treeview.grab_focus()
+        self.feature_pane.set_size_request(int(self.tv_w_adj.get_value()), 100)
+
         self.clipboard = gtk.clipboard_get(gdk.SELECTION_CLIPBOARD)
+        self.edit_menu_activate()
+        self.treeview.grab_focus()
+        self.show_not_connected = True
+        self.actionAutoRefresh.connect('toggled', self.autorefresh_call)
+
 
     def ask_to_create_standalone(self, fromdirs) :
         dir_exists = False
@@ -1942,8 +2142,29 @@ class NCam(gtk.VBox):
                 sys.exit(0)
 
     def update_user_tree(self, fromdirs, todir):
+
+        if not os.path.isdir(NCAM_DIR) :
+            os.makedirs(NCAM_DIR, 0o755)
+
         if not os.path.isdir(NGC_DIR) :
-            os.makedirs(NGC_DIR, 0755)
+            os.makedirs(NGC_DIR, 0o755)
+
+        srcdir = os.path.join(NCAM_DIR, CUSTOM_DIR)
+        if not os.path.exists(srcdir) :
+            os.mkdir(srcdir)
+
+        srcdir = os.path.join(NCAM_DIR, LIB_DIR)
+        if os.path.exists(srcdir) and not os.path.islink(srcdir) :
+            msg = _('\nAn updated system is available\n\n'
+                'A new structure will replace the old one if you continue\n\n'
+                'If you have modified files in cfg, lib or graphics\n'
+                'sub-directories, you should chose CANCEL on the\n'
+                'next screen and exit the application to copy those files\n'
+                'in the newly created \'%(dir)s\' sub-directory. Other\n'
+                'un-needed files will be transfered to \'%(dir)s\' automatically.\n'
+                'It is up to you to delete them.\n\n'
+                'Take time to read the README file in \'%(dir)s\'' % {'dir':CUSTOM_DIR})
+            mess_dlg(msg, 'NativeCAM major update')
 
         # copy system files to user, make dirs if necessary
         mode = copymode.one_at_a_time
@@ -1962,295 +2183,307 @@ class NCam(gtk.VBox):
                 fmt2 = _('Created %(qty)3d files in %(dir)s')
 
             if update_ct > 0 :
-                print (fmt2 % {'qty':update_ct, 'dir':NCAM_DIR.rstrip('/') + '/' + d.lstrip('/')})
+                print(fmt2 % {'qty':update_ct, 'dir':NCAM_DIR.rstrip('/') + '/' + d.lstrip('/')})
         print('')
 
-        # copy default files if not exist
         for s in VALID_CATALOGS :
-            src_dir = os.path.join(SYS_DIR, DEFAULTS_DIR, s)
-            for f in os.listdir(src_dir) :
+            # copy default files if not exist
+            srcdir = os.path.join(SYS_DIR, DEFAULTS_DIR, s)
+            for f in os.listdir(srcdir) :
                 dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, f)
                 if not os.path.exists(dst) :
-                    shutil.copy(os.path.join(src_dir, f), dst)
+                    shutil.copy(os.path.join(srcdir, f), dst)
 
+            # create links to examples directories
+            srcdir = os.path.join(SYS_DIR, EXAMPLES_DIR, s)
+            dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, PROJECTS_DIR, EXAMPLES_DIR)
+            if os.path.exists(dst) and not os.path.islink(dst) :
+                shutil.rmtree(dst)
+            if not os.path.exists(dst) :
+                os.symlink(srcdir, dst)
 
-    def create_mi(self, _action):
-        mi = _action.create_menu_item()
-        mi.set_image(_action.create_icon(menu_icon_size))
-        return mi
+        def move_files(dir_processed) :
+            mov_src = os.path.join(NCAM_DIR, dir_processed)
+            mov_dst = os.path.join(NCAM_DIR, CUSTOM_DIR, dir_processed)
+            cmp_dir = os.path.join(SYS_DIR, dir_processed)
 
-    def create_menu_interface(self):
-        menu_bar = gtk.MenuBar()
+            if not os.path.isdir(mov_dst) :
+                os.makedirs(mov_dst, 0o755)
 
+            for p in os.listdir(mov_src) :
+                frompath = os.path.join(mov_src, p)
+                if os.path.isdir(frompath) :
+                    move_files(os.path.join(dir_processed, p))
+                else :
+                    cmp_path = os.path.join(cmp_dir, p)
+                    if not os.path.exists(cmp_path) :
+                        shutil.copy(frompath, os.path.join(mov_dst, p))
+
+        # move files that are not in SYS_DIR directories
+        # and replace dir with a link
+        for s in [LIB_DIR, GRAPHICS_DIR, CFG_DIR] :
+            srcdir = os.path.join(NCAM_DIR, s)
+            if os.path.isdir(srcdir) :
+                if not os.path.islink(srcdir) :
+                    move_files(s)
+                    shutil.rmtree(srcdir)
+            if not os.path.isdir(srcdir) :
+                os.symlink(os.path.join(SYS_DIR, s), srcdir)
+
+    def create_menubar(self):
+        def create_mi(_action, imgfile = None):
+            mi = _action.create_menu_item()
+            if imgfile == None :
+                mi.set_image(_action.create_icon(menu_icon_size))
+            else :
+                img = gtk.Image()
+                img.set_from_pixbuf(get_pixbuf(imgfile, add_menu_icon_size))
+                mi.set_image(img)
+            return mi
+
+        if self.menubar is not None :
+            self.menubar.destroy()
+        self.menubar = gtk.MenuBar()
+
+        # Projects menu
         file_menu = gtk.Menu()
-        f_menu = gtk.MenuItem(_("_Projects"))
-        f_menu.connect("activate", self.menu_file_activate)
+        file_menu.append(create_mi(self.actionNew))
+        file_menu.append(create_mi(self.actionOpen))
+        file_menu.append(create_mi(self.actionOpenExample))
+        file_menu.append(gtk.SeparatorMenuItem())
+        file_menu.append(create_mi(self.actionSave))
+        file_menu.append(create_mi(self.actionCurrent))
+        file_menu.append(create_mi(self.actionSaveTemplate))
+        file_menu.append(gtk.SeparatorMenuItem())
+        file_menu.append(create_mi(self.actionSaveNGC))
+
+        f_menu = create_mi(self.actionProject)
         f_menu.set_submenu(file_menu)
-        menu_bar.append(f_menu)
+        self.menubar.append(f_menu)
 
-        file_menu.append(self.create_mi(self.actionNew))
-        file_menu.append(self.create_mi(self.actionOpen))
-        file_menu.append(self.create_mi(self.actionOpenExample))
-        file_menu.append(gtk.SeparatorMenuItem())
-        file_menu.append(self.create_mi(self.actionSave))
-        file_menu.append(self.create_mi(self.actionSaveTemplate))
-        file_menu.append(gtk.SeparatorMenuItem())
-        file_menu.append(self.create_mi(self.actionSaveNGC))
-
-
+        # Edit menu
         ed_menu = gtk.Menu()
-        edit_menu = gtk.MenuItem(_("_Edit"))
-        edit_menu.connect("activate", self.menu_edit_activate)
+        ed_menu.append(create_mi(self.actionUndo))
+        ed_menu.append(create_mi(self.actionRedo))
+        ed_menu.append(gtk.SeparatorMenuItem())
+
+        ed_menu.append(create_mi(self.actionCut))
+        ed_menu.append(create_mi(self.actionCopy))
+        ed_menu.append(create_mi(self.actionPaste))
+        ed_menu.append(gtk.SeparatorMenuItem())
+
+        ed_menu.append(create_mi(self.actionAdd))
+        ed_menu.append(create_mi(self.actionDuplicate))
+        ed_menu.append(create_mi(self.actionDelete))
+        ed_menu.append(gtk.SeparatorMenuItem())
+
+        ed_menu.append(create_mi(self.actionMoveUp))
+        ed_menu.append(create_mi(self.actionMoveDown))
+        ed_menu.append(gtk.SeparatorMenuItem())
+
+        ed_menu.append(create_mi(self.actionAppendItm))
+        ed_menu.append(create_mi(self.actionRemoveItm))
+
+        self.sep1 = gtk.SeparatorMenuItem()
+        ed_menu.append(self.sep1)
+        self.adt_mi = create_mi(self.actionDataType)
+        ed_menu.append(self.adt_mi)
+        self.art_mi = create_mi(self.actionRevertType)
+        ed_menu.append(self.art_mi)
+
+#         ed_menu.append(create_mi(self.actionSaveUser))
+#         ed_menu.append(create_mi(self.actionDeleteUser))
+
+        edit_menu = create_mi(self.actionEditMenu)
         edit_menu.set_submenu(ed_menu)
-        menu_bar.append(edit_menu)
+        self.menubar.append(edit_menu)
 
-        ed_menu.append(self.create_mi(self.actionUndo))
-        ed_menu.append(self.create_mi(self.actionRedo))
-        ed_menu.append(gtk.SeparatorMenuItem())
-
-        ed_menu.append(self.create_mi(self.actionCut))
-        ed_menu.append(self.create_mi(self.actionCopy))
-        ed_menu.append(self.create_mi(self.actionPaste))
-        ed_menu.append(gtk.SeparatorMenuItem())
-
-        ed_menu.append(self.create_mi(self.actionAdd))
-        ed_menu.append(self.create_mi(self.actionDuplicate))
-        ed_menu.append(self.create_mi(self.actionDelete))
-        ed_menu.append(gtk.SeparatorMenuItem())
-
-        ed_menu.append(self.create_mi(self.actionMoveUp))
-        ed_menu.append(self.create_mi(self.actionMoveDn))
-        ed_menu.append(gtk.SeparatorMenuItem())
-
-        ed_menu.append(self.create_mi(self.actionAppendItem))
-        ed_menu.append(self.create_mi(self.actionRemoveItem))
-        ed_menu.append(gtk.SeparatorMenuItem())
-
-        ed_menu.append(self.create_mi(self.actionSaveUserDef))
-        self.dev_separator = gtk.SeparatorMenuItem()
-        ed_menu.append(self.dev_separator)
-
-        self.set_digits_mi = gtk.MenuItem(_('Set digits'))
-        self.set_digits_mi.set_size_request(-1, add_menu_icon_size)
-        ed_menu.append(self.set_digits_mi)
-        sub_menu = gtk.Menu()
-        self.set_digits_mi.set_submenu(sub_menu)
-
-        i = 1
-        while i < 7 :
-            menu_item = gtk.MenuItem(str(i))
-            menu_item.set_size_request(-1, add_menu_icon_size)
-            menu_item.connect("activate", self.chng_dt_activate, i)
-            sub_menu.append(menu_item)
-            i = i + 1
-
-        self.chng_dt_sep = gtk.SeparatorMenuItem()
-        ed_menu.append(self.chng_dt_sep)
-
-        ed_menu.append(self.create_mi(self.actionEditFeature))
-        ed_menu.append(self.create_mi(self.actionReloadFeature))
-
+        # View menu
         v_menu = gtk.Menu()
-        view_menu = gtk.MenuItem(_("_View"))
+        self.aren_mi = create_mi(self.actionRename)
+        v_menu.append(self.aren_mi)
+        self.agrp_mi = create_mi(self.actionChngGrp)
+        v_menu.append(self.agrp_mi)
+        self.sep3 = gtk.SeparatorMenuItem()
+        v_menu.append(self.sep3)
+        v_menu.append(self.actionHideField.create_menu_item())
+        v_menu.append(self.actionShowF.create_menu_item())
+        self.sep2 = gtk.SeparatorMenuItem()
+        v_menu.append(self.sep2)
+
+        digits_menu = gtk.Menu()
+        digits_menu.append(create_mi(self.actionDigit1))
+        digits_menu.append(create_mi(self.actionDigit2))
+        digits_menu.append(create_mi(self.actionDigit3))
+        digits_menu.append(create_mi(self.actionDigit4))
+        digits_menu.append(create_mi(self.actionDigit5))
+        digits_menu.append(create_mi(self.actionDigit6))
+        self.d_menu = create_mi(self.actionSetDigits)
+        self.d_menu.set_submenu(digits_menu)
+        v_menu.append(self.d_menu)
+
+        v_menu.append(gtk.SeparatorMenuItem())
+        v_menu.append(self.actionSingleView.create_menu_item())
+        v_menu.append(self.actionDualView.create_menu_item())
+        v_menu.append(gtk.SeparatorMenuItem())
+        v_menu.append(self.actionTopBottom.create_menu_item())
+        v_menu.append(self.actionSideSide.create_menu_item())
+        v_menu.append(gtk.SeparatorMenuItem())
+        v_menu.append(self.actionHideCol.create_menu_item())
+        v_menu.append(self.actionSubHdrs.create_menu_item())
+        v_menu.append(gtk.SeparatorMenuItem())
+        v_menu.append(create_mi(self.actionSaveLayout))
+
+        view_menu = create_mi(self.actionViewMenu)
         view_menu.set_submenu(v_menu)
-        menu_bar.append(view_menu)
+        self.menubar.append(view_menu)
 
-        v_menu.append(self.create_mi(self.actionCollapse))
-        v_menu.append(gtk.SeparatorMenuItem())
+        # Add menu
+        menuAdd = gtk.Menu()
+        self.add_catalog_items(menuAdd)
+        menuAdd.append(gtk.SeparatorMenuItem())
+        menuAdd.append(create_mi(self.actionLoadCfg))
+        menuAdd.append(create_mi(self.actionImportXML))
 
-        mi = self.actionSingleView.create_menu_item()
-        mi.set_size_request(-1, menu_icon_size)
-        v_menu.append(mi)
+        add_menu = create_mi(self.actionAddMenu)
+        add_menu.set_submenu(menuAdd)
+        self.menubar.append(add_menu)
 
-        mi = self.actionDualView.create_menu_item()
-        mi.set_size_request(-1, menu_icon_size)
-        v_menu.append(mi)
-
-        v_menu.append(gtk.SeparatorMenuItem())
-
-        mi = self.actionTopBottom.create_menu_item()
-        mi.set_size_request(-1, menu_icon_size)
-        v_menu.append(mi)
-
-        mi = self.actionSideBySide.create_menu_item()
-        mi.set_size_request(-1, menu_icon_size)
-        v_menu.append(mi)
-
-        v_menu.append(gtk.SeparatorMenuItem())
-
-        mi = self.actionHideValCol.create_menu_item()
-        mi.set_size_request(-1, menu_icon_size)
-        v_menu.append(mi)
-
-        mi = self.actionSubHdrs.create_menu_item()
-        mi.set_size_request(-1, menu_icon_size)
-        v_menu.append(mi)
-
-        v_menu.append(gtk.SeparatorMenuItem())
-
-        v_menu.append(self.create_mi(self.actionSaveLayout))
-
-        self.menuAdd = gtk.Menu()
-        add_menu = gtk.MenuItem(_('_Add'))
-        add_menu.set_submenu(self.menuAdd)
-        menu_bar.append(add_menu)
-
-        self.add_catalog_items()
-
+        # Utilities menu
         menu_utils = gtk.Menu()
-        u_menu = gtk.MenuItem(_('_Utilities'))
-        u_menu.set_submenu(menu_utils)
-
-        self.auto_refresh = gtk.CheckMenuItem(_('_Auto-Refresh'))
-        self.auto_refresh.set_size_request(-1, menu_icon_size)
-        menu_utils.append(self.auto_refresh)
+        menu_utils.append(self.actionAutoRefresh.create_menu_item())
         menu_utils.append(gtk.SeparatorMenuItem())
+        menu_utils.append(create_mi(self.actionLoadTools))
+        menu_utils.append(gtk.SeparatorMenuItem())
+        menu_utils.append(create_mi(self.actionSaveUser))
+        menu_utils.append(create_mi(self.actionDeleteUser))
+        menu_utils.append(gtk.SeparatorMenuItem())
+        menu_utils.append(create_mi(self.actionPreferences))
 
-        mi = gtk.ImageMenuItem(_('_Reload tools table'))
-        img = gtk.Image()
-        img.set_from_stock('gtk-refresh', menu_icon_size)
-        mi.set_image(img)
-        mi.connect("activate", self.tools.load_table)
-        menu_utils.append(mi)
+        u_menu = create_mi(self.actionUtilMenu)
+        u_menu.set_submenu(menu_utils)
+        self.menubar.append(u_menu)
 
-        menu_config = gtk.ImageMenuItem(_('_Preferences'))
-        img = gtk.Image()
-        img.set_from_stock('gtk-preferences', menu_icon_size)
-        menu_config.set_image(img)
-        menu_config.connect("activate", self.menu_pref_activate)
-        menu_utils.append(menu_config)
-
-        menu_bar.append(u_menu)
-
+        # Help menu
         menu_help = gtk.Menu()
-        h_menu = gtk.MenuItem(_('_Help'))
+        menu_help.append(create_mi(self.actionYouTube, "youtube.png"))
+#        menu_help.append(create_mi(self.actionYouTrans, "youtube.png"))
+        menu_help.append(gtk.SeparatorMenuItem())
+        menu_help.append(create_mi(self.actionCNCHome, "linuxcncicon.png",))
+        menu_help.append(create_mi(self.actionForum, "linuxcncicon.png",))
+        menu_help.append(gtk.SeparatorMenuItem())
+        menu_help.append(create_mi(self.actionAbout))
+
+        h_menu = create_mi(self.actionHelpMenu)
         h_menu.set_submenu(menu_help)
+        self.menubar.append(h_menu)
 
-        menu_tutorial = gtk.ImageMenuItem(_('NativeCAM on YouTube'))
-        img = gtk.Image()
-        img.set_from_pixbuf(get_pixbuf("youtube.png", add_menu_icon_size))
-        menu_tutorial.set_image(img)
-        menu_tutorial.connect("activate", self.menu_tutorial_activate)
-        menu_help.append(menu_tutorial)
+        self.main_box.pack_start(self.menubar, False, False, 0)
 
-        menu_translate = gtk.ImageMenuItem(_('How to translate NativeCAM'))
-        img = gtk.Image()
-        img.set_from_pixbuf(get_pixbuf("youtube.png", add_menu_icon_size))
-        menu_translate.set_image(img)
-        menu_translate.connect("activate", self.menu_translate_activate)
-        menu_help.append(menu_translate)
+    def action_build(self, *arg) :
+        if not self.actionAutoRefresh.get_active() :
+            self.actionAutoRefresh.set_active(True)
+        else :
+            self.autorefresh_call()
 
-        menu_linuxcnc_home = gtk.ImageMenuItem(_('LinuxCNC Home'))
-        img = gtk.Image()
-        img.set_from_pixbuf(get_pixbuf("linuxcncicon.png", add_menu_icon_size))
-        menu_linuxcnc_home.set_image(img)
-        menu_linuxcnc_home.connect("activate", self.menu_html_cnc_activate)
-        menu_help.append(menu_linuxcnc_home)
+    def action_cut(self, *arg):
+        self.action_copy()
+        self.action_delete()
 
-        menu_linuxcnc_forum = gtk.ImageMenuItem(_('LinuxCNC Forum'))
-        img = gtk.Image()
-        img.set_from_pixbuf(get_pixbuf("linuxcncicon.png", add_menu_icon_size))
-        menu_linuxcnc_forum.set_image(img)
-        menu_linuxcnc_forum.connect("activate", self.menu_html_forum_activate)
-        menu_help.append(menu_linuxcnc_forum)
-
-        menu_about = gtk.ImageMenuItem(_('_About'))
-        img = gtk.Image()
-        img.set_from_stock('gtk-about', menu_icon_size)
-        menu_about.set_image(img)
-        menu_about.connect("activate", self.menu_about_activate)
-        menu_help.append(menu_about)
-
-        menu_bar.append(h_menu)
-
-        self.main_box.pack_start(menu_bar, False, False, 0)
-        self.main_box.reorder_child(menu_bar, 0)
-
-        self.menubar = menu_bar
-
-    def chng_dt_activate(self, *arg):
-        if arg[1] < 10 :
-            self.treestore.get(self.selected_param, 0)[0].attr["digits"] = str(arg[1])
-            fmt = '{0:0.' + str(arg[1]) + 'f}'
-            v = get_float(self.treestore.get(self.selected_param, 0)[0].get_value())
-            self.treestore.get(self.selected_param, 0)[0].set_value(fmt.format(v))
-
-        elif arg[1] == 11 :
-            self.treestore.get(self.selected_param, 0)[0].attr["type"] = 'string'
-        self.selected_type = self.treestore.get(self.selected_param, 0)[0].attr["type"]
-        self.action()
-
-    def edit_cut(self, *arg):
-        self.edit_copy()
-        self.delete_clicked()
-
-    def edit_copy(self, *arg):
+    def action_copy(self, *arg):
         self.get_expand()
         xml = etree.Element(XML_TAG)
         self.treestore_to_xml_recursion(self.selected_feature_ts_itr, xml, False)
         self.clipboard.set_text(etree.tostring(xml), len = -1)
+        self.actionPaste.set_sensitive(True)
 
-    def edit_paste(self, *arg):
+    def action_paste(self, *arg):
         txt = self.clipboard.wait_for_text()
         if txt and txt.find(XML_TAG) > -1 :
-            xml = etree.fromstring(txt)
-            self.import_xml(xml)
+            self.import_xml(etree.fromstring(txt))
 
-    def menu_edit_activate(self, *arg):
+    def edit_menu_activate(self, *arg):
         txt = self.clipboard.wait_for_text()
         if txt:
             self.actionPaste.set_sensitive(txt.find(XML_TAG) > -1)
         else:
             self.actionPaste.set_sensitive(False)
 
-        self.actionEditFeature.set_sensitive(self.selected_feature is not None)
-        self.actionReloadFeature.set_sensitive(self.selected_feature is not None)
-        self.actionEditFeature.set_visible(developer_menu)
-        self.actionReloadFeature.set_visible(developer_menu)
-        self.dev_separator.set_visible(developer_menu)
+        self.adt_mi.set_visible(self.selected_type in ['float', 'int'])
+        self.art_mi.set_visible(self.selected_type == 'gcode')
+        self.sep1.set_visible(self.selected_type in ['float', 'int', 'gcode'])
 
-        self.chng_dt_sep.set_visible(self.selected_type == 'float')
-        self.set_digits_mi.set_visible(self.selected_type == 'float')
+    def view_menu_activate(self, *arg):
+        self.agrp_mi.set_visible(self.selected_type in ["sub-header", "header"] and \
+                                 self.actionDualView.get_active())
+        self.aren_mi.set_visible(self.iter_selected_type == tv_select.feature)
+        self.sep3.set_visible(self.agrp_mi.get_visible() or self.aren_mi.get_visible())
 
-        self.actionSaveUserDef.set_sensitive(self.selected_feature is not None)
+        self.d_menu.set_visible(self.selected_type == 'float')
+        self.sep2.set_visible(self.selected_type == 'float')
 
-    def menu_html_cnc_activate(self, *arg):
+    def action_lcncHome(self, *arg):
         webbrowser.open('http://www.linuxcnc.org')
 
-    def menu_html_forum_activate(self, *arg):
+    def action_lcncForum(self, *arg):
         webbrowser.open('http://www.linuxcnc.org/index.php/english/forum/40-subroutines-and-ngcgui')
 
-    def edit_feature(self, *arg):
-        subprocess.Popen(self.editor + ' ' +
-                         self.selected_feature.get_attr('src'),
-                         shell = True, stdin = open(os.devnull, 'r'))
+    def action_preferences(self, *arg):
+        old_quick_access_icon_size = quick_access_icon_size
+        old_treeview_icon_size = treeview_icon_size
+        old_menu_icon_size = menu_icon_size
+        old_add_menu_icon_size = add_menu_icon_size
+        old_add_dlg_icon_size = add_dlg_icon_size
+        old_view = self.actionDualView.get_active()
 
-    def menu_tutorial_activate(self, *arg):
+        if self.pref.edit(self) :
+            if old_quick_access_icon_size <> quick_access_icon_size :
+                self.create_nc_toolbar()
+                self.nc_toolbar.show_all()
+            if old_treeview_icon_size <> treeview_icon_size :
+                self.tv1_icon_cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
+                if self.treeview2 is not None:
+                    self.tv2_icon_cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
+            if (old_menu_icon_size <> menu_icon_size) or (old_add_menu_icon_size <> add_menu_icon_size) :
+                self.create_menubar()
+                self.menubar.show_all()
+            if old_add_dlg_icon_size <> add_dlg_icon_size :
+                self.update_catalog()
+
+            self.set_preferences()
+
+    def action_youTube(self, *arg):
         webbrowser.open('https://www.youtube.com/channel/UCjOe4VxKL86HyVrshTmiUBQ')
 
-    def menu_translate_activate(self, *arg):
+    def action_youTrans(self, *arg):
 #        webbrowser.open('https://www.youtube.com/channel/UCjOe4VxKL86HyVrshTmiUBQ')
         pass
 
-    def btn_cancel_add_clicked(self, *arg):
+    def on_destroy(self, *arg):
+        if self.pref.autosave :
+            self.action_saveCurrent()
+
+    def btn_cancel_add(self, *arg):
         self.addVBox.hide()
         self.feature_Hpane.show()
         self.menubar.set_sensitive(True)
-        self.button_tb.set_sensitive(True)
-        self.quick_access_tb.set_sensitive(True)
-
-    def on_add_iconview_key_press(self, widget, event):
-        keyname = gdk.keyval_name(event.keyval)
-        if keyname == ['Escape'] :
-            self.btn_cancel_add_clicked()
-            event.keyval = 0
+        self.main_toolbar.set_sensitive(True)
+        self.nc_toolbar.set_sensitive(True)
 
     def create_add_dialog(self):
         self.icon_store = gtk.ListStore(gdk.Pixbuf, str, str, str, int, str)
         self.add_iconview.set_model(self.icon_store)
         self.add_iconview.set_pixbuf_column(0)
         self.add_iconview.set_text_column(2)
-        self.catalog_path = self.catalog
+
+        if self.catalog.tag == 'xml' :
+            self.catalog_src = self.catalog
+        else :
+            for _ptr in range(len(self.catalog)) :
+                _p = self.catalog[_ptr]
+                if _p.tag.lower() in ["menu", "group"] :
+                    self.catalog_src = _p
+                    break
         self.update_catalog()
 
     def catalog_activate(self, iconview):
@@ -2261,14 +2494,14 @@ class NCam(gtk.VBox):
             tag = self.icon_store.get(itr, 1)[0]
             if tag == "parent" :
                 self.update_catalog(xml = "parent")
-            elif tag in ["sub"] :
+            elif tag in ["menuitem", "sub"] :
                 self.addVBox.hide()
                 self.feature_Hpane.show()
                 self.menubar.set_sensitive(True)
-                self.button_tb.set_sensitive(True)
-                self.quick_access_tb.set_sensitive(True)
-                self.add_feature(src)
-            elif tag == "group" :
+                self.main_toolbar.set_sensitive(True)
+                self.nc_toolbar.set_sensitive(True)
+                self.add_feature(None, src)
+            elif tag in ["menu", "group"] :
                 path = self.icon_store.get(itr, 4)[0]
                 self.update_catalog(xml = self.catalog_path[path])
 
@@ -2279,166 +2512,85 @@ class NCam(gtk.VBox):
             self.catalog_path = xml
 
         if self.catalog_path is None :
-            self.catalog_path = self.catalog
+            self.catalog_path = self.catalog_src
 
         self.icon_store.clear()
 
         # add link to upper level
-        if (self.catalog_path != self.catalog) :
+        if (self.catalog_path != self.catalog_src) :
             self.icon_store.append([get_pixbuf("upper-level.png",
                 add_dlg_icon_size), "parent", _('Back...'), "parent", 0, None])
 
         for path in range(len(self.catalog_path)) :
             p = self.catalog_path[path]
-            if p.tag.lower() in ["group", "sub", "import"] :
-                name = p.get('name') if "name" in p.keys() else 'Un-named'
-                src = p.get("src") if "src" in p.keys() else None
-                tooltip = _(p.get('tool_tip')) if "tool_tip" in p.keys() else None
-                self.icon_store.append([get_pixbuf(p.get("icon"),
-                    add_dlg_icon_size), p.tag.lower(), _(name), src, path, tooltip])
+            if p.tag.lower() in ["menuitem", "menu", "group", "sub"] :
+                name = p.get('name') if "name" in list(p.keys()) else 'Un-named'
+                src = p.get("src") if "src" in list(p.keys()) else None
+                tooltip = _(p.get('tool_tip')) if "tool_tip" in \
+                        list(p.keys()) else None
+                self.icon_store.append([get_pixbuf(p.get("icon"), add_dlg_icon_size),
+                        p.tag.lower(), _(name), src, path, tooltip])
 
-    def add_button_clicked(self, *arg) :
+    def action_add(self, *arg) :
         self.feature_Hpane.hide()
         self.addVBox.show()
         self.menubar.set_sensitive(False)
-        self.button_tb.set_sensitive(False)
-        self.quick_access_tb.set_sensitive(False)
+        self.main_toolbar.set_sensitive(False)
+        self.nc_toolbar.set_sensitive(False)
         self.add_iconview.grab_focus()
 
-    def toolbutton_clicked(self, call, src) :
-        self.add_feature(src)
-
-    def setup_toolbar(self) :
-        while self.quick_access_tb.get_n_items() > 0 :
-            self.quick_access_tb.remove(self.quick_access_tb.get_nth_item(0))
-        config = ConfigParser.ConfigParser()
-        fname = search_path(1, TOOLBAR_CUSTOM_FNAME, CATALOGS_DIR, self.catalog_dir)
-        if fname is None :
-            fname = search_path(1, TOOLBAR_FNAME, CATALOGS_DIR, self.catalog_dir)
-
-        quick_access_dict = {}
-        if fname is not None :
-            config.read(fname)
-            for section in config.sections() :
-                quick_access_dict[section] = [get_int(config.get(section, 'order'))]
-
-        feature_list = [s.get("src") for s in self.catalog.findall(".//sub") if "src" in s.keys()]
-        quick_access = {}
-        quick_access_buttons = {}
-
-        for src in feature_list :
-            try :
-                src_file = search_path(1, src, CFG_DIR)
-                if src_file is None:
-                    continue
-                f = Feature(src_file)
-                icon = gtk.Image()
-                icon.set_from_pixbuf(f.get_icon(quick_access_icon_size))
-                button = gtk.ToolButton(icon, label = f.get_name())
-                button.set_tooltip_markup(f.get_tooltip())
-
-                button.connect("clicked", self.toolbutton_clicked, src)
-                quick_access_buttons[src] = button
-
-                quick_access[src] = [None, button, 0]
-                if src in quick_access_dict :
-                    quick_access[src][2] = quick_access_dict[src][0]
-            except :
-                pass
-
-        tf = quick_access.items()
-        tf.sort(lambda x, y:y[1][2] - x[1][2])  # sort by selected order
-        for tfi in tf[:MAX_QUICK_ACCESS_BTN] :
-            self.quick_access_tb.insert(tfi[1][1], -1)
-
-        if fname is None :  # write TOOLBAR_FNAME file
-            fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, TOOLBAR_FNAME)
-            for src in quick_access :
-                config.add_section(src)
-                config.set(src, 'name', quick_access[src][1].get_label())
-                config.set(src, 'order', 0)
-            try :
-                config.write(open(fname, "w"))
-            except :
-                mess_dlg(_("WARNING:\nCannot write to toolbar file %(filename)s") % {'filename':fname})
-
-    def add_catalog_items(self):
+    def add_catalog_items(self, menu_add):
 
         def add_to_menu(grp_menu, path) :
             for ptr in range(len(path)) :
                 try :
                     p = path[ptr]
-                    if p.tag.lower() == "group":
-                        name = p.get("name") if "name" in p.keys() else None
+                    if p.tag.lower() in ["menu", "menuitem", "group", "sub"] :
+                        name = p.get("name") if "name" in p.keys() else ""
                         a_menu_item = gtk.ImageMenuItem(_(name))
 
                         tooltip = _(p.get("tool_tip")) if "tool_tip" in p.keys() else None
                         if (tooltip is not None) and (tooltip != '') :
-                            a_menu_item.set_tooltip_text(_(tooltip))
+                            a_menu_item.set_tooltip_markup(_(tooltip))
 
-                        img = gtk.Image()
-                        img.set_from_pixbuf(get_pixbuf(p.get("icon"), add_menu_icon_size))
-                        a_menu_item.set_image(img)
+                        icon = p.get('icon')
+                        if icon is not None :
+                            img = gtk.Image()
+                            img.set_from_pixbuf(get_pixbuf(icon, add_menu_icon_size))
+                            a_menu_item.set_image(img)
+
+                        src = p.get('src')
+                        if src is not None :
+                            a_menu_item.connect("activate", self.add_feature, src)
 
                         grp_menu.append(a_menu_item)
-                        a_menu = gtk.Menu()
-                        a_menu_item.set_submenu(a_menu)
-                        add_to_menu(a_menu, p)
+
+                        if p.tag.lower() in ['menu', "group"] :
+                            a_menu = gtk.Menu()
+                            a_menu_item.set_submenu(a_menu)
+                            add_to_menu(a_menu, p)
 
                     elif p.tag.lower() == "separator":
                         grp_menu.append(gtk.SeparatorMenuItem())
-
-                    elif p.tag.lower() in ["sub", "import"] :
-                        name = p.get("name") if "name" in p.keys() else None
-                        a_menu_item = gtk.ImageMenuItem(_(name))
-
-                        tooltip = _(p.get("tool_tip")) if "tool_tip" in p.keys() else None
-                        if (tooltip is not None) and (tooltip != '') :
-                            a_menu_item.set_tooltip_text(_(tooltip))
-
-                        img = gtk.Image()
-                        img.set_from_pixbuf(get_pixbuf(p.get("icon"), add_menu_icon_size))
-                        a_menu_item.set_image(img)
-
-                        src = p.get("src") if "src" in p.keys() else None
-                        if (src is not None) and (src != ''):
-                            a_menu_item.connect("activate", self.add_feature_menu, src)
-
-                        grp_menu.append(a_menu_item)
                 except:
                     pass
 
-        try :
-            add_to_menu(self.menuAdd, self.catalog)
-        except :
-            mess_dlg(_('Problem adding catalog to menu'))
-
-        self.menuAdd.append(gtk.SeparatorMenuItem())
-
-        menu_importXML = gtk.ImageMenuItem(_('Import _XML file'))
-        img = gtk.Image()
-        img.set_from_stock('gtk-revert-to-saved', menu_icon_size)
-        menu_importXML.set_image(img)
-        menu_importXML.connect("activate", self.menu_import_activate)
-        self.menuAdd.append(menu_importXML)
-
-        menu_item = gtk.ImageMenuItem(_('_Open cfg file'))
-        img = gtk.Image()
-        img.set_from_stock('gtk-open', menu_icon_size)
-        menu_item.set_image(img)
-        menu_item.connect("activate", self.menu_open_cfg_activate)
-        menu_item.set_tooltip_text(_("Select a valid or prototype cfg file"))
-        self.menuAdd.append(menu_item)
+        if self.catalog.tag <> 'ncam_ui' :
+            mess_dlg(_('Menu is old format, no toolbar defined.\nUpdate to new format'))
+            add_to_menu(menu_add, self.catalog)
+        else :
+            for _ptr in range(len(self.catalog)) :
+                _p = self.catalog[_ptr]
+                if _p.tag.lower() in ["menu", "group"] :
+                    add_to_menu(menu_add, _p)
 
     def create_treeview(self):
         self.treeview = gtk.TreeView(self.treestore)
         self.treeview.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_VERTICAL)
-
         self.builder.get_object("feat_scrolledwindow").add(self.treeview)
 
         self.treeview.add_events(gdk.BUTTON_PRESS_MASK)
         self.treeview.connect('button-press-event', self.pop_menu)
-
         self.treeview.connect('row_activated', self.tv_row_activated)
         self.treeview.connect('key_press_event', self.tv_key_pressed_event)
 
@@ -2462,16 +2614,12 @@ class NCam(gtk.VBox):
 
         # value
         col = gtk.TreeViewColumn(_("Value"))
-        self.col_value = col
 
-        self.edit_cell = CellRendererMx()
-        self.edit_cell.set_property("editable", True)
-        self.edit_cell.edited = self.edited
-        self.edit_cell.set_preediting(self.get_editinfo)
-        self.edit_cell.set_edited_user_fn(self.edited_user)
-        self.edit_cell.set_treeview(self.treeview)
-        col.pack_start(self.edit_cell, expand = True)
-        col.set_cell_data_func(self.edit_cell, self.get_col_value)
+        cell = CellRendererMx(self.treeview)
+        cell.edited = self.edited
+        cell.set_preediting(self.get_editinfo)
+        col.pack_start(cell, expand = True)
+        col.set_cell_data_func(cell, self.get_col_value)
         col.set_min_width(200)
         col.set_resizable(True)
         self.treeview.append_column(col)
@@ -2481,26 +2629,46 @@ class NCam(gtk.VBox):
 
         self.treeview.set_model(self.master_filter)
 
-    def save_user_values(self, *arg) :
+    def action_saveUser(self, *arg) :
         fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, USER_DEFAULT_FILE)
         parser = ConfigParser.ConfigParser()
         parser.read(fname)
 
         section = self.selected_feature.get_type()
-        if not parser.has_section(section) :
-            parser.add_section(section)
+        if parser.has_section(section) :
+            parser.remove_section(section)
+        parser.add_section(section)
 
         for p in self.selected_feature.param :
-            if p.attr['type'] not in GROUP_HEADER_TYPES :
+            t = p.get_type()
+            if t in SUPPORTED_DATA_TYPES :
                 s = p.attr['call'].lstrip('#')
-                parser.set(section, s, p.attr['value'])
+                parser.set(section, s + '--type', t)
+                if 'value' in p.attr :
+                    parser.set(section, s + '--value', p.get_strict_value())
+                if p.get_hidden() :
+                    parser.set(section, s + '--hidden', '2')
 
         with open(fname, 'wb') as configfile:
             parser.write(configfile)
 
         self.pref.read_user_values()
+        self.actionDeleteUser.set_sensitive(self.selected_feature.get_type() in USER_SUBROUTINES)
 
-    def save_work(self, *arg):
+    def action_deleteUser(self, *arg):
+        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir,
+                             USER_DEFAULT_FILE)
+        parser = ConfigParser.ConfigParser()
+        parser.read(fname)
+
+        section = self.selected_feature.get_type()
+        if parser.has_section(section) :
+            parser.remove_section(section)
+            parser.write(io.open(fname, 'wb'))
+            self.pref.read_user_values()
+            self.actionDeleteUser.set_sensitive(self.selected_feature.get_type() in USER_SUBROUTINES)
+
+    def action_saveCurrent(self, *arg):
         fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, CURRENT_WORK)
         if self.treestore.get_iter_root() is not None :
             xml = self.treestore_to_xml()
@@ -2511,102 +2679,42 @@ class NCam(gtk.VBox):
 
     def pop_menu(self, tv, event):
         if event.button == 3:
-            self.pop_up = None
-            self.pop_up = gtk.Menu()
+            self.click_x = int(event.x)
+            self.click_y = int(event.y)
+            path = tv.get_path_at_pos(self.click_x, self.click_y - 1)
+            if path is not None:
+                path = path[0]
+                tv.set_cursor(path)
+            else :
+                selection = tv.get_selection()
+                if selection is not None :
+                    model, itr = selection.get_selected()
+                    itr = model.get_iter_first()
+                    if itr is not None :
+                        tv.set_cursor(model.get_path(itr))
 
-            pthinfo = tv.get_path_at_pos(int(event.x), int(event.y))
-            if pthinfo is not None:
-                path, col, cellx, celly = pthinfo
-                self.click_y = int(event.y)
-                tv.grab_focus()
-                tv.set_cursor(path, col, 0)
-                if tv == self.treeview :
-                    itr = self.master_filter.get_iter(path)
-                    itr = self.master_filter.convert_iter_to_child_iter(itr)
-                    if self.iter_selected_type == tv_select.feature :
-                        self.pop_up.append(self.create_mi(self.actionRenameFeature))
-                        self.pop_up.append(gtk.SeparatorMenuItem())
-                else :
-                    itr = self.details_filter.get_iter(path)
-                    itr = self.details_filter.convert_iter_to_child_iter(itr)
-                dt = self.treestore.get_value(itr, 0).get_type()
-
-                if dt == 'float' :
-                    menu_digits = gtk.MenuItem(_('Set digits'))
-                    menu_digits.set_size_request(-1, add_menu_icon_size)
-                    self.pop_up.append(menu_digits)
-                    sub_menu = gtk.Menu()
-                    menu_digits.set_submenu(sub_menu)
-
-                    i = 1
-                    while i < 7 :
-                        menu_item = gtk.MenuItem(str(i))
-                        menu_item.set_size_request(-1, add_menu_icon_size)
-                        menu_item.connect("activate",
-                                    self.pop_set_digits_activate, itr, i)
-                        sub_menu.append(menu_item)
-                        i = i + 1
-                    self.pop_up.append(gtk.SeparatorMenuItem())
-
-                if developer_menu :
-                    self.pop_up.append(self.create_mi(self.actionEditFeature))
-                    self.pop_up.append(self.create_mi(self.actionReloadFeature))
-                    self.pop_up.append(gtk.SeparatorMenuItem())
-
-                self.pop_up.append(self.create_mi(self.actionDuplicate))
-                self.pop_up.append(self.create_mi(self.actionDelete))
-
-                self.pop_up.append(gtk.SeparatorMenuItem())
-
-            self.pop_up.append(self.create_mi(self.actionAdd))
-            self.pop_up.append(gtk.SeparatorMenuItem())
-
-            mi = self.actionSingleView.create_menu_item()
-            mi.set_size_request(-1, menu_icon_size)
-            self.pop_up.append(mi)
-
-            mi = self.actionDualView.create_menu_item()
-            mi.set_size_request(-1, menu_icon_size)
-            self.pop_up.append(mi)
-
-            self.pop_up.append(gtk.SeparatorMenuItem())
-
-            mi = self.actionTopBottom.create_menu_item()
-            mi.set_size_request(-1, menu_icon_size)
-            self.pop_up.append(mi)
-
-            mi = self.actionSideBySide.create_menu_item()
-            mi.set_size_request(-1, menu_icon_size)
-            self.pop_up.append(mi)
-
-            self.pop_up.append(gtk.SeparatorMenuItem())
-
-            mi = self.actionHideValCol.create_menu_item()
-            mi.set_size_request(-1, menu_icon_size)
-            self.pop_up.append(mi)
-
-            mi = self.actionSubHdrs.create_menu_item()
-            mi.set_size_request(-1, menu_icon_size)
-            self.pop_up.append(mi)
-
-            self.pop_up.show_all()
-            self.pop_up.popup(None, None, None, event.button, event.time, None)
+            self.edit_menu_activate()
+            if tv == self.treeview :
+                self.pop_up.popup(None, None, None, event.button, event.time, None)
+            else :
+                self.pop_up2.popup(None, None, None, event.button, event.time, None)
             return True
 
-    def pop_set_digits_activate(self, callback = None, *arg) :
-        self.treestore.get(arg[0], 0)[0].attr["digits"] = str(arg[1])
-        fmt = '{0:0.' + str(arg[1]) + 'f}'
-        v = get_float(self.treestore.get(arg[0], 0)[0].get_value())
-        self.treestore.get(arg[0], 0)[0].set_value(fmt.format(v))
-        self.action()
+    def action_digits(self, *arg) :
+        self.treestore.get(self.selected_param, 0)[0].set_digits(arg[1][0])
 
     def create_second_treeview(self):
         self.treeview2 = gtk.TreeView()
         self.treeview2.add_events(gdk.BUTTON_PRESS_MASK)
         self.treeview2.connect('button-press-event', self.pop_menu)
         self.treeview2.connect('cursor-changed', self.tv2_selected)
+        self.treeview2.connect('row_activated', self.tv_row_activated)
         self.treeview2.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_VERTICAL)
-        self.treeview2.set_show_expanders(False)
+        self.treeview2.set_show_expanders(self.pref.tv2_expandable)
+        if self.pref.tv2_expandable :
+            self.treeview2.set_level_indentation(-5)
+        else :
+            self.treeview2.set_level_indentation(12)
 
         # icon and name
         col = gtk.TreeViewColumn(_("Name"))
@@ -2627,25 +2735,23 @@ class NCam(gtk.VBox):
         self.treeview2.append_column(col)
 
         # value
-        self.col_value2 = gtk.TreeViewColumn(_("Value"))
-        self.cell_value2 = CellRendererMx()
-        self.cell_value2.set_property("editable", True)
-        self.cell_value2.edited = self.edited
-        self.cell_value2.set_treeview(self.treeview2)
-        self.cell_value2.set_preediting(self.get_editinfo)
-        self.cell_value2.set_edited_user_fn(self.edited_user)
+        col = gtk.TreeViewColumn(_("Value"))
+        cell = CellRendererMx(self.treeview2)
+        cell.set_property("editable", True)
+        cell.edited = self.edited
+        cell.set_preediting(self.get_editinfo)
 
-        self.col_value2.pack_start(self.cell_value2, expand = False)
-        self.col_value2.set_cell_data_func(self.cell_value2, self.get_col_value)
-        self.col_value2.set_resizable(True)
-        self.col_value2.set_min_width(200)
-        self.treeview2.append_column(self.col_value2)
+        col.pack_start(cell, expand = False)
+        col.set_cell_data_func(cell, self.get_col_value)
+        col.set_resizable(True)
+        col.set_min_width(200)
+        self.treeview2.append_column(col)
 
         self.treeview2.set_tooltip_column(1)
         self.treeview2.set_model(self.treestore)
         self.treeview2.set_model(self.details_filter)
         self.params_scroll.add(self.treeview2)
-        self.treeview2.connect('key-press-event', self.tv2_kp_event)
+        self.treeview2.connect('key-press-event', self.tv_key_pressed_event)
 
     def tv2_selected(self, tv, *arg):
         (model, itr) = tv.get_selection().get_selected()
@@ -2658,157 +2764,220 @@ class NCam(gtk.VBox):
             self.selected_type = self.treestore.get_value(itr_m, 0).get_type()
             self.selected_param = itr_m
             self.hint_label.set_markup(self.treestore.get_value(itr_m, 0).get_tooltip())
+            if self.selected_type in GROUP_HEADER_TYPES :
+                tree_path = model.get_path(itr)
+                if not tv.row_expanded(tree_path) :
+                    tv.expand_row(tree_path, True)
+
+        self.set_actions_state()
+
+    def get_toolbar_actions(self):
+        global TB_CATALOG
+
+        MENU_LISTING = {}
+
+        def add_actions(path) :
+            for ptr in range(len(path)) :
+                try :
+                    p = path[ptr]
+                    if p.tag.lower() == "menuitem":
+                        name = p.get("name")
+                        actionname = p.get("action")
+                        tooltip = p.get("tool_tip")
+                        src = p.get("src")
+                        icon = p.get("icon")
+
+                        if (actionname is not None) and (src is not None) :
+                            MENU_LISTING[actionname] = [name, tooltip, src, icon]
+                    if p.tag.lower() == "menu" :
+                        add_actions(p)
+                except :
+                    return
+
+        def add_toolbar_def(path):
+            toolbar_rank = 0
+            for ptr in range(len(path)) :
+                try :
+                    p = path[ptr]
+                    if p.tag.lower() == "separator":
+                        TB_CATALOG[toolbar_rank] = "separator"
+                    elif p.tag.lower() == 'toolitem':
+                        TB_CATALOG[toolbar_rank] = MENU_LISTING[p.get("action")]
+                except :
+                    return
+                toolbar_rank += 1
+
+        for _ptr in range(len(self.catalog)) :
+            _p = self.catalog[_ptr]
+            if _p.tag.lower() == "menu":
+                add_actions(_p)
+            elif _p.tag.lower() == "toolbar":
+                TB_CATALOG = {}
+                add_toolbar_def(_p)
 
     def create_actions(self):
-        # without accelerators
-        self.actionBuild = gtk.Action("actionBuild", _('Create %(filename)s') % {'filename':GENERATED_FILE},
-                _('Build gcode and save to %(filename)s') % {'filename':GENERATED_FILE}, 'gnome-run')
-        self.actionBuild.connect('activate', self.action_build)
+        def ca(actionname, stock_id, label, accel, tooltip, callback, *args):
+            act = gtk.Action(actionname, label, tooltip, stock_id)
+            if callback is not None :
+                act.connect('activate', callback, args)
+            if accel is not None :
+                self.action_group.add_action_with_accel(act, accel)
+            else :
+                self.action_group.add_action(act)
+            return act
 
-        self.actionDualView = gtk.RadioAction("actionDualView", _('Dual Views'),
-                _('Dual Views'), '', 0)
-        self.actionDualView.connect('activate', self.dual_view_activate)
+        # actions related to projects_("Create a New Project")("Open A Project")_("Open a Saved Project xml file")_('Save Project')
+        # "<control>X"
+        self.actionProject = ca('Project', None, _("_Projects"), None, None, None)
+        self.actionNew = ca("New", gtk.STOCK_NEW, None, "<control>N", None, self.action_new_project)
+        self.actionOpen = ca("Open", gtk.STOCK_OPEN, None, "<control>O", None, self.action_open_project, 0)
+        self.actionOpenExample = ca("OpenExample", None, _('Open Example'), '', _('Open Example Project'), self.action_open_project, 1)
+        self.actionSave = ca("Save", gtk.STOCK_SAVE, None, None, _("Save project as xml file"), self.action_save_project)
+        self.actionSaveTemplate = ca("SaveTemplate", None, _('Save as Default Template'), '', _("Save project as default template"), self.action_save_template)
+        self.actionSaveNGC = ca("SaveNGC", None, _('Export gcode as RS274NGC'), '', _('Export gcode as RS274NGC'), self.action_save_ngc)
 
-        self.actionSingleView = gtk.RadioAction("actionSingleView", _('Single View'),
-                _('Single View'), '', 0)
-        self.actionSingleView.set_group(self.actionDualView)
-        self.actionSingleView.connect('activate', self.single_view_activate)
+        # actions related to editing
+        self.actionEditMenu = ca("EditMenu", None, _("_Edit"), None, None, self.edit_menu_activate)
+        self.actionUndo = ca("Undo", gtk.STOCK_UNDO, None, "<control>Z", _('Undo last operation'), self.action_undo)
+        self.actionRedo = ca("Redo", gtk.STOCK_REDO, None, "<control><shift>Z", _('Cancel last Undo'), self.action_redo)
+        self.actionCut = ca("Cut", gtk.STOCK_CUT, None, "<control>X", _('Cut selected subroutine to clipboard'), self.action_cut)
+        self.actionCopy = ca("Copy", gtk.STOCK_COPY, None, "<control>C", _('Copy selected subroutine to clipboard'), self.action_copy)
+        self.actionPaste = ca("Paste", gtk.STOCK_PASTE, None, "<control>V", _('Paste from clipboard'), self.action_paste)
+        self.actionAdd = ca("Add", gtk.STOCK_ADD, None, "<control>Insert", _('Add a subroutine'), self.action_add)
+        self.actionDuplicate = ca("Duplicate", gtk.STOCK_COPY, _('Duplicate'), "<control>D", _('Duplicate selected subroutine'), self.action_duplicate)
+        self.actionDelete = ca("Delete", gtk.STOCK_REMOVE, None, "<control>Delete", _('Remove selected subroutine'), self.action_delete)
+        self.actionAppendItm = ca("AppendItm", gtk.STOCK_INDENT, _("Add to Items"), "<control>Right", _("Add to Items"), self.action_appendItm)
+        self.actionRemoveItm = ca("RemoveItm", gtk.STOCK_UNINDENT, _("Remove from Items"), "<control>Left", _('Remove from Items'), self.action_removeItem)
+        self.actionMoveUp = ca("MoveUp", gtk.STOCK_GO_UP, _('Move up'), "<control>Up", _('Move up'), self.move, 1)
+        self.actionMoveDown = ca("MoveDown", gtk.STOCK_GO_DOWN, _('Move down'), "<control>Down", _('Move down'), self.move, -1)
+        self.actionSaveUser = ca("SaveUser", gtk.STOCK_SAVE, _('Save Values as Defaults'), '', _('Save Values of this Subroutine as Defaults'), self.action_saveUser)
+        self.actionDeleteUser = ca("DeleteUser", gtk.STOCK_CANCEL, _("Delete Custom Default Values"), None, _("Delete Custom Default Values"), self.action_deleteUser)
+        self.actionSetDigits = ca("SetDigits", None, _('Set Digits'), None, None, None)
+        self.actionDigit1 = ca("Digit1", None, '1', None, None, self.action_digits, '1')
+        self.actionDigit2 = ca("Digit2", None, '2', None, None, self.action_digits, '2')
+        self.actionDigit3 = ca("Digit3", None, '3', None, None, self.action_digits, '3')
+        self.actionDigit4 = ca("Digit4", None, '4', None, None, self.action_digits, '4')
+        self.actionDigit5 = ca("Digit5", None, "5", None, None, self.action_digits, '5')
+        self.actionDigit6 = ca("Digit6", None, '6', None, None, self.action_digits, '6')
 
-        self.actionEditFeature = gtk.Action("actionEditFeature", _('Edit Current Subroutine'),
-                _('Edit Current Subroutine'), 'gtk-edit')
-        self.actionEditFeature.connect('activate', self.edit_feature)
+        # actions related to adding subroutines
+        self.actionAddMenu = ca("AddMenu", None, _("_Add"), None, None, None)
+        self.actionLoadCfg = ca("LoadCfg", gtk.STOCK_OPEN, _('Add a Prototype Subroutine'), '', _('Add a Subroutine Definition File'), self.action_loadCfg)
+        self.actionImportXML = ca("ImportXML", gtk.STOCK_REVERT_TO_SAVED, _('Import a Project File'), None, _('Import a Project Into the Current One'), self.action_importXML)
 
-        self.actionHideValCol = gtk.ToggleAction("actionHideValCol",
-                    _('Hide Master Tree Value Column'), _('Hide Master Tree Value Column'), '')
-        self.actionHideValCol.connect('activate', self.hide_value_col)
+        # actions related to view
+        self.actionViewMenu = ca("ViewMenu", None, _("_View"), None, None, self.view_menu_activate)
+        self.actionCollapse = ca("Collapse", gtk.STOCK_ZOOM_OUT, _("Collapse All Other Nodes"), '<control>K', _("Collapse All Other Nodes"), self.action_collapse)
+        self.actionSaveLayout = ca("SaveLayout", gtk.STOCK_SAVE, _('Save As Default Layout'), '', _('Save As Default Layout'), self.action_saveLayout)
 
-        self.actionReloadFeature = gtk.Action("actionReloadFeature",
-                _('Reload Current Subroutine'), _('Reload Current Subroutine'), 'gtk-refresh')
-        self.actionReloadFeature.connect('activate', self.reload_subroutine)
+        self.action_group.add_radio_actions([
+            ("SingleView", None, _('Single View'), None, None, 1),
+            ("DualView", None,  _('Dual Views'), None, None, 2)
+        ], 1, self.set_layout)
 
-        self.actionSaveLayout = gtk.Action("actionSaveLayout", _('Save As Default Layout'),
-                _('Save As Default Layout'), 'gtk-save')
-        self.actionSaveLayout.connect('activate', self.save_default_layout)
+        self.action_group.add_radio_actions([
+            ("TopBottom", None, _('Top / Bottom Layout'), None, None, 1),
+            ("SideSide", None, _('Side By Side Layout'), None, None, 2)
+        ], 1, self.set_layout)
 
-        self.actionSaveNGC = gtk.Action("actionSaveNGC", _('Export gcode as RS274NGC'),
-                _('Export gcode as RS274NGC'), 'gtk-save')
-        self.actionSaveNGC.connect('activate', self.save_ngc)
+        self.actionHideCol = gtk.ToggleAction("HideCol", _('Master Value Column Hidden'), _('In master treeview'), None)
+        self.actionHideCol.connect("toggled", self.set_layout)
+        self.action_group.add_action(self.actionHideCol)
 
-        self.actionSaveTemplate = gtk.Action("actionSaveTemplate",
-                _('Save as Default Template'), _('Save as Default Template'), 'gtk-save')
-        self.actionSaveTemplate.connect('activate', self.save_default_template)
+        self.actionSubHdrs = gtk.ToggleAction("SubHdrs", _('Sub-Groups In Master Tree'), _('Sub-Groups In Master Tree'), None)
+        self.actionSubHdrs.connect("toggled", self.set_layout)
+        self.action_group.add_action(self.actionSubHdrs)
 
-        self.actionSideBySide = gtk.RadioAction("actionSideBySide",
-                _('Side By Side Layout'), _('Side By Side Layout'), '', 0)
-        self.actionSideBySide.connect('activate', self.side_by_side_layout)
+        # actions related to utilities
+        self.actionUtilMenu = ca("UtilitiesMenu", None, _("_Utilities"), None, None, None)
+        self.actionLoadTools = ca("LoadTools", gtk.STOCK_REFRESH, _("Reload Tool Table"), None, _("Reload Tool Table"), self.tools.load_table)
+        self.actionPreferences = ca("Preferences", gtk.STOCK_PREFERENCES, _("Edit Preferences"), None, _("Edit Preferences"), self.action_preferences)
 
-        self.actionTopBottom = gtk.RadioAction("actionTopBottom",
-                _('Top / Bottom Layout'), _('Top / Bottom Layout'), '', 0)
-        self.actionTopBottom.set_group(self.actionSideBySide)
-        self.actionTopBottom.connect('activate', self.top_bottom_layout)
+        self.actionAutoRefresh = gtk.ToggleAction("AutoRefresh", _("Auto-refresh"), _('Auto-refresh LinuxCNC'), None)
+        self.actionAutoRefresh.set_active(True)
+        self.action_group.add_action(self.actionAutoRefresh)
 
-        self.actionSubHdrs = gtk.ToggleAction("actionSubHdrs",
-                _('Sub-Groups In Master Tree'), _('Sub-Groups In Master Tree'), '')
-        self.actionSubHdrs.connect('activate', self.action_SubHdrs)
+        # actions related to help
+        self.actionHelpMenu = ca("HelpMenu", None, _("_Help"), None, None, None)
+        self.actionYouTube = ca("YouTube", None, _('NativeCAM on YouTube'), None, None, self.action_youTube)
+        self.actionYouTrans = ca("YouTranslate", None, _('Translating NativeCAM'), None, None, self.action_youTrans)
+        self.actionCNCHome = ca("CNCHome", None, _("LinuxCNC web Site"), None, None, self.action_lcncHome)
+        self.actionForum = ca("CNCForum", None, _('LinuxCNC Forum'), None, None, self.action_lcncForum)
+        self.actionAbout = ca("About", gtk.STOCK_ABOUT, None, None, None, self.action_about)
 
-        self.actionRenameFeature = gtk.Action("actionRenameFeature",
-                _('Rename'), _('Rename selected subroutine'), '')
-        self.actionRenameFeature.connect('activate', self.rename_selected_feature)
+        # actions related to toolbars and popup
+        self.actionHideField = ca("HideField", None, _("Hide Selected Field"), None, _("Hide Selected Field"), self.action_hideField)
+        self.actionShowF = ca("ShowFields", None, _("Show All Fields"), None, _("Show All Fields"), self.action_showFields)
+        self.actionCurrent = ca("Current", gtk.STOCK_SAVE, _("Save Project as Current Work"), '', _('Save Project as Current Work'), self.action_saveCurrent)
+        self.actionBuild = ca("Build", gtk.STOCK_EXECUTE, _('Generate %(filename)s') % {'filename':GENERATED_FILE}, None,
+                     _('Generate %(filename)s and load it in LinuxCNC') % {'filename':GENERATED_FILE}, self.action_build)
+        self.actionRename = ca("Rename", None, _("Rename Subroutine"), None, _('Rename Subroutine'), self.action_renameF)
+        self.actionChngGrp = ca("ChngGrp", None, _("Group <-- --> Sub-group"), None, _('Group <-- --> Sub-group'), self.action_chng_group)
+        self.actionDataType = ca("DataType", None, _("Change to GCode"), None, _('Change to GCode'), self.action_gcode)
+        self.actionRevertType = ca("RevertType", None, _("Revert to original type"), None, _('Revert to original type'), self.action_revert_type)
 
-        self.actionSaveUserDef = gtk.Action("actionSaveUDef", _('Save values as defaults'),
-                _('Save values of this subroutine as defaults'), 'gtk-save')
-        self.actionSaveUserDef.connect('activate', self.save_user_values)
+    def get_actions_reference(self) :
+        self.actionSingleView = self.uimanager.get_action("/dummy/SingleView")
+        self.actionDualView = self.uimanager.get_action("/dummy/DualView")
+        self.actionTopBottom = self.uimanager.get_action("/dummy/TopBottom")
+        self.actionSideSide = self.uimanager.get_action("/dummy/SideSide")
+        self.actionHideCol = self.uimanager.get_action("/dummy/HideCol")
+        self.actionSubHdrs = self.uimanager.get_action("/dummy/SubHdrs")
 
-        self.actionOpenExample = gtk.Action("actionOpenExample", _('Open example'),
-                _('Open example project'), 'gtk-open')
-        self.actionOpenExample.connect('activate', self.menu_open_example_activate)
-
-    def save_default_layout(self, *arg) :
-        cfg_file = os.path.join(NCAM_DIR, 'catalogs', 'ncam.conf')
+    def action_saveLayout(self, *arg) :
+        cfg_file = os.path.join(NCAM_DIR, CATALOGS_DIR, CONFIG_FILE)
         parser = ConfigParser.ConfigParser()
         parser.read(cfg_file)
 
-        if not parser.has_section('display') :
-            parser.add_section('display')
-        parser.set('display', 'subheaders_in_master', self.pref.sub_hdrs_in_tv1)
-
         if not parser.has_section('layout') :
             parser.add_section('layout')
-        parser.set('layout', 'dual_view', self.pref.use_dual_views)
-        parser.set('layout', 'side_by_side', self.pref.side_by_side)
+        parser.set('layout', 'subheaders_in_master', self.actionSubHdrs.get_active())
+        parser.set('layout', 'hide_value_column', self.actionHideCol.get_active())
+        parser.set('layout', 'dual_view', self.actionDualView.get_active())
+        parser.set('layout', 'side_by_side', self.actionSideSide.get_active())
 
-        with open(cfg_file, 'wb') as configfile:
-            parser.write(configfile)
+        parser.write(io.open(cfg_file, 'wb'))
+
+    def set_preferences(self):
+        self.main_box.reorder_child(self.menubar, 0)
+        self.main_box.reorder_child(self.main_toolbar, 1)
+        self.main_box.reorder_child(self.nc_toolbar, 2)
+
+        self.main_toolbar.set_icon_size(toolbar_icon_size)
+        self.add_toolbar.set_icon_size(toolbar_icon_size)
+
+        self.actionSubHdrs.set_active(self.pref.sub_hdrs_in_tv1)
+        self.actionHideCol.set_active(self.pref.hide_value_column)
+        self.actionTopBottom.set_active(not self.pref.side_by_side)
+        self.actionSideSide.set_active(self.pref.side_by_side)
+        self.actionSingleView.set_active(not self.pref.use_dual_views)
+        self.actionDualView.set_active(self.pref.use_dual_views)
+
+        self.actionCurrent.set_visible(not self.pref.autosave)
+        self.name_cell.set_property('ellipsize', self.pref.name_ellipsis)
+        self.treeview.set_show_expanders(self.pref.tv_expandable)
+        if self.pref.tv_expandable :
+            self.treeview.set_level_indentation(-5)
+        else :
+            self.treeview.set_level_indentation(12)
+
+        if self.treeview2 is not None :
+            self.name_cell2.set_property('ellipsize', self.pref.name_ellipsis)
+            self.treeview2.set_show_expanders(self.pref.tv2_expandable)
+            if self.pref.tv2_expandable :
+                self.treeview2.set_level_indentation(-5)
+            else :
+                self.treeview2.set_level_indentation(12)
 
     def get_widgets(self):
         self.main_box = self.builder.get_object("MainBox")
-
-        self.accelGroup = gtk.AccelGroup()
-        self.actionGroup = self.builder.get_object("actiongroup1")
-
-        self.create_actions()
-        self.actionGroup.add_action(self.actionBuild)
-        self.actionGroup.add_action(self.actionDualView)
-        self.actionGroup.add_action(self.actionSingleView)
-        self.actionGroup.add_action(self.actionEditFeature)
-        self.actionGroup.add_action(self.actionHideValCol)
-        self.actionGroup.add_action(self.actionReloadFeature)
-        self.actionGroup.add_action(self.actionSaveLayout)
-        self.actionGroup.add_action(self.actionSaveNGC)
-        self.actionGroup.add_action(self.actionSaveTemplate)
-        self.actionGroup.add_action(self.actionSideBySide)
-        self.actionGroup.add_action(self.actionTopBottom)
-        self.actionGroup.add_action(self.actionSubHdrs)
-
-        self.actionAdd = self.builder.get_object("actionAdd")
-        self.actionAdd.set_accel_group(self.accelGroup)
-        self.actionCut = self.builder.get_object("actionCut")
-        self.actionCut.set_accel_group(self.accelGroup)
-        self.actionCollapse = self.builder.get_object("actionCollapse")
-        self.actionCollapse.set_accel_group(self.accelGroup)
-        self.actionCopy = self.builder.get_object("actionCopy")
-        self.actionCopy.set_accel_group(self.accelGroup)
-        self.actionPaste = self.builder.get_object("actionPaste")
-        self.actionPaste.set_accel_group(self.accelGroup)
-        self.actionRemoveItem = self.builder.get_object("actionRemoveItem")
-        self.actionRemoveItem.set_accel_group(self.accelGroup)
-        self.actionAppendItem = self.builder.get_object("actionAppendItem")
-        self.actionAppendItem.set_accel_group(self.accelGroup)
-        self.actionMoveDn = self.builder.get_object("actionMoveDn")
-        self.actionMoveDn.set_accel_group(self.accelGroup)
-        self.actionMoveUp = self.builder.get_object("actionMoveUp")
-        self.actionMoveUp.set_accel_group(self.accelGroup)
-        self.actionRedo = self.builder.get_object("actionRedo")
-        self.actionRedo.set_accel_group(self.accelGroup)
-        self.actionUndo = self.builder.get_object("actionUndo")
-        self.actionUndo.set_accel_group(self.accelGroup)
-        self.actionDelete = self.builder.get_object("actionDelete")
-        self.actionDelete.set_accel_group(self.accelGroup)
-        self.actionDuplicate = self.builder.get_object("actionDuplicate")
-        self.actionDuplicate.set_accel_group(self.accelGroup)
-        self.actionNew = self.builder.get_object("actionNew")
-        self.actionNew.set_accel_group(self.accelGroup)
-        self.actionOpen = self.builder.get_object("actionOpen")
-        self.actionOpen.set_accel_group(self.accelGroup)
-        self.actionSave = self.builder.get_object("actionSave")
-        self.actionSave.set_accel_group(self.accelGroup)
-
-        bbtn = self.builder.get_object("btn_build")
-        self.actionBuild.connect_proxy(bbtn)
-        bbtn.set_icon_name('gnome-run')
-
-        bbtn = self.builder.get_object("btn_collapse")
-        self.actionCollapse.connect_proxy(bbtn)
-
         self.col_width_adj = self.builder.get_object("col_width_adj")
-        self.col_width_adj.value = self.pref.col_width_adj_value
+        self.col_width_adj.set_value(self.pref.col_width_adj_value)
         self.w_adj = self.builder.get_object("width_adj")
-        self.w_adj.value = self.pref.w_adj_value
+        self.w_adj.set_value(self.pref.w_adj_value)
         self.tv_w_adj = self.builder.get_object("tv_w_adj")
-        self.tv_w_adj.value = self.pref.tv_w_adj_value
+        self.tv_w_adj.set_value(self.pref.tv_w_adj_value)
 
-        self.button_tb = self.builder.get_object("toolbar1")
-        self.button_tb.set_icon_size(toolbar_icon_size)
         self.add_toolbar = self.builder.get_object("add_toolbar")
         self.add_toolbar.set_icon_size(toolbar_icon_size)
 
@@ -2820,20 +2989,19 @@ class NCam(gtk.VBox):
         self.add_iconview = self.builder.get_object("add_iconview")
         self.hint_label = self.builder.get_object("hint_label")
 
-    def move(self, i) :
+    def move(self, *arg) :
         itr = self.master_filter.convert_iter_to_child_iter(self.selected_feature_itr)
-        if (i > 0) :
+        if (arg[1][0] < 0) :
             itr_swap = self.master_filter.convert_iter_to_child_iter(self.iter_next)
-        if (i < 0) :
+        elif (arg[1][0] > 0) :
             itr_swap = self.master_filter.convert_iter_to_child_iter(self.iter_previous)
         self.treestore.swap(itr, itr_swap)
-        self.get_selected_feature(self)
+        self.get_selected_feature(self.treeview)
         self.action()
 
     def get_selected_feature(self, widget) :
         old_selected_feature = self.selected_feature
         (model, itr) = self.treeview.get_selection().get_selected()
-        self.actionCollapse.set_sensitive(itr is not None)
 
         if itr is not None :
 
@@ -2853,6 +3021,7 @@ class NCam(gtk.VBox):
 
             elif self.selected_type in ["header", 'sub-header'] :
                 self.iter_selected_type = tv_select.header
+                self.selected_param = ts_itr
 
             elif self.selected_type in SUPPORTED_DATA_TYPES :
                 self.iter_selected_type = tv_select.param
@@ -2918,7 +3087,7 @@ class NCam(gtk.VBox):
         else:
             self.iter_selected_type = tv_select.none
             self.selected_feature = None
-            self.selected_type = None
+            self.selected_type = 'xxx'
             self.can_move_up = False
             self.can_move_down = False
             self.can_add_to_group = False
@@ -2928,11 +3097,7 @@ class NCam(gtk.VBox):
             tree_path = None
             self.hint_label.set_text('')
 
-
-        self.can_delete_duplicate = (self.iter_selected_type == tv_select.feature)
-        self.set_actions_state()
-
-        if self.pref.use_dual_views :
+        if self.actionDualView.get_active() :
             if self.iter_selected_type == tv_select.none :
                 if self.treeview2 is None:
                     self.create_second_treeview()
@@ -2955,9 +3120,12 @@ class NCam(gtk.VBox):
                 self.treeview2.expand_all()
 
         if tree_path is not None :
-            self.treeview.expand_row(tree_path, False)
+            self.treeview.expand_to_path(tree_path + (0, 0))
+        self.can_delete_duplicate = (self.iter_selected_type == tv_select.feature)
+        self.set_actions_state()
 
-    def add_to_item_clicked(self, call) :
+
+    def action_appendItm(self, *arg) :
         ts_itr = self.master_filter.convert_iter_to_child_iter(self.iter_next)
         pnext = self.treestore.get_string_from_iter(ts_itr)
         xml = self.treestore_to_xml()
@@ -2971,15 +3139,17 @@ class NCam(gtk.VBox):
             dst.set("expanded", "True")
             self.treestore_from_xml(xml)
             self.expand_and_select(self.path_to_new_selected)
-            self.action()
+            self.action(xml)
 
-    def remove_from_item_clicked(self, call) :
+    def action_removeItem(self, *arg) :
         xml = self.treestore_to_xml()
         src = xml.find(".//*[@path='%s']" % self.selected_feature_ts_path_s)
         src.set("new-selected", "True")
         parent = src.getparent().getparent()
         n = None
-        while parent != xml and not (parent.tag == "param" and parent.get("type") == "items") and parent is not None :
+        while parent != xml and \
+                    not (parent.tag == "param" and parent.get("type") == "items") and \
+                    parent is not None :
             p = parent
             parent = parent.getparent()
             n = parent.index(p)
@@ -2987,7 +3157,7 @@ class NCam(gtk.VBox):
             parent.insert(n, src)
             self.treestore_from_xml(xml)
             self.expand_and_select(self.path_to_new_selected)
-            self.action()
+            self.action(xml)
 
     def expand_and_select(self, path):
         if path is not None :
@@ -2997,7 +3167,7 @@ class NCam(gtk.VBox):
             self.treeview.expand_to_path((0,))
             self.treeview.set_cursor((0,))
 
-    def duplicate_clicked(self, *arg) :
+    def action_duplicate(self, *arg) :
         xml = etree.Element(XML_TAG)
         self.treestore_to_xml_recursion(self.selected_feature_ts_itr, xml, False)
         self.import_xml(xml)
@@ -3006,7 +3176,7 @@ class NCam(gtk.VBox):
         if tv.row_expanded(path) :
             tv.collapse_row(path)
         else:
-            tv.expand_row(path, False)
+            tv.expand_row(path, True)
 
     def tv_w_adj_value_changed(self, *arg):
         self.feature_pane.set_size_request(int(self.tv_w_adj.get_value()), 100)
@@ -3018,196 +3188,89 @@ class NCam(gtk.VBox):
 
     def tv_key_pressed_event(self, widget, event) :
         keyname = gdk.keyval_name(event.keyval)
-        model, itr = self.treeview.get_selection().get_selected()
+        model, itr = widget.get_selection().get_selected()
 
-        self.focused_widget = self.treeview
+        self.focused_widget = widget
 
         if itr is not None :
             path = model.get_path(itr)
         else :
             path = None
 
-        if self.embedded :
-            if event.state & gdk.SHIFT_MASK :
-                if event.state & gdk.CONTROL_MASK :
-                    if keyname in ['z', 'Z'] :
-                        self.actionRedo.activate()
-                        return True
-
-            elif event.state & gdk.CONTROL_MASK :
+        if event.state & gdk.SHIFT_MASK :
+            if event.state & gdk.CONTROL_MASK :
                 if keyname in ['z', 'Z'] :
-                    self.actionUndo.activate()
-                    return True
+                    self.actionRedo.activate()
 
-                elif keyname == "Up" :
-                    self.actionMoveUp.activate()
-                    return True
+        elif event.state & gdk.CONTROL_MASK :
+            if keyname in ['z', 'Z'] :
+                self.actionUndo.activate()
 
-                elif keyname == "Down" :
-                    self.actionMoveDn.activate()
-                    return True
+            elif keyname == "Up" :
+                self.actionMoveUp.activate()
 
-                elif keyname == "Left" :
-                    self.actionRemoveItem.activate()
-                    return True
+            elif keyname == "Down" :
+                self.actionMoveDown.activate()
 
-                elif keyname == "Right" :
-                    self.actionAppendItem.activate()
-                    return True
+            elif keyname == "Left" :
+                self.actionRemoveItm.activate()
 
-                elif keyname == "Insert" :
-                    self.actionAdd.activate()
-                    return True
+            elif keyname == "Right" :
+                self.actionAppendItm.activate()
 
-                elif keyname == "Delete" :
-                    self.actionDelete.activate()
-                    return True
+            elif keyname == "Insert" :
+                self.actionAdd.activate()
 
-                elif (keyname in ["D", "d"]) :
-                    self.actionDuplicate.activate()
-                    return True
+            elif keyname == "Delete" :
+                self.actionDelete.activate()
 
-                elif (keyname in ["X", "x"]) :
-                    self.actionCut.activate()
-                    return True
+            elif (keyname in ["D", "d"]) :
+                self.actionDuplicate.activate()
 
-                elif (keyname in ["C", "c"]) :
-                    self.actionCopy.activate()
-                    return True
+            elif (keyname in ["X", "x"]) :
+                self.actionCut.activate()
 
-                elif (keyname in ["V", "v"]) :
-                    self.actionPaste.activate()
-                    return True
+            elif (keyname in ["C", "c"]) :
+                self.actionCopy.activate()
 
-                elif (keyname in ["N", "n"]) :
-                    self.actionNew.activate()
-                    return True
+            elif (keyname in ["V", "v"]) :
+                self.actionPaste.activate()
 
-                elif (keyname in ["O", "o"]) :
-                    self.actionOpen.activate()
-                    return True
+            elif (keyname in ["N", "n"]) :
+                self.actionNew.activate()
 
-                elif (keyname in ["S", "s"]) :
-                    self.actionSave.activate()
-                    return True
+            elif (keyname in ["O", "o"]) :
+                self.actionOpen.activate()
 
-                elif (keyname in ["K", "k"]) :
-                    self.actionCollapse.activate()
-                    return True
+            elif (keyname in ["S", "s"]) :
+                self.actionSave.activate()
 
-            else :
-                if path is None :
-                    return False
-
-                if keyname == "Up" :
-                    if path != (0,) :
-                        depth = len(path)
-                        index_s = path[depth - 1]
-                        if index_s > 0 :
-                            p = path[0: depth - 1] + (index_s - 1,)
-                            iter_p = model.get_iter(p)
-                            while iter_p is not None :
-                                count = model.iter_n_children(iter_p)
-                                if (count == 0) or not self.treeview.row_expanded(model.get_path(iter_p)) :
-                                    p = model.get_path(iter_p)
-                                    break
-                                else :
-                                    iter_p = model.iter_nth_child(iter_p, count - 1)
-                        else :
-                            p = path[0: depth - 1]
-                    else :
-                        p = None
-
-                    if p is not None :
-                        self.treeview.expand_to_path(p)
-                        self.treeview.set_cursor(p)
-                    return True
-
-                elif keyname == "Down" :
-                    p = None
-                    if model.iter_has_child(itr) :
-                        p = model.get_path(model.iter_children(itr))
-                    else :
-                        itn = model.iter_next(itr)
-                        if itn is not None :
-                            p = model.get_path(itn)
-                        else :
-                            itn = model.iter_parent(itr)
-                            while itn is not None :
-                                ito = model.iter_next(itn)
-                                if ito is not None :
-                                    p = model.get_path(ito)
-                                    break
-                                else :
-                                    itn = model.iter_parent(itn)
-
-                    if p is not None :
-                        self.treeview.set_cursor(p)
-                    return True
-
-                elif keyname == "Left" :
-                    self.treeview.collapse_row(path)
-                    return True
-
-                elif keyname == "Right" :
-                    self.treeview.expand_row(path, False)
-                    return True
-
-                elif keyname in ["Return", "KP_Enter", "space"] :
-                    self.treeview.set_cursor_on_cell(path, focus_column = self.col_value, start_editing = True)
-                    return True
-
-        if keyname == "Tab" and self.treeview2 is not None:
-            self.treeview2.grab_focus()
-            model, itr = self.treeview2.get_selection().get_selected()
-            if itr is None :
-                self.treeview2.set_cursor((0,))
-            self.hint_label.set_markup(items_fmt_str % _("Parameters treeview focused"))
-            return True
-
-        if path is None :
-            return False
-
-        if keyname == "BackSpace" :
-            self.edit_cell.set_Input('BS')
-            self.treeview.set_cursor_on_cell(path, focus_column = self.col_value, start_editing = True)
-            return True
-
-        if keyname == "F2" :
-            self.treeview.set_cursor_on_cell(path, focus_column = self.col_value, start_editing = True)
-            return True
-
-        if (keyname >= "0" and keyname <= "9") or (keyname >= "KP_0" and keyname <= "KP_9") :
-            self.edit_cell.set_Input(keyname[-1])
-            self.treeview.set_cursor_on_cell(path, focus_column = self.col_value, start_editing = True)
-            return True
-
-        elif keyname in ['KP_Decimal', 'period', 'comma'] :
-            self.edit_cell.set_Input(decimal_point)
-            self.treeview.set_cursor_on_cell(path, focus_column = self.col_value, start_editing = True)
-            return True
-
-        elif keyname in ['KP_Subtract', 'KP_Add', 'plus', 'minus'] :
-            self.edit_cell.set_Input('-')
-            self.treeview.set_cursor_on_cell(path, focus_column = self.col_value, start_editing = True)
-            return True
+            elif (keyname in ["K", "k"]) :
+                self.actionCollapse.activate()
 
         else :
-            return False
 
-    def tv2_kp_event(self, widget, event) :
-        keyname = gdk.keyval_name(event.keyval)
-        model, itr = self.treeview2.get_selection().get_selected()
+            if keyname == "Tab" and self.treeview2 is not None:
+                if widget == self.treeview :
+                    self.hint_label.set_markup(items_fmt_str % _("Secondary treeview focused"))
+                    self.treeview2.grab_focus()
+                    model, itr = self.treeview2.get_selection().get_selected()
+                    if itr is None :
+                        self.treeview2.set_cursor((0,))
+                    else :
+                        p = model.get_path(itr)
+                        self.treeview2.set_cursor(p)
+                else :
+                    self.hint_label.set_markup(items_fmt_str % _("Primary treeview focused"))
+                    self.treeview.grab_focus()
+                    model, itr = self.treeview.get_selection().get_selected()
+                    p = model.get_path(itr)
+                    self.treeview.set_cursor(p)
 
-        if itr is None :
-            return False
+            elif path is None :
+                return False
 
-        self.focused_widget = self.treeview2
-        path = model.get_path(itr)
-
-        if self.embedded:
-
-            if keyname == "Up" :
+            elif keyname == "Up" :
                 if path != (0,) :
                     depth = len(path)
                     index_s = path[depth - 1]
@@ -3216,24 +3279,20 @@ class NCam(gtk.VBox):
                         iter_p = model.get_iter(p)
                         while iter_p is not None :
                             count = model.iter_n_children(iter_p)
-                            if (count == 0) :  # or not self.treeview.row_expanded(model.get_path(iter_p)) :
+                            if (count == 0) or not widget.row_expanded(model.get_path(iter_p)) :
                                 p = model.get_path(iter_p)
                                 break
                             else :
                                 iter_p = model.iter_nth_child(iter_p, count - 1)
                     else :
                         p = path[0: depth - 1]
-                else :
-                    p = None
 
-                if p is not None :
-                    self.treeview2.expand_to_path(p)
-                    self.treeview2.set_cursor(p)
-                return True
+                    widget.expand_to_path(p)
+                    widget.set_cursor(p)
 
             elif keyname == "Down" :
                 p = None
-                if model.iter_has_child(itr) :
+                if widget.row_expanded(path) :
                     p = model.get_path(model.iter_children(itr))
                 else :
                     itn = model.iter_next(itr)
@@ -3250,45 +3309,89 @@ class NCam(gtk.VBox):
                                 itn = model.iter_parent(itn)
 
                 if p is not None :
-                    self.treeview2.set_cursor(p)
-                return True
+                    widget.set_cursor(p)
 
-            elif keyname in ["Return", "KP_Enter", "space"] :
-                self.treeview2.set_cursor_on_cell(path, focus_column = self.col_value2, start_editing = True)
-                return True
+            elif keyname == "Left" :
+                if widget.row_expanded(path) :
+                    widget.collapse_row(path)
+                else :
+                    depth = len(path)
+                    d_len = 1
+                    if depth > d_len :
+                        apath = path[0:depth - d_len]
+                        widget.set_cursor_on_cell(apath)
+                        widget.collapse_row(apath)
 
-        if keyname == "Tab" :
-            self.treeview.grab_focus()
-            self.hint_label.set_markup(items_fmt_str % _("Master treeview focused"))
-            return True
+            elif keyname == "Right" :
+                widget.expand_to_path(path + (0, 0))
 
-        if keyname == "F2" :
-            self.treeview2.set_cursor_on_cell(path, focus_column = self.col_value2, start_editing = True)
-            return True
+            elif keyname == "Home" :
+                widget.set_cursor((0,))
 
-        if keyname == "BackSpace" :
-            self.cell_value2.set_Input('BS')
-            self.treeview2.set_cursor_on_cell(path, focus_column = self.col_value2, start_editing = True)
-            return True
+            elif keyname == "Page_Up" :
+                if path != (0,) :
+                    depth = len(path)
+                    index_s = path[depth - 1]
+                    if index_s > 0 and widget.row_expanded(path) :
+                        widget.set_cursor(path[0: depth - 1] + (index_s - 1,))
+                    else :
+                        if depth > 1 :
+                            widget.set_cursor(path[0: depth - 1],)
+                        else :
+                            widget.set_cursor((path[0] - 1,))
 
-        aKey = keyname[-1]
-        if (aKey >= "0" and aKey <= "9") :
-            self.cell_value2.set_Input(aKey)
-            self.treeview2.set_cursor_on_cell(path, focus_column = self.col_value2, start_editing = True)
-            return True
+            elif keyname == "End" :
+                p = (path[0],)
+                iter_p = model.get_iter(p)
+                ito = iter_p
+                while iter_p is not None :
+                    p = model.get_path(iter_p)
+                    ito = iter_p
+                    iter_p = model.iter_next(iter_p)
 
-        elif keyname in ['KP_Decimal', 'period', 'comma'] :
-            self.cell_value2.set_Input(decimal_point)
-            self.treeview2.set_cursor_on_cell(path, focus_column = self.col_value2, start_editing = True)
-            return True
+                while widget.row_expanded(p) :
+                    p = model.get_path(model.iter_children(ito))
+                    iter_p = model.get_iter(p)
+                    ito = iter_p
+                    while iter_p is not None :
+                        p = model.get_path(iter_p)
+                        ito = iter_p
+                        iter_p = model.iter_next(iter_p)
 
-        elif keyname in ['KP_Subtract', 'KP_Add', 'plus', 'minus'] :
-            self.cell_value2.set_Input('-')
-            self.treeview2.set_cursor_on_cell(path, focus_column = self.col_value2, start_editing = True)
-            return True
+                widget.set_cursor(p)
 
-        else :
-            return False
+            elif keyname == "Page_Down" :
+                itr_n = model.iter_next(itr)
+                if itr_n is not None :
+                    widget.set_cursor(model.get_path(itr_n))
+                else :
+                    itr_n = model.iter_children(itr)
+                    if itr_n is not None :
+                        widget.set_cursor(model.get_path(itr_n))
+
+            elif keyname in ["Return", "KP_Enter", "space", "F2"] :
+                widget.set_cursor_on_cell(path, focus_column = widget.get_column(1), start_editing = True)
+
+            elif keyname == "BackSpace" :
+                widget.get_column(1).get_cell_renderers()[0].set_Input('BS')
+                widget.set_cursor_on_cell(path, focus_column = widget.get_column(1), start_editing = True)
+
+            elif (keyname[-1] >= "0" and keyname[-1] <= "9") :
+                widget.get_column(1).get_cell_renderers()[0].set_Input(keyname[-1])
+                widget.set_cursor_on_cell(path, focus_column = widget.get_column(1), start_editing = True)
+
+            elif keyname in ['KP_Decimal', 'period', 'comma'] :
+                widget.get_column(1).get_cell_renderers()[0].set_Input('0' + decimal_point)
+                widget.set_cursor_on_cell(path, focus_column = widget.get_column(1), start_editing = True)
+
+            elif keyname in ['KP_Subtract', 'KP_Add', 'plus', 'minus'] :
+                widget.get_column(1).get_cell_renderers()[0].set_Input('-')
+                widget.set_cursor_on_cell(path, focus_column = widget.get_column(1), start_editing = True)
+
+            else :
+                return False
+
+        return True
 
     def treestore_from_xml(self, xml):
         def recursive(treestore, itr, xmlpath):
@@ -3307,8 +3410,8 @@ class NCam(gtk.VBox):
                         p_type = p.get_type()
                         p_hidden = get_int(p.attr['hidden'] if 'hidden' in p.attr else '0')
 
-                        if self.pref.use_dual_views :
-                            if self.pref.sub_hdrs_in_tv1 :
+                        if self.actionDualView.get_active() :
+                            if self.actionSubHdrs.get_active() :
                                 m_visible = p_type in ['items', 'header', 'sub-header'] and not p_hidden
                                 is_visible = p_type not in ['items', 'header', 'sub-header'] and not p_hidden
                             else :
@@ -3366,7 +3469,6 @@ class NCam(gtk.VBox):
         self.treeview.set_model(self.master_filter)
         self.set_expand()
 
-
     def to_gcode(self, *arg) :
         def recursive(itr, ldr) :
             gcode_def = ""
@@ -3403,13 +3505,7 @@ class NCam(gtk.VBox):
         return self.pref.default + gcode_def + \
             _("(end sub definitions)\n\n") + gcode + self.pref.post_amble
 
-    def action_build(self, *arg) :
-        self.autorefresh_call()
-        if not self.LinuxCNC_connected :
-            mess_dlg(_('LinuxCNC not running\n\nStart LinuxCNC and\npress Build button again'))
-        self.auto_refresh.set_active(self.LinuxCNC_connected)
-
-    def save_ngc(self, *arg) :
+    def action_save_ngc(self, *arg) :
         filechooserdialog = gtk.FileChooserDialog(_("Save as ngc..."), None,
             gtk.FILE_CHOOSER_ACTION_SAVE,
             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
@@ -3420,6 +3516,8 @@ class NCam(gtk.VBox):
             filt.add_pattern("*.ngc")
             filechooserdialog.add_filter(filt)
             filechooserdialog.set_current_folder(NGC_DIR)
+            filechooserdialog.set_keep_above(True)
+            filechooserdialog.set_transient_for(self.get_toplevel())
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 gcode = self.to_gcode()
@@ -3432,58 +3530,78 @@ class NCam(gtk.VBox):
         finally :
             filechooserdialog.destroy()
 
-    def edited_user(self, itr, new_value, new_type):
-        if new_type != '' :
-            self.treestore.get(itr, 0)[0].set_type(new_type)
-        self.treestore.get(itr, 0)[0].set_value(new_value)
-
-    def edited(self, renderer, path, new_text, new_type) :
+    def edited(self, renderer, path, new_value) :
         self.focused_widget = renderer.get_treeview()
         itr = renderer.get_treeview().get_model().get_iter(path)
         itr = renderer.get_treeview().get_model().convert_iter_to_child_iter(itr)
-        old_value = self.treestore.get_value(itr, 0).get_value()
+        param = self.treestore.get_value(itr, 0)
+        old_value = param.get_value()
+        r = gtk.RESPONSE_NONE
+
         if renderer.editdata_type == 'combo-user' :
-            df = self.treestore.get_value(itr, 0).get_attr('links')
+            p_name = None
+            df = param.get_attr('links')
             if (df is not None) :
                 for dg in df.split(":") :
                     opt = dg.split('=')
-                    self.treestore.get(itr, 0)[0].set_value(new_text)
-                    if opt[1] == new_text :
-                        children = self.treestore.iter_children(self.treestore.iter_parent(itr))
-                        while children is not None :
-                            ca = self.treestore.get_value(children, 0).get_attr('call')
-                            if ca == '#param_' + opt[0] :
-                                renderer.set_tooltip(self.treestore.get_value(children, 0).get_tooltip())
-                                dt = self.treestore.get_value(children, 0).get_type()
-                                renderer.set_edit_datatype(dt)
-                                val = self.treestore.get_value(children, 0).get_value()
-                                renderer.set_param_value(val)
-                                if dt in NUMBER_TYPES :
-                                    renderer.set_param_value(val.replace('.', decimal_point))
-                                    renderer.set_max_value(get_float(self.treestore.get_value(children, 0).get_max_value()))
-                                    renderer.set_min_value(get_float(self.treestore.get_value(children, 0).get_min_value()))
-                                    renderer.set_digits(self.treestore.get_value(children, 0).get_digits())
-                                    renderer.set_not_zero(self.treestore.get_value(children, 0).get_not_zero())
-                                    renderer.edit_number(children, gmoccapy_time_out)
+                    if (opt[1] == new_value) :
+                        p_name = '#param_' + opt[0]
+                        break
 
-                                elif dt == 'string' :
-                                    renderer.edit_string(children, gmoccapy_time_out)
+            if p_name is not None :
+                itr_n = self.treestore.iter_parent(itr)
+                itr_n = self.treestore.iter_children(itr_n)
 
-                                elif dt == 'list' :
-                                    renderer.set_options(self.treestore.get_value(children, 0).get_options())
-                                    renderer.edit_list(children, gmoccapy_time_out)
-                                self.action()
-                                break
-                            children = self.treestore.iter_next(children)
+                # finding the linked param
+                param_e = None
+                while (itr_n is not None) :
+                    param_u = self.treestore.get_value(itr_n, 0)
+                    if param_u.get_attr('call') == p_name :
+                        param_e = param_u
+                        break
+                    itr_n = self.treestore.iter_next(itr_n)
 
-        if new_type != '' :
-            self.treestore.get(itr, 0)[0].set_type(new_type)
-        if old_value != new_text :
-            self.treestore.get(itr, 0)[0].set_value(new_text)
+                if param_e is not None :
+                    renderer.set_tooltip(param_e.get_tooltip())
+                    dt = param_e.get_type()
+                    renderer.set_edit_datatype(dt)
+                    val = param_e.get_value()
+                    renderer.set_param_value(val)
+                    if dt in NUMBER_TYPES :
+                        renderer.set_param_value(val.replace('.', decimal_point))
+                        renderer.set_max_value(get_float(param_e.get_max_value()))
+                        renderer.set_min_value(get_float(param_e.get_min_value()))
+                        renderer.set_digits(param_e.get_digits())
+                        renderer.set_not_zero(param_e.get_not_zero())
+                        r, v = renderer.edit_number(gmoccapy_time_out)
+                        if r == gtk.RESPONSE_OK :
+                            param_e.set_value(v)
+                        else :
+                            return
+
+                    elif dt in ['string', 'gcode'] :
+                        r, v = renderer.edit_string(gmoccapy_time_out)
+                        if r == gtk.RESPONSE_OK :
+                            param_e.set_value(v)
+                        else :
+                            return
+
+                    elif dt == 'list' :
+                        renderer.set_options(param_e.get_options())
+                        r, v = renderer.edit_list(gmoccapy_time_out)
+                        if r == gtk.RESPONSE_OK :
+                            param_e.set_value(v)
+                        else :
+                            return
+
+        if (old_value != new_value) or (r == gtk.RESPONSE_OK):
+            param.set_value(new_value)
+#            if renderer.editdata_type == 'text' :
+#                renderer.get_treeview.queue_draw()
             self.action()
         self.focused_widget.grab_focus()
 
-    def delete_clicked(self, *arg) :
+    def action_delete(self, *arg) :
         if self.iter_next is not None :
             next_path = self.master_filter.get_path(self.selected_feature_itr)
         elif self.iter_previous is not None :
@@ -3500,42 +3618,41 @@ class NCam(gtk.VBox):
             self.treeview.set_cursor(next_path)
 
         self.action()
-        self.get_selected_feature(self)
-
-    def top_bottom_layout(self, *arg):
-        self.pref.side_by_side = False
-        self.frame2.reparent(self.feature_pane)
-
-    def side_by_side_layout(self, *arg):
-        self.pref.side_by_side = True
-        self.frame2.reparent(self.feature_Hpane)
+        self.get_selected_feature(self.treeview)
 
     def action_collapse(self, *arg) :
         (model, itr) = self.treeview.get_selection().get_selected()
         path = model.get_path(itr)
+        if self.treeview2 is not None :
+            (model, itr) = self.treeview2.get_selection().get_selected()
         self.treeview.collapse_all()
         self.treeview.expand_to_path(path)
         self.treeview.set_cursor(path)
-        self.treeview.grab_focus()
 
-    def action_SubHdrs(self, *arg):
-        self.pref.sub_hdrs_in_tv1 = self.actionSubHdrs.get_active()
-        self.treestore_from_xml(self.treestore_to_xml())
-        self.expand_and_select(self.path_to_old_selected)
+        if (self.treeview2 is not None) :
+            self.treeview2.collapse_all()
+            if  (itr is not None) :
+                path = model.get_path(itr)
+                self.treeview2.expand_to_path(path)
+                self.treeview2.set_cursor(path)
 
-    def rename_selected_feature(self, *arg):
+        if self.focused_widget is not None :
+            self.focused_widget.grab_focus()
+
+    def action_renameF(self, *arg):
         self.newnamedlg = gtk.MessageDialog(parent = None,
             flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
             type = gtk.MESSAGE_QUESTION,
             buttons = gtk.BUTTONS_OK_CANCEL
         )
+        old_name = self.selected_feature.get_attr('name')
         self.newnamedlg.set_markup(_('Enter new name for'))
-        self.newnamedlg.format_secondary_markup(self.selected_feature.get_attr('name'))
+        self.newnamedlg.format_secondary_markup(old_name)
         self.newnamedlg.set_title('NativeCAM')
         edit_entry = gtk.Entry()
         edit_entry.set_editable(True)
-        edit_entry.set_text(self.selected_feature.get_attr('name'))
-        edit_entry.connect('key-press-event', self.rename_keyhandler)
+        edit_entry.set_text(old_name)
+        edit_entry.connect('key-press-event', self.action_rename_keyhandler)
         self.newnamedlg.vbox.add(edit_entry)
         self.newnamedlg.set_keep_above(True)
 
@@ -3548,9 +3665,10 @@ class NCam(gtk.VBox):
             newname = edit_entry.get_text().lstrip(' ')
             if newname > '' :
                 self.selected_feature.attr['name'] = newname
+                self.treeview.queue_draw()
         self.newnamedlg.destroy()
 
-    def rename_keyhandler(self, widget, event):
+    def action_rename_keyhandler(self, widget, event):
         keyname = gdk.keyval_name(event.keyval)
         if keyname in ['Return', 'KP_Enter']:
             self.newnamedlg.response(gtk.RESPONSE_OK)
@@ -3601,14 +3719,11 @@ class NCam(gtk.VBox):
 
             self.treestore_from_xml(xml)
             self.expand_and_select(next_path)
-            self.get_selected_feature(self)
-            self.action()
+            self.get_selected_feature(self.treeview)
+            self.action(xml)
 
-    def add_feature_menu(self, widget, src):
-        self.add_feature(src)
-
-    def add_feature(self, src) :
-        src_file = search_path(2, src, CFG_DIR)
+    def add_feature(self, widget, src) :
+        src_file = search_path(search_warning.dialog, src, CFG_DIR)
         if src_file is None:
             return
 
@@ -3617,6 +3732,7 @@ class NCam(gtk.VBox):
             xml = etree.parse(src_file).getroot()
         elif src_data.find('[SUBROUTINE]') > -1 :
             f = Feature(src_file)
+            f.attr['src'] = src
             xml = etree.Element(XML_TAG)
             xml.append(f.to_xml())
         else :
@@ -3624,7 +3740,10 @@ class NCam(gtk.VBox):
             return
         self.import_xml(xml)
 
-    def autorefresh_call(self) :
+    def autorefresh_call(self, *arg) :
+        if not self.actionAutoRefresh.get_active() :
+            return
+        connected = True
         try :
             fname = os.path.join(NGC_DIR, GENERATED_FILE)
             f = open(fname, "w")
@@ -3648,12 +3767,16 @@ class NCam(gtk.VBox):
                             linuxCNC.program_open(fname)
                             time.sleep(0.05)
                         except :
-                            self.LinuxCNC_connected = False
+                            connected = False
             except :
-                self.LinuxCNC_connected = False
-                self.auto_refresh.set_active(False)
+                connected = False
         except :
-            self.LinuxCNC_connected = False
+            connected = False
+
+        if not connected :
+            self.actionAutoRefresh.set_active(False)
+            if self.show_not_connected :
+                mess_dlg(_('LinuxCNC not running\n\nStart LinuxCNC and\nactivate Auto-refresh menu item'))
 
         if self.focused_widget is not None :
             self.focused_widget.grab_focus()
@@ -3662,7 +3785,48 @@ class NCam(gtk.VBox):
 
         return False
 
-    def action(self, xml = None) :
+    def action_hideField(self, *arg):
+        path = self.master_filter.get_path(self.selected_feature_itr)
+        self.treestore.get(self.selected_param, 0)[0].set_hidden(True)
+        self.selected_feature.hide_field()
+        xml_ = self.treestore_to_xml()
+        self.treestore_from_xml(xml_)
+        self.expand_and_select(path)
+        self.action(xml = xml_, refresh = False)
+
+    def action_showFields(self, *args):
+        path = self.master_filter.get_path(self.selected_feature_itr)
+        if self.selected_feature.show_all_fields() :
+            xml_ = self.treestore_to_xml()
+            self.treestore_from_xml(xml_)
+            self.expand_and_select(path)
+            self.action(xml = xml_, refresh = False)
+
+    def action_chng_group(self, *arg):
+        if self.treestore.get(self.selected_param, 0)[0].change_group() :
+            path = self.master_filter.get_path(self.selected_feature_itr)
+            xml_ = self.treestore_to_xml()
+            self.treestore_from_xml(xml_)
+            self.expand_and_select(path)
+            self.action(xml = xml_, refresh = False)
+
+    def action_gcode(self, *arg) :
+        self.treestore.get(self.selected_param, 0)[0].set_type('gcode')
+        self.selected_type = 'gcode'
+        self.treeview.queue_draw()
+        if self.treeview2 is not None :
+            self.treeview2.queue_draw()
+        self.action()
+
+    def action_revert_type(self, *arg) :
+        self.treestore.get(self.selected_param, 0)[0].revert_type()
+        self.selected_type = self.treestore.get(self.selected_param, 0)[0].get_type()
+        self.treeview.queue_draw()
+        if self.treeview2 is not None :
+            self.treeview2.queue_draw()
+        self.action()
+
+    def action(self, xml = None, refresh = True) :
         if xml is None :
             xml = self.treestore_to_xml()
 
@@ -3671,31 +3835,31 @@ class NCam(gtk.VBox):
         self.undo_list.append(etree.tostring(xml))
         self.undo_pointer = len(self.undo_list) - 1
 
-        self.update_do_btns()
+        self.update_do_btns(refresh)
 
-    def update_do_btns(self):
+    def update_do_btns(self, refresh):
         self.set_do_buttons_state()
-        if self.auto_refresh.get_active() :
-            self.timeout = gobject.timeout_add(int(self.pref.timeout_value * 1000),
+        if self.actionAutoRefresh.get_active() and refresh:
+            self.timeout = gobject.timeout_add(self.pref.timeout_value,
                     self.autorefresh_call)
 
-    def undo_clicked(self, *arg) :
+    def action_undo(self, *arg) :
         save_restore = self.pref.restore_expand_state
         self.pref.restore_expand_state = True
         self.undo_pointer -= 1
         self.treestore_from_xml(etree.fromstring(self.undo_list[self.undo_pointer]))
         self.expand_and_select(self.path_to_old_selected)
         self.pref.restore_expand_state = save_restore
-        self.update_do_btns()
+        self.update_do_btns(True)
 
-    def redo_clicked(self, *arg) :
+    def action_redo(self, *arg) :
         save_restore = self.pref.restore_expand_state
         self.pref.restore_expand_state = True
         self.undo_pointer += 1
         self.treestore_from_xml(etree.fromstring(self.undo_list[self.undo_pointer]))
         self.expand_and_select(self.path_to_old_selected)
         self.pref.restore_expand_state = save_restore
-        self.update_do_btns()
+        self.update_do_btns(True)
 
     def set_do_buttons_state(self):
         self.actionUndo.set_sensitive(self.undo_pointer > 0)
@@ -3706,13 +3870,7 @@ class NCam(gtk.VBox):
         self.undo_pointer = -1
         self.set_do_buttons_state()
 
-    def menu_file_activate(self, *arg):
-        self.actionBuild.set_sensitive(self.treestore.get_iter_root() is not None)
-        self.actionSave.set_sensitive(self.treestore.get_iter_root() is not None)
-        self.actionSaveTemplate.set_sensitive(self.treestore.get_iter_root() is not None)
-        self.actionSaveNGC.set_sensitive(self.treestore.get_iter_root() is not None)
-
-    def menu_about_activate(self, *arg):
+    def action_about(self, *arg):
         dialog = gtk.AboutDialog()
         dialog.set_name(APP_TITLE)
 
@@ -3736,88 +3894,98 @@ class NCam(gtk.VBox):
         dialog.run()
         dialog.destroy()
 
-    def save_default_template(self, *arg):
+    def action_save_template(self, *arg):
         xml = self.treestore_to_xml()
-        etree.ElementTree(xml).write(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, \
-                                               DEFAULT_TEMPLATE), pretty_print = True)
+        etree.ElementTree(xml).write(os.path.join(NCAM_DIR, CATALOGS_DIR, \
+                    self.catalog_dir, DEFAULT_TEMPLATE), pretty_print = True)
 
-    def loadcurrentwork(self):
+    def load_currentWork(self):
         self.treestore.clear()
         self.clear_undo()
-        fn = search_path(0, CURRENT_WORK, CATALOGS_DIR, self.catalog_dir)
+        fn = search_path(search_warning.none, CURRENT_WORK, \
+                         CATALOGS_DIR, self.catalog_dir)
         if fn is not None :
             xml = etree.parse(fn)
             self.treestore_from_xml(xml.getroot())
             self.expand_and_select((0,))
-            self.autorefresh_call()
-            self.auto_refresh.set_active(True)
             self.current_filename = _('Untitle.xml')
             self.file_changed = False
-            self.action()
+            self.action(xml.getroot())
         else :
-            print (_('Previous work not saved as current work'))
-            self.menu_new_activate()
+            print(_('Previous work not saved as current work'))
+            self.action_new_project()
 
-    def menu_new_activate(self, *arg):
+    def action_new_project(self, *arg):
         global UNIQUE_ID
 
         UNIQUE_ID = 10
         self.treestore.clear()
         self.clear_undo()
-        fn = search_path(0, DEFAULT_TEMPLATE, CATALOGS_DIR, self.catalog_dir)
+        fn = search_path(search_warning.none, DEFAULT_TEMPLATE, \
+                         CATALOGS_DIR, self.catalog_dir)
         if fn is None :
-            print (_('No default template saved'))
+            print(_('No default template saved'))
         else :
             xml = etree.parse(fn)
             self.treestore_from_xml(xml.getroot())
             self.expand_and_select((0,))
-        self.autorefresh_call()
-        self.auto_refresh.set_active(True)
         self.current_filename = _('Untitle.xml')
         self.file_changed = False
         self.action()
 
-    def set_layout(self, dual_views):
-        self.pref.use_dual_views = dual_views
-        if self.pref.use_dual_views :
+    def set_layout(self, *arg):
+        if self.actionDualView.get_active() :
             if self.treeview2 is None :
                 self.create_second_treeview()
                 self.treeview2.show_all()
-            if self.pref.side_by_side :
-                self.side_by_side_layout()
-            self.frame2.set_visible(True)
+            if self.actionSideSide.get_active() :
+                self.frame2.reparent(self.feature_Hpane)
+            else :
+                self.frame2.reparent(self.feature_pane)
         else :
-            self.frame2.set_visible(False)
             if self.treeview2 is not None :
                 self.treeview2.destroy()
                 self.treeview2 = None
+
         self.treestore_from_xml(self.treestore_to_xml())
         self.expand_and_select(self.path_to_new_selected)
 
-        self.actionTopBottom.set_sensitive(self.pref.use_dual_views)
-        self.actionSideBySide.set_sensitive(self.pref.use_dual_views)
-        self.actionSubHdrs.set_sensitive(self.pref.use_dual_views)
-
-    def dual_view_activate(self, *arg) :
-        self.set_layout(True)
-
-    def single_view_activate(self, *arg) :
-        self.set_layout(False)
-
-    def hide_value_col(self, callback = None):
-        self.col_value.set_visible(not self.actionHideValCol.get_active())
-
-    def menu_pref_activate(self, callback = None) :
-        self.pref.edit(self)
+        self.frame2.set_visible(self.actionDualView.get_active())
+        self.actionTopBottom.set_sensitive(self.actionDualView.get_active())
+        self.actionSideSide.set_sensitive(self.actionDualView.get_active())
+        self.actionSubHdrs.set_sensitive(self.actionDualView.get_active())
+        self.actionHideCol.set_sensitive(self.actionDualView.get_active())
+        self.treeview.get_column(1).set_visible(self.actionSingleView.get_active() or \
+                                    not self.actionHideCol.get_active())
 
     def on_scale_change_value(self, widget):
-        self.main_box.set_size_request(int(self.w_adj.value), 100)
+        self.main_box.set_size_request(int(self.w_adj.get_value()), 100)
 
-    def move_up_clicked(self, *arg) :
-        self.move(-1)
+    def create_nc_toolbar(self):
+        if self.nc_toolbar is not None :
+            self.nc_toolbar.destroy()
+        self.nc_toolbar = gtk.Toolbar()
+        self.nc_toolbar.set_style(gtk.TOOLBAR_ICONS)
+        self.nc_toolbar.set_can_focus(False)
 
-    def move_down_clicked(self, *arg) :
-        self.move(1)
+        count = len(TB_CATALOG)
+        for x in range(count) :
+            li = TB_CATALOG[x]
+            if li == 'separator' :
+                self.nc_toolbar.insert(gtk.SeparatorToolItem(), -1)
+            else :
+                if li[3] is not None :
+                    icon = gtk.Image()
+                    icon.set_from_pixbuf(get_pixbuf(li[3], quick_access_icon_size))
+                    button = gtk.ToolButton(icon_widget = icon, label = _(li[0]))
+                else :
+                    button = gtk.ToolButton(label = li[0])
+                if li[1] is not None :
+                    button.set_tooltip_markup(_(li[1]))
+                button.connect('clicked', self.add_feature, li[2])
+                self.nc_toolbar.insert(button, -1)
+
+        self.main_box.pack_start(self.nc_toolbar, False, False, 0)
 
     def get_col_name(self, column, cell, model, itr, *arg) :
         data_type = model.get_value(itr, 0).get_type()
@@ -3825,7 +3993,7 @@ class NCam(gtk.VBox):
         if data_type == 'header' :
             cell.set_property('markup', header_fmt_str % val)
         elif data_type == 'sub-header' :
-            if  self.pref.use_dual_views and not self.pref.sub_hdrs_in_tv1 :
+            if  self.actionDualView.get_active() and not self.actionSubHdrs.get_active() :
                 cell.set_property('markup', sub_header_fmt_str2 % val)
             else :
                 cell.set_property('markup', sub_header_fmt_str % val)
@@ -3839,119 +4007,113 @@ class NCam(gtk.VBox):
     def get_editinfo(self, cell, treeview, path):
         model = treeview.get_model()
         itr = model.get_iter(path)
-        data_type = model.get_value(itr, 0).get_type()
+        param = model.get_value(itr, 0)
+
+        data_type = param.get_type()
         cell.set_edit_datatype(data_type)
-        cell.set_param_value(model.get_value(itr, 0).get_value())
+        cell.set_param_value(param.get_value())
 
         if data_type in ['combo', 'combo-user', 'list']:
-            cell.set_options(_(model.get_value(itr, 0).get_options()))
+            cell.set_options(_(param.get_options()))
 
         elif data_type in NUMBER_TYPES:
-            cell.set_max_value(get_float(model.get_value(itr, 0).get_max_value()))
-            cell.set_min_value(get_float(model.get_value(itr, 0).get_min_value()))
-            cell.set_digits(model.get_value(itr, 0).get_digits())
-            cell.set_tooltip(_(model.get_value(itr, 0).get_tooltip()))
-            cell.set_not_zero(model.get_value(itr, 0).get_not_zero())
+            cell.set_max_value(get_float(param.get_max_value()))
+            cell.set_min_value(get_float(param.get_min_value()))
+            cell.set_digits(param.get_digits())
+            cell.set_tooltip(_(param.get_tooltip()))
+            cell.set_not_zero(param.get_not_zero())
 
         elif data_type == 'tool' :
             cell.set_options(self.tools.list)
 
         elif data_type == 'filename' :
-            cell.set_fileinfo(model.get_value(itr, 0).attr['patterns'], \
-                            model.get_value(itr, 0).attr['mime_types'], \
-                            model.get_value(itr, 0).attr['filter_name'])
+            cell.set_fileinfo(param.attr['patterns'], \
+                            param.attr['mime_types'], \
+                            param.attr['filter_name'])
 
 
     def get_col_value(self, column, cell, model, itr, *arg) :
-        f = model.get_value(itr, 0)
-        val = f.get_value()
+        param = model.get_value(itr, 0)
+        val = param.get_value()
+        dval = param.get_display_string()
+
         cell.set_param_value(val)
 
-        data_type = f.get_type()
+        data_type = param.get_type()
         cell.set_data_type(data_type)
 
         if data_type == 'filename':
-            h, val = os.path.split(val)
+            h, dval = os.path.split(val)
 
         elif data_type == 'tool' :
-            val = self.tools.get_text(val)
+            dval = self.tools.get_text(val)
 
         if data_type == 'combo':
-            options = _(f.get_attr('options'))
+            options = _(param.get_attr('options'))
             for option in options.split(":") :
                 opt = option.split('=')
                 if opt[1] == val :
-                    val = opt[0]
+                    dval = opt[0]
                     break
 
         elif data_type == 'combo-user':
-            found = False
-            df = f.get_attr('links') if 'links' in f.attr else None
-            if (df is not None) :
-                stop = False
+            p_name = None
+            df = param.get_attr('links')
+            if df is not None :
                 for dg in df.split(":") :
-                    if stop :
+                    opt = dg.split('=')
+                    if (opt[1] == val) :
+                        p_name = '#param_' + opt[0]
                         break
-                    else :
-                        opt = dg.split('=')
-                        if (opt[1] == val) :
-                            try :
-                                itr_n = model.convert_iter_to_child_iter(itr)
-                                itr_n = self.treestore.iter_parent(itr_n)
-                                itr_n = self.treestore.iter_children(itr_n)
-                                loop = True
-                                while loop and (itr_n is not None) :
-                                    f = self.treestore.get_value(itr_n, 0)
-                                    ca = f.get_attr('call')
-                                    if ca == '#param_' + opt[0] :
-                                        found = True
-                                        data_type = f.get_type()
-                                        if data_type == 'list':
-                                            link_val = _(f.get_value())
-                                            options = _(f.get_attr('options'))
-                                            for option in options.split(":") :
-                                                opt = option.split('=')
-                                                if opt[1] == link_val :
-                                                    val = opt[0]
-                                                    loop = False
-                                                    stop = True
-                                                    break
-                                        else :
-                                            val = _(f.get_value())
-                                            loop = False
-                                            stop = True
-                                            break
 
-                                    itr_n = self.treestore.iter_next(itr_n)
-                            except :
-                                stop = True
-
-            if not found :
-                f = model.get_value(itr, 0)
-                options = _(f.attr['options'])
+            # not a user defined value but one proposed
+            if p_name is None :
+                options = _(param.attr['options'])
                 for option in options.split(":") :
                     opt = option.split('=')
                     if opt[1] == val :
-                        val = opt[0]
+                        dval = opt[0]
                         break
+            else :
+                itr_n = model.convert_iter_to_child_iter(itr)
+                itr_n = self.treestore.iter_parent(itr_n)
+                itr_n = self.treestore.iter_children(itr_n)
+
+                # finding the linked param
+                while (itr_n is not None) :
+                    param = self.treestore.get_value(itr_n, 0)
+                    if param.get_attr('call') == p_name :
+                        break
+                    itr_n = self.treestore.iter_next(itr_n)
+
+                if param is not None :
+                    data_type = param.get_type()
+                    link_val = param.get_value()
+                    if data_type == 'list':
+                        options = _(param.get_attr('options'))
+                        for option in options.split(":") :
+                            opt = option.split('=')
+                            if opt[1] == link_val :
+                                dval = opt[0]
+                                break
+                    else :
+                        dval = param.get_display_string()
 
         if data_type == 'float' :
-            val = val.replace('.', decimal_point)
+            dval = dval.replace('.', decimal_point)
 
-        ps = f.get_attr('prefix')
+        ps = param.get_attr('prefix')
         if ps is not None :
-            val = ps + ' ' + val
-        ps = f.get_attr('suffix')
+            dval = ps + ' ' + dval
+        ps = param.get_attr('suffix')
         if ps is not None :
-            val += ' ' + ps
-
-        val = val.replace('&#176;', '°')
+            dval += ' ' + ps
 
         if data_type == 'text' :
             cell.set_property("wrap-width", 180)
         else :
             cell.set_property("wrap-width", -1)
-        cell.set_property('text', val)
+        cell.set_property('text', dval.replace('&#176;', '°'))
 
 
     def get_col_icon(self, column, cell, model, itr) :
@@ -3992,59 +4154,58 @@ class NCam(gtk.VBox):
             try :
                 self.treestore_to_xml_recursion(itr, xml)
                 return xml
-            except Exception, detail :
-                print('Error in treestore_to_xml\n%(err_details)s' % {'err_details':detail})
-                mess_dlg('Error in treestore_to_xml\n%(err_details)s' % {'err_details':detail})
+            except Exception as detail :
+                print(_('Error in treestore_to_xml\n%(err_details)s') % {'err_details':detail})
+                mess_dlg(_('Error in treestore_to_xml\n%(err_details)s') % {'err_details':detail})
         else :
             self.iter_selected_type = tv_select.none
             return xml
 
     def set_expand(self) :
-        def treestore_set_expand(model, path, itr, self) :
+        def treestore_set_expand(model, path, itr) :
             try :
                 mf_itr = self.master_filter.convert_child_iter_to_iter(itr)
                 mf_pa = self.master_filter.get_path(mf_itr)
                 p = model.get(itr, 0)[0].attr
-                if self.pref.restore_expand_state :
-                    if "expanded" in p and p["expanded"] == "True":
-                        self.treeview.expand_row(mf_pa, False)
-                    if "old-selected" in p and p["old-selected"] == "True":
-                        self.treeview.set_cursor(mf_pa)
-                        self.path_to_old_selected = mf_pa
-                    if "new-selected" in p and p["new-selected"] == "True":
-                        self.treeview.set_cursor(mf_pa)
-                        self.path_to_new_selected = mf_pa
+                if ("expanded" in p and p["expanded"] == "True") \
+                        and self.pref.restore_expand_state :
+                    self.treeview.expand_row(mf_pa, False)
+                if "old-selected" in p and p["old-selected"] == "True":
+                    self.treeview.set_cursor(mf_pa)
+                    self.path_to_old_selected = mf_pa
+                if "new-selected" in p and p["new-selected"] == "True":
+                    self.treeview.set_cursor(mf_pa)
+                    self.path_to_new_selected = mf_pa
             except :
                 # not in treeview
                 pass
 
         self.path_to_new_selected = None
         self.path_to_old_selected = None
-        self.selected_pathlist = []
         self.selection = self.treeview.get_selection()
         self.selection.unselect_all()
-        self.treestore.foreach(treestore_set_expand, self)
+        self.treestore.foreach(treestore_set_expand)
 
     def get_expand(self) :
-        def treestore_get_expand(model, path, itr, self) :
+        self.selection = self.treeview.get_selection()
+        model, pathlist = self.selection.get_selected_rows()
+
+        def treestore_get_expand(model, path, itr) :
             p = model.get(itr, 0)[0]
             p.attr["path"] = model.get_string_from_iter(itr)
             try :
                 mf_itr = self.master_filter.convert_child_iter_to_iter(itr)
                 mf_pa = self.master_filter.get_path(mf_itr)
-                p.attr["old-selected"] = mf_pa in self.selected_pathlist
+                p.attr["old-selected"] = mf_pa in pathlist
                 p.attr["new-selected"] = False
                 p.attr["expanded"] = self.treeview.row_expanded(mf_pa)
             except :
                 # not in treeview
                 pass
 
-        self.selection = self.treeview.get_selection()
-        model, pathlist = self.selection.get_selected_rows()
-        self.selected_pathlist = pathlist
-        self.treestore.foreach(treestore_get_expand, self)
+        self.treestore.foreach(treestore_get_expand)
 
-    def menu_import_activate(self, calback) :
+    def action_importXML(self, *arg) :
         filechooserdialog = gtk.FileChooserDialog(_("Import project"), None, \
                 gtk.FILE_CHOOSER_ACTION_OPEN, (gtk.STOCK_CANCEL, \
                 gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
@@ -4059,17 +4220,20 @@ class NCam(gtk.VBox):
             filt.add_pattern("*")
             filechooserdialog.add_filter(filt)
             filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR))
+            filechooserdialog.set_keep_above(True)
+            filechooserdialog.set_transient_for(self.get_toplevel())
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 fname = filechooserdialog.get_filename()
-                if not self.file_changed :
-                    self.current_filename = fname
-                self.import_xml(etree.parse(fname).getroot())
-                self.file_changed = False
+                try :
+                    self.import_xml(etree.parse(fname).getroot())
+                    self.file_changed = True
+                except etree.ParseError as err :
+                    mess_dlg(err, _("Import project"))
         finally:
             filechooserdialog.destroy()
 
-    def menu_save_xml_activate(self, callback) :
+    def action_save_project(self, *arg) :
         filechooserdialog = gtk.FileChooserDialog(_("Save project as..."), None,
                 gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL, \
                 gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
@@ -4083,6 +4247,8 @@ class NCam(gtk.VBox):
             filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR))
             filechooserdialog.set_current_name(fname)
             filechooserdialog.set_do_overwrite_confirmation(True)
+            filechooserdialog.set_keep_above(True)
+            filechooserdialog.set_transient_for(self.get_toplevel())
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 xml = self.treestore_to_xml()
@@ -4094,16 +4260,10 @@ class NCam(gtk.VBox):
         finally:
             filechooserdialog.destroy()
 
-    def menu_open_activate(self, callback = None) :
-        self.open_project(0)
-
-    def menu_open_example_activate(self, callback = None) :
-        self.open_project(1)
-
-    def open_project(self, option = 0):
+    def action_open_project(self, *arg):
         global UNIQUE_ID
 
-        if option == 0 :  # user project
+        if arg[1][0] == 0 :  # user project
             dlg_title = _("Open project")
             flt_name = _("NativeCAM projects")
             dir_ = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR)
@@ -4122,6 +4282,9 @@ class NCam(gtk.VBox):
             filt.add_pattern("*.xml")
             filechooserdialog.add_filter(filt)
             filechooserdialog.set_current_folder(dir_)
+            filechooserdialog.set_keep_above(True)
+            filechooserdialog.set_transient_for(self.get_toplevel())
+
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 filename = filechooserdialog.get_filename()
@@ -4131,53 +4294,71 @@ class NCam(gtk.VBox):
                 UNIQUE_ID = 10
                 self.clear_undo()
                 self.current_filename = filename
-                self.autorefresh_call()
                 self.file_changed = False
-                self.auto_refresh.set_active(True)
-                self.action()
+                self.action(xml.getroot())
         finally:
             filechooserdialog.destroy()
 
-    def menu_open_cfg_activate(self, callback = None) :
+    def action_loadCfg(self, *arg) :
         filechooserdialog = gtk.FileChooserDialog(_("Open a cfg file"), None, \
-            gtk.FILE_CHOOSER_ACTION_OPEN, (gtk.STOCK_CANCEL, \
-            gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+                    gtk.FILE_CHOOSER_ACTION_OPEN, \
+                    (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                     gtk.STOCK_OK, gtk.RESPONSE_OK))
         try:
             filt = gtk.FileFilter()
-            filt.set_name("cfgfiles")
+            filt.set_name(_("Config files"))
             filt.add_mime_type("text/xml")
             filt.add_pattern("*.cfg")
             filechooserdialog.add_filter(filt)
-            filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, CFG_DIR))
+            filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, CUSTOM_DIR))
+            filechooserdialog.set_keep_above(True)
+            filechooserdialog.set_transient_for(self.get_toplevel())
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
-                self.add_feature(filechooserdialog.get_filename())
+                self.add_feature(None, filechooserdialog.get_filename())
         finally :
             filechooserdialog.destroy()
 
-    def reload_subroutine(self, *arg):
-        src = self.selected_feature.get_attr('src')
-        self.auto_refresh.set_active(False)
-        self.add_feature(src)
-
     def set_actions_state(self):
-        self.actionBuild.set_sensitive(self.treestore.get_iter_root() is not None)
+        self.actionCollapse.set_sensitive(self.selected_feature is not None)
+
+        self.actionSave.set_sensitive(self.selected_feature is not None)
+        self.actionSaveTemplate.set_sensitive(self.selected_feature is not None)
+        self.actionSaveNGC.set_sensitive(self.selected_feature is not None)
+
+        self.actionSaveUser.set_sensitive(self.selected_feature is not None)
+        self.actionDeleteUser.set_sensitive((self.selected_feature is not None) and \
+                    (self.selected_feature.get_type() in USER_SUBROUTINES))
 
         self.actionDelete.set_sensitive(self.can_delete_duplicate)
         self.actionDuplicate.set_sensitive(self.can_delete_duplicate)
         self.actionMoveUp.set_sensitive(self.can_move_up)
-        self.actionMoveDn.set_sensitive(self.can_move_down)
-        self.actionAppendItem.set_sensitive(self.can_add_to_group)
-        self.actionRemoveItem.set_sensitive(self.can_remove_from_group)
+        self.actionMoveDown.set_sensitive(self.can_move_down)
+        self.actionAppendItm.set_sensitive(self.can_add_to_group)
+        self.actionRemoveItm.set_sensitive(self.can_remove_from_group)
         self.actionCut.set_sensitive(self.can_delete_duplicate)
         self.actionCopy.set_sensitive(self.can_delete_duplicate)
+
+        self.actionChngGrp.set_visible(self.selected_type in ["sub-header", "header"] and \
+                            self.actionDualView.get_active())
+        self.actionSetDigits.set_visible(self.selected_type == 'float')
+        self.actionDataType.set_visible(self.selected_type in ['float', 'int'])
+        self.actionRevertType.set_visible(self.selected_type == 'gcode')
+
+        self.actionRename.set_visible(self.iter_selected_type == tv_select.feature)
+
+        self.actionHideField.set_sensitive((self.selected_type in SUPPORTED_DATA_TYPES) and \
+                                      (self.selected_type <> 'items'))
+        self.actionShowF.set_sensitive(self.selected_feature is not None and \
+                                       self.selected_feature.has_hidden_fields())
+
 
 def verify_ini(fname, ctlog) :
     path2ui = os.path.join(SYS_DIR, 'ncam.ui')
     req = '# required NativeCAM item :\n'
 
     txt = open(fname, 'r').read()
-    if txt.find(path2ui) == -1 :
+    if (txt.find(path2ui) == -1) or (txt.find('my-stuff') == -1) :
         if not os.path.exists(fname + '.bak') :
             open(fname + '.bak', 'w').write(txt)
         txt = re.sub(r"%s" % req, '', txt)
@@ -4204,6 +4385,9 @@ def verify_ini(fname, ctlog) :
                     ctlog = 'lathe'
             except :
                 pass
+
+            # remove all '# required NativeCAM item :\n' if exist
+            txt = re.sub(r"%s" % req, '', txt)
 
             if dp == 'axis' :
                 newstr = '%sGLADEVCP = -U --catalog=%s %s\n' % (req, ctlog, path2ui)
@@ -4249,7 +4433,7 @@ def verify_ini(fname, ctlog) :
             except :
                 txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
-            newstr = '%sSUBROUTINE_PATH = ncam/lib/%s:ncam/lib/utilities\n' % (req, ctlog)
+            newstr = '%sSUBROUTINE_PATH = ncam/my-stuff:ncam/lib/%s:ncam/lib/utilities\n' % (req, ctlog)
             try :
                 oldstr = 'SUBROUTINE_PATH = ' + parser.get('RS274NGC', 'subroutine_path')
                 txt = re.sub(r"%s" % oldstr, newstr, txt)
@@ -4258,11 +4442,13 @@ def verify_ini(fname, ctlog) :
 
             open(fname, 'w').write(txt)
 
-        except Exception, detail :
+            print(_('Success in modifying inifile :\n  %s') % fname)
+
+        except Exception as detail :
             err_exit(_('Error modifying ini file\n%(err_details)s') % {'err_details':detail})
 
 def usage():
-    print """
+    print("""
 Standalone Usage:
    ncam [Options]
 
@@ -4281,7 +4467,7 @@ To prepare your inifile to use NativeCAM embedded,
    After success, you can use it embedded  :
      linuxcnc inifilename
 
-"""
+""")
 
 if __name__ == "__main__":
     # process args
@@ -4321,8 +4507,8 @@ if __name__ == "__main__":
 
     window = gtk.Dialog(APP_TITLE, None, gtk.DIALOG_MODAL)
     ncam = NCam()
-    ncam.embedded = False
     window.vbox.add(ncam)
+    ncam.actionCurrent.set_visible(True)
     window.add_accel_group(ncam.accelGroup)
     window.connect("destroy", gtk.main_quit)
     window.set_default_size(400, 800)

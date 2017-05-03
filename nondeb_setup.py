@@ -6,7 +6,7 @@ Will create links and modify files to embed NativeCAM in LinuxCNC
 should work with any linux distro save a few exceptions
 
 usage :
-    sudo nondeb_setup.py [c]
+    sudo nondeb_setup.py [-c]
 
     w/ argument c will restore files and delete links
     w/o argument will create links and modify files
@@ -30,10 +30,10 @@ except :
 lcode = os.getenv('LANGUAGE', 'en')[0:2]
 # print lcode
 
-if "c" in sys.argv[1:] :
+cls = sys.argv.__len__() > 1
+
+if os.path.exists('/usr/share/linuxcnc/aux_gladevcp/NativeCAM/ncam.py') :
     cls = True
-else :
-    cls = False
 
 print 'wait, processing...'
 
@@ -57,50 +57,51 @@ if find > '' :
         head, fn = os.path.split(s)
 
         fn = os.path.join(head, 'ncam.py')
+        if os.path.islink(fn) and (fn <> os.path.join(os.getcwd(), 'ncam.py')) :
+            os.remove(fn)
         if os.path.islink(fn) :
             if cls :
                 os.remove(fn)
-                print 'removed link to ncam.py from ', head, '\n'
+                print('removed link to ncam.py from %s\n' % head)
             else :
-                print 'link to ncam.py already exists in ', head, '\n'
+                print('link to ncam.py already exists in %s\n' % head)
         elif not cls :
             os.symlink(os.path.join(os.getcwd(), 'ncam.py'), fn)
-            print 'created link to ncam.py in ', head, '\n'
+            print('created link to ncam.py in %s\n' % head)
 
         fn = os.path.join(head, 'pref_edit.py')
+        if os.path.islink(fn) and (fn <> os.path.join(os.getcwd(), 'pref_edit.py')) :
+            os.remove(fn)
         if os.path.islink(fn) :
             if cls :
                 os.remove(fn)
-                print 'removed link to pref_edit.py from ', head, '\n'
+                print('removed link to pref_edit.py from %s\n' % head)
             else :
-                print 'link to pref_edit.py already exists in ', head, '\n'
+                print('link to pref_edit.py already exists in %s\n' % head)
         elif not cls :
             os.symlink(os.path.join(os.getcwd(), 'pref_edit.py'), fn)
-            print 'created link to pref_edit.py in ', head, '\n'
-
-#         fn = os.path.join(head, 'tr_glade.py')
-#         if os.path.islink(fn) :
-#             if cls :
-#                 os.remove(fn)
-#                 print 'removed link to tr_glade.py from ', head, '\n'
-#             else :
-#                 print 'link to tr_glade.py already exists in ', head, '\n'
-#         elif not cls :
-#             os.symlink(os.path.join(os.getcwd(), 'tr_glade.py'), fn)
-#             print 'created link to tr_glade.py in ', head, '\n'
-
-
-#        sd = os.path.join(head, 'path2ncam')
-#        if os.path.isfile(sd) :
-#            os.remove(sd)
-#            print 'removed path2ncam file'
-#        if not cls :
-#            open(sd, "w").write(os.getcwd())
-#            print 'created path2ncam file'
+            print('created link to pref_edit.py in %s\n' % head)
 
 else :
     print 'Directory of "hal_pythonplugin.py" not found - EXITING'
     exit(2)
+
+# create links to language files
+fr_mo = '/usr/share/locale/fr/LC_MESSAGES/nativecam.mo'
+if os.path.exists(fr_mo) :
+    if os.path.islink(fr_mo) :
+        if cls :
+            os.remove(fr_mo)
+else :
+    os.symlink(os.path.join(os.getcwd(), 'locale/fr/LC_MESSAGES/nativecam.mo'), fr_mo)
+
+de_mo = '/usr/share/locale/de/LC_MESSAGES/nativecam.mo'
+if os.path.exists(de_mo) :
+    if os.path.islink(de_mo) :
+        if cls :
+            os.remove(de_mo)
+else :
+    os.symlink(os.path.join(os.getcwd(), 'locale/de/LC_MESSAGES/nativecam.mo'), de_mo)
 
 
 edited = False
@@ -167,14 +168,7 @@ if find > '' :
                 print s, 'saved'
 
 else :
-    print 'File "hal_python.xml" not found - EXITING'
+    print('File "hal_python.xml" not found - EXITING')
     exit(3)
-
-if cls :
-    # remove link to translation file
-    pass
-else :
-    # add link to translation files
-    pass
 
 exit(0)

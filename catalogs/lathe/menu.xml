@@ -1,22 +1,35 @@
-<xml>
-	
-	<group name=_("Parameters")_ icon="od.png">
-		<sub name=_("Cutting Params")_ tool_tip= _("Set cutting parameters")_ icon="threading-params.png" src="lathe/cutting-params.cfg"/>
-        <sub name=_("Threading Params")_ tool_tip= _("Set thread cutting params")_ icon="threading-params.png" src="lathe/threading-params.cfg"/>
-	</group>
-    <group name=_("Tool")_ icon="lathe-tool.png">
-        <sub name=_("Change Tool")_ tool_tip= _("Change cutter")_ icon="lathe-tool-change.png" src="lathe/tool-change.cfg"/>
-    </group>
-	<group name=_("Cutting")_ icon="threading.png">
-		<sub name=_("Threads")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/thread-adv.cfg"/>
-        <sub name=_("Face")_ tool_tip= _("Cut face")_ icon="lathe-facing.png" src="lathe/face.cfg"/>
-	</group>
-    <group name=_('Miscellaneous')_ icon='misc.png'>
-        <sub name=_('Insert a G Code File')_ tool_tip= _('Include a custom gcode file')_ icon="file-gcode.png" src="i_gcode.cfg"/>
-        <sub name=_('Custom G Code')_ tool_tip= _('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
-        <sub name=_('Change Units')_ tool_tip= _('Change from inch to metric or inverse')_ icon="mm2in.png" src="change-units.cfg"/>
-    </group>
+<ncam_ui>
+	<menu>
+		<menu action='params'  name=_("Parameters")_ icon="od.png">
+			<menuitem action='cutting_params'  name=_("Cutting Params")_ tool_tip= _("Set cutting parameters")_ icon="threading-params.png" src="lathe/cutting-params.cfg"/>
+			<menuitem action='thread_params'  name=_("Threading Params")_ tool_tip= _("Set thread cutting params")_ icon="threading-params.png" src="lathe/threading-params.cfg"/>
+		</menu>
+		<menu action='tools'  name=_("Tool")_ icon="lathe-tool.png">
+			<menuitem action='ch_tool'  name=_("Change Tool")_ tool_tip= _("Change cutter")_ icon="lathe-tool-change.png" src="lathe/tool-change.cfg"/>
+		</menu>
+		<menu action='cutting'  name=_("Cutting")_ icon="threading.png">
+			<menuitem action='threads'  name=_("Threads")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/thread-adv.cfg"/>
+			<menuitem action='face'  name=_("Face")_ tool_tip= _("Cut face")_ icon="lathe-facing.png" src="lathe/face.cfg"/>
+		</menu>
+		<menu action='misc'  name=_('Miscellaneous')_ icon='misc.png'>
+			<menuitem action='group_std' name=_('Standard Group')_ tool_tip=_('Group subroutines')_ icon="group.png" src="group.cfg"/>
+			<menuitem action='gcode_file'  name=_('Insert a G Code File')_ tool_tip= _('Include a custom gcode file')_ icon="file-gcode.png" src="i_gcode.cfg"/>
+			<menuitem action='gcode'  name=_('Custom G Code')_ tool_tip= _('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
+			<menuitem action='ch_units'  name=_('Change Units')_ tool_tip= _('Change from inch to metric or inverse')_ icon="mm2in.png" src="change-units.cfg"/>
+		</menu>
+	</menu>
 
-</xml>
-
-<!-- Do not forget to close <sub /> tags! -->	
+    <toolbar>
+        <toolitem action='cutting_params' />
+        <toolitem action='ch_tool' />
+        <toolitem action='face' />
+        <separator/>
+        <toolitem action='group_std' />
+        <separator/>
+        <toolitem action='thread_params' />
+        <toolitem action='threads' />
+        <separator/>
+        <toolitem action='gcode' />
+        <toolitem action='gcode_file' />
+    </toolbar >
+</ncam_ui>

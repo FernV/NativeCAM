@@ -1,36 +1,47 @@
 (will find exit point to avoid gouging or/and move away from the edge)
 (author : Fernand Veilleux)
 o<lead_out> sub
-(CALL #1 = data ptr, #2 = rec_no, #3 = exit mode)
-(exit mode : -3 = exit at end force arc, -2 = exit at end w/ arc if possible, -1 = exit at end w/o arc)
-(      1 = exit before end w/o arc, 2 = exit before end w/ arc if possible, 3 = exit before end force arc)
+(CALL #1 = data ptr, #2 = rec_no, #3 = dir, #4 = opt, #5 = exit with arc, #6 = debug)
+(CALL is only from o<trace> sub and dir and opt passed with call to o<trace>)
 
-	#<debug> = 0
+	#<debug> = #6
 	
-	o17 if [#<_ccomp> LT 410]
-		o<lead_out> return
-	o17 endif
-
-	o15 if [#5410 EQ 0]
+	o15 if [[#5410 EQ 0] AND [#<debug> NE 0]]
 		(print,)
-		(print,"exit" subroutine not executed : no tool selected or diameter not defined in tool table)
+		(print,lead_out subroutine not executed : no tool selected or diameter not defined in tool table)
 		o<lead_out> return
 	o15 endif
 	
-	#<cur>      = [#1 + #2 * 8 + 1] (ptr to line/arc just traced)
+	(validate exit_mode)
+	#<dir> = #3
+	#<opt> = #4
+	#<exit_arc> = #5
 	
-	o10 if [#2 EQ [#[#1] - 1]] (last one)
-		#<nxt>  = [#1 + 1]
+	o101 if [[#<dir> LT 2] OR [#<dir> GT 3]]
+		o<lead_out> return
+	o101 endif
+	
+	o102 if [#<opt> EQ 0]
+		#<opt> = 1
+	o102 endif
+
+	o103 if [[#<opt> NE 1] AND [#<opt> NE 3]]
+		o<lead_out> return
+	o103 endif
+	
+	(set the pointers to segment milled)
+	#<cur>     = [#1 + #2 * 8 + 1] (ptr to line/arc just traced)
+	
+	o10 if [#2 EQ [#[#1] - 1]] (on the last one)
+		#<nxt> = [#1 + 1]
 	o10 else
-		#<nxt>  = [#<cur> + 8]
+		#<nxt> = [#<cur> + 8]
 	o10 endif
-	#<to_dir>   = #[#<nxt> + 2]
+	#<to_dir>  = #[#<nxt> + 2]
 
 	o16 if [#<to_dir> EQ 0] (last item dir 0 is not closed)
 		o<lead_out> return
 	o16 endif
-
-	#<exit_mode> = ABS[#3]
 	
 	#<from_dir>  = #[#<cur> + 2]
 	#<from_cx>   = #[#<cur> + 3]
@@ -41,7 +52,7 @@ o<lead_out> sub
 	#<to_cx>     = #[#<nxt> + 3]
 	#<to_cy>     = #[#<nxt> + 4]
 
-	o11 if [#2 EQ 0] (first one)	
+	o11 if [#2 EQ 0] (first one)
 		#<prv>   = [#1 + [#[#1] * 8] - 7]
 	o11 else
 		#<prv>   = [#<cur> - 8]
@@ -50,15 +61,36 @@ o<lead_out> sub
 	#<from_y>    = #[#<prv> + 1]
 	
 	#<exit_dir>  = 0
+
+	o109 if [#<_ccomp> GT 400]
+		#<lead_out_radius> = [#5410 * 0.85]
+	o109 else
+		#<lead_out_radius> = [#5410 * 0.45]
+	o109 endif
 	
-	#<cmp>         = FIX[#<_ccomp> / 10]
-	#<tool_radius> = [#5410 * #<_lead_out_fact>]
+	#<tool_radius> = [#5410 * 0.51]
+
+	o106 if [#<opt> LE 1] (inside or pocket)
+		o107 if [#<dir> EQ 2]
+			#<cmp> = 42
+		o107 else
+			#<cmp> = 41
+		o107 endif
+		
+	o106 elseif [#<opt> EQ 3] (outside)
+		o108 if [#<dir> EQ 2]
+			#<cmp> = 41
+		o108 else
+			#<cmp> = 42
+		o108 endif
+		
+	o106 endif
 
 	o<dbg> if [#<debug>]
 		(print,)
-		(print,"exit CALL",  tracking = #<debug>)
+		(print,"lead_out CALL",  tracking = #<debug>)
+		(print,   dir = #<dir>, opt = #<opt>, comp = #<cmp>)
 		(print,   at X#<_cut_current_x>, Y#<_cut_current_y>   ptr = #1, rec_no = #2)
-		(print,   exit mode = #<exit_mode>)
 		(print,   from x,y  = #<from_x>, #<from_y>,  dir = #<from_dir>,  cx,cy = #<from_cx>, #<from_cy>)
 		(print,   next x,y  = #<to_x>, #<to_y>,  dir = #<to_dir>,  cx,cy = #<to_cx>, #<to_cy>)
 	o<dbg> endif
@@ -67,19 +99,23 @@ o<lead_out> sub
 
 	o12 if [#<to_dir> EQ 1]
 		o13 if [#<from_dir> EQ 1]
-			o<angle> CALL [#<from_x>] [#<from_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<to_x>] [#<to_y>] ;[-11]
+;(print,100)
+		o<angle> CALL [#<from_x>] [#<from_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<to_x>] [#<to_y>] ;[-11]
 
 			o24 if [[[#<_angle_phi> GE 179.999999] AND [#<cmp> EQ 41]] OR [[#<_angle_phi> LE 180.000001] AND [#<cmp> EQ 42]]]
-				o18 if [[#<exit_mode> EQ 3] OR [[#<exit_mode> EQ 2] AND [#<_angle_phi> EQ 180]]]
+;(print,101)
+				o18 if [[#<exit_arc> EQ 1] AND [#<_angle_phi> EQ 180]]
+;(print,102)
 					o<select> CALL [40] [#<cmp> - 41] [1] [-1]
-					o<rotate_xy> CALL [#<_cut_current_x> + #5410 * 0.65] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23> + 90 * #40]
+					o<rotate_xy> CALL [#<_cut_current_x> + #<lead_out_radius>] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23> + 90 * #40]
 					#<to_cx> = #<_rotated_x>
 					#<to_cy> = #<_rotated_y>
-					o<rotate_xy> CALL [#<to_cx> + #5410 * 0.65] [#<to_cy>] [#<to_cx>] [#<to_cy>] [#<_angle_phi23> - 55 * #40]
+					o<rotate_xy> CALL [#<to_cx> + #<lead_out_radius>] [#<to_cy>] [#<to_cx>] [#<to_cy>] [#<_angle_phi23> - 55 * #40]
 					#<exit_x> = #<_rotated_x>
 					#<exit_y> = #<_rotated_y>
 					#<exit_dir> = [6 / [#<cmp> - 39]]
 				o18 else
+;(print,103)
 					#<element1> = [#<tool_radius> / [TAN[#<_angle_angle> / 2]]]
 					#<exit_x>   = [#<_cut_current_x> + #<element1> * #<_angle_cos23>]
 					#<exit_y>   = [#<_cut_current_y> + #<element1> * #<_angle_sin23>]
@@ -88,24 +124,31 @@ o<lead_out> sub
 			o24 endif
 			
 		o13 else
+;(print,104)
 			o<angle> CALL [#<from_cx>] [#<from_cy>] [#<_cut_current_x>] [#<_cut_current_y>] [#<to_x>] [#<to_y>] ;[325]
 
 			o14 if [#<from_dir> EQ 2]
+;(print,105)
 				o19 if [[#<cmp> EQ 42] AND [[#<_angle_phi> LT 90] OR [#<_angle_phi> GT 270]]] (right compensation)
+;(print,106)
 					#<rot>   = -90
 					#<len>   = -#<tool_radius>
 					#<rot_e> = -90
 				o19 elseif [[#<cmp> EQ 41] AND [#<_angle_phi> GT 90]] (41 left compensation)
+;(print,107)
 					#<rot>   = 90
 					#<len>   = #<tool_radius>
 					#<rot_e> = -90
 				o19 endif
 			o14 else (from_dir == 3)
+;(print,108)
 				o20 if [[#<cmp> EQ 42] AND [#<_angle_phi> LT 270]] (right compensation)
+;(print,109)
 					#<rot>   = -90
 					#<len>   = #<tool_radius>
 					#<rot_e> = 90
 				o20 elseif [[#<cmp> EQ 41] AND [[#<_angle_phi> LT 90] OR [#<_angle_phi> GT 270]]] (41 left compensation)
+;(print,110)
 					#<rot>   = 90
 					#<len>   = -#<tool_radius>
 					#<rot_e> = 90
@@ -113,6 +156,7 @@ o<lead_out> sub
 			o14 endif
 			
 			o27 if [#<rot>]
+;(print,200)
 				(Create a parallel line to first one)
 				o<rotate_xy> CALL [#<_cut_current_x> + #<tool_radius>] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23> + #<rot>] [0] [50] [51]
 				o<rotate_xy> CALL [#<to_x> + #<tool_radius>] [#<to_y>] [#<to_x>] [#<to_y>] [#<_angle_phi23> + #<rot>] [0]
@@ -130,29 +174,38 @@ o<lead_out> sub
 		o13 endif
 
 	o12 else (to dir == 2 or 3)
-	
+;(print,120)
+
 		o28 if [#<from_dir> EQ 1]
+;(print,121)
 			o<angle> CALL [#<from_x>] [#<from_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<to_cx>] [#<to_cy>] ;[965]
 
 			o31 if [#<to_dir> EQ 2]
+;(print,122)
 				o25 if [[#<cmp> EQ 42] AND [[#<_angle_phi> LT 89.999999] OR [#<_angle_phi> GT 270.000001]]] (right compensation)
+;(print,123)
 					#<rot>   = 90
 					#<len>   = -#<tool_radius>
 				o25 elseif [[#<cmp> EQ 41] AND [#<_angle_phi> GT 90.000001]] (41 left compensation)
+;(print,124)
 					#<rot>   = -90
 					#<len>   = #<tool_radius>
 				o25 endif
 			o31 else (to_dir == 3)
+;(print,125)
 				o26 if [[#<cmp> EQ 42] AND [[#<_angle_phi> GT 90.000001] AND [#<_angle_phi> LT 269.999999]]] (right compensation)
+;(print,126)
 					#<rot>   = 90
 					#<len>   = #<tool_radius>
 				o26 elseif [[#<cmp> EQ 41] AND [[#<_angle_phi> LT 89.999999] OR [#<_angle_phi> GT 270.000001]]] (41 left compensation)
+(;print,127)
 					#<rot>   = -90
 					#<len>   = -#<tool_radius>
 				o26 endif
 			o31 endif
 
 			o32 if [#<rot>]
+(p;rint,300)
 				(Create a parallel line to first one)
 				o<rotate_xy> CALL [#<_cut_current_x> + #<tool_radius>] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi21> + #<rot>] [0] [50] [51]
 				o<rotate_xy> CALL [#<from_x> + #<tool_radius>] [#<from_y>] [#<from_x>] [#<from_y>] [#<_angle_phi21> + #<rot>] ;[02]
@@ -175,55 +228,93 @@ o<lead_out> sub
 			
 			#<len_to>   = 0
 			o34 if [#<to_dir> EQ 2]
+;(print,0)
 				o35 if [#<from_dir> EQ 2]
-					o36 if [[#<exit_mode> EQ 2] AND [#<cmp> EQ 42] AND [#<_angle_phi> EQ 0] AND [#<_angle_len23> GT [#5410 * 0.65]]]
-						o<rotate_xy> CALL [#<_cut_current_x> + #5410 * 0.65] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23>]
-						#<to_cx> = #<_rotated_x>
-						#<to_cy> = #<_rotated_y>
-						o<rotate_xy> CALL [#<to_cx> + #5410 * 0.65] [#<to_cy>] [#<to_cx>] [#<to_cy>] [#<_angle_phi23> + 135]
-						#<exit_x> = #<_rotated_x>
-						#<exit_y> = #<_rotated_y>
-						#<exit_dir> = 2
-
+;(print,1)
+					o36 if [[#<exit_arc> EQ 1] AND [#<_angle_phi> EQ 0] AND [#<_angle_len23> GT [#<lead_out_radius>]]]
+;					o36 if [[#<exit_arc> EQ 1] AND [#<_angle_len23> GT [#<lead_out_radius>]]]
+;(print,10)
+						o33 if [#<cmp> EQ 42]
+							o<rotate_xy> CALL [#<_cut_current_x> + #<lead_out_radius>] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23>]
+							#<to_cx> = #<_rotated_x>
+							#<to_cy> = #<_rotated_y>
+							o<rotate_xy> CALL [#<to_cx> + #<lead_out_radius>] [#<to_cy>] [#<to_cx>] [#<to_cy>] [#<_angle_phi23> + 135]
+							#<exit_x> = #<_rotated_x>
+							#<exit_y> = #<_rotated_y>
+							#<exit_dir> = 2
+						o33 else
+							o<rotate_xy> CALL [#<_cut_current_x> - #<lead_out_radius>] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23>]
+							#<to_cx> = #<_rotated_x>
+							#<to_cy> = #<_rotated_y>
+							o<rotate_xy> CALL [#<to_cx> + #<lead_out_radius>] [#<to_cy>] [#<to_cx>] [#<to_cy>] [#<_angle_phi23> + 45]
+							#<exit_x> = #<_rotated_x>
+							#<exit_y> = #<_rotated_y>
+							#<exit_dir> = 3
+						o33 endif
+				
 					o36 elseif [[#<cmp> EQ 42] AND [#<_angle_phi> GE 180.000001]] (right compensation)
+;(print,11)
 						#<len_to>   = -#<tool_radius>
 						#<len_from> = -#<tool_radius>
 					o36 elseif [[#<cmp> EQ 41] AND [[#<_angle_phi> GE 0.000001] AND [#<_angle_phi> LT 179.999999]]](left compensation)
+;(print,12)
 						#<len_to>   =  #<tool_radius>
 						#<len_from> =  #<tool_radius>
 					o36 endif
 				o35 else (from_dir == 3)
+;(print,2)
 					o37 if [[#<cmp> EQ 42] AND [[#<_angle_phi> GE 0.000001] AND [#<_angle_phi> LE 179.999999]]] (right compensation)
+;(print,21)
 						#<len_to>   = -#<tool_radius>
 						#<len_from> =  #<tool_radius>
 					o37 elseif [[#<cmp> EQ 41] AND [#<_angle_phi> GE 180.000001]] (left compensation)
+;(print,22)
 						#<len_to>   =  #<tool_radius>
 						#<len_from> = -#<tool_radius>
 					o37 endif
 				o35 endif
 			o34 else (to_dir == 3)
+;(print,3)
 				o38 if [#<from_dir> EQ 2]
+;(print,31)
 					o39 if [[#<cmp> EQ 42] AND [[#<_angle_phi> GE 0.000001] AND [#<_angle_phi> LE 179.999999]]] (right compensation)
+;(print,32)
 						#<len_to>   =  #<tool_radius>
 						#<len_from> = -#<tool_radius>
 					o39 elseif [[#<cmp> EQ 41] AND [#<_angle_phi> GE 180.000001]] (left compensation)
+;(print,33)
 						#<len_to>   = -#<tool_radius>
 						#<len_from> =  #<tool_radius>
 						#<rot> = 0
 					o39 endif
 				o38 else (from_dir == 3)
-					o40 if [[#<exit_mode> EQ 2] AND [#<cmp> EQ 41] AND [#<_angle_phi> EQ 0] AND [#<_angle_len23> GT [#5410 * 0.65]]]
-						o<rotate_xy> CALL [#<_cut_current_x> + #5410 * 0.65] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23>]
-						#<to_cx> = #<_rotated_x>
-						#<to_cy> = #<_rotated_y>
-						o<rotate_xy> CALL [#<to_cx> + #5410 * 0.65] [#<to_cy>] [#<to_cx>] [#<to_cy>] [#<_angle_phi23> - 135]
-						#<exit_x> = #<_rotated_x>
-						#<exit_y> = #<_rotated_y>
-						#<exit_dir> = 3
+;(print,4)
+					o40 if [[#<exit_arc> EQ 1] AND [#<_angle_phi> EQ 0] AND [#<_angle_len23> GT [#<lead_out_radius>]]]
+;(print,41)
+						o42 if [#<cmp> EQ 41]
+							o<rotate_xy> CALL [#<_cut_current_x> + #<lead_out_radius>] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23>]
+							#<to_cx> = #<_rotated_x>
+							#<to_cy> = #<_rotated_y>
+							o<rotate_xy> CALL [#<to_cx> + #<lead_out_radius>] [#<to_cy>] [#<to_cx>] [#<to_cy>] [#<_angle_phi23> - 135]
+							#<exit_x> = #<_rotated_x>
+							#<exit_y> = #<_rotated_y>
+							#<exit_dir> = 3
+						o42 else
+							o<rotate_xy> CALL [#<_cut_current_x> - #<lead_out_radius>] [#<_cut_current_y>] [#<_cut_current_x>] [#<_cut_current_y>] [#<_angle_phi23>]
+							#<to_cx> = #<_rotated_x>
+							#<to_cy> = #<_rotated_y>
+							o<rotate_xy> CALL [#<to_cx> + #<lead_out_radius>] [#<to_cy>] [#<to_cx>] [#<to_cy>] [#<_angle_phi23> - 45]
+							#<exit_x> = #<_rotated_x>
+							#<exit_y> = #<_rotated_y>
+							#<exit_dir> = 2
+						o42 endif
+						
 					o40 elseif [[#<cmp> EQ 42] AND [#<_angle_phi> GE 180.000001]] (right compensation)
+;(print,42)
 						#<len_to>   =  #<tool_radius>
 						#<len_from> =  #<tool_radius>
 					o40 elseif [[#<cmp> EQ 41] AND [[#<_angle_phi> GE 0.000001] AND [#<_angle_phi> LE 179.999999]]] (left compensation)
+;(print,43)
 						#<len_to>   = -#<tool_radius>
 						#<len_from> = -#<tool_radius>
 					o40 endif
@@ -231,6 +322,7 @@ o<lead_out> sub
 			o34 endif
 			
 			o41 if [#<len_to> NE 0]
+;(print,5)
 				o<isect_arcs> CALL [#<from_cx>] [#<from_cy>] [#<_angle_len21> + #<len_from>] [#<to_cx>] [#<to_cy>] [#<_angle_len23> + #<len_to>] [#<_cut_current_x>] [#<_cut_current_y>] [0] [50] [51]
 				o<line> CALL [#50] [#51] [#<to_cx>] [#<to_cy>] ;[4]
 				o<rotate_xy> CALL [#<_cut_current_x>] [#<_cut_current_y>] [#<to_cx>] [#<to_cy>] [#<_line_phi> - #<_angle_phi23> + #<rot>] ;[5]
@@ -249,11 +341,12 @@ o<lead_out> sub
 		o<g123> CALL [#<exit_x>] [#<exit_y>] [#<exit_dir>] [#<exit_i>] [#<exit_j>]
 		o<dbg00> if [#<debug>]
 			(print,)
-			(print,exit x,y = #<exit_x>, #<exit_y>,  dir = #<exit_dir>,  cx,cy = #<to_cx>, #<to_cy>,  i,j = #<exit_i>, #<exit_j>,  cmp = #<cmp>)
+			(print,lead_out x,y = #<exit_x>, #<exit_y>,  dir = #<exit_dir>,  cx,cy = #<to_cx>, #<to_cy>,  i,j = #<exit_i>, #<exit_j>,  cmp = #<cmp>)
 		o<dbg00> endif
 	o21 else
 		o<dbg01> if [#<debug>]
-			(print,*** no action from "exit CALL" ***)
+			(print,)
+			(print,*** no action from "lead_out CALL" ***)
 		o<dbg01> endif
 	o21 endif
 	

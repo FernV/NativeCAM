@@ -14,7 +14,7 @@ o<slot_arc_create> sub
 	#<entry_x>     = [#<radius> + #3 / 2] (radius + width / 2)
 	#<entry_y>     = 0 (Y0 is mid point of arc)
 	#<extend_half> = [#4 / 2] (half positive Y and half negative Y)
-	#<dir>         = #5
+	#<dir>         = [#5 MOD 10]
 	
 	#<x_out>  = [#<entry_x> * COS[#<extend_half>]]
 	#<y_out>  = [#<entry_x> * SIN[#<extend_half>]]
@@ -24,15 +24,15 @@ o<slot_arc_create> sub
 	#<end_cy> = [#<radius> * SIN[#<extend_half>]]
 	
 	o<if04> if [#6 EQ 1] (end style)
-		#<end_dir>      = 1 (converging ends)
+		#<end_dir> = 1 (converging ends)
 	o<if04> else
-		#<end_dir>      = #<dir> (follow dir)
+		#<end_dir> = #<dir> (follow dir)
 	o<if04> endif
 
 	o<if00> if [#<dir> EQ 2] (reverse dir)
-		#<y_out>  = -#<y_out>
-		#<y_in>   = -#<y_in>
-		#<end_cy> = -#<end_cy>
+		#<y_out>   = -#<y_out>
+		#<y_in>    = -#<y_in>
+		#<end_cy>  = -#<end_cy>
 	o<if00> endif
 
 	o<add_mill_data> CALL [#1] [#<x_out>] [#<y_out>] [#<dir>] [0] [0] [0]

@@ -1,8 +1,13 @@
 (info: rectangle is also used for straight slot)
 o<rectangle> sub
-(CALL [cx] [cy] [#<w>] [#<h>] [#rot] [offset_center_x] [offset_center_y] [#ctype] [#<cradius>] [#opt] [#dir] [#cutstart] [#<cutdpt>] [#preview] [#<finalpass>] [#final_step_over])
+(CALL [cx] [cy] [#<w>] [#<h>] [#rot] [offset_center_x] [offset_center_y] [#ctype] [#<cradius>] [#opt] [#dir] [#cutstart] ...)
+( ...[#<cutdpt>] [#preview] [#<finalpass>] [#final_step_over] [#exit_arc])
 (Author : Fernand Veilleux)
 
+	o1 if [#<_tool_usage> GT 2]
+		o<rectangle> return
+	o1 endif
+	
 (validate params first)
 	o<valid02> if [#12 LT #13]
 		(debug,Rectangle/Slot: bad cut start or depth - EXITING)
@@ -50,7 +55,9 @@ o<rectangle> sub
 		o<get_max> CALL [41] [2] [#16] [#<_stepover_min>]
 	o234 endif
 	#<fcut> = #41
-		
+
+	#<exit_arc> = #17
+
 (change coords system to offset/rotate)
 	#<old_coord_system> = [#<_coord_system> / 10]
 	o<get_offsets> CALL
@@ -67,19 +74,21 @@ o<rectangle> sub
 
 	o<set_spindle_rpm> CALL [#<_rpm_normal>]
 	
+	#<cut_step> = [[#<cut_depth> - #<cut_start>] / FUP[[#<cut_depth> - #<cut_start>] / #<_depth_step>]]
+
 (roughing cut)
 	o<if_roughing> if [#<_tool_usage> LE 1]
 		
 		(define rough width and height as per option and final_pass)
 		o<calc00> if [#<cut_opt> EQ 3] (outside)
-			#<rg_width>  = [#<width>  + #41 * 2]
-			#<rg_height> = [#<height> + #41 * 2]
+			#<rg_width>  = [#<width>  + #<fcut> * 2]
+			#<rg_height> = [#<height> + #<fcut> * 2]
 		o<calc00> elseif [#<cut_opt> EQ 2] (on the line)
 			#<rg_width>  = #<width>
 			#<rg_height> = #<height>
 		o<calc00> else (inside or pocket)
-			#<rg_width>  = [#<width>  - #41 * 2]
-			#<rg_height> = [#<height> - #41 * 2]
+			#<rg_width>  = [#<width>  - #<fcut> * 2]
+			#<rg_height> = [#<height> - #<fcut> * 2]
 		o<calc00> endif
 		
 		o<if011> if [[#<cut_opt> EQ 1] AND [[#5410 * 1.95] GE #<rg_height>]]
@@ -92,8 +101,8 @@ o<rectangle> sub
 			#<p_height>  = [#<rg_height> - #5410]
 			
 			(rectangle pocket DOES NOT use compensation, hence those 2 factors)
-			#<min_move>    = [#5410 * 0.1]
-			#<init_height> = [#5410 * 0.85]
+			#<loop_mov>    = [#5410 * 0.1]
+			#<init_height> = [#5410 * 0.8]
 			
 			#<exp_cycles>  = FUP[[#<p_height> - #<init_height>] / [#5410 * #<_stepover_normal>] / 2]
 			#<step_over>   = [[#<p_height> - #<init_height>] / #<exp_cycles>]
@@ -102,63 +111,47 @@ o<rectangle> sub
 			(print,rectangle/slot pocket stepover = #<t> %)
 
 			(calc data)
-			#<exp_cycle> = 0
-			#<data> = #<_mill_data_start>
-			o<loop01> while [#<exp_cycle> LE #<exp_cycles>]
-				#<pr_height> = [#<init_height> + #<step_over> * #<exp_cycle>]
-				#<pr_width>  = [#<p_width> - #<p_height> + #<pr_height>]
-;				o11 if [#<exp_cycle> EQ #<exp_cycles>]
-;					o<rectangle_create> CALL [#<data>] [#<rg_width>] [#<rg_height>] [#<corner_radius>] [#<corner_style>] [#<dir>] [#<width>] [#<height>] [1]
-;				o11 else
-					o<rectangle_create> CALL [#<data>] [#<pr_width>] [#<pr_height>] [#<corner_radius>] [#<corner_style>] [#<dir>] [#<width>] [#<height>] [1]
-;				o11 endif
-				#<exp_cycle> = [#<exp_cycle> + 1]
-				#<data>      = [#<data> + #[#<data>] * 8 + 1]
-			o<loop01> endwhile
-
 			#<_cut_current_z> = #<cut_start>
 			o<while_pocket> while [#<_cut_current_z> GT #<cut_depth>]
-				#<data>   = #<_mill_data_start>
-				(rectangle pocket DOES NOT use compensation, opt is 2 here ...)
+				#[#<_mill_data_start>] = 0
+				o<add_mill_data> CALL [#<_mill_data_start>] [0] [  #<init_height> / 2] [#<dir>]
+				o<add_mill_data> CALL [#<_mill_data_start>] [0] [- #<init_height> / 2] [#<dir>]
+				o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [2] [#<_cut_current_z>] [-1]
 				o<set_feed_rate_and_speed> CALL [1.0]
-				o<lead_in> CALL [#<data>] [#<dir>] [2] [#<_cut_current_z>] [-1]
-				o<set_next_cut_level> CALL [#<cut_depth>]
-				o<wh010p> while [#<_depth_reached> NE 0]
-					o<trace> CALL [#<data>] [#<_cut_loop_final_z>] [1]
-				o<wh010p> endwhile
 
-				o<set_feed_rate_and_speed> CALL [#<t> / 100]
-				o<lead_in> CALL [#<data>] [#<dir>] [2] [#<_cut_current_z>] [-1]
+				o<set_next_cut_level> CALL [#<cut_depth>] [#<cut_step>]
+				o<wh010p> while [#<_depth_reached> NE 0]
+					o<trace> CALL [#<_mill_data_start>] [#<_cut_loop_final_z>] [0]
+				o<wh010p> endwhile
+				
+				o<rectangle_create> CALL [#<_mill_data_start>] [#<p_width> - #<p_height> + #<init_height>] [#<init_height>] [#<corner_radius>] [#<corner_style>] [#<dir>] [#<width>] [#<height>] [1]
+				o<trace> CALL [#<_mill_data_start>] [#<_cut_loop_final_z>] [0]
+
+				o<set_feed_rate_and_speed> CALL [#<step_over> / #5410 / 2]
 				#<exp_cycle> = 1
 				o<expand_loop> while [#<exp_cycle> LE #<exp_cycles>]
-					#<data>    = [#<data> + #[#<data>] * 8 + 1]
-					o<g123> CALL [0] [#<_cut_current_y> + #<min_move>] [#<dir>] [0] [#<min_move> / 2]
-					#<enter_y> = #[#<data> + [#[#<data>] - 1] * 8 + 2]
-					(...here the exception in the last loop)
-;					o12 if [#<exp_cycle> EQ #<exp_cycles>]
-;						o13 if [#<dir> EQ 2]
-;							G42
-;						o13 else
-;							G41
-;						o13 endif
-;					o12 endif
+					#<pr_height> = [#<init_height> + #<step_over> * #<exp_cycle>]
+					#<pr_width>  = [#<p_width> - #<p_height> + #<pr_height>]
+					o<rectangle_create> CALL [#<_mill_data_start>] [#<pr_width>] [#<pr_height>] [#<corner_radius>] [#<corner_style>] [#<dir>] [#<width>] [#<height>] [1]
+
+					o<g123> CALL [0] [#<_cut_current_y> + #<loop_mov>] [#<dir>] [0] [#<loop_mov> / 2]
+					#<enter_y> = #[#<_mill_data_start> + [#[#<_mill_data_start>] - 1] * 8 + 2]
 					o<g123> CALL [0] [#<enter_y>] [#<dir>] [0] [[#<enter_y> - #<_cut_current_y>] / 2]
-;					F#<_feed_normal>
 					
-					o<select> CALL [38] [FIX[#<exp_cycle> / #<exp_cycles>]] [0] [-2]
-					o<trace> CALL [#<data>] [#<_cut_loop_final_z>] [#38]
+					o<select> CALL [38] [FIX[#<exp_cycle> / #<exp_cycles>]] [0] [2]
+					o<trace> CALL [#<_mill_data_start>] [#<_cut_loop_final_z>] [#38] [#<dir>] [1] [#<exit_arc>]
 					#<exp_cycle> = [#<exp_cycle> + 1]
 				o<expand_loop> endwhile
 			o<while_pocket> endwhile
 		
 		o<if_pocket> else
 			o<rectangle_create> CALL [#<_mill_data_start>] [#<rg_width>] [#<rg_height>] [#<corner_radius>] [#<corner_style>] [#<dir>] [#<width>] [#<height>]
-			o<set_feed_rate_and_speed> CALL [1.0]
 			o<lead_in> CALL [#<_mill_data_start>] [#<dir>] [#<cut_opt>] [#<cut_start>] [-1]
+			o<set_feed_rate_and_speed> CALL [1.0]
 			
 			o<wh010> while [#<_depth_reached> NE 0]
-				o<set_next_cut_level> CALL [#<cut_depth>]
-				o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [1]
+				o<set_next_cut_level> CALL [#<cut_depth>] [#<cut_step>]
+				o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [1] [#<dir>] [#<cut_opt>] [#<exit_arc>]
 			o<wh010> endwhile
 
 		o<if_pocket> endif
@@ -167,21 +160,18 @@ o<rectangle> sub
 (finishing cut)
 	o<finishing_tool> if [#<fin_dir> AND [[#<_tool_usage> EQ 0] OR [#<_tool_usage> EQ 2]]]
 		o<rectangle_create> CALL [#<_mill_data_start>] [#<width>] [#<height>] [#<corner_radius>] [#<corner_style>] [#<fin_dir>] [#<width>] [#<height>]
-		o<set_feed_rate_and_speed> CALL [#41 * #5410]
-		o15 if [#<fin_dir> GT 10]
-			o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_depth>] [-1] [#<fcut>]
-		o15 else
-			o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1]
-		o15 endif
+		
+		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1] [#<fcut>] [#<cut_depth>]
+		o<set_feed_rate_and_speed> CALL [#<fcut> / #5410]
 	
 		o<wh01> while [#<_depth_reached> NE 0]
-			o<set_next_cut_level> CALL [#<cut_depth>]
-			o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [2]
+			o<set_next_cut_level> CALL [#<cut_depth>] [#<cut_step>]
+			o<trace> CALL [#<_mill_data_start>] [#<cut_depth>] [FIX[#<fin_dir> / 10] + 1] [#<fin_dir> MOD 10] [#<cut_opt>] [1]
 		o<wh01> endwhile
 	o<finishing_tool> endif
 
 (draw reference lines)
-	/o<preview> if [#<_show_final_cuts> AND #<preview> AND [#<_tool_usage> LE 2]]
+	/o<preview> if [#<_show_final_cuts> AND #<preview>]
 		/o<pv_1> if [[#<corner_style> EQ 0] AND [#<cut_opt> LE 1] AND [#5410 GT 0]]
 			/#<corner_style>  = 1
 			/#<corner_radius> = [#5410 * 0.501]

@@ -1,3 +1,41 @@
+nativecam (0.1.0) UNRELEASED; urgency=medium
+
+  Major update, changes include
+  directory changes uses links instead of copies
+  user dir my-stuff
+  add gcode and fontname data type
+  add hiding of fields
+  add support for autosave current work
+  change from float or int to gcode type and revert back
+  improve popup menus
+  customizable toolbar and menu
+  custom defaults for values and display settings for ALL subroutines
+  support for testing new translation
+  better support for keyboard navigation
+  treeview2 rows expandable
+  update code for python 3.0 (partial)
+  setup prevent setup of nondeb if a deb is installed
+  nondeb_setup create links to language file
+  catalogs use a new format
+  cfg files :
+    add indexing 4th axis
+    add lead-out option
+    add gcode option in combo-user
+    add center position for Z axis in material
+    add appropriate icons
+  default_template when not defined
+  add mill examples : 4th axis and turnercube(2)
+  ngc files
+    improve Z-step calculation
+    improve lead-in and lead-out calc
+    support for full depth finishing pass
+    improve milling performance
+  update language files
+  numerous minor improvements and fixes
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Sun, 30 Apr 2017 16:55:00 -0500
+
+
 nativecam (0.0.12) UNRELEASED; urgency=medium
 
   .gitignore regrouped in a single file
@@ -7,7 +45,7 @@ nativecam (0.0.12) UNRELEASED; urgency=medium
   change in program files to use translation
 
  -- Fernand Veilleux <fernveilleux@gmail.com>  Tue, 14 Mar 2017 18:34:00 -0500
- 
+
 nativecam (0.0.11) UNRELEASED; urgency=medium
 
   change debian/rules for LCNC 2.8-pre

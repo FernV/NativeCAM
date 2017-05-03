@@ -184,7 +184,7 @@ o<shcs_size> sub (CALL [screw number] [scr_f] [scr_m] [scr_n] [washer dia] [wash
  	#<lowest_bore>  = [#<piece_bottom> + #<bdia> * #<_shcs_min_pct>]
 	#<highest_bore> = [#<cut_start> - #<head_height>]
 	
-	o<shcs-depth> if [#<bore_depth_opt> EQ 0] (user defined)
+	o<shcs-depth> if [[#<bore_depth_opt> EQ 0] OR [#<bore_depth_opt> EQ 3]] (user defined)
 		#<_shcs_bore_depth> = #<user_depth>
 		o<shcs-depth_1> if [#<user_depth> LT #<lowest_bore>]
 			#<t> = [#<lowest_bore> - #<user_depth>]

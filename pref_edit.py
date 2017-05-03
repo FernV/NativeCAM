@@ -13,6 +13,7 @@ import pygtk
 pygtk.require('2.0')
 import ConfigParser
 import gettext, re
+import pango
 
 translate_test = True
 
@@ -34,7 +35,7 @@ if __name__ == '__main__':
         gettext.install(APP_NAME, None, unicode = True)
 
 def translate(fstring):
-    # translate the file when testing translation
+    # translate the glade file when testing translation
     txt2 = fstring.split('\n')
     fstring = ''
     for line in txt2 :
@@ -46,6 +47,7 @@ def translate(fstring):
         fstring += (line + '\n')
     return fstring
 
+msizecomp = (10, 16, 20, 26, 28, 34, 48)
 
 class PrefEditor():
 
@@ -81,7 +83,11 @@ class PrefEditor():
             return default
 
     def read_int(self, cf, section, key, default):
-        return int(self.read_float(cf, section, key, default))
+        return int(round(self.read_float(cf, section, key, default), 0))
+
+    def getint(self, value):
+        return int(round(value, 0))
+
 
     def __init__(self, ncam, is_metric, catalog, path, pre_amble, post_amble, sysdir) :
         global translate_test
@@ -118,9 +124,12 @@ class PrefEditor():
         else :
             parent = None
 
+        builder.get_object("valueLbl").modify_font(pango.FontDescription('sans 16'))
         self.adj_WindowWidth = builder.get_object("hscaleWindowWidth").get_adjustment()
         self.adj_tvWidth = builder.get_object("hscaleTVWidth").get_adjustment()
         self.adj_nameColWidth = builder.get_object("hscaleNameColWidth").get_adjustment()
+
+        self.table11 = builder.get_object("table11")
 
         if ncam is None :
             self.adj_WindowWidth.set_value(self.read_int('p', 'display', 'width', 550))
@@ -130,9 +139,17 @@ class PrefEditor():
         self.ellip_name_combo = builder.get_object("ellip_name_combo")
         self.ellip_name_combo.set_active(self.read_int('p', 'display', 'name-ellipsis', 2))
 
+        self.tv2_expandable = builder.get_object("tv2_expandable")
+        self.tv2_expandable.set_active(self.read_boolean('p', 'display', 'tv2_expandable', False))
+
+        self.tv_expandable = builder.get_object("tv_expandable")
+        self.tv_expandable.set_active(self.read_boolean('p', 'display', 'tv_expandable', False))
+
         self.adj_vkbwidth = builder.get_object("adj_vkbwidth")
         self.adj_vkbwidth.set_value(self.read_int('p', 'virtual_kb', 'minimum_width', 260))
+        self.adj_vkbwidth.connect('value-changed', self.set_vkb_height)
         self.adj_vkbheight = builder.get_object("adj_vkbheight")
+        self.adj_vkbheight.connect('value-changed', self.set_vkb_height)
         self.adj_vkbheight.set_value(self.read_int('p', 'virtual_kb', 'height', 260))
         self.vkb_cancel = builder.get_object("vkb_cancel")
         self.vkb_cancel.set_active(self.read_boolean('p', 'virtual_kb', 'cancel_on_focus_out', True))
@@ -144,6 +161,7 @@ class PrefEditor():
         self.adj_menuiconsize = builder.get_object("adj_menuiconsize")
         self.adj_menuiconsize.set_value(self.read_int('p', 'icons_size', 'menu', 4))
         self.adj_menuiconsize.connect("value-changed", self.menu_isize)
+        self.adj_menuiconsize.connect("value-changed", self.menu_isize1)
 
         self.imgAddMenu = builder.get_object("imgAddMenu")
         self.adj_addmenuiconsize = builder.get_object("adj_addmenuiconsize")
@@ -152,12 +170,13 @@ class PrefEditor():
 
         self.imgToolbar = builder.get_object("imgMToolBar")
         self.adj_tbIconSize = builder.get_object("adj_tbIconSize")
-        self.adj_tbIconSize.set_value(self.read_int('p', 'icons_size', 'toolbar', 4))
+        self.adj_tbIconSize.set_value(self.read_int('p', 'icons_size', 'toolbar', 5))
         self.adj_tbIconSize.connect("value-changed", self.toolbar_isize)
+        self.adj_tbIconSize.connect("value-changed", self.toolbar_isize1)
 
         self.imgHistTB = builder.get_object("imgHistTB")
         self.adj_histiconsize = builder.get_object("adj_histiconsize")
-        self.adj_histiconsize.set_value(self.read_int('p', 'icons_size', 'quick_access_tb', 30))
+        self.adj_histiconsize.set_value(self.read_int('p', 'icons_size', 'ncam_toolbar', 30))
         self.adj_histiconsize.connect("value-changed", self.imgHist_isize)
 
         self.imgTV = builder.get_object("imgTV")
@@ -167,7 +186,7 @@ class PrefEditor():
 
         self.imgAddDlg = builder.get_object("imgAddDlg")
         self.adj_adddlgimgsize = builder.get_object("adj_adddlgimgsize")
-        self.adj_adddlgimgsize.set_value(self.read_int('p', 'icons_size', 'add_dlg', 65))
+        self.adj_adddlgimgsize.set_value(self.read_int('p', 'icons_size', 'add_dlg', 70))
         self.adj_adddlgimgsize.connect("value-changed", self.adddlg_isize)
 
         self.comboProbe = builder.get_object("comboProbe")
@@ -200,6 +219,10 @@ class PrefEditor():
 
         self.finalcut_chk = builder.get_object("finalcut_chk")
         self.finalcut_chk.set_active(self.read_boolean('d', 'general', 'show_final_cut', True))
+
+        self.autosave_chk = builder.get_object("autosave_chk")
+        self.autosave_chk.set_active(self.read_boolean('d', 'general', 'autosave', False))
+
         self.finalbottom_chk = builder.get_object("finalbottom_chk")
         self.finalbottom_chk.set_active(self.read_boolean('d', 'general', 'show_bottom_cut', True))
         self.finalcut_chk.connect("toggled", self.ref_clicked)
@@ -211,15 +234,13 @@ class PrefEditor():
         self.adj_timeout_value = builder.get_object("adj_timeout_value")
         self.adj_timeout_value.set_value(self.read_float('d', 'general', 'time_out', 0.300))
         self.digits_combo = builder.get_object("digits_combo")
-        self.digits_combo.set_active(self.read_int('d', 'general', 'digits', 3))
+        self.digits_combo.set_active(self.read_int('d', 'general', 'digits', 3) - 1)
         self.adj_spindledelay = builder.get_object("adj_spindledelay")
-        self.adj_spindledelay.set_value(self.read_float('d', 'ngc', 'spindle_acc_time', 1))
+        self.adj_spindledelay.set_value(self.read_float('d', 'ngc', 'spindle_acc_time', 0.0))
 
         self.adj_gmoccapy = builder.get_object("adj_gmoccapy")
         self.adj_gmoccapy.set_value(self.read_float('d', 'general', 'gmoccapy_time_out', 0.15))
 
-        self.dev_chk = builder.get_object("dev_chk")
-        self.dev_chk.set_active(self.read_boolean('p', 'display', 'developer_menu', False))
         self.tlo_chk = builder.get_object("tlo_chk")
         self.tlo_chk.set_active(self.read_boolean('d', 'probe', 'probe_tool_len_comp', True))
 
@@ -313,6 +334,8 @@ class PrefEditor():
         self.imgHist_isize()
         self.addmenu_isize()
         self.toolbar_isize()
+        self.set_vkb_height()
+
         self.saved = False
         prefdlg.run()
         prefdlg.destroy()
@@ -329,51 +352,61 @@ class PrefEditor():
         return None
 
     def tv_isize(self, *args):
-        self.imgTV.set_from_pixbuf(self.get_pixbuf('circle.png', int(self.adj_tviconsize.get_value())))
+        self.imgTV.set_from_pixbuf(self.get_pixbuf('circle.png', self.getint(self.adj_tviconsize.get_value())))
 
     def adddlg_isize(self, *args):
-        self.imgAddDlg.set_from_pixbuf(self.get_pixbuf('circle.png', int(self.adj_adddlgimgsize.get_value())))
+        self.imgAddDlg.set_from_pixbuf(self.get_pixbuf('circle.png', self.getint(self.adj_adddlgimgsize.get_value())))
 
     def imgHist_isize(self, *args):
-        self.imgHistTB.set_from_pixbuf(self.get_pixbuf('circle.png', int(self.adj_histiconsize.get_value())))
+        self.imgHistTB.set_from_pixbuf(self.get_pixbuf('circle.png', self.getint(self.adj_histiconsize.get_value())))
 
     def addmenu_isize(self, *args):
-        self.imgAddMenu.set_from_pixbuf(self.get_pixbuf('circle.png', int(self.adj_addmenuiconsize.get_value())))
+        self.imgAddMenu.set_from_pixbuf(self.get_pixbuf('circle.png', self.getint(self.adj_addmenuiconsize.get_value())))
 
     def toolbar_isize(self, *args):
-        self.imgToolbar.set_from_stock('gtk-save', int(self.adj_tbIconSize.get_value()))
+        self.imgToolbar.set_from_stock('gtk-save', self.getint(self.adj_tbIconSize.get_value()))
+
+    def toolbar_isize1(self, *args):
+        self.adj_histiconsize.set_value(msizecomp[self.getint(self.adj_tbIconSize.get_value())])
 
     def menu_isize(self, *args):
-        self.imgMenu.set_from_stock('gtk-new', int(self.adj_menuiconsize.get_value()))
+        self.imgMenu.set_from_stock('gtk-open', self.getint(self.adj_menuiconsize.get_value()))
+
+    def menu_isize1(self, *args):
+        self.adj_addmenuiconsize.set_value(msizecomp[self.getint(self.adj_menuiconsize.get_value())])
 
     def ref_clicked(self, *args):
         self.finalbottom_chk.set_sensitive(self.finalcut_chk.get_active())
         self.finalbottom_lbl.set_sensitive(self.finalcut_chk.get_active())
 
+    def set_vkb_height(self, *arg):
+        self.table11.set_size_request(self.getint(self.adj_vkbwidth.get_value()), self.getint(self.adj_vkbheight.get_value()))
+
     def save_click(self, *args):
         # preferences first
         if not self.config_pref.has_section('display') :
             self.config_pref.add_section('display')
-        self.config_pref.set('display', 'width', self.adj_WindowWidth.get_value())
+        self.config_pref.set('display', 'width', self.getint(self.adj_WindowWidth.get_value()))
         self.config_pref.set('display', 'name-ellipsis', self.ellip_name_combo.get_active())
-        self.config_pref.set('display', 'name_col_width', self.adj_nameColWidth.get_value())
-        self.config_pref.set('display', 'master_tv_width', self.adj_tvWidth.get_value())
+        self.config_pref.set('display', 'name_col_width', self.getint(self.adj_nameColWidth.get_value()))
+        self.config_pref.set('display', 'master_tv_width', self.getint(self.adj_tvWidth.get_value()))
         self.config_pref.set('display', 'restore_expand_state', self.restore_tvstate.get_active())
-        self.config_pref.set('display', 'developer_menu', self.dev_chk.get_active())
+        self.config_pref.set('display', 'tv2_expandable', self.tv2_expandable.get_active())
+        self.config_pref.set('display', 'tv_expandable', self.tv_expandable.get_active())
 
         if not self.config_pref.has_section('icons_size') :
             self.config_pref.add_section('icons_size')
-        self.config_pref.set('icons_size', 'treeview', self.adj_tviconsize.get_value())
-        self.config_pref.set('icons_size', 'add_menu', self.adj_addmenuiconsize.get_value())
-        self.config_pref.set('icons_size', 'menu', self.adj_menuiconsize.get_value())
-        self.config_pref.set('icons_size', 'toolbar', self.adj_tbIconSize.get_value())
-        self.config_pref.set('icons_size', 'add_dlg', self.adj_adddlgimgsize.get_value())
-        self.config_pref.set('icons_size', 'quick_access_tb', self.adj_histiconsize.get_value())
+        self.config_pref.set('icons_size', 'treeview', self.getint(self.adj_tviconsize.get_value()))
+        self.config_pref.set('icons_size', 'add_menu', self.getint(self.adj_addmenuiconsize.get_value()))
+        self.config_pref.set('icons_size', 'menu', self.getint(self.adj_menuiconsize.get_value()))
+        self.config_pref.set('icons_size', 'toolbar', self.getint(self.adj_tbIconSize.get_value()))
+        self.config_pref.set('icons_size', 'add_dlg', self.getint(self.adj_adddlgimgsize.get_value()))
+        self.config_pref.set('icons_size', 'ncam_toolbar', self.getint(self.adj_histiconsize.get_value()))
 
         if not self.config_pref.has_section('virtual_kb') :
             self.config_pref.add_section('virtual_kb')
-        self.config_pref.set('virtual_kb', 'minimum_width', self.adj_vkbwidth.get_value())
-        self.config_pref.set('virtual_kb', 'height', self.adj_vkbheight.get_value())
+        self.config_pref.set('virtual_kb', 'minimum_width', self.getint(self.adj_vkbwidth.get_value()))
+        self.config_pref.set('virtual_kb', 'height', self.getint(self.adj_vkbheight.get_value()))
         self.config_pref.set('virtual_kb', 'cancel_on_focus_out', self.vkb_cancel.get_active())
 
         with open(self.cfg_file, 'wb') as configfile:
@@ -383,10 +416,11 @@ class PrefEditor():
         if not self.config_def.has_section('general') :
             self.config_def.add_section('general')
         self.config_def.set('general', 'time_out', self.adj_timeout_value.get_value())
-        self.config_def.set('general', 'digits', int(self.digits_combo.get_active()))
+        self.config_def.set('general', 'digits', int(self.digits_combo.get_active()) + 1)
         self.config_def.set('general', 'show_final_cut', self.finalcut_chk.get_active())
         self.config_def.set('general', 'show_bottom_cut', self.finalbottom_chk.get_active())
         self.config_def.set('general', 'gmoccapy_time_out', self.adj_gmoccapy.get_value())
+        self.config_def.set('general', 'autosave', self.autosave_chk.get_active())
 
         if not self.config_def.has_section('ngc') :
             self.config_def.add_section('ngc')
