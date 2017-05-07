@@ -2171,28 +2171,28 @@ class NCam(gtk.VBox):
         for s in VALID_CATALOGS :
             # copy default files if not exist
             srcdir = os.path.join(SYS_DIR, DEFAULTS_DIR, s)
-            if not os.path.exists(srcdir) :
-                os.mkdir(srcdir)
-            for f in os.listdir(srcdir) :
-                dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, f)
-                if not os.path.exists(dst) :
-                    try :
-                        shutil.copy(os.path.join(srcdir, f), dst)
-                    except Exception as error :
-                        mess_dlg(_("Error copying file : %(f)s\nCode : %(c)s") \
-                                 % {'f':f, 'c':error})
+            if os.path.exists(srcdir) :
+                for f in os.listdir(srcdir) :
+                    dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, f)
+                    if not os.path.exists(dst) :
+                        try :
+                            shutil.copy(os.path.join(srcdir, f), dst)
+                        except Exception as error :
+                            mess_dlg(_("Error copying file : %(f)s\nCode : %(c)s") \
+                                     % {'f':f, 'c':error})
 
             # create links to examples directories
             srcdir = os.path.join(SYS_DIR, EXAMPLES_DIR, s)
-            dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, PROJECTS_DIR, EXAMPLES_DIR)
-            if os.path.exists(dst) and not os.path.islink(dst) :
-                shutil.rmtree(dst)
-            if not os.path.exists(dst) :
-                try :
-                    os.symlink(srcdir, dst)
-                except Exception as err :
-                    mess_dlg(_("Error creating link : %(s)s -> %(d)s\nCode : %(c)s") \
-                             % {'s':srcdir, 'd':dst, 'c':err})
+            if os.path.exists(srcdir) :
+                dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, PROJECTS_DIR, EXAMPLES_DIR)
+                if os.path.exists(dst) and not os.path.islink(dst) :
+                    shutil.rmtree(dst)
+                if not os.path.exists(dst) :
+                    try :
+                        os.symlink(srcdir, dst)
+                    except Exception as err :
+                        mess_dlg(_("Error creating link : %(s)s -> %(d)s\nCode : %(c)s") \
+                                 % {'s':srcdir, 'd':dst, 'c':err})
 
         def move_files(dir_processed) :
             mov_src = os.path.join(NCAM_DIR, dir_processed)

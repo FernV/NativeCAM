@@ -27,6 +27,7 @@ override_dh_install:
 		ncam.glade \
 		ncam_pref.glade \
 		pref_edit.py \
+		ttt \
 		debian/tmp/$(AUX_DIR)
 		
 	# copy only the graphic files, not the source

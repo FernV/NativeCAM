@@ -1,3 +1,10 @@
+nativecam (0.1.1) UNRELEASED; urgency=medium
+
+  add TTFont engraving and example
+  add error message if copying, linking create an error
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Sun, 7 May 2017 13:51:00 -0500
+
 nativecam (0.1.0) UNRELEASED; urgency=medium
 
   Major update, changes include
@@ -34,7 +41,6 @@ nativecam (0.1.0) UNRELEASED; urgency=medium
   numerous minor improvements and fixes
 
  -- Fernand Veilleux <fernveilleux@gmail.com>  Sun, 30 Apr 2017 16:55:00 -0500
-
 
 nativecam (0.0.12) UNRELEASED; urgency=medium
 
