@@ -45,7 +45,7 @@ localeDICT = locale.localeconv()
 decimal_point = localeDICT['decimal_point']
 
 # if False, NO_ICON_FILE will be used
-DEFAULT_USE_NO_ICON = False
+DEFAULT_USE_NO_ICON = True
 NO_ICON_FILE = 'no-icon.png'
 
 # info at http://www.pygtk.org/pygtk2reference/pango-markup-language.html
@@ -109,8 +109,8 @@ GENERATED_FILE = "ncam.ngc"
 
 DEFAULT_EDITOR = 'gedit'
 
-SUPPORTED_DATA_TYPES = ['sub-header', 'header', 'bool', 'boolean', 'int', 'fontname',
-                        'tool', 'gcode', 'text', 'list', 'float', 'string',
+SUPPORTED_DATA_TYPES = ['sub-header', 'header', 'bool', 'boolean', 'int',
+                        'tool', 'gcode', 'text', 'list', 'float', 'string', 'engrave',
                         'combo', 'combo-user', 'items', 'filename']
 NUMBER_TYPES = ['float', 'int']
 NO_ICON_TYPES = ['sub-header', 'header']
@@ -1058,7 +1058,6 @@ class CellRendererMx(gtk.CellRendererText):
 
                 filechooserdialog.add_filter(filt)
                 filechooserdialog.set_keep_above(True)
-                filechooserdialog.set_transient_for(self.get_toplevel())
 
                 filt = gtk.FileFilter()
                 filt.set_name(_("All files"))
@@ -1075,21 +1074,6 @@ class CellRendererMx(gtk.CellRendererText):
                     self.edited(self, path, filechooserdialog.get_filename())
             finally:
                 filechooserdialog.destroy()
-            return None
-
-        elif self.editdata_type == 'fontname':
-            dlg = gtk.FontSelectionDialog('Titre')
-            try :
-                dlg.set_font_name(self.param_value)
-                dlg.set_preview_text('NativeCAM and LinuxCNC')
-                dlg.set_keep_above(True)
-                response = dlg.run()
-                result = dlg.get_font_name()
-            finally :
-                dlg.destroy()
-
-            if response == gtk.RESPONSE_OK:
-                self.edited(self, path, result)
             return None
 
         else :  # edit multi-line text
@@ -1499,15 +1483,15 @@ class Feature(object):
         return f_id
 
     def get_definitions(self) :
-        global DEFINITIONS
-        if self.attr["type"] not in DEFINITIONS :
-            s = self.attr["definitions"] if "definitions" in self.attr else ''
-            if s != '' :
-                s = self.process(s)
-                if s != "" :
-                    DEFINITIONS.append(self.attr["type"])
-                return s
-        return ""
+#        global DEFINITIONS
+#        if self.attr["type"] not in DEFINITIONS :
+        s = self.attr["definitions"] if "definitions" in self.attr else ''
+        if s != '' :
+            s = self.process(s)
+#                if s != "" :
+#                    DEFINITIONS.append(self.attr["type"])
+        return s
+#        return ""
 
     def include(self, srce) :
         src = search_path(search_warning.dialog, srce, LIB_DIR)
@@ -1586,9 +1570,6 @@ class Feature(object):
             if fname is not None :
                 return str(open(fname).read())
 
-        s = re.sub(r"#sub_name", "%s" % self.attr['name'], s)
-        s = re.sub(r"%NCAM_DIR%", "%s" % NCAM_DIR, s)
-
         for p in self.param :
             if "call" in p.attr and "value" in p.attr :
                 if p.attr['type'] == 'text' :
@@ -1605,15 +1586,16 @@ class Feature(object):
                        (re.escape(p.attr["call"])), r"%s\1" %
                        p.get_value(True), s)
 
-        s = re.sub(r"%NCAM_DIR%", "%s" % NCAM_DIR, s)
+        s = re.sub(r"#sub_name", "%s" % self.attr['name'], s)
+        s = re.sub(r"%SYS_DIR%", "%s" % SYS_DIR, s)
+        f_id = self.get_attr("id")
+        s = re.sub(r"#self_id", "%s" % f_id, s)
+
         s = re.sub(r"(?i)(<import>(.*?)</import>)", import_callback, s)
         s = re.sub(r"(?i)(<eval>(.*?)</eval>)", eval_callback, s)
         s = re.sub(r"(?ims)(<exec>(.*?)</exec>)", exec_callback, s)
         s = re.sub(r"(?ims)(<subprocess>(.*?)</subprocess>)",
                    subprocess_callback, s)
-
-        f_id = self.get_attr("id")
-        s = re.sub(r"#self_id", "%s" % f_id, s)
 
         if s.find("#ID") > -1 :
             f_id = self.get_short_id()
@@ -2189,10 +2171,16 @@ class NCam(gtk.VBox):
         for s in VALID_CATALOGS :
             # copy default files if not exist
             srcdir = os.path.join(SYS_DIR, DEFAULTS_DIR, s)
+            if not os.path.exists(srcdir) :
+                os.mkdir(srcdir)
             for f in os.listdir(srcdir) :
                 dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, f)
                 if not os.path.exists(dst) :
-                    shutil.copy(os.path.join(srcdir, f), dst)
+                    try :
+                        shutil.copy(os.path.join(srcdir, f), dst)
+                    except Exception as error :
+                        mess_dlg(_("Error copying file : %(f)s\nCode : %(c)s") \
+                                 % {'f':f, 'c':error})
 
             # create links to examples directories
             srcdir = os.path.join(SYS_DIR, EXAMPLES_DIR, s)
@@ -2200,7 +2188,11 @@ class NCam(gtk.VBox):
             if os.path.exists(dst) and not os.path.islink(dst) :
                 shutil.rmtree(dst)
             if not os.path.exists(dst) :
-                os.symlink(srcdir, dst)
+                try :
+                    os.symlink(srcdir, dst)
+                except Exception as err :
+                    mess_dlg(_("Error creating link : %(s)s -> %(d)s\nCode : %(c)s") \
+                             % {'s':srcdir, 'd':dst, 'c':err})
 
         def move_files(dir_processed) :
             mov_src = os.path.join(NCAM_DIR, dir_processed)

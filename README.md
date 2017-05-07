@@ -16,6 +16,9 @@ be automatically updated after changes are published
 
 Open a terminal window in the cloned directory and type : ./ncam.py -h
 
+Pre-requisite is python-lxml package installed.
+If not install with 'sudo apt-get install python-lxml'
+
 1.	Stand alone mode
 --------------------------------------------------------------------------------
 1.	Using the command : ./ncam.py  will create and use ~/nativecam directory

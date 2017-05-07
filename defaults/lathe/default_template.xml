@@ -1,0 +1,18 @@
+<lcnc-ncam>
+  <feature src="/home/fernand/nativecam/cfg/lathe/cutting-params.cfg" expanded="False" help="&lt;b&gt;Sets global cutting depth, depth step, surface origin, and rappid distance.&lt;/b&gt;" name="Lathe cutting parameters" old-selected="True" after="" order="['PARAM_SURFACE', 'PARAM_SURFACE_ID', 'PARAM_DEPTH', 'PARAM_DEPTH_STEP', 'PARAM_FEED', 'PARAM_SPINDLE', 'PARAM_RAPPID', 'PARAM_RAPPID_ID', 'PARAM_RAPPID_Z', 'PARAM_FINAL', 'PARAM_FINAL_NUM', 'PARAM_FINAL_FEED', 'PARAM_FINAL_SPINDLE', 'PARAM_FLOOD', 'PARAM_MIST']" new-selected="False" hidden_count="0" definitions="" call="&#10;&#9;#&lt;_global_surface&gt; =&#9;[#param_surface]&#10;&#9;#&lt;_global_surface_id&gt; =&#9;[#param_surface_id]&#10;&#9;#&lt;_global_depth_step&gt; = [#param_depth_step]&#10;&#9;#&lt;_global_rappid&gt; =&#9;&#9;[#param_rappid]&#10;&#9;#&lt;_global_rappid_id&gt; =&#9;[#param_rappid_id]&#10;&#9;#&lt;_global_rappid_z&gt; =&#9;[#param_rappid_z]&#10;&#9;#&lt;_global_final&gt; =&#9;&#9;[#param_final]&#10;&#9;#&lt;_global_final_num&gt; =&#9;[#param_final_num]&#10;&#9;#&lt;_global_final_feed&gt; = [#param_final_feed]&#10;&#9;#&lt;_global_feed&gt; =&#9;&#9;[#param_feed]&#10;&#9;#&lt;_global_spindle&gt; =&#9;[#param_spindle]&#10;&#9;#&lt;_global_final_spindle&gt; = [#param_final_spindle]&#10;" path="0" icon="lathe-cutting-params.png" type="cutting-params" id="cutting-params_001" before="&#10;">
+    <param tool_tip="Surface" name="Surface" value="40" call="#param_surface" path="0:0" type="string" icon="lathe-surface.png"/>
+    <param tool_tip="Surface for ID cutting" name="Surface for ID" value="0" call="#param_surface_id" path="0:1" type="string" icon="lathe-surface-id.png"/>
+    <param tool_tip="Depth step" name="Depth step" value="1" call="#param_depth_step" path="0:2" type="string" icon="lathe-depth-step.png"/>
+    <param tool_tip="Feed" name="Feed" value="1000" call="#param_feed" path="0:3" type="string" icon="lathe-feed.png"/>
+    <param tool_tip="Spindle speed" name="Spindle" value="1000" call="#param_spindle" path="0:4" type="string" icon="lathe-spindle.png"/>
+    <param tool_tip="Rappid distance" name="Rappid" value="70" call="#param_rappid" path="0:5" type="string" icon="lathe-rappid.png"/>
+    <param tool_tip="Rappid distance for inner cuts" name="Rappid for inner cuts" value="0" call="#param_rappid_id" path="0:6" type="string" icon="lathe-rappid-id.png"/>
+    <param tool_tip="Rappid to switch ID-OD" name="Rappid Z to go to ID" value="50" call="#param_rappid_z" path="0:7" type="string" icon="lathe-rappid-z.png"/>
+    <param tool_tip="Final cut depth step" name="Final cut" value="1" call="#param_final" path="0:8" type="string" icon=""/>
+    <param tool_tip="Num of final cuts" name="Num of final cuts" value="2" call="#param_final_num" path="0:9" type="string" icon=""/>
+    <param tool_tip="Final cut Feed" name="Final cut feed" value="1000" call="#param_final_feed" path="0:10" type="string" icon="lathe-feed.png"/>
+    <param tool_tip="Spindle speed" name="Final cut spindle" value="1000" call="#param_final_spindle" path="0:11" type="string" icon="lathe-spindle.png"/>
+    <param tool_tip="Use flood or not" name="Flood" value="1" call="#param_flood" path="0:12" type="bool" icon=""/>
+    <param tool_tip="Use mist or not" name="Mist" value="0" call="#param_mist" path="0:13" type="bool" icon=""/>
+  </feature>
+</lcnc-ncam>
