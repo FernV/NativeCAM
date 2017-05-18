@@ -71,6 +71,7 @@ gettext.textdomain(APP_NAME)
 try :
     lang = gettext.translation(APP_NAME, nativecam_locale, fallback = True)
     lang.install()
+    _ = lang.ugettext
 except :
     gettext.install(APP_NAME, None, str = True)
 
@@ -446,7 +447,7 @@ def err_exit(errtxt):
     mess_dlg(errtxt)
     sys.exit(1)
 
-if platform.system() <> 'Windows' :
+if platform.system() != 'Windows' :
     try :
         import linuxcnc
     except ImportError as detail :
@@ -586,6 +587,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.tooltip = ''
         self.preedit = None
         self.edited = None
+        self.refresh_fn = None
         self.inputKey = ''
         self.tool_list = []
         self.not_zero = '0'
@@ -610,6 +612,9 @@ class CellRendererMx(gtk.CellRendererText):
 
     def set_edit_datatype(self, value):
         self.editdata_type = value
+
+    def set_refresh_fn(self, value):
+        self.refresh_fn = value
 
     def set_Input(self, value):
         self.inputKey = value
@@ -1119,7 +1124,7 @@ class CellRendererMx(gtk.CellRendererText):
                 text = self.textbuffer.get_text(iter_first, iter_last)
                 self.edited(self, path, text)
             self.textedit_window.destroy()
-#            self.tv.queue_draw()
+            self.refresh_fn(self.tv)
             return None
 
     def do_render(self, win, widget, background_area, cell_area,
@@ -1209,22 +1214,19 @@ class Parameter(object) :
             else :
                 return val
         elif default_metric and "metric_value" in self.attr :
-            return self.attr["metric_value"]
+            return str(get_float(self.attr["value"]) * 25.4)
         else :
             return self.attr["value"] if "value" in self.attr else ""
 
     def get_strict_value(self) :
-        if (self.attr["type"] == 'float') and default_metric and ("metric_value" in self.attr) :
-            return str(get_float(self.attr["metric_value"]) / 25.4)
-        else :
-            return self.attr["value"] if "value" in self.attr else ""
+        return self.attr["value"] if "value" in self.attr else ""
 
     def set_user_value(self, user_value) :
         if (self.get_type() == "float") :
-            a_val = get_float(user_value)
-            if "metric_value" in self.attr :
-                self.attr['metric_value'] = str(a_val * 25.4)
-            self.attr['value'] = str(a_val)
+#            a_val = get_float(user_value)
+#            if "metric_value" in self.attr :
+#                self.attr['metric_value'] = str(a_val * 25.4)
+            self.attr['value'] = user_value  # str(a_val)
         elif self.get_type() == 'int' :
             self.attr['value'] = str(get_int(user_value))
         else :
@@ -1234,12 +1236,9 @@ class Parameter(object) :
         if self.get_type() == "float" :
             a_val = get_float(new_val)
             if default_metric and "metric_value" in self.attr :
-                self.attr["metric_value"] = str(a_val)
                 self.attr["value"] = str(a_val / 25.4)
             else :
                 self.attr["value"] = str(a_val)
-                if "metric_value" in self.attr :
-                    self.attr["metric_value"] = str(a_val * 25.4)
         elif self.get_type() == 'int' :
             self.attr['value'] = str(get_int(new_val))
         else :
@@ -1249,7 +1248,7 @@ class Parameter(object) :
         if self.get_type() == "float" :
             fmt = '{0:0.%sf}' % self.get_digits()
             if default_metric and "metric_value" in self.attr :
-                return fmt.format(get_float(self.attr["metric_value"]))
+                return fmt.format(get_float(self.attr["value"]) * 25.4)
             else :
                 return fmt.format(get_float(self.attr["value"]))
         else :
@@ -1331,12 +1330,20 @@ class Parameter(object) :
         self.attr["digits"] = new_digits
 
     def get_min_value(self):
-        return self.attr["minimum_value"] if "minimum_value" in self.attr \
-            else "-999999.9"
+        min_v = self.attr["minimum_value"] if "minimum_value" in self.attr \
+                        else "-999999.9"
+        if self.get_type() == 'float' and default_metric :
+            return str(get_float(min_v) * 25.4)
+        else :
+            return min_v
 
     def get_max_value(self):
-        return self.attr["maximum_value"] if "maximum_value" in self.attr \
-            else "999999.9"
+        max_v = self.attr["maximum_value"] if "maximum_value" in self.attr \
+                        else "999999.9"
+        if self.get_type() == 'float' and default_metric :
+            return str(get_float(max_v) * 25.4)
+        else :
+            return max_v
 
 class Feature(object):
     def __init__(self, src = None, xml = None) :
@@ -1419,6 +1426,11 @@ class Feature(object):
             if s in conf :
                 p = Parameter(ini = conf[s], ini_id = s.lower())
 
+                if default_metric and p.attr['type'] == 'float' \
+                        and 'metric_value' in p.attr :
+                    a_val = get_float(p.attr['metric_value']) / 25.4
+                    p.attr["value"] = str(a_val)
+
                 p_id = "%s:%s" % (ftype, p.id)
                 if (p_id + '--type') in USER_VALUES :
                     p.set_type(USER_VALUES[p_id + '--type'])
@@ -1430,7 +1442,8 @@ class Feature(object):
 
                 # set the value to user preference
                 if (p_id + '--value') in USER_VALUES :
-                    p.set_user_value(USER_VALUES[p_id + '--value'])
+                    p.attr["value"] = USER_VALUES[p_id + '--value']
+#                    p.set_user_value(USER_VALUES[p_id + '--value'])
 
                 self.param.append(p)
 
@@ -1980,8 +1993,20 @@ class NCam(gtk.VBox):
                 mess_dlg(_("DISPLAY can only be 'axis' or 'gmoccapy'"))
                 sys.exit(-1)
 
+            if val == 'axis' :
+                val = ini_instance.find('DISPLAY', 'GLADEVCP')
+            elif val == 'gmoccapy' :
+                val = ini_instance.find('DISPLAY', 'EMBED_TAB_COMMAND')
+
+            if (val.find('--catalog=mill') > 0) or (val.find('-cmill') > 0) :
+                self.catalog_dir = 'mill'
+            elif (val.find('--catalog=lathe') > 0) or (val.find('-clathe') > 0) :
+                self.catalog_dir = 'lathe'
+            elif (val.find('--catalog=plasma') > 0) or (val.find('-cplasma') > 0) :
+                self.catalog_dir = 'plasma'
+
             val = ini_instance.find('DISPLAY', 'LATHE')
-            if (val is not None) and (val != '0') :
+            if (val is not None) and ((val == '0') or (val == 'TRUE')):
                 self.catalog_dir = 'lathe'
 
             self.pref.ngc_init_str = ini_instance.find('RS274NGC', 'RS274NGC_STARTUP_CODE')
@@ -2429,17 +2454,17 @@ class NCam(gtk.VBox):
         old_view = self.actionDualView.get_active()
 
         if self.pref.edit(self) :
-            if old_quick_access_icon_size <> quick_access_icon_size :
+            if old_quick_access_icon_size != quick_access_icon_size :
                 self.create_nc_toolbar()
                 self.nc_toolbar.show_all()
-            if old_treeview_icon_size <> treeview_icon_size :
+            if old_treeview_icon_size != treeview_icon_size :
                 self.tv1_icon_cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
                 if self.treeview2 is not None:
                     self.tv2_icon_cell.set_fixed_size(treeview_icon_size, treeview_icon_size)
-            if (old_menu_icon_size <> menu_icon_size) or (old_add_menu_icon_size <> add_menu_icon_size) :
+            if (old_menu_icon_size != menu_icon_size) or (old_add_menu_icon_size != add_menu_icon_size) :
                 self.create_menubar()
                 self.menubar.show_all()
-            if old_add_dlg_icon_size <> add_dlg_icon_size :
+            if old_add_dlg_icon_size != add_dlg_icon_size :
                 self.update_catalog()
 
             self.set_preferences()
@@ -2567,7 +2592,7 @@ class NCam(gtk.VBox):
                 except:
                     pass
 
-        if self.catalog.tag <> 'ncam_ui' :
+        if self.catalog.tag != 'ncam_ui' :
             mess_dlg(_('Menu is old format, no toolbar defined.\nUpdate to new format'))
             add_to_menu(menu_add, self.catalog)
         else :
@@ -2610,6 +2635,7 @@ class NCam(gtk.VBox):
         cell = CellRendererMx(self.treeview)
         cell.edited = self.edited
         cell.set_preediting(self.get_editinfo)
+        cell.set_refresh_fn(self.get_selected_feature)
         col.pack_start(cell, expand = True)
         col.set_cell_data_func(cell, self.get_col_value)
         col.set_min_width(200)
@@ -2732,6 +2758,7 @@ class NCam(gtk.VBox):
         cell.set_property("editable", True)
         cell.edited = self.edited
         cell.set_preediting(self.get_editinfo)
+        cell.set_refresh_fn(self.get_selected_feature)
 
         col.pack_start(cell, expand = False)
         col.set_cell_data_func(cell, self.get_col_value)
@@ -3216,28 +3243,28 @@ class NCam(gtk.VBox):
             elif keyname == "Delete" :
                 self.actionDelete.activate()
 
-            elif (keyname in ["D", "d"]) :
+            elif (keyname in ["d", "D"]) :
                 self.actionDuplicate.activate()
 
-            elif (keyname in ["X", "x"]) :
+            elif (keyname in ["x", "X"]) :
                 self.actionCut.activate()
 
-            elif (keyname in ["C", "c"]) :
+            elif (keyname in ["c", "C"]) :
                 self.actionCopy.activate()
 
-            elif (keyname in ["V", "v"]) :
+            elif (keyname in ["v", "V"]) :
                 self.actionPaste.activate()
 
-            elif (keyname in ["N", "n"]) :
+            elif (keyname in ["n", "N"]) :
                 self.actionNew.activate()
 
-            elif (keyname in ["O", "o"]) :
+            elif (keyname in ["o", "O"]) :
                 self.actionOpen.activate()
 
-            elif (keyname in ["S", "s"]) :
+            elif (keyname in ["s", "S"]) :
                 self.actionSave.activate()
 
-            elif (keyname in ["K", "k"]) :
+            elif (keyname in ["k", "K"]) :
                 self.actionCollapse.activate()
 
         else :
@@ -3434,7 +3461,7 @@ class NCam(gtk.VBox):
                                     hiter = treestore.iter_parent(hiter)
                             grp_header = p.attr['call'][7:]
                         else :
-                            if (header_name == '') :
+                            if (header_name == '') or (grp_header == '') :
                                 treestore.append(citer, [p, tool_tip, m_visible, is_visible])
                             elif grp_header == header_name :
                                 treestore.append(hiter, [p, tool_tip, m_visible, is_visible])
@@ -3588,8 +3615,6 @@ class NCam(gtk.VBox):
 
         if (old_value != new_value) or (r == gtk.RESPONSE_OK):
             param.set_value(new_value)
-#            if renderer.editdata_type == 'text' :
-#                renderer.get_treeview.queue_draw()
             self.action()
         self.focused_widget.grab_focus()
 
@@ -3734,7 +3759,7 @@ class NCam(gtk.VBox):
 
     def autorefresh_call(self, *arg) :
         if not self.actionAutoRefresh.get_active() :
-            return
+            return False
         connected = True
         try :
             fname = os.path.join(NGC_DIR, GENERATED_FILE)
@@ -3750,7 +3775,8 @@ class NCam(gtk.VBox):
                     try :
                         subprocess.check_output(["pgrep", "axis"])
                         subprocess.call(["axis-remote", fname])
-                    except :
+                    except subprocess.CalledProcessError as e:
+                        print(e)
                         try :
                             subprocess.check_output(["pgrep", "gmoccapy"])
                             linuxCNC.reset_interpreter()
@@ -3758,9 +3784,11 @@ class NCam(gtk.VBox):
                             linuxCNC.mode(linuxcnc.MODE_AUTO)
                             linuxCNC.program_open(fname)
                             time.sleep(0.05)
-                        except :
+                        except subprocess.CalledProcessError as e:
+                            print(e)
                             connected = False
-            except :
+            except Exception as e:
+                print(e)
                 connected = False
         except :
             connected = False
@@ -4340,7 +4368,7 @@ class NCam(gtk.VBox):
         self.actionRename.set_visible(self.iter_selected_type == tv_select.feature)
 
         self.actionHideField.set_sensitive((self.selected_type in SUPPORTED_DATA_TYPES) and \
-                                      (self.selected_type <> 'items'))
+                                      (self.selected_type != 'items'))
         self.actionShowF.set_sensitive(self.selected_feature is not None and \
                                        self.selected_feature.has_hidden_fields())
 
@@ -4353,18 +4381,23 @@ def verify_ini(fname, ctlog) :
     if (txt.find(path2ui) == -1) or (txt.find('my-stuff') == -1) :
         if not os.path.exists(fname + '.bak') :
             open(fname + '.bak', 'w').write(txt)
-        txt = re.sub(r"%s" % req, '', txt)
+            print(_('Backup file created : %s.bak') % fname)
+
+        if (txt.find('--catalog=mill') > 0) or (txt.find('-cmill') > 0) :
+            ctlog = 'mill'
+        elif (txt.find('--catalog=lathe') > 0) or (txt.find('-clathe') > 0) :
+            ctlog = 'lathe'
+        elif (txt.find('--catalog=plasma') > 0) or (txt.find('-cplasma') > 0) :
+            ctlog = 'plasma'
 
         txt1 = ''
         txt2 = txt.split('\n')
         for line in txt2 :
             txt1 += line.lstrip(' \t') + '\n'
-        open(fname + '.cvt', 'w').write(txt1)
 
         parser = ConfigParser.RawConfigParser()
         try :
-            parser.read(fname + '.cvt')
-            os.remove(fname + '.cvt')
+            parser.readfp(io.BytesIO(txt1))
 
             dp = parser.get('DISPLAY', 'DISPLAY').lower()
             if dp not in ['gmoccapy', 'axis'] :

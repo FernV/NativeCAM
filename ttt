@@ -89,7 +89,8 @@ except subprocess.CalledProcessError as e:
     msg = 'Error with subprocess: returncode = %(errcode)s\n' \
              'output = %(output)s\ne= %(e)s\n' \
              % {'errcode':e.returncode, 'output':e.output, 'e':e}
-    print(msg)
+    print('o<%s_engrave> sub\n' % sub_name)
+    print('o<%s_engrave> endsub\n' % sub_name)
     exit(-1)
 
 gc_line = re.sub(r"G00 Z #1\nM02\n", '', gc_line)
@@ -140,11 +141,12 @@ for aline in text.split('\n') :
     gc_line = gc_line.replace("*", " * ")
     gc_line = gc_line.replace("+", " + ")
     gc_line = gc_line.replace("/G", "G")
+    gc_line = gc_line.replace("G01  Z#2", "G00  Z#<start>\nG01  Z#2 F#<plunge_feed>\nF#<normal_feed>")
 
     new_gc = ''
     for a_line in gc_line.split('\n') :
         if a_line.find('#1=') == 0 :
-            continue
+            new_gc += '\t#<start> = #3\n\t#<plunge_feed> = #4\n\t#<normal_feed> = #5\n'
         elif a_line.find('#2=') == 0 :
             continue
         elif a_line.find('#3=') == 0 :
@@ -166,12 +168,14 @@ for aline in text.split('\n') :
 
         elif a_line.find('(start of symbol') == 0 :
             new_gc += '\n\t%s\n' % a_line
+        elif a_line.find('(overall extents:') == 0 :
+            new_gc += '\t%s\n\n\tG00  Z#1\n' % a_line
         else :
             new_gc += '\t%s\n' % a_line
 
     result += 'o<%s-line-%d> sub\n%s' % (sub_name, line_processed, new_gc)
     result += 'o<%s-line-%d> endsub\n\n' % (sub_name, line_processed)
-    result_call += '\to<%s-line-%d> CALL [#1] [#2]\n' % (sub_name, line_processed)
+    result_call += '\to<%s-line-%d> CALL [#1] [#2] [#3] [#4] [#5]\n' % (sub_name, line_processed)
     line_processed += 1
 
 print result + result_call + 'o<%s_engrave> endsub\n' % sub_name
