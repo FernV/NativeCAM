@@ -35,6 +35,7 @@ import time
 import locale
 import platform
 import pref_edit
+import Tkinter
 
 
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -1931,7 +1932,6 @@ class NCam(gtk.VBox):
         self.iter_next = None
         self.iter_previous = None
         self.iter_selected_type = tv_select.none
-        self.LinuxCNC_connected = False
         self.show_not_connected = False
         self.menubar = None
         self.name_cell = None
@@ -3760,37 +3760,26 @@ class NCam(gtk.VBox):
     def autorefresh_call(self, *arg) :
         if not self.actionAutoRefresh.get_active() :
             return False
-        connected = True
-        try :
-            fname = os.path.join(NGC_DIR, GENERATED_FILE)
-            f = open(fname, "w")
-            f.write(self.to_gcode())
-            f.close()
-            try:
-                linuxCNC = linuxcnc.command()
-                self.LinuxCNC_connected = True
-                stat = linuxcnc.stat()
-                stat.poll()
-                if stat.interp_state == linuxcnc.INTERP_IDLE :
-                    try :
-                        subprocess.check_output(["pgrep", "axis"])
-                        subprocess.call(["axis-remote", fname])
-                    except subprocess.CalledProcessError as e:
-                        print(e)
-                        try :
-                            subprocess.check_output(["pgrep", "gmoccapy"])
-                            linuxCNC.reset_interpreter()
-                            time.sleep(gmoccapy_time_out)
-                            linuxCNC.mode(linuxcnc.MODE_AUTO)
-                            linuxCNC.program_open(fname)
-                            time.sleep(0.05)
-                        except subprocess.CalledProcessError as e:
-                            print(e)
-                            connected = False
-            except Exception as e:
-                print(e)
-                connected = False
-        except :
+        fname = os.path.join(NGC_DIR, GENERATED_FILE)
+        f = open(fname, "w")
+        f.write(self.to_gcode())
+        f.close()
+        try:
+            linuxCNC = linuxcnc.command()
+            stat = linuxcnc.stat()
+            stat.poll()
+            if stat.interp_state == linuxcnc.INTERP_IDLE :
+                connected = True
+                try :
+                    Tkinter.Tk().tk.call("send", "axis", ("remote", "open_file_name", fname))
+                except Tkinter.TclError as detail:
+                    linuxCNC.reset_interpreter()
+                    time.sleep(gmoccapy_time_out)
+                    linuxCNC.mode(linuxcnc.MODE_AUTO)
+                    linuxCNC.program_open(fname)
+                    time.sleep(0.05)
+
+        except Exception as e:
             connected = False
 
         if not connected :
@@ -3896,8 +3885,7 @@ class NCam(gtk.VBox):
 
         try :
             ver = subprocess.check_output(["dpkg-query", "--show", "--showformat='${Version}'", "nativecam"])
-            s = ver[0]
-            dialog.set_version(s.strip("'"))
+            dialog.set_version(str(ver).strip("'"))
         except :
             dialog.set_version(APP_VERSION)
 
