@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nativecam\n"
 "POT-Creation-Date: 2017-04-27 12:27-0400\n"
-"PO-Revision-Date: 2017-04-30 23:50-0500\n"
+"PO-Revision-Date: 2017-05-28 02:32-0500\n"
 "Last-Translator: Fernand Veilleux <fernveilleux@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -106,7 +106,7 @@ msgstr "Décimales par défaut"
 
 #: ncam_pref.glade:445
 msgid "Delay on faster rpm"
-msgstr "Délai pour accélération de broche"
+msgstr "Délai accélération broche"
 
 #: ncam_pref.glade:447
 msgid "Spindle full speed delay"
@@ -135,7 +135,7 @@ msgstr "Augmenter si gmoccapy cause rafraîchissement intermittent ou que des fe
 
 #: ncam_pref.glade:586
 msgid "Gmoccapy input time-out delay"
-msgstr "Délai d'entrée pour gmoccapy"
+msgstr "Délai saisie pour gmoccapy"
 
 #: ncam_pref.glade:642
 msgid "Spiral mode not supported yet"

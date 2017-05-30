@@ -101,6 +101,7 @@ class PrefEditor():
         self.pref_file = os.path.join(path, 'catalogs', catalog, 'default.conf')
         self.config_def = ConfigParser.ConfigParser()
         self.config_def.read(self.pref_file)
+        self.catalog = catalog
 
         try :
             gf = open(os.path.join(sysdir, "ncam_pref.glade")).read()
@@ -236,6 +237,7 @@ class PrefEditor():
         self.digits_combo = builder.get_object("digits_combo")
         self.digits_combo.set_active(self.read_int('d', 'general', 'digits', 3) - 1)
         self.adj_spindledelay = builder.get_object("adj_spindledelay")
+
         self.adj_spindledelay.set_value(self.read_float('d', 'ngc', 'spindle_acc_time', 0.0))
 
         self.adj_gmoccapy = builder.get_object("adj_gmoccapy")
@@ -245,16 +247,9 @@ class PrefEditor():
         self.tlo_chk.set_active(self.read_boolean('d', 'probe', 'probe_tool_len_comp', True))
 
         self.entryInit = builder.get_object("entryInit")
-        if pre_amble > '' :
-            self.entryInit.set_text(pre_amble)
-        else :
-            self.entryInit.set_text(self.read_str('d', 'ngc', 'init_str', ' '))
-
+        self.entryInit.set_text(self.read_str('d', 'ngc', 'init_str', pre_amble))
         self.entryPost = builder.get_object("entryPost")
-        if post_amble > '' :
-            self.entryPost.set_text(post_amble)
-        else :
-            self.entryPost.set_text(self.read_str('d', 'ngc', 'post_amble', " "))
+        self.entryPost.set_text(self.read_str('d', 'ngc', 'post_amble', post_amble))
 
         self.combo_pck = builder.get_object("combo_pck")
         self.combo_pck.set_active(self.read_int('d', 'pocket', 'mode', 0))
@@ -327,6 +322,16 @@ class PrefEditor():
         prefdlg.set_transient_for(parent)
         prefdlg.set_keep_above(True)
         prefdlg.show_all()
+        builder.get_object('spinbutton14').set_visible(catalog in ['mill', 'lathe'])
+        builder.get_object('label53').set_visible(catalog in ['mill', 'lathe'])
+        builder.get_object('alignment5').set_visible(catalog == 'mill')
+        builder.get_object('alignment9').set_visible(catalog == 'mill')
+        builder.get_object('alignment1').set_visible(catalog == 'mill')
+        builder.get_object('alignment7').set_visible(catalog == 'plasma')
+        builder.get_object('label28').set_visible(catalog in ['mill', 'plasma'])
+        builder.get_object('label29').set_visible(catalog in ['mill', 'plasma'])
+        builder.get_object('finalcut_chk').set_visible(catalog in ['mill', 'plasma'])
+        builder.get_object('finalbottom_chk').set_visible(catalog in ['mill', 'plasma'])
         self.ref_clicked()
         self.menu_isize()
         self.tv_isize()
@@ -417,8 +422,9 @@ class PrefEditor():
             self.config_def.add_section('general')
         self.config_def.set('general', 'time_out', self.adj_timeout_value.get_value())
         self.config_def.set('general', 'digits', int(self.digits_combo.get_active()) + 1)
-        self.config_def.set('general', 'show_final_cut', self.finalcut_chk.get_active())
-        self.config_def.set('general', 'show_bottom_cut', self.finalbottom_chk.get_active())
+        if self.catalog in ['mill', 'plasma'] :
+            self.config_def.set('general', 'show_final_cut', self.finalcut_chk.get_active())
+            self.config_def.set('general', 'show_bottom_cut', self.finalbottom_chk.get_active())
         self.config_def.set('general', 'gmoccapy_time_out', self.adj_gmoccapy.get_value())
         self.config_def.set('general', 'autosave', self.autosave_chk.get_active())
 
@@ -426,59 +432,63 @@ class PrefEditor():
             self.config_def.add_section('ngc')
         self.config_def.set('ngc', 'init_str', self.entryInit.get_text())
         self.config_def.set('ngc', 'post_amble', self.entryPost.get_text())
-        self.config_def.set('ngc', 'off_rot_coord_system', self.comboCoords.get_active())
-        self.config_def.set('ngc', 'spindle_acc_time', self.adj_spindledelay.get_value())
+        if self.catalog == 'mill' :
+            self.config_def.set('ngc', 'off_rot_coord_system', self.comboCoords.get_active())
+        if self.catalog in ['mill', 'lathe'] :
+            self.config_def.set('ngc', 'spindle_acc_time', self.adj_spindledelay.get_value())
 
-        if not self.config_def.has_section('probe') :
-            self.config_def.add_section('probe')
-        self.config_def.set('probe', 'probe_func', self.comboProbe.get_active() + 2)
-        self.config_def.set('probe', 'probe_tool_len_comp', self.tlo_chk.get_active())
+        if self.catalog == 'mill' :
+            if not self.config_def.has_section('probe') :
+                self.config_def.add_section('probe')
+            self.config_def.set('probe', 'probe_func', self.comboProbe.get_active() + 2)
+            self.config_def.set('probe', 'probe_tool_len_comp', self.tlo_chk.get_active())
 
-        if self.default_metric :
-            probe_section = 'probe_mm'
-            drill_section = 'drill_mm'
-        else :
-            probe_section = 'probe'
-            drill_section = 'drill'
+            if self.default_metric :
+                probe_section = 'probe_mm'
+                drill_section = 'drill_mm'
+            else :
+                probe_section = 'probe'
+                drill_section = 'drill'
 
-        if not self.config_def.has_section(probe_section) :
-            self.config_def.add_section(probe_section)
-        if not self.config_def.has_section(drill_section) :
-            self.config_def.add_section(drill_section)
+            if not self.config_def.has_section(probe_section) :
+                self.config_def.add_section(probe_section)
+            if not self.config_def.has_section(drill_section) :
+                self.config_def.add_section(drill_section)
 
-        self.config_def.set(probe_section, 'probe_feed', self.adj_probefeed.get_value())
-        self.config_def.set(probe_section, 'probe_latch', self.adj_probelatch.get_value())
-        self.config_def.set(probe_section, 'probe_latch_feed', self.adj_probelatchfeed.get_value())
-        self.config_def.set(probe_section, 'probe_tip_dia', self.adj_probedia.get_value())
-        self.config_def.set(probe_section, 'probe_safe', self.adj_probesafe.get_value())
+            self.config_def.set(probe_section, 'probe_feed', self.adj_probefeed.get_value())
+            self.config_def.set(probe_section, 'probe_latch', self.adj_probelatch.get_value())
+            self.config_def.set(probe_section, 'probe_latch_feed', self.adj_probelatchfeed.get_value())
+            self.config_def.set(probe_section, 'probe_tip_dia', self.adj_probedia.get_value())
+            self.config_def.set(probe_section, 'probe_safe', self.adj_probesafe.get_value())
 
-        self.config_def.set(drill_section, 'center_drill_depth', self.adj_centerdrill_depth.get_value())
+            self.config_def.set(drill_section, 'center_drill_depth', self.adj_centerdrill_depth.get_value())
 
-        if not self.config_def.has_section('pocket') :
-            self.config_def.add_section('pocket')
-        self.config_def.set('pocket', 'mode', self.combo_pck.get_active())
+            if not self.config_def.has_section('pocket') :
+                self.config_def.add_section('pocket')
+            self.config_def.set('pocket', 'mode', self.combo_pck.get_active())
 
-        if not self.config_def.has_section('optimizing') :
-            self.config_def.add_section('optimizing')
-        self.config_def.set('optimizing', 'engagement1', self.adj_opt_eng1.get_value())
-        self.config_def.set('optimizing', 'engagement2', self.adj_opt_eng2.get_value())
-        self.config_def.set('optimizing', 'engagement3', self.adj_opt_eng3.get_value())
+            if not self.config_def.has_section('optimizing') :
+                self.config_def.add_section('optimizing')
+            self.config_def.set('optimizing', 'engagement1', self.adj_opt_eng1.get_value())
+            self.config_def.set('optimizing', 'engagement2', self.adj_opt_eng2.get_value())
+            self.config_def.set('optimizing', 'engagement3', self.adj_opt_eng3.get_value())
 
-        self.config_def.set('optimizing', 'feedfactor1', self.adj_opt_ff1.get_value())
-        self.config_def.set('optimizing', 'feedfactor2', self.adj_opt_ff2.get_value())
-        self.config_def.set('optimizing', 'feedfactor3', self.adj_opt_ff3.get_value())
-        self.config_def.set('optimizing', 'feedfactor4', self.adj_opt_ff4.get_value())
-        self.config_def.set('optimizing', 'feedfactor0', self.adj_opt_ff0.get_value())
+            self.config_def.set('optimizing', 'feedfactor1', self.adj_opt_ff1.get_value())
+            self.config_def.set('optimizing', 'feedfactor2', self.adj_opt_ff2.get_value())
+            self.config_def.set('optimizing', 'feedfactor3', self.adj_opt_ff3.get_value())
+            self.config_def.set('optimizing', 'feedfactor4', self.adj_opt_ff4.get_value())
+            self.config_def.set('optimizing', 'feedfactor0', self.adj_opt_ff0.get_value())
 
-        self.config_def.set('optimizing', 'speedfactor1', self.adj_opt_sf1.get_value())
-        self.config_def.set('optimizing', 'speedfactor2', self.adj_opt_sf2.get_value())
-        self.config_def.set('optimizing', 'speedfactor3', self.adj_opt_sf3.get_value())
-        self.config_def.set('optimizing', 'speedfactor4', self.adj_opt_sf4.get_value())
-        self.config_def.set('optimizing', 'speedfactor0', self.adj_opt_sf0.get_value())
+            self.config_def.set('optimizing', 'speedfactor1', self.adj_opt_sf1.get_value())
+            self.config_def.set('optimizing', 'speedfactor2', self.adj_opt_sf2.get_value())
+            self.config_def.set('optimizing', 'speedfactor3', self.adj_opt_sf3.get_value())
+            self.config_def.set('optimizing', 'speedfactor4', self.adj_opt_sf4.get_value())
+            self.config_def.set('optimizing', 'speedfactor0', self.adj_opt_sf0.get_value())
 
-        if not self.config_def.has_section('plasma') :
-            self.config_def.add_section('plasma')
-        self.config_def.set('plasma', 'test_mode', self.plasma_tmode_chk.get_active())
+        if self.catalog == 'plasma' :
+            if not self.config_def.has_section('plasma') :
+                self.config_def.add_section('plasma')
+            self.config_def.set('plasma', 'test_mode', self.plasma_tmode_chk.get_active())
 
         with open(self.pref_file, 'wb') as configfile:
             self.config_def.write(configfile)

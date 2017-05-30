@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: nativecam\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-27 12:28-0400\n"
-"PO-Revision-Date: 2017-04-30 23:50-0500\n"
+"PO-Revision-Date: 2017-05-21 15:25-0500\n"
 "Last-Translator: Fernand Veilleux <fernveilleux@gmail.com>\n"
 "Language-Team: LL@li.org\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Generator: Poedit 2.0\n"
+"X-Generator: Poedit 1.6.10\n"
 "X-Poedit-SearchPathExcluded-0: xml\n"
 "X-Poedit-SearchPathExcluded-1: configs\n"
 "X-Poedit-SearchPathExcluded-2: debian\n"
@@ -67,23 +67,23 @@ msgstr "Schleife zurück"
 
 #: ncam_pref.glade:293
 msgid "Spiral"
-msgstr "Spiralförmigen"
+msgstr "Spiralförmig"
 
 #: ncam_pref.glade:304
 msgid "G38.2 - toward workpiece, stop on contact, signal failure"
-msgstr "G38.2 - zu Werkstück, bleiben Sie Kontakt, Signalfehlschlag da"
+msgstr "G38.2 - in Richtung Werkstück, Stop bei Kontakt, Fehler melden"
 
 #: ncam_pref.glade:307
 msgid "G38.3 - toward workpiece, stop on contact"
-msgstr "G38.3 - zu Werkstück, bleiben Sie Kontakt da"
+msgstr "G38.3 - in Richtung Werkstück, Stop bei Kontakt"
 
 #: ncam_pref.glade:310
 msgid "G38.4 - away from workpiece, stop on loss of contact, signal failure"
-msgstr "G38.4 - weit weg von Werkstück, bleiben Sie Verlust des Kontaktes, Signalfehlschlages da"
+msgstr "G38.4 - vom Werkstück weg, Stop bei Kontaktöffnung, Fehler melden"
 
 #: ncam_pref.glade:313
 msgid "G38.5 - away from workpiece, stop on loss of contact"
-msgstr "G38.4 - weit weg von Werkstück, bleiben Sie Verlust des Kontaktes da"
+msgstr "G38.4 - vom Werkstück weg, Stop bei Kontaktöffnung"
 
 #: ncam_pref.glade:324
 msgid "Imperial"
@@ -111,7 +111,7 @@ msgstr "Standard Dezimalstellen"
 
 #: ncam_pref.glade:445
 msgid "Delay on faster rpm"
-msgstr "Verzögerung bei höhere Upm"
+msgstr "Verzögerung bei höheren Upm"
 
 #: ncam_pref.glade:447
 msgid "Spindle full speed delay"
@@ -128,7 +128,7 @@ msgstr "Initialisierung"
 
 #: ncam_pref.glade:498
 msgid "Post-amble"
-msgstr "Post-schlendern"
+msgstr "Nachsatz  "
 
 #: ncam_pref.glade:512
 msgid "Coordinates for offsetting and rotation"
@@ -176,23 +176,23 @@ msgstr "Stelle ausgeklappte Baumstruktur wieder her"
 
 #: ncam_pref.glade:891
 msgid "Show bottom lines"
-msgstr "Show boden linien"
+msgstr "Zeige Grundlinien"
 
 #: ncam_pref.glade:905
 msgid "Show design lines"
-msgstr "Show design linien"
+msgstr "Zeige Entwurfslinien"
 
 #: ncam_pref.glade:919
 msgid "Name column minimal width"
-msgstr "Minimal Breite der \"Name\"-Spalte"
+msgstr "Minimale Breite der \"Name\"-Spalte"
 
 #: ncam_pref.glade:949
 msgid "Primary treeview expanders visible"
-msgstr ""
+msgstr "Aufklappen der Hauptbaumansicht sichtbar"
 
 #: ncam_pref.glade:979
 msgid "Secondary treeview expanders visible"
-msgstr ""
+msgstr "Aufklappen der Unterbaumansicht sichtbar"
 
 #: ncam_pref.glade:1016
 msgid "Display"
@@ -212,7 +212,7 @@ msgstr "Menü hinzufügen"
 
 #: ncam_pref.glade:1128
 msgid "Quick access toolbar"
-msgstr "Schnellzugiffsleiste"
+msgstr "Schnellzugriffsleiste"
 
 #: ncam_pref.glade:1142
 msgid "Add dialog"
@@ -232,7 +232,7 @@ msgstr "Abbruch bei Fokusverlust"
 
 #: ncam_pref.glade:1635
 msgid "This is the tool tip"
-msgstr ""
+msgstr "Das ist der Tooltip"
 
 #: ncam_pref.glade:1694
 msgid "Virtual Keyboard"
@@ -265,7 +265,7 @@ msgstr "Funktion"
 #: ncam_pref.glade:2141
 #: ncam_pref.glade:2156
 msgid "If Latch Distance is greater than 0 then probe will go back and Latch in the same direction, else Latch will be done in opposite direction (stop on loss of contact)."
-msgstr "IWenn der Rastabstand größer als 0 ist, wird der Taster zurückgezogen und rastet in der gleichen Richtung, sonst rastet der Taster in der anderen Richtung (Stop bei offenem Kontakt)"
+msgstr "Wenn der Rastabstand größer als 0 ist, wird der Taster zurückgezogen und rastet in der gleichen Richtung, sonst rastet der Taster in der anderen Richtung (Stop bei offenem Kontakt)"
 
 #: ncam_pref.glade:2143
 msgid "Latch distance"
@@ -277,7 +277,7 @@ msgstr "Vorschub zum Rasten"
 
 #: ncam_pref.glade:2214
 msgid "Probe tip diameter"
-msgstr "Durchmesser Taster"
+msgstr "Durchmesser Tasterspitze"
 
 #: ncam_pref.glade:2249
 #: cfg/lathe/cutting-params.cfg:72
@@ -403,7 +403,7 @@ msgstr "Gewinde"
 
 #: catalogs/lathe/menu.xml:11
 msgid "Cut regular threads"
-msgstr ""
+msgstr "Normale Gewinde schneiden"
 
 #: catalogs/lathe/menu.xml:12
 msgid "Face"
@@ -790,7 +790,7 @@ msgstr "Anordnung von Bohrungen"
 
 #: catalogs/mill/menu.xml:46
 msgid "Drill lines of holes"
-msgstr "Reihe von Bohrungen"
+msgstr "Zeilenweise Bohrungen"
 
 #: catalogs/mill/menu.xml:47
 msgid "Regular Circle"
@@ -866,11 +866,11 @@ msgstr "Anordnung mit Zeilen und Spalten"
 
 #: catalogs/mill/menu.xml:57
 msgid "Index A Axis"
-msgstr ""
+msgstr "Index A-Achse"
 
 #: catalogs/mill/menu.xml:57
 msgid "Rotate A axis"
-msgstr ""
+msgstr "A-Achse drehen"
 
 #: catalogs/mill/menu.xml:59
 msgid "Select end mill or drill and set parameters"
@@ -1546,30 +1546,30 @@ msgstr "Gewindelänge (Z)"
 
 #: cfg/lathe/thread-adv.cfg:35
 msgid "Thread peak (I)"
-msgstr ""
+msgstr "Gewindespitze (I)"
 
 #: cfg/lathe/thread-adv.cfg:44
 msgid "Inital cut (J)"
-msgstr ""
+msgstr "Tiefe erster Schnitt"
 
 #: cfg/lathe/thread-adv.cfg:51
 #: cfg/lathe/threading-params.cfg:16
 msgid " depth degression (R)"
-msgstr ""
+msgstr "Tiefendegression (R)"
 
 #: cfg/lathe/thread-adv.cfg:62
 msgid "Full thread depth (K)"
-msgstr ""
+msgstr "Volle Gewindetiefe"
 
 #: cfg/lathe/thread-adv.cfg:69
 #: cfg/lathe/threading-params.cfg:34
 msgid "Compound slide angle (Q)"
-msgstr ""
+msgstr "Flankenzustellwinkel (Q)"
 
 #: cfg/lathe/thread-adv.cfg:77
 #: cfg/lathe/threading-params.cfg:42
 msgid "# spring passes (H)"
-msgstr ""
+msgstr "Anzahl Enddurchgänge ohne Zustellung"
 
 #: cfg/lathe/thread-adv.cfg:79
 #: cfg/lathe/threading-params.cfg:44
@@ -2499,7 +2499,7 @@ msgstr "Wähle Werkzeugpfad"
 #: cfg/mill/slot-arc.cfg:114
 #: cfg/mill/slot.cfg:101
 msgid "Arc lead-out"
-msgstr ""
+msgstr "Austrittsbogen"
 
 #: cfg/mill/circle-2.cfg:101
 #: cfg/mill/circle.cfg:135
@@ -2510,7 +2510,7 @@ msgstr ""
 #: cfg/mill/slot-arc.cfg:117
 #: cfg/mill/slot.cfg:104
 msgid "Not if on the line"
-msgstr ""
+msgstr "Nicht wenn auf der Linie"
 
 #: cfg/mill/circle-2.cfg:149
 #: cfg/mill/circle.cfg:183
@@ -2708,7 +2708,7 @@ msgstr "Bohre in einer Anordnung"
 
 #: cfg/mill/drill-array.cfg:5
 msgid "<b>Drill Lines of Holes</b>"
-msgstr "<b>Bohre in einer Linie</b>"
+msgstr "<b>Bohre in Zeilen</b>"
 
 #: cfg/mill/drill-array.cfg:26
 #: cfg/rectangular-array.cfg:41
@@ -2718,7 +2718,7 @@ msgstr "Größe und Offsets"
 #: cfg/mill/drill-array.cfg:46
 #: cfg/mill/drill-array.cfg:73
 msgid "Align axis"
-msgstr "Richte Achse aus"
+msgstr "Achsausrichtung"
 
 #: cfg/mill/drill-array.cfg:55
 msgid "X axis count"
@@ -2748,7 +2748,7 @@ msgstr "Zwischen jeder Bohrung=0:Insgesamt=1"
 
 #: cfg/mill/drill-array.cfg:106
 msgid "Define dX"
-msgstr "Bestimme dX"
+msgstr "Definiere dX"
 
 #: cfg/mill/drill-array.cfg:109
 msgid "dY options"
@@ -2756,7 +2756,7 @@ msgstr "dY-Optionen"
 
 #: cfg/mill/drill-array.cfg:115
 msgid "Define dY"
-msgstr "Bestimme dY"
+msgstr "Definiere dY"
 
 #: cfg/mill/drill-array.cfg:131
 msgid "Rotation of line"
@@ -2941,20 +2941,20 @@ msgstr "Pro Quadrant, glatter mit größerer Zahl"
 
 #: cfg/mill/index-axisA.cfg:3
 msgid "A indexing"
-msgstr ""
+msgstr "A Index"
 
 #: cfg/mill/index-axisA.cfg:5
 msgid "<b>Rotate A axis</b>"
-msgstr ""
+msgstr "<b>A-Achse drehen</b>"
 
 #: cfg/mill/index-axisA.cfg:20
 #: cfg/mill/index-axisA.cfg:24
 msgid "Number of steps"
-msgstr ""
+msgstr "Schrittzahl"
 
 #: cfg/mill/index-axisA.cfg:43
 msgid "Angle covered by all items"
-msgstr ""
+msgstr "Winkelbereich aller Elemente"
 
 #: cfg/mill/material.cfg:3
 #: cfg/plasma/material2d.cfg:3
@@ -4247,7 +4247,7 @@ msgstr "Internal=2:External=3"
 
 #: cfg/mill/thread-milling.cfg:69
 msgid "Select helix side"
-msgstr "Wählen Sie Spirale-Seite aus"
+msgstr "Wähle Spiral-Seite"
 
 #: cfg/mill/thread-milling.cfg:76
 msgid "Clockwise (RH)=3:Counter-clockwise (LH)=2"
@@ -4279,7 +4279,7 @@ msgstr "Spirale"
 
 #: cfg/mill/thread-milling.cfg:150
 msgid "Metric=0:Imperial=1"
-msgstr "Metrik=0:Imperial=1"
+msgstr "Metrisch=0:Imperial=1"
 
 #: cfg/mill/thread-milling.cfg:152
 msgid "Metric pitch is thread to thread, imperial is per inch"
@@ -4305,7 +4305,7 @@ msgstr "Spirale-Wurf"
 
 #: cfg/mill/thread-milling.cfg:189
 msgid "Helix count"
-msgstr ""
+msgstr "Helixanzahl"
 
 #: cfg/mill/thread-milling.cfg:192
 msgid "Number of helix starts"
@@ -4718,7 +4718,7 @@ msgstr "NativeCAM für LinuxCNC"
 
 #: ncam.py:77
 msgid "A GUI to help create LinuxCNC NGC files."
-msgstr "EIN GUI, um LinuxCNC NGC Dateien schaffen zu helfen."
+msgstr "Ein GUI, um die Erstellung von LinuxCNC NGC Dateien zu erleichtern."
 
 #: ncam.py:78
 msgid ""
@@ -4728,6 +4728,10 @@ msgid ""
 "\n"
 "It is recommended you use the deb package\n"
 msgstr ""
+"Dieses Programm ist in der Hoffnung, das es nützlich ist, verbreitet worden,\n"
+"allerdings OHNE JEDE GARANTIE; ohne jegliche, auch nur implizierte Garantie\n"
+"der MARKTTAUGLICHKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.\n"
+"Die Verwendung des deb package wird empfohlen\n"
 
 #: ncam.py:271
 #: ncam.py:274
@@ -4738,7 +4742,7 @@ msgstr "Datei %(filename)s nicht gefunden"
 #: ncam.py:403
 #, python-format
 msgid "Keeping modified local file %(filename)s"
-msgstr "Halten modifizierten lokalen datei %(filename)s"
+msgstr "Modifizierte lokale datei %(filename)s beibehalten"
 
 #: ncam.py:420
 #, python-format
@@ -4758,14 +4762,14 @@ msgstr ""
 "\n"
 "%(frompath)s\n"
 "\n"
-"Ja     -> Benutzen Sie neue System-Datei\n"
-"Nein   -> Behalten Sie lokale Datei\n"
-"Aktualisieren-> Akzeptieren Sie alle neuen System-Dateien\n"
-"Abbrechen->     Behalten Sie alle lokalen Dateien\n"
+"Ja     -> Benutze neue System-Datei\n"
+"Nein   -> Behalte lokale Datei\n"
+"Aktualisieren-> alle neuen System-Dateien akzeptieren\n"
+"Abbrechen->     alle lokalen Dateien behalten\n"
 
 #: ncam.py:427
 msgid "NEW file version available"
-msgstr "NEUE vorhandene Dateiversion"
+msgstr "NEUE Dateiversion vorhanden"
 
 #: ncam.py:470
 #, python-format
@@ -4773,6 +4777,8 @@ msgid ""
 "Ini file <%(inifilename)s>\n"
 "must have entry for [DISPLAY]NCAM_DIR"
 msgstr ""
+"Ini-Datei <%(inifilename)s>\n"
+"muss einen Eintrag [DISPLAY]NCAM_DIR enthalten"
 
 #: ncam.py:482
 msgid ""
@@ -4782,6 +4788,11 @@ msgid ""
 "PROGRAM_PREFIX = abs or relative path to scripts directory\n"
 "i.e. PROGRAM_PREFIX = ./scripts or ~/ncam/scripts"
 msgstr ""
+"ini-Datei enthält keinen PROGRAM_PREFIX\n"
+"Editiere DISPLAY Abschnitt\n"
+"\n"
+"PROGRAM_PREFIX = absoluter oder relativer Pfad zum scripts-Verzeichnis\n"
+"z.B. PROGRAM_PREFIX = ./scripts or ~/ncam/scripts"
 
 #: ncam.py:503
 msgid ""
@@ -4789,6 +4800,9 @@ msgid ""
 "\n"
 "[RS274NGC]SUBROUTINE_PATH"
 msgstr ""
+"Erforderliche lib fehlt:\n"
+"\n"
+"[RS274NGC]SUBROUTINE_PATH"
 
 #: ncam.py:524
 #, python-format
@@ -4802,6 +4816,14 @@ msgid ""
 "\n"
 "Edit ini and correct\n"
 msgstr ""
+"\n"
+"Das erforderliche NativeCAM lib -Verzeichnis :\n"
+"<%(lib)s>\n"
+"\n"
+"ist nicht im [RS274NGC]SUBROUTINE_PATH:\n"
+"<%(path)s> enthalten\n"
+"\n"
+"Editiere ini und korrrigiere\n"
 
 #: ncam.py:530
 #, python-format
@@ -4809,10 +4831,12 @@ msgid ""
 "Required NativeCAM lib\n"
 "%(err_details)s"
 msgstr ""
+"Erforderliche NativeCAM lib\n"
+"%(err_details)s"
 
 #: ncam.py:563
 msgid "no description"
-msgstr "keine beschreibung"
+msgstr "Keine Beschreibung"
 
 #: ncam.py:872
 #: ncam.py:888
@@ -4822,6 +4846,9 @@ msgid ""
 "\n"
 "%(tooltip)s"
 msgstr ""
+"Wert kann nicht  '0' sein in\n"
+"\n"
+"%(tooltip)s"
 
 #: ncam.py:1061
 msgid "Open"
@@ -4830,11 +4857,11 @@ msgstr "Öffne"
 #: ncam.py:1080
 #: ncam.py:4181
 msgid "All files"
-msgstr "Alle dateien"
+msgstr "Alle Dateien"
 
 #: ncam.py:1397
 msgid "unname"
-msgstr ""
+msgstr "uname"
 
 #: ncam.py:1424
 #, python-format
@@ -4842,6 +4869,8 @@ msgid ""
 "Type not defined for\n"
 "%s"
 msgstr ""
+"Typ nicht definiert für\n"
+"%s"
 
 #: ncam.py:1580
 #, python-format
@@ -4850,6 +4879,9 @@ msgid ""
 "output = %(output)s\n"
 "e= %(e)s\n"
 msgstr ""
+"Fehler in subprocess: returncode = %(errcode)s\n"
+"output = %(output)s\n"
+"e= %(e)s\n"
 
 #: ncam.py:1827
 msgid ""
@@ -4861,11 +4893,11 @@ msgstr ""
 
 #: ncam.py:1828
 msgid "(*.ngc files are best viewed with Syntax Highlighting)\n"
-msgstr "(*.ngc Dateien werden am besten mit Syntax-Hervorheben angesehen)\n"
+msgstr "(*.ngc Dateien werden am besten mit Syntax-Hervorhebung angesehen)\n"
 
 #: ncam.py:1835
 msgid "G21  (metric)"
-msgstr "G21  (metrik)"
+msgstr "G21  (metrisch)"
 
 #: ncam.py:1837
 msgid "G20  (imperial/inches)"
@@ -4880,16 +4912,16 @@ msgid ""
 "(end defaults)\n"
 "\n"
 msgstr ""
-"(Endunterlassungen)\n"
+"(Ende der Defaultwert)\n"
 "\n"
 
 #: ncam.py:1893
 msgid "(This is a built-in safety to help avoid gouging into your work piece)\n"
-msgstr "(Das ist eine eingebaute Sicherheit, um gouging in Ihr Arbeitsstück vermeiden zu helfen)\n"
+msgstr "(Das ist eine eingebaute Sicherheit, um einen Einstich das Werkstück vermeiden zu helfen)\n"
 
 #: ncam.py:1900
 msgid "(sub definitions)\n"
-msgstr "(sub definitionen)\n"
+msgstr "(Subroutinedefinitionen)\n"
 
 #: ncam.py:1997
 #, python-format
@@ -4898,8 +4930,8 @@ msgid ""
 "\n"
 "%(detail)s"
 msgstr ""
-"Offen versagt für ini Datei : %(inifilename)s\n"
-"\n"
+"ini Datei : %(inifilename)s\n"
+"konte nicht geöffnet werden\n"
 "%(detail)s"
 
 #: ncam.py:2004
@@ -4915,7 +4947,7 @@ msgstr "Verwenden %s\n"
 #: ncam.py:2054
 #, python-format
 msgid "Using default %(mnu)s,  no %(dir)s/menu-custom.xml found\n"
-msgstr ""
+msgstr "Benutze default %(mnu)s,  kein %(dir)s/menu-custom.xml gefunden\n"
 
 #: ncam.py:2146
 #, python-format
@@ -4926,7 +4958,7 @@ msgid ""
 "\n"
 "Continue?"
 msgstr ""
-"Standalone Verzeichnis :\n"
+"Standalone-Verzeichnis :\n"
 "\n"
 "%(dir)s\n"
 "\n"
@@ -4934,7 +4966,7 @@ msgstr ""
 
 #: ncam.py:2147
 msgid "NativeCAM CREATE"
-msgstr "NativeCAM SCHAFFEN"
+msgstr "NativeCAM ERZEUGEN"
 
 #: ncam.py:2161
 #, python-format
@@ -4953,16 +4985,29 @@ msgid ""
 "\n"
 "Take time to read the README file in '%(dir)s'"
 msgstr ""
+"\n"
+"Ein Systemupdate ist vorhanden\n"
+"\n"
+"Bei Fortsetzung wird eine neue Struktur die alte überschreiben\n"
+"\n"
+"Wenn Sie Dateien in cfg, lib oder graphics\n"
+"Unterverzeichnissen verändert haben, sollten Sie im nächsten Dialog ABBRECHEN wählen\n"
+"und die Anwendung schließen, um diese Dateien\n"
+"in das neue  '%(dir)s' Unterverzeichnis kopieren. Andere\n"
+"nicht benötigte Dateien werden automatisch nach '%(dir)s' übertragen.\n"
+"Sie können bei Bedarf gelöscht werden.\n"
+"\n"
+"Bitte lesen Sie die README-Datei in '%(dir)s'"
 
 #: ncam.py:2184
 #, python-format
 msgid "Updated %(qty)3d files in %(dir)s"
-msgstr "Aktualisierter %(qty)3d dateien in %(dir)s"
+msgstr "Aktualisierte %(qty)3d-Dateien in %(dir)s"
 
 #: ncam.py:2186
 #, python-format
 msgid "Created %(qty)3d files in %(dir)s"
-msgstr "Geschaffen%(qty)3d dateien in %(dir)s"
+msgstr "%(qty)3d dateien in %(dir)s erzeugt"
 
 #: ncam.py:2495
 msgid "Back..."
@@ -4973,6 +5018,8 @@ msgid ""
 "Menu is old format, no toolbar defined.\n"
 "Update to new format"
 msgstr ""
+"Menü hat altes Format, keine Toolbar definiert.\n"
+"Auf neues Format updaten "
 
 #: ncam.py:2571
 #: ncam.py:2692
@@ -4986,15 +5033,15 @@ msgstr "Wert"
 
 #: ncam.py:2803
 msgid "_Projects"
-msgstr "_Projekt"
+msgstr "_Projekte"
 
 #: ncam.py:2806
 msgid "Open Example"
-msgstr ""
+msgstr "Beispiel öffnen"
 
 #: ncam.py:2806
 msgid "Open Example Project"
-msgstr ""
+msgstr "Öffne Beispielprojekt"
 
 #: ncam.py:2807
 msgid "Save project as xml file"
@@ -5006,7 +5053,7 @@ msgstr "Speichern als Standardtemplate"
 
 #: ncam.py:2808
 msgid "Save project as default template"
-msgstr ""
+msgstr "Speichere Projekt als Standardtemplate"
 
 #: ncam.py:2809
 msgid "Export gcode as RS274NGC"
@@ -5070,19 +5117,19 @@ msgstr "Nach unten"
 
 #: ncam.py:2825
 msgid "Save Values as Defaults"
-msgstr ""
+msgstr "Speichere als Standardwerte"
 
 #: ncam.py:2825
 msgid "Save Values of this Subroutine as Defaults"
-msgstr ""
+msgstr "Speichere Werte dieser Subroutine als Standardwerte"
 
 #: ncam.py:2826
 msgid "Delete Custom Default Values"
-msgstr ""
+msgstr "Lösche Benutzerstandardwerte"
 
 #: ncam.py:2827
 msgid "Set Digits"
-msgstr ""
+msgstr "Setze Stellenanzahl"
 
 #: ncam.py:2836
 msgid "_Add"
@@ -5094,7 +5141,7 @@ msgstr "Öffne cfg-Datei"
 
 #: ncam.py:2837
 msgid "Add a Subroutine Definition File"
-msgstr ""
+msgstr "Füge Subroutinedefinitiion ein"
 
 #: ncam.py:2838
 msgid "Import a Project File"
@@ -5102,7 +5149,7 @@ msgstr "Importiere _XML-Datei"
 
 #: ncam.py:2838
 msgid "Import a Project Into the Current One"
-msgstr ""
+msgstr "Importiere ein Projekt in das aktuelle Projekt"
 
 #: ncam.py:2841
 msgid "_View"
@@ -5138,11 +5185,11 @@ msgstr "Stammwertespalte ausblenden"
 
 #: ncam.py:2855
 msgid "In master treeview"
-msgstr ""
+msgstr "Im Hauptanzeigebaum"
 
 #: ncam.py:2859
 msgid "Sub-Groups In Master Tree"
-msgstr "Unterguppen im Hauptstamm"
+msgstr "Untergruppen im Hauptstamm"
 
 #: ncam.py:2864
 msgid "_Utilities"
@@ -5174,7 +5221,7 @@ msgstr "NativeCAM auf YouTube"
 
 #: ncam.py:2875
 msgid "Translating NativeCAM"
-msgstr "Wie übersetzen NativeCAM"
+msgstr "NativeCAM übersetzen"
 
 #: ncam.py:2876
 msgid "LinuxCNC web Site"
@@ -5186,11 +5233,11 @@ msgstr "LinuxCNC Forum"
 
 #: ncam.py:2881
 msgid "Hide Selected Field"
-msgstr "Verbergen Sie Ausgewähltes Feld"
+msgstr "Ausgewähltes Feld verbergen"
 
 #: ncam.py:2882
 msgid "Show All Fields"
-msgstr "Zeigen Sie Alle Felder"
+msgstr "Alle Felder zeigen"
 
 #: ncam.py:2883
 msgid "Save Project as Current Work"
@@ -5214,11 +5261,11 @@ msgstr "Kehren Sie zu ursprünglichem Typ zurück"
 
 #: ncam.py:3226
 msgid "Secondary treeview focused"
-msgstr ""
+msgstr "Fokus auf Unterbaumstruktur"
 
 #: ncam.py:3235
 msgid "Primary treeview focused"
-msgstr ""
+msgstr "Fokus auf Hauptbaumstruktur"
 
 #: ncam.py:3477
 msgid ""
@@ -5278,7 +5325,7 @@ msgstr "Importiere Projekt"
 #: ncam.py:4206
 #: ncam.py:4232
 msgid "NativeCAM projects"
-msgstr "NativeCAM projekt"
+msgstr "NativeCAM-Projekte"
 
 #: ncam.py:4201
 msgid "Save project as..."
@@ -5290,26 +5337,26 @@ msgstr "Projekt öffnen"
 
 #: ncam.py:4235
 msgid "Open example project"
-msgstr "Demo projekt öffnen"
+msgstr "Demoprojekt öffnen"
 
 #: ncam.py:4236
 msgid "NativeCAM example projects"
-msgstr "NativeCAM demo projekt"
+msgstr "NativeCAM Demoprojekte"
 
 #: ncam.py:4266
 msgid "Open a cfg file"
-msgstr ""
+msgstr "Öffne cfg-Datei"
 
 #: ncam.py:4272
 msgid "Config files"
-msgstr ""
+msgstr "Config-Dateien"
 
 #: ncam.py:4406
 #, python-format
 msgid ""
 "Success in modifying inifile :\n"
 "  %s"
-msgstr ""
+msgstr "ini-Datei %s erfolgreich modifiziert"
 
 #: ncam.py:4409
 #, python-format
@@ -5317,7 +5364,7 @@ msgid ""
 "Error modifying ini file\n"
 "%(err_details)s"
 msgstr ""
-"Fehler, der ini Datei modifiziert\n"
+"Fehler beim Modifizieren der ini Datei\n"
 "%(err_details)s"
 
 #: pref_edit.py:109

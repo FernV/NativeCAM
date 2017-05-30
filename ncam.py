@@ -1740,7 +1740,7 @@ class Preferences(object):
             if self.cat_name in ['mill', 'plasma'] :
                 self.ngc_init_str = 'G17 G40 G49 G90 G92.1 G94 G54 G64 p0.001'
             elif self.cat_name == 'lathe' :
-                self.ngc_init_str = 'G17 G40 G49 G90 G92.1 G94 G54 G64 p0.001'
+                self.ngc_init_str = 'G18 G40 G49 G90 G92.1 G94 G54 G64 p0.001'
 
         self.timeout_value = read_int(config, 'general', 'time_out', 0.300) * 1000
         self.autosave = read_boolean(config, 'general', 'autosave', False)
@@ -1749,8 +1749,9 @@ class Preferences(object):
         self.ngc_show_bottom_cut = read_sbool(config, 'general', 'show_bottom_cut', True)
         self.ngc_init_str = read_str(config, 'ngc', 'init_str', self.ngc_init_str)
         self.ngc_post_amble = read_str(config, 'ngc', 'post_amble', " ")
+        self.ngc_spindle_speedup_time = read_str(config, 'ngc', 'spindle_acc_time', '0.0')
+
         self.ngc_off_rot_coord_system = read_int(config, 'ngc', 'off_rot_coord_system', 2)
-        self.ngc_spindle_speedup_time = read_str(config, 'ngc', 'spindle_acc_time', '1.0')
         gmoccapy_time_out = read_float(config, 'general', 'gmoccapy_time_out', 0.15)
 
         self.ngc_probe_func = read_str(config, 'probe', 'probe_func', "4")
@@ -1823,40 +1824,17 @@ class Preferences(object):
 
         self.default += (self.ngc_init_str + "\n")
         if default_metric :
-            self.default += _("G21  (metric)")
+            self.default += _("G21  (metric)\n\n")
         else :
-            self.default += _("G20  (imperial/inches)")
+            self.default += _("G20  (imperial/inches)\n\n")
 
-        if self.ngc_off_rot_coord_system < 5 :
-            coord = str(5 + self.ngc_off_rot_coord_system)
-        else :
-            coord = '9.' + str(self.ngc_off_rot_coord_system - 4)
-        self.default += ("\n\n#<_off_rot_coord_system>    = 5" + coord + "\n\n")
-
-        self.default += ("#<_show_final_cuts>         = " + self.ngc_show_final_cut + "\n")
-        self.default += ("#<_show_bottom_cut>         = " + self.ngc_show_bottom_cut + "\n\n")
         self.default += ("#<_units_radius>            = 1  (factor for radius and diameter)\n")
         self.default += ("#<_units_width>             = 1  (factor for width, height, length)\n")
-        self.default += ("#<_units_cut_depth>         = 1  (factor for depth)\n\n")
-        self.default += ("#<_mill_data_start>         = 70\n\n")
-        self.default += ("#<in_polyline>              = 0\n\n")
-        if self.has_Z_axis :
-            self.default += ("#<_has_z_axis>              = 1\n\n")
-        else :
-            self.default += ("#<_has_z_axis>              = 0\n\n")
-
-        self.default += ("#<_probe_func>              = 38." + self.ngc_probe_func + "\n")
-        self.default += ("#<_probe_feed>              = " + self.ngc_probe_feed + "\n")
-        self.default += ("#<_probe_latch>             = " + self.ngc_probe_latch + "\n")
-        self.default += ("#<_probe_latch_feed>        = " + self.ngc_probe_latch_feed + "\n")
-        self.default += ("#<_probe_safe>              = " + self.ngc_probe_safe + "\n")
-        self.default += ("#<_probe_tip_dia>           = " + self.ngc_probe_tip_dia + "\n\n")
-        self.default += ("#<_probe_tool_len_comp>     = " + self.probe_tool_len_comp + "\n")
-        self.default += ("#<_tool_probe_z>            = 0\n\n")
+        if self.cat_name in ['mill', 'lathe'] :
+            self.default += ("#<_units_cut_depth>         = 1  (factor for depth)\n")
 
         if self.cat_name == 'mill' :
-            self.default += ("#<_spindle_speed_up_delay>  = " + self.ngc_spindle_speedup_time + "\n\n")
-            self.default += ("#<center_drill_depth>       = " + self.drill_center_depth + "\n\n")
+            self.default += ("\n#<center_drill_depth>       = " + self.drill_center_depth + "\n\n")
             self.default += ("#<_pocket_expand_mode>      = " + self.pocket_mode + "\n\n")
 
             self.default += _("(optimization values)\n")
@@ -1876,21 +1854,54 @@ class Preferences(object):
             self.default += ("#<_speedfactor4>            = " + self.opt_sf4 + "\n")
             self.default += ("#<_speedfactor0>            = " + self.opt_sf0 + "\n\n")
 
+            self.default += ("#<_probe_func>              = 38." + self.ngc_probe_func + "\n")
+            self.default += ("#<_probe_feed>              = " + self.ngc_probe_feed + "\n")
+            self.default += ("#<_probe_latch>             = " + self.ngc_probe_latch + "\n")
+            self.default += ("#<_probe_latch_feed>        = " + self.ngc_probe_latch_feed + "\n")
+            self.default += ("#<_probe_safe>              = " + self.ngc_probe_safe + "\n")
+            self.default += ("#<_probe_tip_dia>           = " + self.ngc_probe_tip_dia + "\n\n")
+            self.default += ("#<_probe_tool_len_comp>     = " + self.probe_tool_len_comp + "\n")
+            self.default += ("#<_tool_probe_z>            = 0\n")
+
+        if self.cat_name in ['mill', 'plasma'] :
+            if self.ngc_off_rot_coord_system < 5 :
+                coord = str(5 + self.ngc_off_rot_coord_system)
+            else :
+                coord = '9.' + str(self.ngc_off_rot_coord_system - 4)
+            self.default += ("\n#<_off_rot_coord_system>    = 5" + coord + "\n\n")
+
+            self.default += ("#<_mill_data_start>         = 70\n")
+            self.default += ("#<in_polyline>              = 0\n\n")
+
+            if self.has_Z_axis :
+                self.default += ("#<_has_z_axis>              = 1\n\n")
+            else :
+                self.default += ("#<_has_z_axis>              = 0\n\n")
+
+            self.default += ("#<_show_final_cuts>         = " + self.ngc_show_final_cut + "\n")
+            self.default += ("#<_show_bottom_cut>         = " + self.ngc_show_bottom_cut + "\n\n")
+
+        if self.cat_name in ['mill', 'lathe'] :
+            self.default += ("#<_spindle_speed_up_delay>  = " + self.ngc_spindle_speedup_time + "\n\n")
+
         if self.cat_name == 'plasma' :
             self.default += ("#<_plasma_test_mode>        = " + self.plasma_test_mode + "\n\n")
 
         self.default += _("(end defaults)\n\n")
 
         self.default += _('(This is a built-in safety to help avoid gouging into your work piece)\n')
-        self.default += ("/ o<safety_999> if [#<_show_final_cuts>]\n")
-        self.default += ("/    o<safety_9999> repeat [1000]\n")
-        self.default += ("/       M0\n")
-        self.default += ("/    o<safety_9999> endrepeat\n")
-        self.default += ("/ o<safety_999> endif\n\n")
+        if self.cat_name in ['mill', 'plasma'] :
+            self.default += ("/ o<safety_999> if [#<_show_final_cuts>]\n")
+            self.default += ("/    o<safety_9999> repeat [1000]\n")
+            self.default += ("/       M0\n")
+            self.default += ("/    o<safety_9999> endrepeat\n")
+            self.default += ("/ o<safety_999> endif")
+        else :
+            self.default += ("/  o<safety_9999> repeat [1000]\n")
+            self.default += ("/    M0\n")
+            self.default += ("/  o<safety_9999> endrepeat")
 
-        self.default += _('(sub definitions)\n')
-
-        self.post_amble = self.ngc_post_amble + "\nM2\n"
+        self.default += _('\n\n(sub definitions)\n')
 
 class NCam(gtk.VBox):
     __gtype_name__ = "NCam"
@@ -1901,7 +1912,7 @@ class NCam(gtk.VBox):
         global NCAM_DIR, default_metric, NGC_DIR, SYS_DIR
 
         arg_start = (sys.argv[0:].index('-U') + 1) if "-U" in sys.argv[0:] else 1
-        opt, optl = 'U:x:c:i:', ["catalog=", "ini="]
+        opt, optl = 'U:x:c:i:t', ["catalog=", "ini="]
         try :
             optlist, arg = getopt.getopt(sys.argv[arg_start:], opt, optl)
             optlist = dict(optlist)
@@ -1993,9 +2004,8 @@ class NCam(gtk.VBox):
                 mess_dlg(_("DISPLAY can only be 'axis' or 'gmoccapy'"))
                 sys.exit(-1)
 
-            if val == 'axis' :
-                val = ini_instance.find('DISPLAY', 'GLADEVCP')
-            elif val == 'gmoccapy' :
+            val = ini_instance.find('DISPLAY', 'GLADEVCP')
+            if val is None :
                 val = ini_instance.find('DISPLAY', 'EMBED_TAB_COMMAND')
 
             if (val.find('--catalog=mill') > 0) or (val.find('-cmill') > 0) :
@@ -3522,7 +3532,7 @@ class NCam(gtk.VBox):
             gcode_def += d
             itr = self.treestore.iter_next(itr)
         return self.pref.default + gcode_def + \
-            _("(end sub definitions)\n\n") + gcode + self.pref.post_amble
+            _("(end sub definitions)\n\n") + gcode + self.pref.ngc_post_amble + '\nM2\n'
 
     def action_save_ngc(self, *arg) :
         filechooserdialog = gtk.FileChooserDialog(_("Save as ngc..."), None,
@@ -4361,7 +4371,7 @@ class NCam(gtk.VBox):
                                        self.selected_feature.has_hidden_fields())
 
 
-def verify_ini(fname, ctlog) :
+def verify_ini(fname, ctlog, in_tab) :
     path2ui = os.path.join(SYS_DIR, 'ncam.ui')
     req = '# required NativeCAM item :\n'
 
@@ -4399,16 +4409,21 @@ def verify_ini(fname, ctlog) :
             except :
                 pass
 
-            # remove all '# required NativeCAM item :\n' if exist
-            txt = re.sub(r"%s" % req, '', txt)
+#            txt = re.sub(r"%s" % req, '', txt)
 
             if dp == 'axis' :
-                newstr = '%sGLADEVCP = -U --catalog=%s %s\n' % (req, ctlog, path2ui)
-                try :
-                    oldstr = 'GLADEVCP = %s' % parser.get('DISPLAY', 'gladevcp')
-                    txt = re.sub(r"%s" % oldstr, newstr, txt)
-                except :
+                if in_tab :
+                    newstr = '%s%s%s%s %s\n' % (req, 'EMBED_TAB_NAME = NativeCAM\n', \
+                            'EMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=', \
+                            ctlog, path2ui)
                     txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+                else :
+                    newstr = '%sGLADEVCP = -U --catalog=%s %s\n' % (req, ctlog, path2ui)
+                    try :
+                        oldstr = 'GLADEVCP = %s' % parser.get('DISPLAY', 'gladevcp')
+                        txt = re.sub(r"%s" % oldstr, newstr, txt)
+                    except :
+                        txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
             else :
                 newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=%s %s\n' % (req, ctlog, path2ui)
@@ -4469,6 +4484,7 @@ Options :
    -h | --help                 this text
    (-i | --ini=) inifilename   inifile used
    (-c | --catalog=) catalog   valid catalogs = mill, plasma, lathe
+   -t                          only if you use axis it will be in a tab
 
 To prepare your inifile to use NativeCAM embedded,
    a) Start in a working directory with your LinuxCNC configuration ini file
@@ -4490,7 +4506,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     try :
-        optlist, args = getopt.getopt(sys.argv[1:], 'c:i:', ["catalog=", "ini="])
+        optlist, args = getopt.getopt(sys.argv[1:], 'c:i:t', ["catalog=", "ini="])
     except getopt.GetoptError as err:
         print(err)  # will print something like "option -a not recognized"
         usage()
@@ -4516,7 +4532,8 @@ if __name__ == "__main__":
             usage()
             sys.exit(3)
 
-        verify_ini(os.path.abspath(ini), catalog)
+        in_tab = "-t" in optlist
+        verify_ini(os.path.abspath(ini), catalog, in_tab)
 
     window = gtk.Dialog(APP_TITLE, None, gtk.DIALOG_MODAL)
     ncam = NCam()

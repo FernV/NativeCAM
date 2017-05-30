@@ -1,23 +1,26 @@
 NativeCAM for LinuxCNC - realtime CAM
 
-Prefer cloning over downloading.
+WARNING : NEVER USE A SUPERUSER TERMINAL FOR INSTALLING LINUXCNC OR NATIVECAM
+   YOU MAY HAVE NO WRITE PERMISSIONS TO FILES OR SUB-DIRECTORIES
+   USE A REGULAR USER TERMINAL AND PREFIX WITH 'SUDO' ONLY WHEN REQUIRED
 
-This release is a major update and will change the directory structure.
-Instead of copying everything, it will copy only files you may want to edit
-and lib, cfg, graphics will be links to original files.
-This will prevent redundancy and protect your edited files from being
-overwritten.
+Prefer cloning over downloading.
 
 Important files are catalogs/customize and catalogs/translating
 
-NativeCAM is now a deb package supplied with LinuxCNC meaning it can
-be automatically updated after changes are published
-(if not released yet, be patient)
-
-Open a terminal window in the cloned directory and type : ./ncam.py -h
+NativeCAM as a deb package will be supplied with next stable release of LinuxCNC (2.9)
+It will be automatically updated after changes are published.
+In the meantime, it is available with the pre-release version. However you can use it
+as a non-deb with the following instructions.
+Follow them EXACTLY for immediate no-pain success.
 
 Pre-requisite is python-lxml package installed.
 If not install with 'sudo apt-get install python-lxml'
+
+-Open a normal user terminal window in your home directory.
+-Clone with : git clone https://github.com/FernV/NativeCAM.git
+-Change directory to NativeCAM : cd NativeCAM
+-Type : ./ncam.py -h
 
 1.	Stand alone mode
 --------------------------------------------------------------------------------
@@ -31,12 +34,13 @@ If not install with 'sudo apt-get install python-lxml'
 2.	Embedded (non deb setup)
 --------------------------------------------------------------------------------
 1.	Run first from ncam directory : sudo ./nondeb_setup.py
-	You may have to redo it after LinuxCNC updates
+	You WILL have to redo it after LinuxCNC updates
 	
 2.	To use with your own inifile, it must first be edited.
 	Using the command : ./ncam.py -i(inifilename) -c('mill' | 'plasma' | 'lathe')
 	will automatically create a backup and modify your file.
 	It will also prepare the sub-directory with needed files and links.
+    If you use axis and -t option it will be embedded in a tab
 	
 2.	Start LinuxCNC normally with this commands :
 	linuxcnc inifilename
