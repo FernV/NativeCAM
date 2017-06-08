@@ -2,6 +2,10 @@ o<poly_mill> sub
 (CALL data ptr[1], cut_start[2], cut_depth[3], compensation[4], show final cut[5], x[6], y[7], rot[8], tool eng pct[9])
 (Author : Fernand Veilleux)
 
+	o1 if [#<_tool_usage> GT 2]
+		o<poly_mill> return
+	o1 endif
+
 (validate params first)
 	o<poly_valid_1> if [#3 GT #2]
 		(debug,Polyline: Invalid cut_depth - EXITING)

@@ -34,4 +34,6 @@ o<get_arc_len> sub
 	o10 else
 		#<_arc_max_chord> = [2 * #<radius> * SIN[#<_arc_rotation> / 2]]
 	o10 endif
+
+	;(print,arc_len = #<_arc_len>)
 o<get_arc_len> endsub

@@ -2,16 +2,12 @@
 # coding: utf-8
 
 '''
-Will create links and modify files to embed NativeCAM in LinuxCNC
-should work with any linux distro save a few exceptions
+Will restore LinuxCNC files to end usage of nondeb_setup
 
 usage :
-    sudo nondeb_setup.py [-c]
+    sudo restore_lcnc.py -c
 
-    w/ argument c will restore files and delete links
-    w/o argument will create links and modify files
-
-DO NOT USE IN ANY WAYS AFTER NATIVECAM IS INTEGRATED WITH LINUXCNC DISTRIBUTION
+    w/ or w/o argument c it will restore files and delete links
 
 Created on 2016-10-08
 
@@ -30,7 +26,8 @@ except :
 lcode = os.getenv('LANGUAGE', 'en')[0:2]
 # print lcode
 
-cls = sys.argv.__len__() > 1
+# cls = sys.argv.__len__() > 1
+cls = True
 
 if os.path.exists('/usr/share/linuxcnc/aux_gladevcp/NativeCAM/ncam.py') :
     cls = True

@@ -2038,7 +2038,7 @@ class NCam(gtk.VBox):
         print("   inifile = %s" % inifilename)
         print("  NCAM_DIR = %s" % NCAM_DIR)
         print("   SYS_DIR = %s" % SYS_DIR)
-        print("   program = %s\n" % __file__)
+        print("   program = %s\n" % os.path.realpath(__file__))
 
         fromdirs = [CATALOGS_DIR, CUSTOM_DIR]
 
@@ -2168,20 +2168,20 @@ class NCam(gtk.VBox):
 
         srcdir = os.path.join(NCAM_DIR, CUSTOM_DIR)
         if not os.path.exists(srcdir) :
-            os.mkdir(srcdir)
+            os.mkdir(srcdir, 0o755)
 
         srcdir = os.path.join(NCAM_DIR, LIB_DIR)
-        if os.path.exists(srcdir) and not os.path.islink(srcdir) :
-            msg = _('\nAn updated system is available\n\n'
-                'A new structure will replace the old one if you continue\n\n'
-                'If you have modified files in cfg, lib or graphics\n'
-                'sub-directories, you should chose CANCEL on the\n'
-                'next screen and exit the application to copy those files\n'
-                'in the newly created \'%(dir)s\' sub-directory. Other\n'
-                'un-needed files will be transfered to \'%(dir)s\' automatically.\n'
-                'It is up to you to delete them.\n\n'
-                'Take time to read the README file in \'%(dir)s\'' % {'dir':CUSTOM_DIR})
-            mess_dlg(msg, 'NativeCAM major update')
+#        if os.path.exists(srcdir) and not os.path.islink(srcdir) :
+#            msg = _('\nAn updated system is available\n\n'
+#                'A new structure will replace the old one if you continue\n\n'
+#                'If you have modified files in cfg, lib or graphics\n'
+#                'sub-directories, you should chose CANCEL on the\n'
+#                'next screen and exit the application to copy those files\n'
+#                'in the newly created \'%(dir)s\' sub-directory. Other\n'
+#                'un-needed files will be transfered to \'%(dir)s\' automatically.\n'
+#                'It is up to you to delete them.\n\n'
+#                'Take time to read the README file in \'%(dir)s\'' % {'dir':CUSTOM_DIR})
+#            mess_dlg(msg, 'NativeCAM major update')
 
         # copy system files to user, make dirs if necessary
         mode = copymode.one_at_a_time
@@ -2246,16 +2246,20 @@ class NCam(gtk.VBox):
                     if not os.path.exists(cmp_path) :
                         shutil.copy(frompath, os.path.join(mov_dst, p))
 
-        # move files that are not in SYS_DIR directories
-        # and replace dir with a link
         for s in [LIB_DIR, GRAPHICS_DIR, CFG_DIR] :
             srcdir = os.path.join(NCAM_DIR, s)
             if os.path.isdir(srcdir) :
+                # move files that are not in SYS_DIR directories
                 if not os.path.islink(srcdir) :
                     move_files(s)
                     shutil.rmtree(srcdir)
+
+            tdir = os.path.join(SYS_DIR, s)
+            if os.path.islink(srcdir) and (tdir != srcdir) :
+                os.remove(srcdir)
+            # replace dir with a link
             if not os.path.isdir(srcdir) :
-                os.symlink(os.path.join(SYS_DIR, s), srcdir)
+                os.symlink(tdir, srcdir)
 
     def create_menubar(self):
         def create_mi(_action, imgfile = None):
@@ -4409,7 +4413,7 @@ def verify_ini(fname, ctlog, in_tab) :
             except :
                 pass
 
-#            txt = re.sub(r"%s" % req, '', txt)
+            txt = re.sub(r"%s" % req, '', txt)
 
             if dp == 'axis' :
                 if in_tab :
@@ -4484,7 +4488,7 @@ Options :
    -h | --help                 this text
    (-i | --ini=) inifilename   inifile used
    (-c | --catalog=) catalog   valid catalogs = mill, plasma, lathe
-   -t                          only if you use axis it will be in a tab
+   -t | --tab                  only if you use axis it will be in a tab
 
 To prepare your inifile to use NativeCAM embedded,
    a) Start in a working directory with your LinuxCNC configuration ini file
@@ -4532,7 +4536,7 @@ if __name__ == "__main__":
             usage()
             sys.exit(3)
 
-        in_tab = "-t" in optlist
+        in_tab = ("-t" in optlist) or ("--tab" in optlist)
         verify_ini(os.path.abspath(ini), catalog, in_tab)
 
     window = gtk.Dialog(APP_TITLE, None, gtk.DIALOG_MODAL)

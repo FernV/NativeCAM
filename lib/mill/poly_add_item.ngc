@@ -44,6 +44,14 @@ o<poly_add_item> sub
 		#60 = [#<prev_x> + #2]
 		#61 = [#<prev_y> + #3]
 
+	o<if01> elseif [#1 EQ 10] (X rel, Y abs)
+		#60 = [#<prev_x> + #2]
+		#61 = #3
+
+	o<if01> elseif [#1 EQ 11] (X abs, Y rel)
+		#60 = #2
+		#61 = [#<prev_y> + #3]
+		
 	o<if01> elseif [#1 EQ 3] (polar line relative w/ prev chord/line)
 		o<rotate_xy> CALL [#<prev_x> + #2] [#<prev_y> + #3] [#<prev_x>] [#<prev_y>] [#<prev_ph>] [0] [60] [61]
 
@@ -54,13 +62,21 @@ o<poly_add_item> sub
 			o<rotate_xy> CALL [#<prev_x> + #2] [#<prev_y> + #3] [#<prev_x>] [#<prev_y>] [#<prev_ph>] [0] [60] [61]
 		o14 endif
 
-	o<if01> elseif [[#1 EQ 4] OR [#1 EQ 5]] (arc to coords or polar #9 = radius or chord height,  #10= what is #9, #11 = flipped)
+	o<if01> elseif [[#1 EQ 4] OR [#1 EQ 5] OR [#1 EQ 41] OR [#1 EQ 42]]
+			(arc to coords or polar #9 = radius or chord height,  #10= what is #9, #11 = flipped)
+			()
 		o<if03> if [#1 EQ 4] (relative)
 			#60 = [#<prev_x> + #2]
 			#61 = [#<prev_y> + #3]
-		o<if03> else (absolute)
+		o<if03> elseif [#1 EQ 5] (absolute)
 			#60 = #2
 			#61 = #3
+		o<if03> elseif [#1 EQ 41] (X rel, Y abs)
+			#60 = [#<prev_x> + #2]
+			#61 = #3
+		o<if03> elseif [#1 EQ 42] (X abs, Y rel)
+			#60 = #2
+			#61 = [#<prev_y> + #3]
 		o<if03> endif
 
 		o<line> CALL [#60] [#61] [#<prev_x>] [#<prev_y>]
@@ -86,13 +102,20 @@ o<poly_add_item> sub
 			o<isect_lines> CALL [#<m1_x>] [#<m1_y>] [#<_rotated_x>] [#<_rotated_y>] [#<mid_x>] [#<mid_y>] [#48] [#49] [0] [0] [62] [63]
 		o<check1> endif
 
-	o<if01> elseif [[#1 EQ 6] OR [#1 EQ 7]] (arc ij w/ cx,cy : 6 = relative to start, 7 = absolute)
+	o<if01> elseif [[#1 EQ 6] OR [#1 EQ 7] OR [#1 EQ 61] OR [#1 EQ 62]]
+			(arc ij w/ cx,cy : 6 = relative to start, 7 = absolute, 61 = X off, Y abs  62 = X abs, Y off)
 		o18 if [#1 EQ 6]
 			#62 = [#<prev_x> + #2]
 			#63 = [#<prev_y> + #3]
-		o18 else
+		o18 elseif [#1 EQ 7]
 			#62 = #2
 			#63 = #3
+		o18 elseif [#1 EQ 61]
+			#62 = [#<prev_x> + #2]
+			#63 = #3
+		o18 elseif [#1 EQ 62]
+			#62 = #2
+			#63 = [#<prev_y> + #3]
 		o18 endif
 		
 		o<if06> if [#10 EQ 1]

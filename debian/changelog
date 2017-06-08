@@ -1,3 +1,23 @@
+nativecam (0.1.3) UNRELEASED; urgency=medium
+
+  edited ncam.py to only use as a deb package
+  change README.md for right setup instruction
+  renamed nondeb_setup.py to restore_lcnc.py and
+  edited to ONLY restore lcnc system if needed
+  added preliminary lathe cfg and lib
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Wed, 7 Jun 2017 21:47:00 -0500
+ 
+nativecam (0.1.2) UNRELEASED; urgency=medium
+
+  add TTFont engraving more feed control  minor fix for translation
+  <> comparators replaced with !=
+  improve metric <-> inch conversion
+  improve detection of mill/plasma/lathe
+  add exception detection to autorefresh_call
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Thu, 18 May 2017 18:33:00 -0500
+ 
 nativecam (0.1.1) UNRELEASED; urgency=medium
 
   add TTFont engraving and example

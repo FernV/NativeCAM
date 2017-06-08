@@ -14,5 +14,5 @@ o<add_mill_data> sub
 
 	#[#1] = [#[#1] + 1]
 	
-;(print,##<ptr>  =  G#4  X#2  Y#3  cx= #5  cy= #6)
+;(print,##<ptr>  =  G#4  X#2  Y#3  cx= #5  cy= #6  length= #7)
 o<add_mill_data> endsub

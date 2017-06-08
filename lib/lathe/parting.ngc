@@ -1,0 +1,28 @@
+(author : Fernand Veilleux)
+o<parting> sub
+(CALL [#start_x] [#end_x] [#start_z] [#len] [#count])
+
+	#<start_x> = #1
+	#<end_x>   = #2
+	#<start_z> = #3
+	#<len>     = #4
+	#<count>   = #5
+	#<feed>    = #6
+	
+	F#<_rough_feed>
+	M#<_cooling_mode>
+	
+	#<c> = 0
+	o10 while [#<c> LT #<count>]
+		#<c> = [#<c> + 1]
+		#<z> = [#<start_z> - [#<len> + #5410] * #<c>]
+		G0 Z#<z>
+		G0 X#<start_x>
+		G1 X#<end_x>
+		G0 X[#<start_x> + #<_x_rapid>]
+	o10 endwhile
+	
+	M9 (cooling off)
+	G0 X[#<_wp_dia_od> + #<_x_rapid>]
+	
+o<parting> endsub
