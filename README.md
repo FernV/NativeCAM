@@ -5,20 +5,10 @@ It will be automatically updated after changes are published.
 
 DO NOT USE AS A NONDEB_SETUP ANYMORE
 
-Pre-requisite is python-lxml package installed.
-If not install with 'sudo apt-get install python-lxml'
+If not installed yet, follow instructions at
+	https://forum.linuxcnc.org/40-subroutines-and-ngcgui/32891-use-nativecam-as-a-deb-package-now?limitstart=0#94274
 
--Open a normal user terminal window.
--Copy this command :
-	curl -s https://packagecloud.io/install/repositories/FernV/NativeCAM/script.deb.sh | sudo bash
-	and enter pwd when asked
--Copy this command :
-	sudo apt-get install nativecam
-	and enter pwd when asked
-You are done
-
-
-Type : ncam -h
+Type : 'ncam -h'
 Important readme files are catalogs/customize and catalogs/translating
 
 
@@ -33,7 +23,7 @@ Important readme files are catalogs/customize and catalogs/translating
 	
 2.	Embedded
 --------------------------------------------------------------------------------
-1.	Use with any of the supplied example from LinuxCNC Configuration Selector
+1.	Use with any of the supplied examples from LinuxCNC Configuration Selector
 	
 2.	To use with your own inifile, it must first be edited.
 	From a normal user terminal, change directory to the one that contains your inifile

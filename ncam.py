@@ -2008,12 +2008,13 @@ class NCam(gtk.VBox):
             if val is None :
                 val = ini_instance.find('DISPLAY', 'EMBED_TAB_COMMAND')
 
-            if (val.find('--catalog=mill') > 0) or (val.find('-cmill') > 0) :
-                self.catalog_dir = 'mill'
-            elif (val.find('--catalog=lathe') > 0) or (val.find('-clathe') > 0) :
-                self.catalog_dir = 'lathe'
-            elif (val.find('--catalog=plasma') > 0) or (val.find('-cplasma') > 0) :
-                self.catalog_dir = 'plasma'
+            if val is not None :
+                if (val.find('--catalog=mill') > 0) or (val.find('-cmill') > 0) :
+                    self.catalog_dir = 'mill'
+                elif (val.find('--catalog=lathe') > 0) or (val.find('-clathe') > 0) :
+                    self.catalog_dir = 'lathe'
+                elif (val.find('--catalog=plasma') > 0) or (val.find('-cplasma') > 0) :
+                    self.catalog_dir = 'plasma'
 
             val = ini_instance.find('DISPLAY', 'LATHE')
             if (val is not None) and ((val == '0') or (val == 'TRUE')):
