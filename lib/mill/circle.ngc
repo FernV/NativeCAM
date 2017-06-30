@@ -31,7 +31,13 @@ o<circle> sub
 	#<flat>         =  #4
 	#<rot>          =  #5 (flat angle rotation)
 	
-	o<tool_dia> if [#5410 EQ 0] (no tool loaded, will cut on the line)
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+
+	o<tool_dia> if [#<tool_dia> EQ 0] (no tool loaded, will cut on the line)
 		#<cut_opt>  =   2
 	o<tool_dia> else
 		#<cut_opt>  =  #6 (Inside normal=0:Pocket=1:On the line=2:Outside=3)
@@ -85,18 +91,18 @@ o<circle> sub
 			#<init_radius> = [#<final_rad> - #<fcut>]
 		o<roughing_0> endif
 
-		o<if01> if [[#<cut_opt> EQ 1] AND [[#5410 * 0.98] GE [#<init_radius> - #<flat> / 2]]]
+		o<if01> if [[#<cut_opt> EQ 1] AND [[#<tool_dia> * 0.98] GE [#<init_radius> - #<flat> / 2]]]
 			#<cut_opt> = 0  (not pocket, cut inside normal)
 		o<if01> endif
 
 		o<if_pocket> if [#<cut_opt> EQ 1]
 			(calc additionnal data for pocket)
-			#<loop_mov>     = [#5410 * 1.1]
-			#<start_radius> = [#5410 * 0.8 + #<flat> / 2]
-			#<exp_cycles>   = FUP[[#<init_radius> - #<start_radius>] / [#5410 * #<_stepover_normal>]]
+			#<loop_mov>     = [#<tool_dia> * 1.1]
+			#<start_radius> = [#<tool_dia> * 0.8 + #<flat> / 2]
+			#<exp_cycles>   = FUP[[#<init_radius> - #<start_radius>] / [#<tool_dia> * #<_stepover_normal>]]
 			#<step_over>    = [[#<init_radius> - #<start_radius>] / #<exp_cycles>]
 			
-			#<t> = [#<step_over> / #5410 * 100]
+			#<t> = [#<step_over> / #<tool_dia> * 100]
 			(print,circle pocket stepover = #<t> %)
 
 			(calc data and mill)
@@ -111,7 +117,7 @@ o<circle> sub
 					o<trace> CALL [#<_mill_data_start>] [#<_cut_loop_final_z>] [0]
 				o<wh010p> endwhile
 
-				o<set_feed_rate_and_speed> CALL [#<step_over> / #5410]
+				o<set_feed_rate_and_speed> CALL [#<step_over> / #<tool_dia>]
 				#<exp_cycle> = 1
 				o<expand_loop> while [#<exp_cycle> LE #<exp_cycles>]
 					o<circle_create> CALL [#<_mill_data_start>] [#<start_radius> + #<step_over> * #<exp_cycle>] [#<flat>] [#<dir>]
@@ -144,7 +150,7 @@ o<circle> sub
 		o<circle_create> CALL [#<_mill_data_start>] [#<final_rad>] [#<flat>] [#<fin_dir> MOD 10]
 
 		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1] [#<fcut>] [#<cut_depth>]
-		o<set_feed_rate_and_speed> CALL [#<fcut> / #5410]
+		o<set_feed_rate_and_speed> CALL [#<fcut> / #<tool_dia>]
 
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>] [#<cut_step>]

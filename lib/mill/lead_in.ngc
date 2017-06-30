@@ -15,8 +15,13 @@ o<lead_in> sub
 	#<fcut>              = #6
 	#<cut_depth>         = #7
 
-	#<tr>                = [#5410 * 0.51]
-	#<tr_full>           = [#5410 * 0.55 + #<fcut>]
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+	#<tr>                = [#<tool_dia> * 0.51]
+	#<tr_full>           = [#<tool_dia> * 0.55 + #<fcut>]
 
 	#<_cut_current_x>    = #[#<ptr>] (entry x)
 	#<_cut_current_y>    = #[#<ptr> + 1] (entry y)
@@ -54,7 +59,7 @@ o<lead_in> sub
 		
 	o16 endif
 	
-	o<comp00> if [[#<opt> EQ 40] OR [#5410 EQ 0]] (no compensation)
+	o<comp00> if [[#<opt> EQ 40] OR [#<tool_dia> EQ 0]] (no compensation)
 		G0 X#<_cut_current_x> Y#<_cut_current_y>
 		G0 Z[#<_z_clear> + #<_cut_current_z>]
 		G1 Z#<_cut_current_z> F#<_feed_vertical>
@@ -285,10 +290,18 @@ o<lead_in> sub
 			#<_cut_current_z> = #<cut_depth>
 			G0 Z[#<_z_clear> + #<_cut_current_z>]
 			G1 Z[#<_cut_current_z>] F#<_feed_vertical>
-			G#<opt>
+			o172 if [#<_tool_dynamic_dia> GT 0.0]
+				G[#<opt> + 0.1] D#<_tool_dynamic_dia>
+			o172 else
+				G#<opt>
+			o172 endif
 			G#<entry_dir> X#<_cut_current_x> Y#<_cut_current_y> I#<i> J#<j>
 		o102 else
-			G#<opt>
+			o182 if [#<_tool_dynamic_dia> GT 0.0]
+				G[#<opt> + 0.1] D#<_tool_dynamic_dia>
+			o182 else
+				G#<opt>
+			o182 endif
 			G#<entry_dir> X#<_cut_current_x> Y#<_cut_current_y> I#<i> J#<j>
 			G0 Z[#<_z_clear> + #<_cut_current_z>]
 			G1 Z#<_cut_current_z> F#<_feed_vertical>

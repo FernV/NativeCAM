@@ -250,6 +250,8 @@ class PrefEditor():
         self.entryInit.set_text(self.read_str('d', 'ngc', 'init_str', pre_amble))
         self.entryPost = builder.get_object("entryPost")
         self.entryPost.set_text(self.read_str('d', 'ngc', 'post_amble', post_amble))
+        self.use_pct_signs_chk = builder.get_object("use_pct_signs_chk")
+        self.use_pct_signs_chk.set_active(self.read_boolean('d', 'ngc', 'use_pct_signs', False))
 
         self.combo_pck = builder.get_object("combo_pck")
         self.combo_pck.set_active(self.read_int('d', 'pocket', 'mode', 0))
@@ -432,6 +434,7 @@ class PrefEditor():
             self.config_def.add_section('ngc')
         self.config_def.set('ngc', 'init_str', self.entryInit.get_text())
         self.config_def.set('ngc', 'post_amble', self.entryPost.get_text())
+        self.config_def.set('ngc', 'use_pct_signs', self.use_pct_signs_chk.get_active())
         if self.catalog == 'mill' :
             self.config_def.set('ngc', 'off_rot_coord_system', self.comboCoords.get_active())
         if self.catalog in ['mill', 'lathe'] :
@@ -496,7 +499,7 @@ class PrefEditor():
         self.saved = True
 
 def edit_preferences(ncam = None, default_metric = True, catalog = 'mill', path = '', \
-        pre_amble = '', post_amble = '', sysdir = ''):
+        pre_amble = '', post_amble = 'M2', sysdir = ''):
     ed = PrefEditor(ncam, default_metric, catalog, path, pre_amble.strip(), \
         post_amble.strip(), sysdir)
     return ed.saved

@@ -51,8 +51,14 @@ o<rectangle_create> sub
 	o<if012> elseif [#<corner_style> EQ 1] (Rounded)
 		#<corner_dir>        = #<dir>
 		
+		o2010 if [#<_tool_dynamic_dia> GT 0.0]
+			#<tool_dia> = #<_tool_dynamic_dia>
+		o2010 else
+			#<tool_dia> = #5410
+		o2010 endif
+
 		o<if034> if [#9]
-			#<corner_radius> = [#<corner_radius> - #5410 / 2]
+			#<corner_radius> = [#<corner_radius> - #<tool_dia> / 2]
 		o<if034> endif
 		
 		o<if031> if [#<corner_radius> LE 0]

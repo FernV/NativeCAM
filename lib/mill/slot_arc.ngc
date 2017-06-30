@@ -25,7 +25,13 @@ o<slot_arc> sub
 	o<get_max> CALL [42] [2] [0.001] [#6] 
 	#<extend_angle> = #42
 	
-	o<tool_dia> if [#5410 EQ 0] (no tool loaded, will cut on the line)
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+
+	o<tool_dia> if [#<tool_dia> EQ 0] (no tool loaded, will cut on the line)
 		#<cut_opt> =   2
 	o<tool_dia> else
 		#<cut_opt> =  #7 (Inside normal=0:Pocket=1:On the line=2:Outside=3)
@@ -78,18 +84,18 @@ o<slot_arc> sub
 			#<rough_width> = [#<final_w> - #<fcut>]
 		o<roughing_0> endif
 		
-		o<if011> if [[#<cut_opt> EQ 1] AND [[#5410 * 1.95] GE #<rough_width>]]
+		o<if011> if [[#<cut_opt> EQ 1] AND [[#<tool_dia> * 1.95] GE #<rough_width>]]
 			#<cut_opt> = 0  (cut inside normal)
 		o<if011> endif
 
 		o<if_pocket> if [#<cut_opt> EQ 1]
 			(create pocket here)
-			#<min_move>   = [#5410 * 1.1]
-			#<init_w>     = [#5410 * 1.6]
-			#<exp_cycles> = FUP[[#<rough_width> - #<init_w>] / [#5410 * #<_stepover_normal>] / 2]
+			#<min_move>   = [#<tool_dia> * 1.1]
+			#<init_w>     = [#<tool_dia> * 1.6]
+			#<exp_cycles> = FUP[[#<rough_width> - #<init_w>] / [#<tool_dia> * #<_stepover_normal>] / 2]
 			#<step_over>  = [[#<rough_width> - #<init_w>] / #<exp_cycles>]
 			
-			#<t> = [#<step_over> / #5410 * 50]
+			#<t> = [#<step_over> / #<tool_dia> * 50]
 			(print,radial slot pocket stepover = #<t> %)
 
 			#<_cut_current_z> = #<cut_start>
@@ -108,7 +114,7 @@ o<slot_arc> sub
 				o<slot_arc_create> CALL [#<_mill_data_start>] [#<radius>] [#<init_w>] [#<extend_angle>] [#<dir>] [#<end_style>]
 				o<trace> CALL [#<_mill_data_start>] [#<_cut_loop_final_z>] [0]
 				
-				o<set_feed_rate_and_speed> CALL [#<step_over> / #5410 / 2]
+				o<set_feed_rate_and_speed> CALL [#<step_over> / #<tool_dia> / 2]
 				#<exp_cycle> = 1
 				o<expand_loop> while [#<exp_cycle> LE #<exp_cycles>]
 					o<slot_arc_create> CALL [#<_mill_data_start>] [#<radius>] [#<init_w> + #<exp_cycle> * #<step_over>] [#<extend_angle>] [#<dir>] [#<end_style>]
@@ -141,7 +147,7 @@ o<slot_arc> sub
 		o<slot_arc_create> CALL [#<_mill_data_start>] [#<radius>] [#<final_w>] [#<extend_angle>] [#<fin_dir>] [#<end_style>]
 
 		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1] [#<fcut>] [#<cut_depth>]
-		o<set_feed_rate_and_speed> CALL [#<fcut> / #5410]
+		o<set_feed_rate_and_speed> CALL [#<fcut> / #<tool_dia>]
 		
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>] [#<cut_step>]

@@ -2,7 +2,13 @@
 o<surf_finish> sub (CALL [left] [right] [front] [rear]  [dir] [mode] [start] [depth] [tool_clearance] [tool_engagement])
 
 (exit if no tool selected)
-	o<not_tool_def> if [[#5410 * #10] EQ 0]
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+
+	o<not_tool_def> if [[#<tool_dia> * #10] EQ 0]
 		(print,Facing: tool diameter not defined)
 		(debug,Facing: tool diameter not defined)
 		(MSG,Facing: tool diameter not defined)
@@ -20,10 +26,10 @@ o<surf_finish> sub (CALL [left] [right] [front] [rear]  [dir] [mode] [start] [de
 	#<cut_start> = #7
 	#<cut_depth> = #8
 	#<_cut_loop_final_z> = #<cut_depth>
-	#<tool_clear> = [#5410 / 2 + #9]
+	#<tool_clear> = [#<tool_dia> / 2 + #9]
 (End init params)
 
-	#<tool_engagement> = [#5410 * #10]
+	#<tool_engagement> = [#<tool_dia> * #10]
 
 	o<axis> if [#<axis> EQ 0] (x axis direction)
 		#<cycle_count> = FUP[[#<rear> - #<front>] / #<tool_engagement>]

@@ -27,7 +27,13 @@ o<ellipse> sub
 	#<off_center_y> =  #7
 	#<segments>     =  #8
 	
-	o<tool_dia> if [#5410 EQ 0] (no tool loaded, will cut on the line)
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+
+	o<tool_dia> if [#<tool_dia> EQ 0] (no tool loaded, will cut on the line)
 		#<cut_opt>  =  2
 	o<tool_dia> else
 		#<cut_opt>  =  #9 (Inside normal=0:Pocket=1:On the line=2:Outside=3)
@@ -74,9 +80,9 @@ o<ellipse> sub
 	
 	(calculate data for cutting w/o compensation)
 	o<roughing_0> if [#<cut_opt> EQ 3] (outside)
-		#<xr1>   = [#<xr> + #5410 / 2]
+		#<xr1>   = [#<xr> + #<tool_dia> / 2]
 		#<x_rad> = [#<xr1> + #<fcut>]
-		#<yr1>   = [#<yr> + #5410 / 2]
+		#<yr1>   = [#<yr> + #<tool_dia> / 2]
 		#<y_rad> = [#<yr1> + #<fcut>]
 	o<roughing_0> elseif [#<cut_opt> EQ 2] (on the line)
 		#<xr1>   = #<xr>
@@ -84,29 +90,29 @@ o<ellipse> sub
 		#<yr1>   = #<yr>
 		#<y_rad> = #<yr1>
 	o<roughing_0> else (inside or pocket)
-		#<xr1>   = [#<xr> - #5410 / 2]
+		#<xr1>   = [#<xr> - #<tool_dia> / 2]
 		#<x_rad> = [#<xr1> - #<fcut>]
-		#<yr1>   = [#<yr> - #5410 / 2]
+		#<yr1>   = [#<yr> - #<tool_dia> / 2]
 		#<y_rad> = [#<yr1> - #<fcut>]
 	o<roughing_0> endif
 
 (roughing cut)
 	o<if_milling> if [#<_tool_usage> LE 1]
 	
-		o<if011> if [[#<cut_opt> EQ 1] AND [[[#5410 * 0.98] GE #<x_rad>] OR [[#5410 * 0.98] GE #<y_rad>]]]
+		o<if011> if [[#<cut_opt> EQ 1] AND [[[#<tool_dia> * 0.98] GE #<x_rad>] OR [[#<tool_dia> * 0.98] GE #<y_rad>]]]
 			#<cut_opt> = 0  (no pocket, cut inside normal)
 		o<if011> endif
 
 		o<if_pocket> if [#<cut_opt> EQ 1] (pocket)
 			(calc additionnal data for pocket)
-			#<loop_mov> = [#5410 * 0.1]
-			#<start_radius> = [#5410 * 0.4] (start at 80% of tool diameter for cross over)
+			#<loop_mov> = [#<tool_dia> * 0.1]
+			#<start_radius> = [#<tool_dia> * 0.4] (start at 80% of tool diameter for cross over)
 			o<get_max> CALL [38] [2] [#<x_rad>] [#<y_rad>]
 
-			#<exp_cycles> = FUP[[#38 - #<start_radius>] / [#5410 * #<_stepover_normal>]]
+			#<exp_cycles> = FUP[[#38 - #<start_radius>] / [#<tool_dia> * #<_stepover_normal>]]
 			#<step_over>  = [[#38 - #<start_radius>] / #<exp_cycles>]
 			
-			#<t> = [#<step_over> / #5410 * 100]
+			#<t> = [#<step_over> / #<tool_dia> * 100]
 			(print,ellipse pocket stepover = #<t> %)
 
 			(calc data and mill)
@@ -121,7 +127,7 @@ o<ellipse> sub
 					o<trace> CALL [#<_mill_data_start>] [#<_cut_loop_final_z>] [0]
 				o<wh010p> endwhile
 				
-				o<set_feed_rate_and_speed> CALL [#<step_over> / #5410]
+				o<set_feed_rate_and_speed> CALL [#<step_over> / #<tool_dia>]
 				#<exp_cycle> = 1
 				o<loop01> while [#<exp_cycle> LE #<exp_cycles>]
 					#<x_r> = [#<start_radius> + [#<x_rad> - #<start_radius>] * #<exp_cycle> / #<exp_cycles>]
@@ -156,7 +162,7 @@ o<ellipse> sub
 		o<ellipse_create> CALL [#<_mill_data_start>] [#<xr1>] [#<yr1>] [#<fin_dir>] [120]
 		
 		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [2] [#<cut_start>] [-1] [#<fcut>] [#<cut_depth>]
-		o<set_feed_rate_and_speed> CALL [#<fcut> / #5410]
+		o<set_feed_rate_and_speed> CALL [#<fcut> / #<tool_dia>]
 		
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>] [#<cut_step>]

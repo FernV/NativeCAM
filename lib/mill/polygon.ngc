@@ -23,7 +23,13 @@ o<polygon> sub
 	#<radius>       =  #4
 	#<start_angle>  =  #5
 	
-	o<tool_dia> if [#5410 EQ 0] (no tool loaded, will cut on the line)
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+
+	o<tool_dia> if [#<tool_dia> EQ 0] (no tool loaded, will cut on the line)
 		#<cut_opt>  =  2
 	o<tool_dia> else
 		#<cut_opt>  =  #6 (Inside normal=0:Pocket=1:On the line=2:Outside=3)
@@ -76,18 +82,18 @@ o<polygon> sub
 			#<rs_radius> = [#<s_radius> - #41]
 		o<roughing_0> endif
 
-		o<if011> if [[#<cut_opt> EQ 1] AND [[#5410 * 0.98] GE #<rs_radius>]]
+		o<if011> if [[#<cut_opt> EQ 1] AND [[#<tool_dia> * 0.98] GE #<rs_radius>]]
 			#<cut_opt>  = 0  (no pocket, cut inside normal)
 		o<if011> endif
 
 		o<if_pocket> if [#<cut_opt> EQ 1] (pocket)
 			(calc data for pocket)
-			#<loop_mov>   = [#5410 * 1.1]
-			#<rsp_radius> = [#5410 * 0.8]
-			#<exp_cycles> = FUP[[#<rs_radius> - #<rsp_radius>] / [#5410 * #<_stepover_normal>]]
+			#<loop_mov>   = [#<tool_dia> * 1.1]
+			#<rsp_radius> = [#<tool_dia> * 0.8]
+			#<exp_cycles> = FUP[[#<rs_radius> - #<rsp_radius>] / [#<tool_dia> * #<_stepover_normal>]]
 			#<step_over>  = [[#<rs_radius> - #<rsp_radius>] / #<exp_cycles>]
 			
-			#<t> = [#<step_over> / #5410 * 100]
+			#<t> = [#<step_over> / #<tool_dia> * 100]
 			(print,polygon pocket stepover = #<t> %)
 
 			#<_cut_current_z> = #<cut_start>
@@ -101,7 +107,7 @@ o<polygon> sub
 					o<trace> CALL [#<_mill_data_start>] [#<_cut_loop_final_z>] [0]
 				o<wh010p> endwhile
 
-				o<set_feed_rate_and_speed> CALL [#<step_over> / #5410]
+				o<set_feed_rate_and_speed> CALL [#<step_over> / #<tool_dia>]
 				#<exp_cycle> = 1
 				o<expand_loop> while [#<exp_cycle> LE #<exp_cycles>]
 					#<tmp>   = [#<rsp_radius> + #<exp_cycle> * #<step_over>]
@@ -135,7 +141,7 @@ o<polygon> sub
 		o<polygon_create> CALL [#<_mill_data_start>] [#<radius>] [#<edges>] [#<fin_dir> MOD 10]
 
 		o<lead_in> CALL [#<_mill_data_start>] [#<fin_dir>] [#<cut_opt>] [#<cut_start>] [-1] [#<fcut>] [#<cut_depth>]
-		o<set_feed_rate_and_speed> CALL [#<fcut> / #5410]
+		o<set_feed_rate_and_speed> CALL [#<fcut> / #<tool_dia>]
 
 		o<wh01> while [#<_depth_reached> NE 0]
 			o<set_next_cut_level> CALL [#<cut_depth>] [#<cut_step>]

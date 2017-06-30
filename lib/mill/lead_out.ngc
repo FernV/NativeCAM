@@ -6,7 +6,13 @@ o<lead_out> sub
 
 	#<debug> = #6
 	
-	o15 if [[#5410 EQ 0] AND [#<debug> NE 0]]
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+
+	o15 if [[#<tool_dia> EQ 0] AND [#<debug> NE 0]]
 		(print,)
 		(print,lead_out subroutine not executed : no tool selected or diameter not defined in tool table)
 		o<lead_out> return
@@ -63,12 +69,12 @@ o<lead_out> sub
 	#<exit_dir>  = 0
 
 	o109 if [#<_ccomp> GT 400]
-		#<lead_out_radius> = [#5410 * 0.85]
+		#<lead_out_radius> = [#<tool_dia> * 0.85]
 	o109 else
-		#<lead_out_radius> = [#5410 * 0.45]
+		#<lead_out_radius> = [#<tool_dia> * 0.45]
 	o109 endif
 	
-	#<tool_radius> = [#5410 * 0.51]
+	#<tool_radius> = [#<tool_dia> * 0.51]
 
 	o106 if [#<opt> LE 1] (inside or pocket)
 		o107 if [#<dir> EQ 2]

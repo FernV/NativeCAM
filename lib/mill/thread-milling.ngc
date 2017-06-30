@@ -46,7 +46,12 @@ o<thread-milling> sub
 
     #<helix_debug>  = #14 (not used)
 
-    #<tool_dia>     = #5410
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+
     #<tool_rad>     = [#<tool_dia> / 2]
 
     o<tool_chk> if [[#<option> EQ 2] AND [#<tool_dia> GE #<min_diam>]]

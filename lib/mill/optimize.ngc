@@ -3,7 +3,13 @@ o<optimize> sub
 (re-view all the control points of a figure and insert new points as needed)
 (CALL src[1] compensation,option[2] dir[3] stepover[4]) ; stepover is in unit not percent
 
-	o1 if [#5410 EQ 0]
+	o2010 if [#<_tool_dynamic_dia> GT 0.0]
+		#<tool_dia> = #<_tool_dynamic_dia>
+	o2010 else
+		#<tool_dia> = #5410
+	o2010 endif
+
+	o1 if [#<tool_dia> EQ 0]
 ;		(print,)
 ;		(print,can not optimize : no tool selected or tool diameter not defined)
 		o<optimize> return
@@ -33,12 +39,12 @@ o<optimize> sub
 	#[#<dest>]   = 0
 	#<counter>   = 0 (loop counter)
 
-	#<tool_radius>   = [#5410 / 2]
-	#<ramp_down_len> = [#5410 / #<_ramp_down_ratio> * #<_depth_step>]
+	#<tool_radius>   = [#<tool_dia> / 2]
+	#<ramp_down_len> = [#<tool_dia> / #<_ramp_down_ratio> * #<_depth_step>]
 	
-	o<get_min> CALL [42] [2] [#4] [#5410]
+	o<get_min> CALL [42] [2] [#4] [#<tool_dia>]
 	#<step_ovr>  = #4; [#<_depth_step> / #<_ramp_down_ratio>]
-	#<so_factor> = [#42 / #5410]
+	#<so_factor> = [#42 / #<tool_dia>]
 	
 ;	(print,)
 ;	(print,src count = #<src_count>)

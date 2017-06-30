@@ -1,3 +1,14 @@
+nativecam (0.1.4) UNRELEASED; urgency=medium
+
+  add option for M2 or %
+  add code for backward compatibility
+  add circle with key/way and images
+  add option for dynamic tool diameter compensation
+  update examples for new options
+  edited ngc files for new options
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Thu, 29 Jun 2017 22:11:00 -0500
+
 nativecam (0.1.3) UNRELEASED; urgency=medium
 
   edited ncam.py to only use as a deb package

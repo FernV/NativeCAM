@@ -41,6 +41,7 @@
             </menu>
             <menuitem action='thread_milling' name=_('Thread Milling')_ tool_tip=_('True thread mill needed')_ icon="threading-v.png" src="mill/thread-milling.cfg"/>
             <menuitem action='ttengraving' name=_('TrueType Engraving')_ tool_tip=_('TrueType Engraving')_ icon="truetype.png" src="mill/ttt.cfg"/>
+			<menuitem action='circle-k' name=_('Circle w/ key')_ tool_tip=_('Create a circle for a key/keyway')_ icon="circle-k.png" src="mill/circle-k.cfg"/>
         </menu>
         <menu action='drilling' name=_('Drilling')_ icon="drills.png">
             <menuitem action='drill_single' name=_('Single Hole')_ tool_tip=_('Drill a single hole')_ icon="drill-single.png" src="mill/drill-single.cfg"/>
