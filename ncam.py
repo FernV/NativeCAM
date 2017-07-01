@@ -37,7 +37,6 @@ import platform
 import pref_edit
 import Tkinter
 
-
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
 locale.setlocale(locale.LC_NUMERIC, '')
@@ -86,7 +85,6 @@ It is recommended you use the deb package
 
 VALID_CATALOGS = ['mill', 'plasma', 'lathe']
 DEFAULT_CATALOG = "mill"
-DEFAULT_METRIC = False
 
 # directories
 CFG_DIR = 'cfg'
@@ -1658,7 +1656,7 @@ class Preferences(object):
 
     def __init__(self):
         global default_metric
-        default_metric = DEFAULT_METRIC
+        default_metric = None
         self.pref_file = None
         self.cfg_file = None
         self.ngc_init_str = None
@@ -1669,7 +1667,7 @@ class Preferences(object):
         global default_digits, default_metric, add_menu_icon_size, \
             add_dlg_icon_size, quick_access_icon_size, menu_icon_size, \
             treeview_icon_size, vkb_width, vkb_height, vkb_cancel_on_out, \
-            toolbar_icon_size, gmoccapy_time_out, NCAM_DIR
+            toolbar_icon_size, gmoccapy_time_out, NCAM_DIR, no_ini
 
         def read_float(cf, section, key, default):
             try :
@@ -1745,6 +1743,10 @@ class Preferences(object):
         self.timeout_value = read_int(config, 'general', 'time_out', 0.300) * 1000
         self.autosave = read_boolean(config, 'general', 'autosave', False)
         default_digits = str(read_int(config, 'general', 'digits', 3))
+
+        if no_ini :
+            default_metric = read_int(config, 'general', 'default_metric', 1) == 1
+
         self.ngc_show_final_cut = read_sbool(config, 'general', 'show_final_cut', True)
         self.ngc_show_bottom_cut = read_sbool(config, 'general', 'show_bottom_cut', True)
         self.ngc_init_str = read_str(config, 'ngc', 'init_str', self.ngc_init_str)
@@ -1917,7 +1919,7 @@ class NCam(gtk.VBox):
     __gproperties = __gproperties__
 
     def __init__(self, *a, **kw):
-        global NCAM_DIR, default_metric, NGC_DIR, SYS_DIR
+        global NCAM_DIR, default_metric, NGC_DIR, SYS_DIR, no_ini
 
         arg_start = (sys.argv[0:].index('-U') + 1) if "-U" in sys.argv[0:] else 1
         opt, optl = 'U:x:c:i:t', ["catalog=", "ini="]
@@ -1990,6 +1992,8 @@ class NCam(gtk.VBox):
             ini = optlist["-i"]
         elif "--ini" in optlist :
             ini = optlist["--ini"]
+
+        no_ini = ini is None
 
         if (ini is None) :
             # standalone with no --ini:
@@ -2269,6 +2273,14 @@ class NCam(gtk.VBox):
             # replace dir with a link
             if not os.path.isdir(srcdir) :
                 os.symlink(tdir, srcdir)
+
+        # move current work and default template
+        srcdir = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir)
+        for s in [CURRENT_WORK, DEFAULT_TEMPLATE] :
+            src_f = os.path.join(srcdir, s)
+            if os.path.isfile(src_f) :
+                shutil.copy(src_f, os.path.join(srcdir, PROJECTS_DIR, s))
+                os.remove(src_f)
 
     def create_menubar(self):
         def create_mi(_action, imgfile = None):
@@ -2711,7 +2723,7 @@ class NCam(gtk.VBox):
             self.actionDeleteUser.set_sensitive(self.selected_feature.get_type() in USER_SUBROUTINES)
 
     def action_saveCurrent(self, *arg):
-        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, CURRENT_WORK)
+        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR, CURRENT_WORK)
         if self.treestore.get_iter_root() is not None :
             xml = self.treestore_to_xml()
             etree.ElementTree(xml).write(fname, pretty_print = True)
@@ -2812,7 +2824,7 @@ class NCam(gtk.VBox):
                 if not tv.row_expanded(tree_path) :
                     tv.expand_row(tree_path, True)
 
-        self.set_actions_state()
+        self.set_actions_sensitives()
 
     def get_toolbar_actions(self):
         global TB_CATALOG
@@ -3165,7 +3177,7 @@ class NCam(gtk.VBox):
         if tree_path is not None :
             self.treeview.expand_to_path(tree_path + (0, 0))
         self.can_delete_duplicate = (self.iter_selected_type == tv_select.feature)
-        self.set_actions_state()
+        self.set_actions_sensitives()
 
 
     def action_appendItm(self, *arg) :
@@ -3547,10 +3559,10 @@ class NCam(gtk.VBox):
             itr = self.treestore.iter_next(itr)
         if self.pref.use_pct :
             return self.pref.default + gcode_def + \
-            _("(end sub definitions)\n\n") + gcode + self.pref.ngc_post_amble + '%\n'
+            _("(end sub definitions)\n\n") + gcode + self.pref.ngc_post_amble + '\n%\n'
         else :
             return self.pref.default + gcode_def + \
-            _("(end sub definitions)\n\n") + gcode + self.pref.ngc_post_amble + 'M2\n'
+            _("(end sub definitions)\n\n") + gcode + self.pref.ngc_post_amble + '\nM2\n'
 
     def action_save_ngc(self, *arg) :
         filechooserdialog = gtk.FileChooserDialog(_("Save as ngc..."), None,
@@ -3933,13 +3945,13 @@ class NCam(gtk.VBox):
     def action_save_template(self, *arg):
         xml = self.treestore_to_xml()
         etree.ElementTree(xml).write(os.path.join(NCAM_DIR, CATALOGS_DIR, \
-                    self.catalog_dir, DEFAULT_TEMPLATE), pretty_print = True)
+                    self.catalog_dir, PROJECTS_DIR, DEFAULT_TEMPLATE), pretty_print = True)
 
     def load_currentWork(self):
         self.treestore.clear()
         self.clear_undo()
         fn = search_path(search_warning.none, CURRENT_WORK, \
-                         CATALOGS_DIR, self.catalog_dir)
+                         CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR)
         if fn is not None :
             xml = etree.parse(fn)
             self.treestore_from_xml(xml.getroot())
@@ -3958,7 +3970,7 @@ class NCam(gtk.VBox):
         self.treestore.clear()
         self.clear_undo()
         fn = search_path(search_warning.none, DEFAULT_TEMPLATE, \
-                         CATALOGS_DIR, self.catalog_dir)
+                         CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR)
         if fn is None :
             print(_('No default template saved'))
         else :
@@ -4355,7 +4367,7 @@ class NCam(gtk.VBox):
         finally :
             filechooserdialog.destroy()
 
-    def set_actions_state(self):
+    def set_actions_sensitives(self):
         self.actionCollapse.set_sensitive(self.selected_feature is not None)
 
         self.actionSave.set_sensitive(self.selected_feature is not None)

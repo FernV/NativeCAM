@@ -238,6 +238,9 @@ class PrefEditor():
         self.digits_combo.set_active(self.read_int('d', 'general', 'digits', 3) - 1)
         self.adj_spindledelay = builder.get_object("adj_spindledelay")
 
+        self.units_combo = builder.get_object("units_combo")
+        self.units_combo.set_active(self.read_int('d', 'general', 'default_metric', 0))
+
         self.adj_spindledelay.set_value(self.read_float('d', 'ngc', 'spindle_acc_time', 0.0))
 
         self.adj_gmoccapy = builder.get_object("adj_gmoccapy")
@@ -424,6 +427,7 @@ class PrefEditor():
             self.config_def.add_section('general')
         self.config_def.set('general', 'time_out', self.adj_timeout_value.get_value())
         self.config_def.set('general', 'digits', int(self.digits_combo.get_active()) + 1)
+        self.config_def.set('general', 'default_metric', int(self.units_combo.get_active()))
         if self.catalog in ['mill', 'plasma'] :
             self.config_def.set('general', 'show_final_cut', self.finalcut_chk.get_active())
             self.config_def.set('general', 'show_bottom_cut', self.finalbottom_chk.get_active())
