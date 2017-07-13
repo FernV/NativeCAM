@@ -1,3 +1,16 @@
+nativecam (0.1.5) UNRELEASED; urgency=medium
+
+  add option for stand alone default units when no inifile
+  move current_work and default_template files
+  add new line after postamble
+  add polyline mirror example
+  removed change-units.cfg and all *<_units*>
+  add button to convert in vkb
+  new gcode.cfg and datatype
+  updated examples
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Wed, 12 Jul 2017 21:11:00 -0500
+
 nativecam (0.1.4) UNRELEASED; urgency=medium
 
   add option for M2 or %

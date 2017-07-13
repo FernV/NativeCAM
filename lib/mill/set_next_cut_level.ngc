@@ -9,6 +9,7 @@ o<set_next_cut_level> sub
 		o<plunge> if [#<_penetration_mode>] (plunge)
 			G1 Z#<_cut_loop_final_z> F#<_feed_vertical>
 			#<_cut_current_z> = #<_cut_loop_final_z>
+			F#<_selected_feed>
 		o<plunge> endif
 	o<lvl_1> endif
 	

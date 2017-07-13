@@ -77,9 +77,13 @@ o<circle> sub
 	G10 L2 P#5220 X#<_rotated_x> Y#<_rotated_y> Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
 
 	o<set_spindle_rpm> CALL [#<_rpm_normal>]
-	
-	#<cut_step> = [[#<cut_depth> - #<cut_start>] / FUP[[#<cut_depth> - #<cut_start>] / #<_depth_step>]]
 
+	o1001 if [#<cut_depth> EQ #<cut_start>]
+		#<cut_step> = 0
+	o1001 else
+		#<cut_step> = [[#<cut_depth> - #<cut_start>] / FUP[[#<cut_depth> - #<cut_start>] / #<_depth_step>]]
+	o1001 endif
+	
 (roughing cut)
 	o<if_roughing> if [#<_tool_usage> LE 1]
 

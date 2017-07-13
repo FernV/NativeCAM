@@ -45,7 +45,6 @@
 			<menuitem action='gcode' name=_('Custom G Code')_ tool_tip=_('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
 			<menuitem action='gcode_file' name=_('Insert a G Code File')_ tool_tip=_('Include a custom gcode file')_ icon="file-gcode.png" src="i_gcode.cfg"/>
 			<menuitem action='comment' name=_('Comment')_ tool_tip=_('Add comments')_ icon="comment.png" src="comment.cfg"/>
-			<menuitem action='chng_units' name=_('Change Units')_ tool_tip=_('Temporarily change units')_ icon="mm2in.png" src="change-units.cfg"/>
 		</menu>
 	</menu>
 

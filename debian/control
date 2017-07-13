@@ -8,8 +8,8 @@ Standards-Version: 3.9.6
 Package: nativecam
 #Note: omitting Depends: for linuxcnc|linuxcnc-uspace
 #      allows install for RIP-only systems
-Depends: python (>=2.7), python-lxml, truetype-tracer, ${misc:Depends}
-Recommends: linuxcnc | linuxcnc-uspace
+Depends: python (>=2.7), python-lxml, ${misc:Depends}
+Recommends: linuxcnc | linuxcnc-uspace, truetype-tracer
 Architecture: all
 Description: Conversational programming for LinuxCNC
  Requires LinuxCNC with support for auxiliary examples

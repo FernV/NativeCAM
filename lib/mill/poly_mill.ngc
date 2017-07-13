@@ -39,7 +39,11 @@ o<poly_mill> sub
 	(apply to new offsets)
 	G10 L2 P#5220 X[#<offset_x> + #<x>] Y[#<offset_y> + #<y>] Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
 	
-	#<cut_step> = [[#<cut_depth> - #<cut_start>] / FUP[[#<cut_depth> - #<cut_start>] / #<_depth_step>]]
+	o1001 if [#<cut_depth> EQ #<cut_start>]
+		#<cut_step> = 0
+	o1001 else
+		#<cut_step> = [[#<cut_depth> - #<cut_start>] / FUP[[#<cut_depth> - #<cut_start>] / #<_depth_step>]]
+	o1001 endif
 	
 	o<set_feed_rate_and_speed> CALL [#<tool_eng>]
 	o<lead_in> CALL [#<pds>] [0] [#<comp>] [#<cut_start>] [-1]

@@ -109,7 +109,7 @@ GENERATED_FILE = "ncam.ngc"
 
 DEFAULT_EDITOR = 'gedit'
 
-SUPPORTED_DATA_TYPES = ['sub-header', 'header', 'bool', 'boolean', 'int',
+SUPPORTED_DATA_TYPES = ['sub-header', 'header', 'bool', 'boolean', 'int', 'gc-lines',
                         'tool', 'gcode', 'text', 'list', 'float', 'string', 'engrave',
                         'combo', 'combo-user', 'items', 'filename']
 NUMBER_TYPES = ['float', 'int']
@@ -590,6 +590,11 @@ class CellRendererMx(gtk.CellRendererText):
         self.inputKey = ''
         self.tool_list = []
         self.not_zero = '0'
+        self.convertible_units = False
+        self.convert_units = False
+
+    def set_convertible_units(self, value):
+        self.convertible_units = value
 
     def set_tooltip(self, value):
         self.tooltip = value
@@ -705,12 +710,23 @@ class CellRendererMx(gtk.CellRendererText):
         btn.connect("clicked", self.vkb_cancel)
         tbl.attach(btn, 3, 4, 2, 3)
 
+        if self.convertible_units :
+            btn = gtk.Button()
+            img = gtk.Image()
+            img.set_from_pixbuf(get_pixbuf('mm2in.png', treeview_icon_size))
+            btn.set_image(img)
+            btn.connect("clicked", self.vkb_convert_ok)
+            tbl.attach(btn, 3, 4, 3, 4)
+
         btn = gtk.Button()
         img = gtk.Image()
         img.set_from_stock('gtk-apply', menu_icon_size)
         btn.set_image(img)
         btn.connect("clicked", self.vkb_ok)
-        tbl.attach(btn, 3, 4, 3, 5)
+        if self.convertible_units :
+            tbl.attach(btn, 3, 4, 4, 5)
+        else :
+            tbl.attach(btn, 3, 4, 3, 5)
 
         (tree_x, tree_y) = self.tv.get_bin_window().get_origin()
         (tree_w, tree_h) = self.tv.window.get_geometry()[2:4]
@@ -718,9 +734,11 @@ class CellRendererMx(gtk.CellRendererText):
         self.vkb.set_size_request(vkb_width, vkb_height)
         self.vkb.resize(vkb_width, vkb_height)
 
-        x = tree_x + tree_w - vkb_width
+        x = tree_w - vkb_width
+        if x > cell_area.x :
+            x = cell_area.x
         y = tree_y + cell_area.y + cell_area.height
-        self.vkb.move(x + 2, y)
+        self.vkb.move(tree_x + x + 2, y)
 
         self.vkb.set_keep_above(True)
 
@@ -744,7 +762,12 @@ class CellRendererMx(gtk.CellRendererText):
         self.vkb.show_all()
         btn.grab_focus()
 
+    def vkb_convert_ok(self, btn):
+        self.convert_units = True
+        self.vkb.response(gtk.RESPONSE_OK)
+
     def vkb_ok(self, btn):
+        self.convert_units = False
         self.vkb.response(gtk.RESPONSE_OK)
 
     def vkb_cancel(self, btn):
@@ -865,6 +888,11 @@ class CellRendererMx(gtk.CellRendererText):
 
                 else :
                     val = get_float(str_val)
+                    if self.convert_units :
+                        if default_metric :
+                            val = val * 25.4
+                        else :
+                            val = val / 25.4
 
                     if val > self.max_value :
                         str_val = str(self.max_value)
@@ -877,6 +905,7 @@ class CellRendererMx(gtk.CellRendererText):
                         mess_dlg(_("Value can not be '0' for\n\n%(tooltip)s") % \
                              {'tooltip':self.tooltip})
                     else :
+                        str_val = str(val)
                         break
 
             else :
@@ -1590,8 +1619,16 @@ class Feature(object):
                     for line in note_lines :
                         lines = lines + '( ' + line + ' )\n'
                     s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
-                       (re.escape(p.attr["call"])), r"%s\1" %
-                       lines, s)
+                        (re.escape(p.attr["call"])), r"%s\1" %
+                        lines, s)
+                elif p.attr['type'] == 'gc-lines' :
+                    note_lines = p.get_value().split('\n')
+                    lines = '\n'
+                    for line in note_lines :
+                        lines = lines + '\t' + line + '\n'
+                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
+                        (re.escape(p.attr["call"])), r"%s\1" %
+                        lines, s)
 
                 else :
                     s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
@@ -1835,11 +1872,6 @@ class Preferences(object):
         else :
             self.default += _("G20  (imperial/inches)\n\n")
 
-        self.default += ("#<_units_radius>            = 1  (factor for radius and diameter)\n")
-        self.default += ("#<_units_width>             = 1  (factor for width, height, length)\n")
-        if self.cat_name in ['mill', 'lathe'] :
-            self.default += ("#<_units_cut_depth>         = 1  (factor for depth)\n")
-
         if self.cat_name == 'mill' :
             self.default += ("\n#<center_drill_depth>       = " + self.drill_center_depth + "\n\n")
             self.default += ("#<_pocket_expand_mode>      = " + self.pocket_mode + "\n\n")
@@ -1896,7 +1928,11 @@ class Preferences(object):
 
         self.default += _("(end defaults)\n\n")
 
-        self.default += _("(next value for backward compatibility)\n")
+        self.default += _("(next values for backward compatibility only)\n")
+        self.default += ("#<_units_radius>            = 1  (factor for radius and diameter)\n")
+        self.default += ("#<_units_width>             = 1  (factor for width, height, length)\n")
+        if self.cat_name in ['mill', 'lathe'] :
+            self.default += ("#<_units_cut_depth>         = 1  (factor for depth)\n")
         self.default += ("#<_tool_dynamic_dia>        = 0.0\n\n")
 
         self.default += _('(This is a built-in safety to help avoid gouging into your work piece)\n')
@@ -4070,6 +4106,7 @@ class NCam(gtk.VBox):
             cell.set_digits(param.get_digits())
             cell.set_tooltip(_(param.get_tooltip()))
             cell.set_not_zero(param.get_not_zero())
+            cell.set_convertible_units('metric_value' in param.attr)
 
         elif data_type == 'tool' :
             cell.set_options(self.tools.list)
