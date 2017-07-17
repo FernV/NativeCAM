@@ -39,10 +39,8 @@ import Tkinter
 
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
-locale.setlocale(locale.LC_NUMERIC, '')
-
-localeDICT = locale.localeconv()
-decimal_point = localeDICT['decimal_point']
+locale.setlocale(locale.LC_ALL, '')
+decimal_point = locale.localeconv()["decimal_point"]
 
 # if False, NO_ICON_FILE will be used
 DEFAULT_USE_NO_ICON = True
@@ -243,7 +241,10 @@ def get_float(s10) :
     try :
         return float(s10)
     except :
-        return 0.0
+        try :
+            return locale.atof(s10)
+        except :
+            return 0.0
 
 def search_path(warn, f, *argsl) :
     if f == "" :
@@ -747,7 +748,8 @@ class CellRendererMx(gtk.CellRendererText):
 
         if self.inputKey > '' :
             self.vkb_initialize = False
-            if ((self.editdata_type == 'int') and self.inputKey.find('.')) or \
+            if ((self.editdata_type == 'int') and \
+                    (self.inputKey.find(decimal_point) >= 0)) or \
                     (self.inputKey == 'BS') :
                 self.set_vkb_result('0')
             else :
@@ -756,7 +758,13 @@ class CellRendererMx(gtk.CellRendererText):
             self.inputKey = ''
         else :
             self.vkb_initialize = False
-            self.set_vkb_result(self.param_value.replace('.', decimal_point))
+            if (self.editdata_type == 'int') :
+                val = str(locale.format('%i', get_int(self.param_value)))
+            else :
+                val = str(locale.format('%f', get_float(self.param_value)).rstrip('0'))
+                if val[-1] == decimal_point :
+                    val = val + '0'
+            self.set_vkb_result(val)
             self.vkb_initialize = True
 
         self.vkb.show_all()
@@ -782,25 +790,19 @@ class CellRendererMx(gtk.CellRendererText):
             if (old_value == '0') :
                 value = value[1:10]
             if value == decimal_point :
-                value = '0' + decimal_point
-            if (value == '') :
-                value = '0'
+                value = '0' + value
             self.result_entry.set_markup('<big><b>%s</b></big>' % value[0:10])
 
     def vkb_key_press_event(self, win, event):
         if event.type == gdk.KEY_PRESS:
             k_name = gdk.keyval_name(event.keyval)
             lbl = self.result_entry.get_text()
-            if k_name >= 'KP_0' and k_name <= 'KP_9':
+            if ((k_name >= 'KP_0' and k_name <= 'KP_9') or \
+                    (k_name >= '0' and k_name <= '9')) :
                 if self.vkb_initialize :
                     self.set_vkb_result(k_name[-1])
                 else :
                     self.set_vkb_result(lbl + k_name[-1])
-            elif k_name >= '0' and k_name <= '9':
-                if self.vkb_initialize :
-                    self.set_vkb_result(k_name)
-                else :
-                    self.set_vkb_result(lbl + k_name)
             elif k_name in ['KP_Enter', 'Enter', 'space']:
                 self.vkb.response(gtk.RESPONSE_OK)
             elif k_name in ['KP_Decimal', 'period', 'comma'] :
@@ -867,7 +869,7 @@ class CellRendererMx(gtk.CellRendererText):
         while True :
             response = self.vkb.run()
             if response == gtk.RESPONSE_OK:
-                str_val = self.result_entry.get_text().replace(decimal_point, '.')
+                str_val = str(locale.atof(self.result_entry.get_text()))
                 if self.editdata_type == 'int' :
                     a_min = int(self.min_value)
                     a_max = int(self.max_value)
@@ -1249,16 +1251,13 @@ class Parameter(object) :
     def get_strict_value(self) :
         return self.attr["value"] if "value" in self.attr else ""
 
-    def set_user_value(self, user_value) :
-        if (self.get_type() == "float") :
-#            a_val = get_float(user_value)
-#            if "metric_value" in self.attr :
-#                self.attr['metric_value'] = str(a_val * 25.4)
-            self.attr['value'] = user_value  # str(a_val)
-        elif self.get_type() == 'int' :
-            self.attr['value'] = str(get_int(user_value))
-        else :
-            self.attr['value'] = user_value
+#    def set_user_value(self, user_value) :
+#        if (self.get_type() == "float") :
+#            self.attr['value'] = user_value
+#        elif self.get_type() == 'int' :
+#            self.attr['value'] = str(get_int(user_value))
+#        else :
+#            self.attr['value'] = user_value
 
     def set_value(self, new_val) :
         if self.get_type() == "float" :
@@ -1274,11 +1273,11 @@ class Parameter(object) :
 
     def get_display_string(self) :
         if self.get_type() == "float" :
-            fmt = '{0:0.%sf}' % self.get_digits()
+            fmt = '%' + '0.%sf' % self.get_digits()
             if default_metric and "metric_value" in self.attr :
-                return fmt.format(get_float(self.attr["value"]) * 25.4)
+                return str(locale.format(fmt, get_float(self.attr["value"]) * 25.4))
             else :
-                return fmt.format(get_float(self.attr["value"]))
+                return str(locale.format(fmt, get_float(self.attr["value"])))
         else :
             return self.attr["value"] if "value" in self.attr else ""
 
@@ -1471,7 +1470,6 @@ class Feature(object):
                 # set the value to user preference
                 if (p_id + '--value') in USER_VALUES :
                     p.attr["value"] = USER_VALUES[p_id + '--value']
-#                    p.set_user_value(USER_VALUES[p_id + '--value'])
 
                 self.param.append(p)
 
@@ -3663,7 +3661,7 @@ class NCam(gtk.VBox):
                     val = param_e.get_value()
                     renderer.set_param_value(val)
                     if dt in NUMBER_TYPES :
-                        renderer.set_param_value(val.replace('.', decimal_point))
+                        renderer.set_param_value(str(locale.format("%f", get_float(val))))
                         renderer.set_max_value(get_float(param_e.get_max_value()))
                         renderer.set_min_value(get_float(param_e.get_min_value()))
                         renderer.set_digits(param_e.get_digits())
@@ -4096,6 +4094,7 @@ class NCam(gtk.VBox):
         data_type = param.get_type()
         cell.set_edit_datatype(data_type)
         cell.set_param_value(param.get_value())
+        cell.set_tooltip(_(param.get_tooltip()))
 
         if data_type in ['combo', 'combo-user', 'list']:
             cell.set_options(_(param.get_options()))
@@ -4104,7 +4103,6 @@ class NCam(gtk.VBox):
             cell.set_max_value(get_float(param.get_max_value()))
             cell.set_min_value(get_float(param.get_min_value()))
             cell.set_digits(param.get_digits())
-            cell.set_tooltip(_(param.get_tooltip()))
             cell.set_not_zero(param.get_not_zero())
             cell.set_convertible_units('metric_value' in param.attr)
 
@@ -4183,9 +4181,6 @@ class NCam(gtk.VBox):
                                 break
                     else :
                         dval = param.get_display_string()
-
-        if data_type == 'float' :
-            dval = dval.replace('.', decimal_point)
 
         ps = param.get_attr('prefix')
         if ps is not None :
