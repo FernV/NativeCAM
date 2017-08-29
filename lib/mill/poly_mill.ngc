@@ -46,6 +46,7 @@ o<poly_mill> sub
 	o1001 endif
 	
 	o<set_feed_rate_and_speed> CALL [#<tool_eng>]
+	
 	o<lead_in> CALL [#<pds>] [0] [#<comp>] [#<cut_start>] [-1]
 
 	o<wh_00> while [#<_depth_reached> NE 0]
@@ -67,6 +68,10 @@ o<poly_mill> sub
 
 	G0 Z#<_rapid_z>
 	G40
+
+	o240 if [#<_spindle_all_time> EQ 0]
+		M9 M5
+	o240 endif
 
 	(restore coordinate system)
 	G#<old_coord_system>

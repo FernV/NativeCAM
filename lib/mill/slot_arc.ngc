@@ -78,6 +78,8 @@ o<slot_arc> sub
 		#<cut_step> = [[#<cut_depth> - #<cut_start>] / FUP[[#<cut_depth> - #<cut_start>] / #<_depth_step>]]
 	o1001 endif
 
+	o<set_feed_rate_and_speed> CALL [1.0]
+	
 (roughing cut)
 	o<if_roughing> if [#<_tool_usage> LE 1]
 		o<roughing_0> if [#<cut_opt> EQ 3] (outside)
@@ -173,6 +175,10 @@ o<slot_arc> sub
 (exit)
 	G0 Z#<_rapid_z>
 	G40
+
+	o240 if [#<_spindle_all_time> EQ 0]
+		M9 M5
+	o240 endif
 
 (restore coordinate system)
 	G#<old_coord_system>

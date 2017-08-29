@@ -243,6 +243,9 @@ class PrefEditor():
 
         self.adj_spindledelay.set_value(self.read_float('d', 'ngc', 'spindle_acc_time', 0.0))
 
+        self.spindle_always_chk = builder.get_object("spindle_always_chk")
+        self.spindle_always_chk.set_active(self.read_boolean('d', 'ngc', 'spindle_all_time', True))
+
         self.adj_gmoccapy = builder.get_object("adj_gmoccapy")
         self.adj_gmoccapy.set_value(self.read_float('d', 'general', 'gmoccapy_time_out', 0.15))
 
@@ -441,6 +444,7 @@ class PrefEditor():
         self.config_def.set('ngc', 'use_pct_signs', self.use_pct_signs_chk.get_active())
         if self.catalog == 'mill' :
             self.config_def.set('ngc', 'off_rot_coord_system', self.comboCoords.get_active())
+            self.config_def.set('ngc', 'spindle_all_time', self.spindle_always_chk.get_active())
         if self.catalog in ['mill', 'lathe'] :
             self.config_def.set('ngc', 'spindle_acc_time', self.adj_spindledelay.get_value())
 

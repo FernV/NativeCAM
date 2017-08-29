@@ -100,6 +100,8 @@ o<ellipse> sub
 		#<y_rad> = [#<yr1> - #<fcut>]
 	o<roughing_0> endif
 
+	o<set_feed_rate_and_speed> CALL [1.0]
+	
 (roughing cut)
 	o<if_milling> if [#<_tool_usage> LE 1]
 	
@@ -188,6 +190,10 @@ o<ellipse> sub
 (exit)
 	G0 Z#<_rapid_z>
 	G40
+
+	o240 if [#<_spindle_all_time> EQ 0]
+		M9 M5
+	o240 endif
 
 (restore coordinate system)
 	G#<old_coord_system>

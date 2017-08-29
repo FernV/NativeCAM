@@ -167,8 +167,11 @@ main ()
 
   echo
   echo -n "The repository is setup! Installing NativeCAM... "
-  apt-get install nativecam &> /dev/null
+  apt-get install nativecam
   echo "done."
+
+  echo
+  ncam -h
   
 }
 

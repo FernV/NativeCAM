@@ -1,3 +1,9 @@
+nativecam (0.1.6) UNRELEASED; urgency=medium
+
+  correct a bug with locale
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Sun, 16 Jul 2017 22:53:00 -0500
+
 nativecam (0.1.5) UNRELEASED; urgency=medium
 
   add option for stand alone default units when no inifile

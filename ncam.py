@@ -36,6 +36,7 @@ import locale
 import platform
 import pref_edit
 import Tkinter
+import math
 
 SYS_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -131,7 +132,7 @@ PIXBUF_DICT = {}
 USER_VALUES = {}
 USER_SUBROUTINES = []
 TB_CATALOG = {}
-UNIQUE_ID = 10
+UNIQUE_ID = 1
 
 UI_INFO = '''
 <ui>
@@ -593,6 +594,8 @@ class CellRendererMx(gtk.CellRendererText):
         self.not_zero = '0'
         self.convertible_units = False
         self.convert_units = False
+        self.save_edit = ''
+        self.opened_paren = 0
 
     def set_convertible_units(self, value):
         self.convertible_units = value
@@ -657,77 +660,109 @@ class CellRendererMx(gtk.CellRendererText):
         self.vkb.set_border_width(3)
         self.vkb.set_property("skip-taskbar-hint", True)
 
-        lbl = gtk.Label()
+        lbl = gtk.Label('')
         lbl.set_line_wrap(True)
         self.vkb.vbox.pack_start(lbl, expand = False)
         lbl.set_markup(self.tooltip)
 
-        tbl = gtk.Table(rows = 5, columns = 4, homogeneous = True)
-        self.vkb.vbox.pack_start(tbl)
+        self.vkb_entry = gtk.Label('')
+        self.vkb_entry.modify_font(pango.FontDescription('sans 14'))
+        self.vkb_entry.set_alignment(1.0, 0.5)
+        self.vkb_entry.set_property('ellipsize', pango.ELLIPSIZE_START)
 
-        self.result_entry = gtk.Label('')
-        self.result_entry.modify_font(pango.FontDescription('sans 16'))
-        tbl.attach(self.result_entry, 0, 4, 0, 1,
+        box = gtk.EventBox()
+        box.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color('#FFFFFF'))
+
+        box.add(self.vkb_entry)
+        frame = gtk.Frame()
+        frame.add(box)
+
+        tbl = gtk.Table(rows = 6, columns = 5, homogeneous = True)
+        tbl.attach(frame, 0, 5, 0, 1,
                    xoptions = gtk.EXPAND | gtk.FILL,
                    yoptions = gtk.EXPAND | gtk.FILL)
 
-        btn = gtk.Button()
-        img = gtk.Image()
-        img.set_from_stock('gtk-clear', menu_icon_size)
-        btn.set_image(img)
-        btn.connect("clicked", self.vkb_backspace)
-        tbl.attach(btn, 3, 4, 1, 2)
+        self.vkb.vbox.pack_start(tbl)
+
+        btn = gtk.Button(_('BS'))
+        btn.connect("clicked", self.vkb_input, 'BS')
+        btn.set_can_focus(False)
+        tbl.attach(btn, 4, 5, 2, 3)
+
+        i = 0
+        for lbl in ['F2', 'Pi', '()', '=', 'C'] :
+            btn = gtk.Button(lbl)
+            btn.connect("clicked", self.vkb_input, lbl)
+            btn.set_can_focus(False)
+            tbl.attach(btn, i, i + 1, 1, 2)
+            i = i + 1
+
+        i = 2
+        for lbl in ['/', '*', '-', '+'] :
+            btn = gtk.Button(lbl)
+            btn.connect("clicked", self.vkb_input, lbl)
+            btn.set_can_focus(False)
+            tbl.attach(btn, 3, 4, i, i + 1)
+            i = i + 1
 
         k = 10
-        for i in range(1, 4) :
+        for i in range(2, 5) :
             k = k - 3
             for j in range(0, 3):
-                btn = gtk.Button(str(k + j))
-                btn.connect("clicked", self.vkb_number)
+                lbl = str(k + j)
+                btn = gtk.Button(lbl)
+                btn.connect("clicked", self.vkb_input, lbl)
+                btn.set_can_focus(False)
                 tbl.attach(btn, j, j + 1, i, i + 1)
 
         if (self.min_value < 0.0) :
-            btn = gtk.Button(label = '+/-')
-            btn.connect("clicked", self.vkb_change_sign)
-            tbl.attach(btn, 2, 3, 4, 5)
+            btn = gtk.Button('+/-')
+            btn.connect("clicked", self.vkb_input, '+/-')
+            btn.set_can_focus(False)
+            tbl.attach(btn, 2, 3, 5, 6)
             last_col = 2
         else :
             last_col = 3
 
         if self.editdata_type == 'float' and get_int(self.digits) > 0 :
-            btn = gtk.Button(label = decimal_point)
-            btn.connect("clicked", self.vkb_dot)
-            tbl.attach(btn, last_col - 1, last_col, 4, 5)
+            btn = gtk.Button(decimal_point)
+            btn.connect("clicked", self.vkb_input, decimal_point)
+            btn.set_can_focus(False)
+            tbl.attach(btn, last_col - 1, last_col, 5, 6)
             last_col = last_col - 1
 
-        btn = gtk.Button(label = '0')
-        btn.connect("clicked", self.vkb_number)
-        tbl.attach(btn, 0, last_col, 4, 5)
+        btn = gtk.Button('0')
+        btn.connect("clicked", self.vkb_input, '0')
+        btn.set_can_focus(False)
+        tbl.attach(btn, 0, last_col, 5, 6)
 
         btn = gtk.Button()
         img = gtk.Image()
         img.set_from_stock('gtk-cancel', menu_icon_size)
         btn.set_image(img)
         btn.connect("clicked", self.vkb_cancel)
-        tbl.attach(btn, 3, 4, 2, 3)
+        btn.set_can_focus(False)
+        tbl.attach(btn, 4, 5, 3, 4)
 
         if self.convertible_units :
             btn = gtk.Button()
             img = gtk.Image()
             img.set_from_pixbuf(get_pixbuf('mm2in.png', treeview_icon_size))
             btn.set_image(img)
-            btn.connect("clicked", self.vkb_convert_ok)
-            tbl.attach(btn, 3, 4, 3, 4)
+            btn.connect("clicked", self.vkb_input, 'CV')
+            btn.set_can_focus(False)
+            tbl.attach(btn, 4, 5, 4, 5)
 
-        btn = gtk.Button()
+        self.OKbtn = gtk.Button()
         img = gtk.Image()
-        img.set_from_stock('gtk-apply', menu_icon_size)
-        btn.set_image(img)
-        btn.connect("clicked", self.vkb_ok)
+        img.set_from_stock('gtk-ok', menu_icon_size)
+        self.OKbtn.set_image(img)
+        self.OKbtn.connect("clicked", self.vkb_ok)
+        self.OKbtn.set_can_focus(False)
         if self.convertible_units :
-            tbl.attach(btn, 3, 4, 4, 5)
+            tbl.attach(self.OKbtn, 4, 5, 5, 6)
         else :
-            tbl.attach(btn, 3, 4, 3, 5)
+            tbl.attach(self.OKbtn, 4, 5, 4, 6)
 
         (tree_x, tree_y) = self.tv.get_bin_window().get_origin()
         (tree_w, tree_h) = self.tv.window.get_geometry()[2:4]
@@ -751,28 +786,142 @@ class CellRendererMx(gtk.CellRendererText):
             if ((self.editdata_type == 'int') and \
                     (self.inputKey.find(decimal_point) >= 0)) or \
                     (self.inputKey == 'BS') :
-                self.set_vkb_result('0')
+                self.vkb_entry.set_markup('<b>0</b>')
             else :
-                self.set_vkb_result(self.inputKey)
+                self.vkb_entry.set_markup('<b>%s</b>' % self.inputKey)
 
             self.inputKey = ''
         else :
-            self.vkb_initialize = False
             if (self.editdata_type == 'int') :
                 val = str(locale.format('%i', get_int(self.param_value)))
             else :
                 val = str(locale.format('%f', get_float(self.param_value)).rstrip('0'))
                 if val[-1] == decimal_point :
                     val = val + '0'
-            self.set_vkb_result(val)
+            self.vkb_entry.set_markup('<b>%s</b>' % val)
             self.vkb_initialize = True
 
         self.vkb.show_all()
-        btn.grab_focus()
 
-    def vkb_convert_ok(self, btn):
-        self.convert_units = True
-        self.vkb.response(gtk.RESPONSE_OK)
+    def vkb_input(self, btn, data):
+        if self.vkb_initialize :
+            lbl = '0'
+            self.vkb_initialize = False
+            self.opened_paren = 0
+        else :
+            lbl = self.vkb_entry.get_text()
+            if lbl in ['0.0', '0.00', '0.000', '0.0000', '0.00000', '0.000000'] :
+                lbl = '0'
+
+        if data == 'C' :
+            self.vkb_entry.set_markup('<b>0</b>')
+            self.opened_paren = 0
+
+        elif data == '=' :
+            is_good, rval = self.compute()
+            if not is_good :
+                self.show_error(_("Error - F2 to edit"))
+            elif self.editdata_type == 'int' :
+                self.vkb_entry.set_markup('<b>%d</b>' % int(rval))
+            else :
+                fmt = '%' + '0.%sf' % self.digits
+                self.vkb_entry.set_markup('<b>%s</b>' % locale.format(fmt, rval))
+
+        elif data == 'F2' :
+            self.vkb_entry.set_markup('<b>%s</b>' % self.save_edit)
+
+        elif data == 'BS' :
+            if (len(lbl) == 1) or lbl == 'Pi':
+                self.vkb_input(None, 'C')
+            elif lbl[-1] == 'i' :
+                self.vkb_entry.set_markup('<b>%s</b>' % lbl[0:-2])
+            elif lbl[-1] == ')' :
+                self.opened_paren = self.opened_paren + 1
+                self.vkb_entry.set_markup('<b>%s</b>' % lbl[0:-1])
+            elif lbl[-1] == '(' :
+                self.vkb_entry.set_markup('<b>%s</b>' % lbl[0:-1])
+                self.opened_paren = self.opened_paren - 1
+            else :
+                self.vkb_entry.set_markup('<b>%s</b>' % lbl[0:-1])
+
+        elif data == 'CV' :
+            self.convert_units = True
+            self.vkb.response(gtk.RESPONSE_OK)
+
+        elif data == '+/-' :
+            if lbl == '0' :
+                self.vkb_entry.set_markup('<b>-</b>')
+            elif lbl.find('-') == 0 :
+                self.vkb_entry.set_markup('<b>%s</b>' % lbl[1:])
+            else :
+                self.vkb_entry.set_markup('<b>-%s</b>' % lbl)
+
+        elif data == 'Pi' :
+            if lbl == '0' :
+                self.vkb_entry.set_markup('<b>%s</b>' % data)
+            elif lbl[-1] in ['+', '-', '*', '/', '('] :
+                self.vkb_entry.set_markup('<b>%s%s</b>' % (lbl, data))
+
+        elif data in ['*', '/', '+'] :
+            if lbl != '0' and not lbl[-1] in ['+', '-', '*', '/', '('] :
+                self.vkb_entry.set_markup('<b>%s%s</b>' % (lbl, data))
+
+        elif data == '()' :
+            if lbl == '0' :
+                self.vkb_entry.set_markup('<b>(</b>')
+                self.opened_paren = 1
+            elif lbl[-1] in ['+', '-', '*', '/', '('] :
+                self.vkb_entry.set_markup('<b>%s(</b>' % lbl)
+                self.opened_paren = self.opened_paren + 1
+            elif lbl[-1] not in ['+', '-', '*', '/', '('] :
+                if self.opened_paren > 0 :
+                    self.vkb_entry.set_markup('<b>%s)</b>' % lbl)
+                    self.opened_paren = self.opened_paren - 1
+
+        elif data == decimal_point :
+            if lbl == '0' :
+                self.vkb_entry.set_markup('<b>0%s</b>' % data)
+            elif lbl[-1] in ['+', '-', '*', '/', '('] :
+                self.vkb_entry.set_markup('<b>%s0%s</b>' % (lbl, data))
+            elif lbl[-1] >= '0' and lbl[-1] <= '9' :
+                self.vkb_entry.set_markup('<b>%s%s</b>' % (lbl, data))
+
+        else :
+            if lbl == '0' :  # numbers and minus sign
+                self.vkb_entry.set_markup('<b>%s</b>' % data)
+            else :
+                self.vkb_entry.set_markup('<b>%s%s</b>' % (lbl, data))
+
+    def vkb_key_press_event(self, win, event):
+        if event.type == gdk.KEY_PRESS:
+            k_name = gdk.keyval_name(event.keyval)
+#            print(k_name)
+            if ((k_name >= 'KP_0' and k_name <= 'KP_9') or \
+                    (k_name >= '0' and k_name <= '9')) :
+                self.vkb_input(None, k_name[-1])
+            elif k_name in ['KP_Decimal', 'period', 'comma', 'KP_Separator'] :
+                if (self.editdata_type == 'float'):
+                    self.vkb_input(None, decimal_point)
+            elif k_name in ['KP_Divide', 'slash'] :
+                self.vkb_input(None, '/')
+            elif k_name in ['KP_Multiply', 'asterisk'] :
+                self.vkb_input(None, '*')
+            elif k_name in ['parenleft', 'parenright'] :
+                self.vkb_input(None, '()')
+            elif k_name == 'F2' :
+                self.vkb_input(None, 'F2')
+            elif k_name in ['C', 'c'] :
+                self.vkb_input(None, 'C')
+            elif k_name == 'equal' :
+                self.vkb_input(None, '=')
+            elif k_name in ['KP_Subtract', 'minus'] :
+                self.vkb_input(None, '-')
+            elif k_name in ['KP_Add', 'plus'] :
+                self.vkb_input(None, '+')
+            elif k_name == 'BackSpace' :
+                self.vkb_input(None, 'BS')
+            elif k_name in ['KP_Enter', 'Return', 'space']:
+                self.vkb.response(gtk.RESPONSE_OK)
 
     def vkb_ok(self, btn):
         self.convert_units = False
@@ -781,76 +930,6 @@ class CellRendererMx(gtk.CellRendererText):
     def vkb_cancel(self, btn):
         self.vkb.response(gtk.RESPONSE_CANCEL)
 
-    def set_vkb_result(self, value):
-        if self.vkb_initialize :
-            self.result_entry.set_markup('<big><b>%s</b></big>' % value[0:10])
-            self.vkb_initialize = False
-        else :
-            old_value = self.result_entry.get_text()
-            if (old_value == '0') :
-                value = value[1:10]
-            if value == decimal_point :
-                value = '0' + value
-            self.result_entry.set_markup('<big><b>%s</b></big>' % value[0:10])
-
-    def vkb_key_press_event(self, win, event):
-        if event.type == gdk.KEY_PRESS:
-            k_name = gdk.keyval_name(event.keyval)
-            lbl = self.result_entry.get_text()
-            if ((k_name >= 'KP_0' and k_name <= 'KP_9') or \
-                    (k_name >= '0' and k_name <= '9')) :
-                if self.vkb_initialize :
-                    self.set_vkb_result(k_name[-1])
-                else :
-                    self.set_vkb_result(lbl + k_name[-1])
-            elif k_name in ['KP_Enter', 'Enter', 'space']:
-                self.vkb.response(gtk.RESPONSE_OK)
-            elif k_name in ['KP_Decimal', 'period', 'comma'] :
-                if (self.editdata_type == 'float'):
-                    if self.vkb_initialize :
-                        self.set_vkb_result(decimal_point)
-                    else :
-                        if lbl.find(decimal_point) == -1 :
-                            self.set_vkb_result(lbl + decimal_point)
-            elif k_name in ['KP_Subtract', 'KP_Add', 'plus', 'minus']  \
-                        and (self.min_value < 0.0) :
-                self.vkb_change_sign(None)
-            elif k_name == 'BackSpace' :
-                self.vkb_backspace(None)
-
-    def vkb_backspace(self, btn) :
-        if self.vkb_initialize :
-            self.set_vkb_result('0')
-        else :
-            self.set_vkb_result(self.result_entry.get_text()[0:-1])
-
-    def vkb_number(self, btn):
-        if self.vkb_initialize :
-            self.set_vkb_result(btn.get_label())
-        else :
-            self.set_vkb_result(self.result_entry.get_text() + btn.get_label())
-
-    def vkb_dot(self, btn):
-        if self.vkb_initialize :
-            self.set_vkb_result(decimal_point)
-        else :
-            lbl = self.result_entry.get_text()
-            if lbl.find(decimal_point) == -1 :
-                self.set_vkb_result(lbl + decimal_point)
-
-    def vkb_change_sign(self, btn):
-        if self.vkb_initialize :
-            self.set_vkb_result('-')
-        else :
-            lbl = self.result_entry.get_text()
-            if lbl.find('-') == -1 :
-                if lbl == '0' :
-                    self.set_vkb_result('0-')
-                else :
-                    self.set_vkb_result('-' + lbl)
-            else :
-                self.set_vkb_result(lbl[1:])
-
     def vkb_focus_out(self, widget, event):
         if vkb_cancel_on_out:
             self.vkb.response(gtk.RESPONSE_CANCEL)
@@ -858,22 +937,59 @@ class CellRendererMx(gtk.CellRendererText):
             self.vkb.response(gtk.RESPONSE_OK)
 
     def do_get_size(self, widget, cell_area):
-        size_tuple = gtk.CellRendererText.do_get_size(self, widget, cell_area)
-        return(size_tuple)
+        return (gtk.CellRendererText.do_get_size(self, widget, cell_area))
+
+    def compute(self):
+        qualified = ''
+        temp = self.vkb_entry.get_text()
+        while temp.count('(') > temp.count(')') :
+            temp = temp + ')'
+        self.opened_paren = 0
+        self.save_edit = temp
+        if decimal_point != '.' :
+            temp = temp.replace(decimal_point, '.')
+        temp = temp.replace('Pi', str(math.pi))
+        for i in('-', '+', '/', '*', '(', ')'):
+            temp = temp.replace(i, " %s " % i)
+        for i in temp.split():
+            try:
+                i = str(locale.atof(i))
+            except:
+                pass
+            if i.isdigit():
+                qualified = qualified + str(float(i))
+            else:
+                qualified = qualified + i
+        try :
+            return True, eval(qualified)
+        except :
+            return False, 0.0
+
+    def show_error(self, errm) :
+        self.vkb_entry.set_markup('<b>%s</b>' % errm)
+        self.vkb_initialize = True
 
     def edit_number(self, time_out = 0.05) :
         self.create_VKB(self.cell_area)
         time.sleep(time_out)
         str_val = self.param_value
+        self.save_edit = str_val
+        self.opened_paren = 0
 
         while True :
+            self.convert_units = False
+            self.OKbtn.grab_focus()
             response = self.vkb.run()
             if response == gtk.RESPONSE_OK:
-                str_val = str(locale.atof(self.result_entry.get_text()))
-                if self.editdata_type == 'int' :
+                if self.vkb_entry.get_text() in ['', _("0 not allowed"), _("Error - F2 to edit")] :
+                    self.vkb_entry.set_text('0')
+                is_good, rval = self.compute()
+                if not is_good :
+                    self.show_error(_("Error - F2 to edit"))
+                elif self.editdata_type == 'int' :
+                    val = int(rval)
                     a_min = int(self.min_value)
                     a_max = int(self.max_value)
-                    val = get_int(str_val)
 
                     if val > a_max :
                         str_val = str(a_max)
@@ -883,33 +999,29 @@ class CellRendererMx(gtk.CellRendererText):
                         val = a_min
 
                     if (val == 0) and (self.not_zero != '0'):
-                        mess_dlg(_("Value can not be '0' for\n\n%(tooltip)s") % \
-                                 {'tooltip':self.tooltip})
-                    else :
-                        break
-
-                else :
-                    val = get_float(str_val)
-                    if self.convert_units :
-                        if default_metric :
-                            val = val * 25.4
-                        else :
-                            val = val / 25.4
-
-                    if val > self.max_value :
-                        str_val = str(self.max_value)
-                        val = self.max_value
-                    elif val < self.min_value :
-                        str_val = str(self.min_value)
-                        val = self.min_value
-
-                    if (val == 0.0) and (self.not_zero != '0'):
-                        mess_dlg(_("Value can not be '0' for\n\n%(tooltip)s") % \
-                             {'tooltip':self.tooltip})
+                        self.show_error(_("0 not allowed"))
                     else :
                         str_val = str(val)
                         break
+                else:
+                    if self.convert_units :
+                        if default_metric :
+                            rval = rval * 25.4
+                        else :
+                            rval = rval / 25.4
 
+                    if rval > self.max_value :
+                        str_val = str(self.max_value)
+                        rval = self.max_value
+                    elif rval < self.min_value :
+                        str_val = str(self.min_value)
+                        rval = self.min_value
+
+                    if (rval == 0.0) and (self.not_zero != '0'):
+                        self.show_error(_("0 not allowed"))
+                    else :
+                        str_val = str(rval)
+                        break
             else :
                 break
 
@@ -1473,6 +1585,7 @@ class Feature(object):
 
                 self.param.append(p)
 
+#        self.get_short_id()
         self.attr["id"] = ftype + '_000'
 
         # get gcode parameters
@@ -1484,6 +1597,7 @@ class Feature(object):
                 self.attr[l.lower()] = ""
 
     def from_xml(self, xml) :
+        global UNIQUE_ID
         self.attr = {}
         for i in xml.keys() :
             self.attr[i] = xml.get(i)
@@ -1492,8 +1606,14 @@ class Feature(object):
         for p in xml :
             self.param.append(Parameter(xml = p))
 
-        if 'short_id' in self.attr :
-            del self.attr['short_id']
+#         f_id = self.attr['short_id'] if 'short_id' in self.attr else None
+#         if f_id is not None :
+#             f_id = str(UNIQUE_ID)
+#             self.attr["short_id"] = f_id
+#             UNIQUE_ID += 1
+#         return f_id
+#         if 'short_id' in self.attr :
+#             del self.attr['short_id']
 
     def to_xml(self) :
         xml = etree.Element("feature")
@@ -1514,12 +1634,12 @@ class Feature(object):
 
     def get_short_id(self):
         global UNIQUE_ID
-        f_id = self.attr['short_id'] if 'short_id' in self.attr else None
-        if f_id is None :
-            f_id = str(UNIQUE_ID)
-            self.attr["short_id"] = f_id
-            UNIQUE_ID += 1
-        return f_id
+#        f_id = self.attr['short_id'] if 'short_id' in self.attr else None
+#        if f_id is None :
+#            f_id = str(UNIQUE_ID)
+        self.attr["short_id"] = str(UNIQUE_ID)
+        UNIQUE_ID += 1
+#        return f_id
 
     def get_definitions(self) :
 #        global DEFINITIONS
@@ -1644,9 +1764,9 @@ class Feature(object):
         s = re.sub(r"(?ims)(<subprocess>(.*?)</subprocess>)",
                    subprocess_callback, s)
 
-        if s.find("#ID") > -1 :
-            f_id = self.get_short_id()
-            s = re.sub(r"#ID", "%s" % f_id, s)
+#        if s.find("#ID") > -1 :
+#            f_id = self.get_short_id()
+        s = re.sub(r"#ID", "%s" % self.attr["short_id"], s)
 
         s = s.lstrip('\n').rstrip('\n\t')
         if s == '' :
@@ -1681,11 +1801,6 @@ class Feature(object):
             return get_int(self.attr['hidden_count']) > 0
         else :
             return False
-
-    def get_unique_id(self) :
-        global UNIQUE_ID
-        UNIQUE_ID = UNIQUE_ID + 1
-        return UNIQUE_ID
 
 class Preferences(object):
 
@@ -1788,6 +1903,7 @@ class Preferences(object):
         self.ngc_post_amble = read_str(config, 'ngc', 'post_amble', " ")
         self.use_pct = read_boolean(config, 'ngc', 'use_pct_signs', False)
         self.ngc_spindle_speedup_time = read_str(config, 'ngc', 'spindle_acc_time', '0.0')
+        self.spindle_all_time = read_sbool(config, 'ngc', 'spindle_all_time', True)
 
         self.ngc_off_rot_coord_system = read_int(config, 'ngc', 'off_rot_coord_system', 2)
         gmoccapy_time_out = read_float(config, 'general', 'gmoccapy_time_out', 0.15)
@@ -1917,6 +2033,8 @@ class Preferences(object):
 
             self.default += ("#<_show_final_cuts>         = " + self.ngc_show_final_cut + "\n")
             self.default += ("#<_show_bottom_cut>         = " + self.ngc_show_bottom_cut + "\n\n")
+
+            self.default += ("#<_spindle_all_time>        = " + self.spindle_all_time + "\n\n")
 
         if self.cat_name in ['mill', 'lathe'] :
             self.default += ("#<_spindle_speed_up_delay>  = " + self.ngc_spindle_speedup_time + "\n\n")
@@ -3469,7 +3587,7 @@ class NCam(gtk.VBox):
                 widget.get_column(1).get_cell_renderers()[0].set_Input(keyname[-1])
                 widget.set_cursor_on_cell(path, focus_column = widget.get_column(1), start_editing = True)
 
-            elif keyname in ['KP_Decimal', 'period', 'comma'] :
+            elif keyname in ['KP_Decimal', 'period', 'comma', 'KP_Separator'] :
                 widget.get_column(1).get_cell_renderers()[0].set_Input('0' + decimal_point)
                 widget.set_cursor_on_cell(path, focus_column = widget.get_column(1), start_editing = True)
 
@@ -3559,12 +3677,16 @@ class NCam(gtk.VBox):
         self.set_expand()
 
     def to_gcode(self, *arg) :
+        global UNIQUE_ID
+        UNIQUE_ID = 21
+
         def recursive(itr, ldr) :
             gcode_def = ""
             gcode = ""
             sub_ldr = ldr
             f = self.treestore.get(itr, 0)[0]
             if f.__class__ == Feature :
+                f.get_short_id()
                 sub_ldr += f.getindent()
                 gcode_def += f.get_definitions()
                 gcode += f.process(f.attr["before"], ldr)
@@ -3805,6 +3927,8 @@ class NCam(gtk.VBox):
                 for xf in l :
                     f = Feature(xml = xf)
                     f.get_id(xml)
+                    if 'short_id' in f.attr :
+                        del f.attr['short_id']
                     xf.set("name", f.attr["name"])
                     xf.set("id", f.attr["id"])
 
@@ -3998,9 +4122,6 @@ class NCam(gtk.VBox):
             self.action_new_project()
 
     def action_new_project(self, *arg):
-        global UNIQUE_ID
-
-        UNIQUE_ID = 10
         self.treestore.clear()
         self.clear_undo()
         fn = search_path(search_warning.none, DEFAULT_TEMPLATE, \
@@ -4341,7 +4462,6 @@ class NCam(gtk.VBox):
             filechooserdialog.destroy()
 
     def action_open_project(self, *arg):
-        global UNIQUE_ID
 
         if arg[1][0] == 0 :  # user project
             dlg_title = _("Open project")
@@ -4358,24 +4478,29 @@ class NCam(gtk.VBox):
         try:
             filt = gtk.FileFilter()
             filt.set_name(flt_name)
-            filt.add_mime_type("text/xml")
-            filt.add_pattern("*.xml")
+            if arg[1][0] == 0 :
+                filt.add_mime_type("text/xml")
+                filt.add_pattern("*.xml")
+            else :
+                filt.add_pattern("*.*")
             filechooserdialog.add_filter(filt)
             filechooserdialog.set_current_folder(dir_)
             filechooserdialog.set_keep_above(True)
             filechooserdialog.set_transient_for(self.get_toplevel())
 
-
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 filename = filechooserdialog.get_filename()
-                xml = etree.parse(filename)
-                self.treestore_from_xml(xml.getroot())
-                self.expand_and_select(self.path_to_old_selected)
-                UNIQUE_ID = 10
-                self.clear_undo()
-                self.current_filename = filename
-                self.file_changed = False
-                self.action(xml.getroot())
+                src_data = open(filename).read()
+                if src_data.find(XML_TAG) != 1 :
+                    subprocess.call(["xdg-open '%s'" % filename], shell = True)
+                else :
+                    xml = etree.fromstring(src_data)
+                    self.treestore_from_xml(xml)
+                    self.expand_and_select(self.path_to_old_selected)
+                    self.clear_undo()
+                    self.current_filename = filename
+                    self.file_changed = False
+                    self.action(xml)
         finally:
             filechooserdialog.destroy()
 
@@ -4465,6 +4590,11 @@ def verify_ini(fname, ctlog, in_tab) :
                 sys.exit(-1)
 
             try :
+                old_sub_path = ':' + parser.get('RS274NGC', 'SUBROUTINE_PATH')
+            except :
+                old_sub_path = ''
+
+            try :
                 c = parser.get('DISPLAY', 'LATHE')
                 if c == '1' :
                     ctlog = 'lathe'
@@ -4523,7 +4653,8 @@ def verify_ini(fname, ctlog, in_tab) :
             except :
                 txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
-            newstr = '%sSUBROUTINE_PATH = ncam/my-stuff:ncam/lib/%s:ncam/lib/utilities\n' % (req, ctlog)
+            newstr = '%sSUBROUTINE_PATH = ncam/my-stuff:ncam/lib/%s:ncam/lib/utilities%s\n' % \
+                    (req, ctlog, old_sub_path)
             try :
                 oldstr = 'SUBROUTINE_PATH = ' + parser.get('RS274NGC', 'subroutine_path')
                 txt = re.sub(r"%s" % oldstr, newstr, txt)

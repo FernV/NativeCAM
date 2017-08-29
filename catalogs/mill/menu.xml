@@ -58,7 +58,11 @@
             <separator/>
 			<menuitem action='group_index' name=_('Index A Axis')_ tool_tip=_('Rotate A axis')_ icon="axis-a.png" src="mill/index-axisA.cfg"/>
         </menu>
-        <menuitem action='chng_tool' name=_('Change Tool')_ tool_tip=_('Select end mill or drill and set parameters')_ icon="tool-change.png" src="mill/tool-change.cfg"/>
+        <menu action='tool_chng' name=_('Change Tool')_ icon="tool-change.png">
+			<menuitem action='chng_end_mill' name=_('End Mill')_ tool_tip=_('Select end mill and set parameters')_ icon="tool-01.png" src="mill/sel-end-mill.cfg"/>
+			<menuitem action='chng_drill' name=_('Drill or Reamer')_ tool_tip=_('Select drill and set parameters')_ icon="drill.png" src="mill/sel-drill.cfg"/>
+			<menuitem action='chng_thread_mill' name=_('Thread Mill')_ tool_tip=_('Select thread mill and set parameters')_ icon="tool-change.png" src="mill/sel-thread-mill.cfg"/>
+        </menu>
         <menu action='probing' name=_('Probing')_ icon="probe.png">
             <menuitem action='probe_edge' name=_('Probe Edges')_ tool_tip=_('Find workpiece edges')_ icon="probe.png" src="mill/probe-edge.cfg"/>
             <menuitem action='probe_stock' name=_('Probe Stock')_ tool_tip=_('Find the center of a cube or cylinder')_ icon="probe.png" src="mill/probe-stock.cfg"/>
@@ -74,7 +78,7 @@
 
     
     <toolbar>
-        <toolitem action='chng_tool' />
+        <toolitem action='chng_end_mill' />
         <toolitem action='circle' />
         <toolitem action='rectangle' />
         <toolitem action='slot1' />
@@ -84,6 +88,7 @@
         <toolitem action='group_radial' />
         <toolitem action='group_arr' />
         <separator/>
+        <toolitem action='chng_drill' />
         <toolitem action='drill_single' />
         <toolitem action='drill_arr' />
         <toolitem action='drill_circle' />

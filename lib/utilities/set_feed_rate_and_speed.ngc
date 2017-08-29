@@ -20,7 +20,6 @@ o<set_feed_rate_and_speed> sub
 	
 ;	(print,tool engagement_ratio = #1 feed = #<_selected_feed>, spindle speed = #<_selected_speed>)
 
-	o<set_spindle_rpm> CALL [#<_selected_speed>]
-	F#<_selected_feed>
+	o<set_spindle_rpm> CALL [#<_selected_speed>] [#<_selected_feed>]
 
 o<set_feed_rate_and_speed> endsub
