@@ -1,3 +1,21 @@
+nativecam (0.1.8) UNRELEASED; urgency=medium
+
+  fix calculator
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Fri, 8 Sep 2017 10:18:00 -0500
+
+nativecam (0.1.7) UNRELEASED; urgency=medium
+
+  add option for spindle stop after every cut
+  add option to open most type of files from examples dir
+  append old subroutine path after ncam subroutine path
+  replace mill/toolchange with drill-change, endmill-change and thread-mill change
+  change tool path in rectangular array and drill array
+  add examples
+  update to surf-finish
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Mon, 29 Aug 2017 00:50:00 -0500
+
 nativecam (0.1.6) UNRELEASED; urgency=medium
 
   correct a bug with locale

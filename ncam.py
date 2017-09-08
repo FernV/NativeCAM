@@ -781,6 +781,13 @@ class CellRendererMx(gtk.CellRendererText):
         self.vkb.connect('key-press-event', self.vkb_key_press_event)
         self.vkb.connect('focus-out-event', self.vkb_focus_out)
 
+        if (self.editdata_type == 'int') :
+            self.save_edit = str(locale.format('%i', get_int(self.param_value)))
+        else :
+            self.save_edit = str(locale.format('%f', get_float(self.param_value)).rstrip('0'))
+            if self.save_edit[-1] == decimal_point :
+                self.save_edit = self.save_edit + '0'
+
         if self.inputKey > '' :
             self.vkb_initialize = False
             if ((self.editdata_type == 'int') and \
@@ -792,13 +799,7 @@ class CellRendererMx(gtk.CellRendererText):
 
             self.inputKey = ''
         else :
-            if (self.editdata_type == 'int') :
-                val = str(locale.format('%i', get_int(self.param_value)))
-            else :
-                val = str(locale.format('%f', get_float(self.param_value)).rstrip('0'))
-                if val[-1] == decimal_point :
-                    val = val + '0'
-            self.vkb_entry.set_markup('<b>%s</b>' % val)
+            self.vkb_entry.set_markup('<b>%s</b>' % self.save_edit)
             self.vkb_initialize = True
 
         self.vkb.show_all()
@@ -940,26 +941,24 @@ class CellRendererMx(gtk.CellRendererText):
         return (gtk.CellRendererText.do_get_size(self, widget, cell_area))
 
     def compute(self):
-        qualified = ''
         temp = self.vkb_entry.get_text()
         while temp.count('(') > temp.count(')') :
             temp = temp + ')'
         self.opened_paren = 0
         self.save_edit = temp
-        if decimal_point != '.' :
-            temp = temp.replace(decimal_point, '.')
+
         temp = temp.replace('Pi', str(math.pi))
         for i in('-', '+', '/', '*', '(', ')'):
             temp = temp.replace(i, " %s " % i)
+
+        qualified = ''
         for i in temp.split():
             try:
                 i = str(locale.atof(i))
-            except:
-                pass
-            if i.isdigit():
                 qualified = qualified + str(float(i))
-            else:
+            except:
                 qualified = qualified + i
+
         try :
             return True, eval(qualified)
         except :
@@ -973,7 +972,6 @@ class CellRendererMx(gtk.CellRendererText):
         self.create_VKB(self.cell_area)
         time.sleep(time_out)
         str_val = self.param_value
-        self.save_edit = str_val
         self.opened_paren = 0
 
         while True :
@@ -981,7 +979,7 @@ class CellRendererMx(gtk.CellRendererText):
             self.OKbtn.grab_focus()
             response = self.vkb.run()
             if response == gtk.RESPONSE_OK:
-                if self.vkb_entry.get_text() in ['', _("0 not allowed"), _("Error - F2 to edit")] :
+                if self.vkb_entry.get_text() in ['', _("0 not allowed - F2 to edit"), _("Error - F2 to edit")] :
                     self.vkb_entry.set_text('0')
                 is_good, rval = self.compute()
                 if not is_good :
@@ -999,7 +997,7 @@ class CellRendererMx(gtk.CellRendererText):
                         val = a_min
 
                     if (val == 0) and (self.not_zero != '0'):
-                        self.show_error(_("0 not allowed"))
+                        self.show_error(_("0 not allowed - F2 to edit"))
                     else :
                         str_val = str(val)
                         break
@@ -1018,7 +1016,7 @@ class CellRendererMx(gtk.CellRendererText):
                         rval = self.min_value
 
                     if (rval == 0.0) and (self.not_zero != '0'):
-                        self.show_error(_("0 not allowed"))
+                        self.show_error(_("0 not allowed - F2 to edit"))
                     else :
                         str_val = str(rval)
                         break
