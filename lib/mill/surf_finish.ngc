@@ -1,5 +1,5 @@
 (info: finish a surface on certain axis and either uni- or bi- directional)
-o<surf_finish> sub (CALL [left] [right] [front] [rear] [dir] [mode] [start] [depth] [tool_clear] [touch_z])
+o<surf_finish> sub (CALL [left] [right] [front] [rear] [dir] [mode] [start] [depth] [clear] [last cut] [touch_z])
 
 (exit if no tool selected)
 	o2010 if [#<_tool_dynamic_dia> GT 0.0]
@@ -27,7 +27,8 @@ o<surf_finish> sub (CALL [left] [right] [front] [rear] [dir] [mode] [start] [dep
 	#<cut_depth> = #8
 	#<_cut_loop_final_z> = #<cut_depth>
 	#<tool_clear> = [#<tool_dia> * #9]
-	#<touch> = #10
+	#<last_cut>   = #10
+	#<touch> = #11
 	
 (End init params)
 
@@ -37,7 +38,7 @@ o<surf_finish> sub (CALL [left] [right] [front] [rear] [dir] [mode] [start] [dep
 	o1001 if [#<cut_depth> EQ #<cut_start>]
 		#<cut_step> = 0
 	o1001 else
-		#<cut_step> = [[#<cut_depth> - #<cut_start>] / FUP[[#<cut_depth> - #<cut_start>] / #<_depth_step>]]
+		#<cut_step> = [[#<cut_depth> - #<cut_start> - #<last_cut>] / FUP[[#<cut_depth> - #<cut_start>] / #<_depth_step>]]
 	o1001 endif
 	
 	o<axis> if [#<axis> EQ 0] (x axis direction)
@@ -133,11 +134,11 @@ o<surf_finish> sub (CALL [left] [right] [front] [rear] [dir] [mode] [start] [dep
 				o<add_mill_data> CALL [#<_mill_data_start>] [#<left> - #<tool_clear>] [#<y>] [1]
 			o<is_odd2> endif
 		o15 else
-			o<is_odd2> if [[#<cycle_count> MOD 2] EQ 1]
+			o<is_odd3> if [[#<cycle_count> MOD 2] EQ 1]
 				o<add_mill_data> CALL [#<_mill_data_start>] [#<x>] [#<rear> + #<tool_clear>] [1]
-			o<is_odd2> else
+			o<is_odd3> else
 				o<add_mill_data> CALL [#<_mill_data_start>] [#<x>] [#<front> - #<tool_clear>] [1]
-			o<is_odd2> endif
+			o<is_odd3> endif
 		o15 endif
 		
 		(add entry point)

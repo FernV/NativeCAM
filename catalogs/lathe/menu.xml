@@ -23,6 +23,7 @@
 			<menuitem action='gcode_file'  name=_('Insert a G Code File')_ tool_tip= _('Include a custom gcode file')_ icon="file-gcode.png" src="i_gcode.cfg"/>
 			<menuitem action='gcode'  name=_('Custom G Code')_ tool_tip= _('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
 			<menuitem action='stock' name=_('Material')_ tool_tip=_('Group subroutines')_ icon="group.png" src="lathe/material.cfg"/>
+            <menuitem action='prjdesc' name=_('Project Description')_ tool_tip=_('View project name and note')_  src="proj_desc.cfg"/>
 		</menu>
 	</menu>
 

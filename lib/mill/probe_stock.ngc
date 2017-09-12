@@ -1,28 +1,30 @@
 (author : Fernand Veilleux)
 o<probe_stock> sub
 (CALL with [xmode] [ymode] [show_entry_lines] [clr] [xz] [yz] [dbx] [dby] [al_x] [al_y] ...)
-	([touch] [info] [wp_inlen] [wp_len] [wp_inwidth] [wp_width])
+	([touch] [info] [wp_inlen] [wp_len] [wp_inwidth] [wp_width] [z opt] [z val])
 
-	#<temp_x> = #<_x>
-	#<temp_y> = #<_y>
-	#<temp_z> = #<_z>
+	#<temp_x>     = #<_x>
+	#<temp_y>     = #<_y>
+	#<temp_z>     = #<_z>
 	
-	#<xmode> = #1
-	#<ymode> = #2
-	#<show_el> = #3
-	#<clear> = #4
-	#<prm_xz> = #5
-	#<prm_yz> = #6
-	#<dbx> = #7
-	#<dby> = #8
-	#<al_x> = #9
-	#<al_y> = #10
-	#<touch> = #11
-	#<info> = #12
-	#<wp_inlen> = #13
-	#<wp_len> = #14
+	#<xmode>      =  #1
+	#<ymode>      =  #2
+	#<show_el>    =  #3
+	#<clear>      =  #4
+	#<prm_xz>     =  #5
+	#<prm_yz>     =  #6
+	#<dbx>        =  #7
+	#<dby>        =  #8
+	#<al_x>       =  #9
+	#<al_y>       = #10
+	#<touch>      = #11
+	#<info>       = #12
+	#<wp_inlen>   = #13
+	#<wp_len>     = #14
 	#<wp_inwidth> = #15
-	#<wp_width> = #16
+	#<wp_width>   = #16
+	#<probe_z>    = #17
+	#<z_value>    = #18
 	
 	o10 if [#<xmode> EQ 0] (probe x inside)
 		#<start_x> = [#<wp_inlen> / 2 - #<_probe_safe>]

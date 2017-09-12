@@ -106,11 +106,13 @@ TOOLBAR_FNAME = "toolbar.conf"
 TOOLBAR_CUSTOM_FNAME = "toolbar-custom.conf"
 GENERATED_FILE = "ncam.ngc"
 
+CURRENT_PROJECT = ''
+
 DEFAULT_EDITOR = 'gedit'
 
 SUPPORTED_DATA_TYPES = ['sub-header', 'header', 'bool', 'boolean', 'int', 'gc-lines',
                         'tool', 'gcode', 'text', 'list', 'float', 'string', 'engrave',
-                        'combo', 'combo-user', 'items', 'filename']
+                        'combo', 'combo-user', 'items', 'filename', 'prjname']
 NUMBER_TYPES = ['float', 'int']
 NO_ICON_TYPES = ['sub-header', 'header']
 GROUP_HEADER_TYPES = ['items', 'sub-header', 'header']
@@ -1148,7 +1150,7 @@ class CellRendererMx(gtk.CellRendererText):
         else :
             self.preedit(self, treeview, path)
 
-        if self.editdata_type in GROUP_HEADER_TYPES :
+        if self.editdata_type in [GROUP_HEADER_TYPES, 'prjname'] :
             self.inputKey = ''
             return None
 
@@ -2091,7 +2093,6 @@ class NCam(gtk.VBox):
         self.catalog_src = None
         self.click_x = 0
         self.click_y = 0
-        self.current_filename = ''
         self.details_filter = None
         self.editor = DEFAULT_EDITOR
         self.file_changed = False
@@ -2579,6 +2580,9 @@ class NCam(gtk.VBox):
         h_menu = create_mi(self.actionHelpMenu)
         h_menu.set_submenu(menu_help)
         self.menubar.append(h_menu)
+
+        self.mnu_current_project = gtk.MenuItem(label = '')
+        self.menubar.append(self.mnu_current_project)
 
         self.main_box.pack_start(self.menubar, False, False, 0)
 
@@ -4104,6 +4108,8 @@ class NCam(gtk.VBox):
                     self.catalog_dir, PROJECTS_DIR, DEFAULT_TEMPLATE), pretty_print = True)
 
     def load_currentWork(self):
+        global CURRENT_PROJECT
+
         self.treestore.clear()
         self.clear_undo()
         fn = search_path(search_warning.none, CURRENT_WORK, \
@@ -4112,7 +4118,8 @@ class NCam(gtk.VBox):
             xml = etree.parse(fn)
             self.treestore_from_xml(xml.getroot())
             self.expand_and_select((0,))
-            self.current_filename = _('Untitle.xml')
+            CURRENT_PROJECT = _('Untitle.xml')
+            self.display_proj_name()
             self.file_changed = False
             self.action(xml.getroot())
         else :
@@ -4120,6 +4127,8 @@ class NCam(gtk.VBox):
             self.action_new_project()
 
     def action_new_project(self, *arg):
+        global CURRENT_PROJECT
+
         self.treestore.clear()
         self.clear_undo()
         fn = search_path(search_warning.none, DEFAULT_TEMPLATE, \
@@ -4130,7 +4139,8 @@ class NCam(gtk.VBox):
             xml = etree.parse(fn)
             self.treestore_from_xml(xml.getroot())
             self.expand_and_select((0,))
-        self.current_filename = _('Untitle.xml')
+        CURRENT_PROJECT = _('Untitle.xml')
+        self.display_proj_name()
         self.file_changed = False
         self.action()
 
@@ -4235,6 +4245,8 @@ class NCam(gtk.VBox):
 
 
     def get_col_value(self, column, cell, model, itr, *arg) :
+        global CURRENT_PROJECT
+
         param = model.get_value(itr, 0)
         val = param.get_value()
         dval = param.get_display_string()
@@ -4246,6 +4258,10 @@ class NCam(gtk.VBox):
 
         if data_type == 'filename':
             h, dval = os.path.split(val)
+
+        elif data_type == 'prjname':
+            h, dval = os.path.split(CURRENT_PROJECT)
+            dval, h = os.path.splitext(dval)
 
         elif data_type == 'tool' :
             dval = self.tools.get_text(val)
@@ -4433,6 +4449,8 @@ class NCam(gtk.VBox):
             filechooserdialog.destroy()
 
     def action_save_project(self, *arg) :
+        global CURRENT_PROJECT
+
         filechooserdialog = gtk.FileChooserDialog(_("Save project as..."), None,
                 gtk.FILE_CHOOSER_ACTION_SAVE, (gtk.STOCK_CANCEL, \
                 gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
@@ -4442,7 +4460,7 @@ class NCam(gtk.VBox):
             filt.add_mime_type("text/xml")
             filt.add_pattern("*.xml")
             filechooserdialog.add_filter(filt)
-            d, fname = os.path.split(self.current_filename)
+            d, fname = os.path.split(CURRENT_PROJECT)
             filechooserdialog.set_current_folder(os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR))
             filechooserdialog.set_current_name(fname)
             filechooserdialog.set_do_overwrite_confirmation(True)
@@ -4451,15 +4469,22 @@ class NCam(gtk.VBox):
 
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 xml = self.treestore_to_xml()
-                self.current_filename = filechooserdialog.get_filename()
-                if self.current_filename[-4] != ".xml" not in self.current_filename :
-                    self.current_filename += ".xml"
-                etree.ElementTree(xml).write(self.current_filename, pretty_print = True)
+                CURRENT_PROJECT = filechooserdialog.get_filename()
+                if CURRENT_PROJECT[-4] != ".xml" not in CURRENT_PROJECT :
+                    CURRENT_PROJECT += ".xml"
+                etree.ElementTree(xml).write(CURRENT_PROJECT, pretty_print = True)
                 self.file_changed = False
         finally:
+            self.display_proj_name()
             filechooserdialog.destroy()
 
+    def display_proj_name(self):
+        h, t = os.path.split(CURRENT_PROJECT)
+        t, h = os.path.splitext(t)
+        self.mnu_current_project.set_label(_(' PROJECT : %s') % t)
+
     def action_open_project(self, *arg):
+        global CURRENT_PROJECT
 
         if arg[1][0] == 0 :  # user project
             dlg_title = _("Open project")
@@ -4496,10 +4521,11 @@ class NCam(gtk.VBox):
                     self.treestore_from_xml(xml)
                     self.expand_and_select(self.path_to_old_selected)
                     self.clear_undo()
-                    self.current_filename = filename
+                    CURRENT_PROJECT = filename
                     self.file_changed = False
                     self.action(xml)
         finally:
+            self.display_proj_name()
             filechooserdialog.destroy()
 
     def action_loadCfg(self, *arg) :
