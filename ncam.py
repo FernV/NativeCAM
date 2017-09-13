@@ -949,7 +949,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.opened_paren = 0
         self.save_edit = temp
 
-        temp = temp.replace('Pi', str(math.pi))
+        temp = temp.replace('Pi', str(math.pi).replace(".", decimal_point))
         for i in('-', '+', '/', '*', '(', ')'):
             temp = temp.replace(i, " %s " % i)
 
@@ -1150,7 +1150,11 @@ class CellRendererMx(gtk.CellRendererText):
         else :
             self.preedit(self, treeview, path)
 
-        if self.editdata_type in [GROUP_HEADER_TYPES, 'prjname'] :
+        if self.editdata_type in GROUP_HEADER_TYPES :
+            self.inputKey = ''
+            return None
+
+        if self.editdata_type == 'prjname' :
             self.inputKey = ''
             return None
 
@@ -4481,7 +4485,7 @@ class NCam(gtk.VBox):
     def display_proj_name(self):
         h, t = os.path.split(CURRENT_PROJECT)
         t, h = os.path.splitext(t)
-        self.mnu_current_project.set_label(_(' PROJECT : %s') % t)
+        self.mnu_current_project.set_label(_(' "%s"') % t)
 
     def action_open_project(self, *arg):
         global CURRENT_PROJECT

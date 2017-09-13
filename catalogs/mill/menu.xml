@@ -64,16 +64,17 @@
 			<menuitem action='chng_thread_mill' name=_('Thread Mill')_ tool_tip=_('Select thread mill and set parameters')_ icon="tool-change.png" src="mill/sel-thread-mill.cfg"/>
         </menu>
         <menu action='probing' name=_('Probing')_ icon="probe.png">
-            <menuitem action='probe_edge' name=_('Probe Edges')_ tool_tip=_('Find workpiece edges')_ icon="probe.png" src="mill/probe-edge.cfg"/>
-            <menuitem action='probe_stock' name=_('Probe Stock')_ tool_tip=_('Find the center of a cube or cylinder')_ icon="probe.png" src="mill/probe-stock.cfg"/>
+            <menuitem action='probe_edge' name=_('Probe Edges')_ tool_tip=_('Find workpiece edges')_ icon="probe-edge.png" src="mill/probe-edge.cfg"/>
+            <menuitem action='probe_stock' name=_('Probe Stock')_ tool_tip=_('Find the center of a cube or cylinder')_ icon="probe-stock.png" src="mill/probe-stock.cfg"/>
             <menuitem action='probe_arr' name=_('Probe Array')_ tool_tip=_('Probe a array of points and save to file')_ icon="probe-grid.png" src="mill/probe-array.cfg"/>
+            <menuitem action='probe_z' name=_('Probe Surface')_ tool_tip=_('Find Z position with a probe')_ icon="probe-down.png" src="mill/probe-surface.cfg"/>
         </menu>
         <menu action='misc' name=_('Miscellaneous')_ icon='misc.png'>
             <menuitem action='stock' name=_('Raw Material')_ tool_tip=_('Show a temporary image of rough material')_ icon="stock.png" src="mill/material.cfg"/>
             <menuitem action='gcode' name=_('Custom G Code')_ tool_tip=_('Write custom gcode')_ icon="gcode.png" src="gcode.cfg"/>
             <menuitem action='gcode_file' name=_('Insert a G Code File')_ tool_tip=_('Include a custom gcode file')_ icon="file-gcode.png" src="i_gcode.cfg"/>
             <menuitem action='comment' name=_('Comment')_ tool_tip=_('Add comments')_ icon="comment.png" src="comment.cfg"/>
-            <menuitem action='prjdesc' name=_('Project Description')_ tool_tip=_('View project name and note')_  src="proj_desc.cfg"/>
+            <menuitem action='prjdesc' name=_('Project Notes')_ tool_tip=_('View project name and note')_ icon="prj-desc.png" src="proj_desc.cfg"/>
         </menu>
     </menu>
 

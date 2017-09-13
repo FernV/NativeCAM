@@ -1,3 +1,10 @@
+nativecam (0.1.10) UNRELEASED; urgency=medium
+
+  fix calculator again
+  add probe surface or Z
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Tue, 12 Sep 2017 20:52:00 -0500
+
 nativecam (0.1.9) UNRELEASED; urgency=medium
 
   add display of project name
