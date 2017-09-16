@@ -16,14 +16,6 @@ o<circle-k> sub
 		o<circle-k> return
 	o<valid01> endif
 	
-;	o<valid02> if [#4 GE #3]
-;		(debug,Circle: Invalid flat versus diameter and tool - EXITING)
-;		(print,)
-;		(print,Circle: Invalid flat versus diameter and tool - EXITING)
-;		(AXIS,notify,Circle: Invalid flat versus diameter and tool - EXITING)
-;		o<circle> return
-;	o<valid02> endif
-
 (set local params value)
 	#<cx>           =  #1
 	#<cy>           =  #2

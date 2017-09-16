@@ -15,22 +15,14 @@ o<circle-k_create> sub
 
 	#<angle>  = ASIN[#<width> / #<radius>]
 	
-;	o<if04> if [#<flat> EQ 0]
-;		o<select> CALL [41] [#<dir> - 2] [#<radius>] [-#<radius>]
-;		o<add_mill_data> CALL [#1] [0]         [#41]   [#<dir>]
-;		o<add_mill_data> CALL [#1] [#<radius>] [0]     [#<dir>]
-;		o<add_mill_data> CALL [#1] [0]         [-#41]  [#<dir>]
-;	o<if04> else
-;		#<angle> = ACOS[[#<radius> - #<flat>] / #<radius>]
-		#<x>     = [COS[#<angle>] * #<radius>]
-		o<select> CALL [41] [#<dir> - 2] [SIN[#<angle>] * #<radius>] [-SIN[#<angle>] * #<radius>]
+	#<x>     = [COS[#<angle>] * #<radius>]
+	o<select> CALL [41] [#<dir> - 2] [SIN[#<angle>] * #<radius>] [-SIN[#<angle>] * #<radius>]
 
-		o<add_mill_data> CALL [#1] [#<x>] [ #41] [#<dir>]
-		o<add_mill_data> CALL [#1] [#<height>] [  #41] [1]
-		o<add_mill_data> CALL [#1] [#<height>] [   0] [1]
-		o<add_mill_data> CALL [#1] [#<height>] [  -#41] [1]
-		o<add_mill_data> CALL [#1] [#<x>] [-#41] [1]
-;	o<if04> endif
-	o<add_mill_data> CALL [#1] [-#<radius>] [0] [#<dir>]
+	o<add_mill_data> CALL [#1] [#<x>]       [ #41] [#<dir>]
+	o<add_mill_data> CALL [#1] [#<height>]  [ #41] [1]
+	o<add_mill_data> CALL [#1] [#<height>]  [   0] [1]
+	o<add_mill_data> CALL [#1] [#<height>]  [-#41] [1]
+	o<add_mill_data> CALL [#1] [#<x>]       [-#41] [1]
+	o<add_mill_data> CALL [#1] [-#<radius>] [0]    [#<dir>]
 
 o<circle-k_create> endsub

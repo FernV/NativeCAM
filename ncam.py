@@ -2167,8 +2167,8 @@ class NCam(gtk.VBox):
             require_ini_items(inifilename, ini_instance)
 
             val = ini_instance.find('DISPLAY', 'DISPLAY')
-            if val not in ['axis', 'gmoccapy'] :
-                mess_dlg(_("DISPLAY can only be 'axis' or 'gmoccapy'"))
+            if val not in ['axis', 'gmoccapy', 'gscreen'] :
+                mess_dlg(_("DISPLAY can only be 'axis', 'gmoccapy' or 'gscreen'"))
                 sys.exit(-1)
 
             val = ini_instance.find('DISPLAY', 'GLADEVCP')
@@ -4613,8 +4613,8 @@ def verify_ini(fname, ctlog, in_tab) :
             parser.readfp(io.BytesIO(txt1))
 
             dp = parser.get('DISPLAY', 'DISPLAY').lower()
-            if dp not in ['gmoccapy', 'axis'] :
-                mess_dlg(_("DISPLAY can only be 'axis' or 'gmoccapy'"))
+            if dp not in ['gmoccapy', 'axis', 'gscreen'] :
+                mess_dlg(_("DISPLAY can only be 'axis', 'gmoccapy' or 'gscreen'"))
                 sys.exit(-1)
 
             try :
@@ -4653,19 +4653,34 @@ def verify_ini(fname, ctlog, in_tab) :
                 except :
                     txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
-                newstr = '%sEMBED_TAB_LOCATION = box_right\n' % req
-                try :
-                    oldstr = 'EMBED_TAB_LOCATION = %s' % parser.get('DISPLAY', 'embed_tab_location')
-                    txt = re.sub(r"%s" % oldstr, newstr, txt)
-                except :
-                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+                if dp == 'gmoccapy' :
+                    newstr = '%sEMBED_TAB_LOCATION = box_right\n' % req
+                    try :
+                        oldstr = 'EMBED_TAB_LOCATION = %s' % parser.get('DISPLAY', 'embed_tab_location')
+                        txt = re.sub(r"%s" % oldstr, newstr, txt)
+                    except :
+                        txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
-                newstr = '%sEMBED_TAB_NAME = right_side_panel\n' % req
-                try :
-                    oldstr = 'EMBED_TAB_NAME = %s' % parser.get('DISPLAY', 'embed_tab_name')
-                    txt = re.sub(r"%s" % oldstr, newstr, txt)
-                except :
-                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+                    newstr = '%sEMBED_TAB_NAME = right_side_panel\n' % req
+                    try :
+                        oldstr = 'EMBED_TAB_NAME = %s' % parser.get('DISPLAY', 'embed_tab_name')
+                        txt = re.sub(r"%s" % oldstr, newstr, txt)
+                    except :
+                        txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+                else :  # gscreen
+                    newstr = '%sEMBED_TAB_LOCATION = vcp_box\n' % req
+                    try :
+                        oldstr = 'EMBED_TAB_LOCATION = %s' % parser.get('DISPLAY', 'embed_tab_location')
+                        txt = re.sub(r"%s" % oldstr, newstr, txt)
+                    except :
+                        txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+                    newstr = '%sEMBED_TAB_NAME = Embedded 2\n' % req
+                    try :
+                        oldstr = 'EMBED_TAB_NAME = %s' % parser.get('DISPLAY', 'embed_tab_name')
+                        txt = re.sub(r"%s" % oldstr, newstr, txt)
+                    except :
+                        txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
             newstr = '%sPROGRAM_PREFIX = ncam/scripts/\n' % req
             try :
