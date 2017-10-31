@@ -1,14 +1,17 @@
 (author : Fernand Veilleux)
 o<turning> sub
 (CALL [#start_x] [#end_x] [#start_z] [#end_z] [#fine_finish])
-
+(print,#1, #2,#3,#4,#5)
 	#<start_x>     = #1
 	#<end_x>       = #2
 	#<start_z>     = #3
 	#<end_z>       = #4
 	#<fine_finish> = #5
-	#<tool_path>   = 1
-	/ #<tool_path> = 0
+	
+	/ G0 X#<end_x> Z#<start_z>
+	/ F10
+	/ G1 Z#<end_z>
+	/ o<turning> return
 
 	o00 if [#<_lathe_diameter_mode> EQ 1]
 		#<roughcut> = [#<_rough_cut> * 2]
@@ -33,12 +36,12 @@ o<turning> sub
 	o11 endif
 
 	G0 X[#<_wp_dia_od> + #<_x_rapid>]
-;	G0 Z#<start_z>
 	M#<_cooling_mode>
+	
 	#<x> = #<start_x>
 	o12 repeat [#<rough_pass>]
 		#<x> = [#<x> - #<each_cut>]
-		o121 if [[#<_tool_usage> LE 1] AND [#<tool_path> EQ 1]]
+		o121 if [#<_tool_usage> LE 1]
 			G0 Z#<start_z>
 			G0 X#<x>
 			G1 Z#<end_z>
@@ -46,7 +49,7 @@ o<turning> sub
 		o121 endif
 	o12 endrepeat
 
-	o20 if [#<fine_finish> AND [#<_tool_usage> NE 1] AND [#<tool_path> EQ 1]]
+	o20 if [#<fine_finish> AND [#<_tool_usage> NE 1]]
 		F#<_finish_feed>
 		o21 repeat [#<fine_finish>]
 			G0 Z#<start_z>
@@ -57,9 +60,6 @@ o<turning> sub
 	o20 endif
 	
 	M9 (cooling off)
-	
-	/ G0 X#<end_x> Z#<start_z>
-	/ G1 Z#<end_z>
 	
 	G0 Z[#<end_z> + #<_z_clear>]
 	G0 X[#<_wp_dia_od> + #<_X_rapid>]

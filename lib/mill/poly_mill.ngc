@@ -1,5 +1,5 @@
 o<poly_mill> sub
-(CALL data ptr[1], cut_start[2], cut_depth[3], compensation[4], show final cut[5], x[6], y[7], rot[8], tool eng pct[9])
+(CALL data ptr[1], cut_start[2], cut_depth[3], compensation[4], show final cut[5], dx[6], dy[7], rot[8], tool eng pct[9], cx[10], cy[11])
 (Author : Fernand Veilleux)
 
 	o1 if [#<_tool_usage> GT 2]
@@ -15,15 +15,17 @@ o<poly_mill> sub
 	o<poly_valid_1> endif
 
 (set local params value)
-	#<pds>        = #1
-	#<cut_start>  = #2
-	#<cut_depth>  = #3
-	#<comp>       = #4
-	#<show_final> = #5
-	#<x>          = #6
-	#<y>          = #7
-	#<rot>        = #8
-	#<tool_eng>   = #9
+	#<pds>        =  #1
+	#<cut_start>  =  #2
+	#<cut_depth>  =  #3
+	#<comp>       =  #4
+	#<show_final> =  #5
+	#<dx>         =  #6
+	#<dy>         =  #7
+	#<rot>        =  #8
+	#<tool_eng>   =  #9
+	#<cx>         = #10
+	#<cy>         = #11
 
 	(get and save current coords system offsets)
 	#<old_coord_system> = [#<_coord_system> / 10]
@@ -36,8 +38,9 @@ o<poly_mill> sub
 	(change coords system)
 	G#<_off_rot_coord_system>
 
-	(apply to new offsets)
-	G10 L2 P#5220 X[#<offset_x> + #<x>] Y[#<offset_y> + #<y>] Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
+	(rotate and apply offsets)
+	o<rotate_xy> CALL [#<_offsets_x>] [#<_offsets_y>] [#<_offsets_x> + #<cx>] [#<_offsets_y> + #<cy>] [#<_offsets_r> + #<rot>]
+	G10 L2 P#5220 X[#<_rotated_x> + #<dx>] Y[#<_rotated_y> + #<dy>] Z#<_offsets_z> R[#<_offsets_r> + #<rot>]
 	
 	o1001 if [#<cut_depth> EQ #<cut_start>]
 		#<cut_step> = 0

@@ -1920,6 +1920,7 @@ class Preferences(object):
             self.ngc_probe_latch_feed = read_str(config, 'probe_mm', 'probe_latch_feed', '50')
             self.ngc_probe_tip_dia = read_str(config, 'probe_mm', 'probe_tip_dia', '3.0')
             self.ngc_probe_safe = read_str(config, 'probe_mm', 'probe_safe', '5.0')
+            self.ngc_probe_height = read_str(config, 'probe_mm', 'probe_height', '0')
 
             self.drill_center_depth = read_str(config, 'drill_mm', 'center_drill_depth', '-3.0')
         else :
@@ -1928,6 +1929,7 @@ class Preferences(object):
             self.ngc_probe_latch_feed = read_str(config, 'probe', 'probe_latch_feed', '2')
             self.ngc_probe_tip_dia = read_str(config, 'probe', 'probe_tip_dia', '0.125')
             self.ngc_probe_safe = read_str(config, 'probe', 'probe_safe', '0.2')
+            self.ngc_probe_height = read_str(config, 'probe', 'probe_height', '0')
 
             self.drill_center_depth = read_str(config, 'drill', 'center_drill_depth', '-0.125')
 
@@ -2018,6 +2020,7 @@ class Preferences(object):
             self.default += ("#<_probe_safe>              = " + self.ngc_probe_safe + "\n")
             self.default += ("#<_probe_tip_dia>           = " + self.ngc_probe_tip_dia + "\n\n")
             self.default += ("#<_probe_tool_len_comp>     = " + self.probe_tool_len_comp + "\n")
+            self.default += ("#<probe_height>             = " + self.ngc_probe_height + "\n")
             self.default += ("#<_tool_probe_z>            = 0.0\n")
 
         if self.cat_name in ['mill', 'plasma'] :

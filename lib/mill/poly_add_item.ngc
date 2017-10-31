@@ -2,15 +2,15 @@ o<poly_add_item> sub
 (author : Fernand Veilleux)
 (CALL type[1], x[2], y[3], dir[4], corner style[5], corner radius[6], complementary[7], tool engagement[8], radius or angle[9], flipped or offsets[10] for type 4 to 7)
 ;types :
-;OK -1 = init and set origin
+; -1 = init and set origin
 ; -3 = mirror all previous items backward -4 = create arc connector to mirror line
-;OK line to : 0 = rel, 1 = abs
-;OK line polar : 2 = abs, 3 = rel w/ prev chord/line, 30 = rel w/ prev arc ctr if so
-;OK arc to coords : 4 = abs, 5 = relative or polar
-;OK arc ij : 6 = relative to start, 7 = absolute from center
-;OK arc w/ ctr at polar : 8 = abs, 9 = rel w/ prev chord/line, 10 = rel w/ prev arc ctr if so
-;OK arc mirrored end with ctr at : 14 = relative to start, 15 = absolute
-;OK type 1 or 5 used in closing
+; line to : 0 = rel, 1 = abs, 10 = X relative, Y absolute, 11 = X absolute, Y relative
+; line polar : 2 = abs, 3 = rel w/ prev chord/line, 30 = rel w/ prev arc ctr if so
+; arc to coords : 4 = abs, 5 = relative or polar
+; arc ij : 6 = relative to start, 7 = absolute from center
+; arc w/ ctr at polar : 8 = abs, 9 = rel w/ prev chord/line, 10 = rel w/ prev arc ctr if so
+; arc mirrored end with ctr at : 14 = relative to start, 15 = absolute
+; type 1 or 5 used in closing
 
 (polydata = x, y, dir, cx, cy, phi-prev, phi-ctr, corner style, corner radius, complementary, tool engagement)
 (polyline items record start at 4982 downward)

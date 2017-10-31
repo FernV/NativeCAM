@@ -5,18 +5,18 @@
 		</menu>
 		<menu action='cutting'  name=_("Cutting")_ icon="threading.png">
 			<menuitem action='boring'  name=_("Boring")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/boring.cfg"/>
-			<menuitem action='turning'  name=_("Turning")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/turning.cfg"/>
+			<menuitem action='turning'  name=_("Turning")_ tool_tip= _("Does straight turning")_ icon="lathe-surface.png" src="lathe/turning.cfg"/>
 			<menuitem action='parting'  name=_("Parting")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/parting.cfg"/>
 			<menuitem action='radius_od'  name=_("Radius OD")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/radius_od.cfg"/>
 			<menuitem action='radius'  name=_("Radius")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/radius.cfg"/>
 			<menuitem action='taper_ida'  name=_("Taper IDA")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/taper_ida.cfg"/>
 			<menuitem action='taper_idl'  name=_("Taper IDL")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/taper_idl.cfg"/>
 			<menuitem action='taper_idla'  name=_("Taper IDLA")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/taper_idla.cfg"/>
-			<menuitem action='taper_oda'  name=_("Taper ODA")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/taper_oda.cfg"/>
-			<menuitem action='taper_odl'  name=_("Taper ODL")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/taper_odl.cfg"/>
-			<menuitem action='taper_odla'  name=_("Taper ODLA")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/taper_odla.cfg"/>
+			<menuitem action='taper_oda'  name=_("Taper ODA")_ tool_tip= _("Machine a taper by angle, small and large diameter")_ icon="taper-oda.png" src="lathe/taper_oda.cfg"/>
+			<menuitem action='taper_odl'  name=_("Taper ODL")_ tool_tip= _("Machine a taper by length, small and large diameter")_ icon="taper-odl.png" src="lathe/taper_odl.cfg"/>
+			<menuitem action='taper_odla'  name=_("Taper ODLA")_ tool_tip= _("Machine a taper by small diameter, length and angle")_ icon="taper-odla.png" src="lathe/taper_odla.cfg"/>
 			<menuitem action='facing'  name=_("Facing")_ tool_tip= _("Cut face")_ icon="lathe-facing.png" src="lathe/facing.cfg"/>
-			<menuitem action='threading'  name=_("Threading")_ tool_tip= _("Cut face")_ icon="lathe-facing.png" src="lathe/threading.cfg"/>
+			<menuitem action='threading'  name=_("Threading")_ tool_tip= _("Cut regular threads")_ icon="threading.png" src="lathe/threading.cfg"/>
 		</menu>
 		<menu action='misc'  name=_('Miscellaneous')_ icon='misc.png'>
 			<menuitem action='group_std' name=_('Standard Group')_ tool_tip=_('Group subroutines')_ icon="group.png" src="group.cfg"/>

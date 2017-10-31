@@ -198,6 +198,7 @@ class PrefEditor():
         self.adj_probefeed = builder.get_object("adj_probefeed")
         self.adj_probesafe = builder.get_object("adj_probesafe")
         self.adj_probedia = builder.get_object("adj_probedia")
+        self.adj_probeheight = builder.get_object("adj_probeheight")
 
         self.adj_centerdrill_depth = builder.get_object("adj_centerdrill_depth")
 
@@ -207,6 +208,7 @@ class PrefEditor():
             self.adj_probefeed.set_value(self.read_float('d', 'probe_mm', 'probe_feed', 200.0))
             self.adj_probesafe.set_value(self.read_float('d', 'probe_mm', 'probe_safe', 5.0))
             self.adj_probedia.set_value(self.read_float('d', 'probe_mm', 'probe_tip_dia', 3.0))
+            self.adj_probeheight.set_value(self.read_float('d', 'probe_mm', 'probe_height', 0.0))
 
             self.adj_centerdrill_depth.set_value(self.read_float('d', 'drill_mm', 'center_drill_depth', -3.0))
         else :
@@ -215,6 +217,7 @@ class PrefEditor():
             self.adj_probefeed.set_value(self.read_float('d', 'probe', 'probe_feed', 8.0))
             self.adj_probesafe.set_value(self.read_float('d', 'probe', 'probe_safe', 0.2))
             self.adj_probedia.set_value(self.read_float('d', 'probe', 'probe_tip_dia', 0.125))
+            self.adj_probeheight.set_value(self.read_float('d', 'probe', 'probe_height', 0.0))
 
             self.adj_centerdrill_depth.set_value(self.read_float('d', 'drill', 'center_drill_depth', -0.125))
 
@@ -471,6 +474,7 @@ class PrefEditor():
             self.config_def.set(probe_section, 'probe_latch_feed', self.adj_probelatchfeed.get_value())
             self.config_def.set(probe_section, 'probe_tip_dia', self.adj_probedia.get_value())
             self.config_def.set(probe_section, 'probe_safe', self.adj_probesafe.get_value())
+            self.config_def.set(probe_section, 'probe_height', self.adj_probeheight.get_value())
 
             self.config_def.set(drill_section, 'center_drill_depth', self.adj_centerdrill_depth.get_value())
 

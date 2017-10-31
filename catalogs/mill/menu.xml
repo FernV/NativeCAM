@@ -68,6 +68,7 @@
             <menuitem action='probe_stock' name=_('Probe Stock')_ tool_tip=_('Find the center of a cube or cylinder')_ icon="probe-stock.png" src="mill/probe-stock.cfg"/>
             <menuitem action='probe_arr' name=_('Probe Array')_ tool_tip=_('Probe a array of points and save to file')_ icon="probe-grid.png" src="mill/probe-array.cfg"/>
             <menuitem action='probe_z' name=_('Probe Surface')_ tool_tip=_('Find Z position with a probe')_ icon="probe-down.png" src="mill/probe-surface.cfg"/>
+            <menuitem action='probe_hole' name=_('Probe Hole')_ tool_tip=_('Find center of a hole')_ icon="probe-hole.png" src="mill/probe-hole.cfg"/>
         </menu>
         <menu action='misc' name=_('Miscellaneous')_ icon='misc.png'>
             <menuitem action='stock' name=_('Raw Material')_ tool_tip=_('Show a temporary image of rough material')_ icon="stock.png" src="mill/material.cfg"/>

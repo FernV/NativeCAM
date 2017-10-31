@@ -4,20 +4,14 @@ o<facing> sub
 	
 	#<start_x>     = #1
 	#<end_x>       = #2
-
-	o30 if [#6 EQ 1]
-		#<start_z> = [#3 - #4]
-		#<end_z>   = 0
-		G10 L20 P#5220 Z[#<_z> - #<start_z>]
-	o30 else
-		#<start_z> = #3
-		#<end_z>   = #4
-	o30 endif
-	
+	#<start_z>     = #3
+	#<end_z>       = #4
 	#<fine_finish> = #5
 	
-	#<tool_path>   = 1
-	/ #<tool_path> = 0
+	/ G0 X#<start_x> Z#<end_z>
+    / F10
+    / G1 X#<end_x>
+	/ o<facing> return
 
 	o10 if [#<fine_finish> GT 0]
 		#<cut_rough_total> = [#<start_z> - #<end_z> - #<_finish_cut>]
@@ -38,7 +32,7 @@ o<facing> sub
 	#<z> = #<start_z>
 	o12 repeat [#<rough_pass>]
 		#<z> = [#<z> - #<each_cut>]
-		o121 if [[#<_tool_usage> LE 1] AND [#<tool_path> EQ 1]]
+		o121 if [#<_tool_usage> LE 1]
 			G0 X#<start_x>
 			G0 Z#<z>
 			G1 X#<end_x>
@@ -46,7 +40,7 @@ o<facing> sub
 		o121 endif
 	o12 endrepeat
 
-	o20 if [#<fine_finish> AND [#<_tool_usage> NE 1] AND [#<tool_path> EQ 1]]
+	o20 if [#<fine_finish> AND [#<_tool_usage> NE 1]]
 		F#<_finish_feed>
 		o21 repeat [#<fine_finish>]
 			G0 X#<start_x>
@@ -58,9 +52,10 @@ o<facing> sub
 	
 	M9 (cooling off)
 	
-	/ G0 X#<start_x> Z#<end_z>
-	/ G1 X#<end_x>
-	
 	G0 X[#<_wp_dia_od> + #<_x_rapid>]
-	
+    o30 if [#6 EQ 1]
+		G0 Z[#<end_z>]
+        G10 L20 P#5220 Z0.0
+    o30 endif
+
 o<facing> endsub
