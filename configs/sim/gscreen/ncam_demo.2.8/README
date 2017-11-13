@@ -2,8 +2,10 @@ NativeCAM is a powerfull user interface to help you create gcode scripts by sele
 
 available for metric or imperial equipment
 
-mill or mill-mm
+mill and mill-mm
 
 plasma and plasma-mm for control of X, Y and Z axes
 
-basic lathe only is not supported yet
+lathe and lathe-mm
+
+execute 'ncam -h' for help on configuration

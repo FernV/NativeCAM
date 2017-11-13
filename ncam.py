@@ -329,15 +329,6 @@ def mess_dlg(mess, title = "NativeCAM"):
     dlg.run()
     dlg.destroy()
 
-# def copy_to_dir(fname, dir):
-    # create directories if necessary
-#    dirname = os.path.realpath(os.path.dirname(dir))
-#    filename = os.path.basename(fname)
-#    if not os.path.exists(dirname):
-#        os.makedirs(dirname)
-#    open(dirname + '/' + filename, 'w').write(open(fname, 'r').read())
-
-
 def mess_yesno(mess, title = ""):
     return mess_with_buttons(mess, (gtk.STOCK_YES, gtk.RESPONSE_YES, \
                              gtk.STOCK_NO, gtk.RESPONSE_NO), title) == gtk.RESPONSE_YES
@@ -505,9 +496,7 @@ def require_ncam_lib(fname, ini_instance):
                 thedir = d
             else :
                 thedir = os.path.join(os.path.realpath(os.path.dirname(fname)), d)
-            if not os.path.isdir(thedir) :
-                continue
-            else :
+            if os.path.isdir(thedir) :
                 print("   %s" % (os.path.realpath(thedir)))
                 if not found_lib_dir :
                     found_lib_dir = thedir.find(require_lib) == 0
@@ -1367,14 +1356,6 @@ class Parameter(object) :
     def get_strict_value(self) :
         return self.attr["value"] if "value" in self.attr else ""
 
-#    def set_user_value(self, user_value) :
-#        if (self.get_type() == "float") :
-#            self.attr['value'] = user_value
-#        elif self.get_type() == 'int' :
-#            self.attr['value'] = str(get_int(user_value))
-#        else :
-#            self.attr['value'] = user_value
-
     def set_value(self, new_val) :
         if self.get_type() == "float" :
             a_val = get_float(new_val)
@@ -1475,7 +1456,7 @@ class Parameter(object) :
     def get_min_value(self):
         min_v = self.attr["minimum_value"] if "minimum_value" in self.attr \
                         else "-999999.9"
-        if self.get_type() == 'float' and default_metric :
+        if self.get_type() == 'float' and default_metric and 'metric_value' in self.attr :
             return str(get_float(min_v) * 25.4)
         else :
             return min_v
@@ -1483,7 +1464,7 @@ class Parameter(object) :
     def get_max_value(self):
         max_v = self.attr["maximum_value"] if "maximum_value" in self.attr \
                         else "999999.9"
-        if self.get_type() == 'float' and default_metric :
+        if self.get_type() == 'float' and default_metric and 'metric_value' in self.attr :
             return str(get_float(max_v) * 25.4)
         else :
             return max_v
@@ -1516,8 +1497,9 @@ class Feature(object):
         return self.attr["type"] if "type" in self.attr else "string"
 
     def get_tooltip(self):
-        return _(self.attr["tool_tip"]) if "tool_tip" in self.attr else \
+        s = _(self.attr["tool_tip"]) if "tool_tip" in self.attr else \
             _(self.attr["help"]) if "help" in self.attr else None
+        return s.replace('&#176;', '°')
 
     def get_attr(self, attr) :
         return self.attr[attr] if attr in self.attr else None
@@ -1589,7 +1571,6 @@ class Feature(object):
 
                 self.param.append(p)
 
-#        self.get_short_id()
         self.attr["id"] = ftype + '_000'
 
         # get gcode parameters
@@ -1610,15 +1591,6 @@ class Feature(object):
         for p in xml :
             self.param.append(Parameter(xml = p))
 
-#         f_id = self.attr['short_id'] if 'short_id' in self.attr else None
-#         if f_id is not None :
-#             f_id = str(UNIQUE_ID)
-#             self.attr["short_id"] = f_id
-#             UNIQUE_ID += 1
-#         return f_id
-#         if 'short_id' in self.attr :
-#             del self.attr['short_id']
-
     def to_xml(self) :
         xml = etree.Element("feature")
         for i in self.attr :
@@ -1638,23 +1610,14 @@ class Feature(object):
 
     def get_short_id(self):
         global UNIQUE_ID
-#        f_id = self.attr['short_id'] if 'short_id' in self.attr else None
-#        if f_id is None :
-#            f_id = str(UNIQUE_ID)
         self.attr["short_id"] = str(UNIQUE_ID)
         UNIQUE_ID += 1
-#        return f_id
 
     def get_definitions(self) :
-#        global DEFINITIONS
-#        if self.attr["type"] not in DEFINITIONS :
         s = self.attr["definitions"] if "definitions" in self.attr else ''
         if s != '' :
             s = self.process(s)
-#                if s != "" :
-#                    DEFINITIONS.append(self.attr["type"])
         return s
-#        return ""
 
     def include(self, srce) :
         src = search_path(search_warning.dialog, srce, LIB_DIR)
@@ -1768,8 +1731,6 @@ class Feature(object):
         s = re.sub(r"(?ims)(<subprocess>(.*?)</subprocess>)",
                    subprocess_callback, s)
 
-#        if s.find("#ID") > -1 :
-#            f_id = self.get_short_id()
         s = re.sub(r"#ID", "%s" % self.attr["short_id"], s)
 
         s = s.lstrip('\n').rstrip('\n\t')
@@ -2153,7 +2114,7 @@ class NCam(gtk.VBox):
 
         no_ini = ini is None
 
-        if (ini is None) :
+        if no_ini :
             # standalone with no --ini:
             inifilename = 'NA'
             # beware, files expected/created in this dir
@@ -2187,7 +2148,7 @@ class NCam(gtk.VBox):
                     self.catalog_dir = 'plasma'
 
             val = ini_instance.find('DISPLAY', 'LATHE')
-            if (val is not None) and ((val == '0') or (val == 'TRUE')):
+            if (val is not None) and val.lower() in ['1', 'true'] :
                 self.catalog_dir = 'lathe'
 
             self.pref.ngc_init_str = ini_instance.find('RS274NGC', 'RS274NGC_STARTUP_CODE')
@@ -2213,7 +2174,7 @@ class NCam(gtk.VBox):
 
         fromdirs = [CATALOGS_DIR, CUSTOM_DIR]
 
-        if ini is None :
+        if no_ini :
             self.ask_to_create_standalone(fromdirs)
 
         # first use:copy, subsequent: update
@@ -2319,15 +2280,12 @@ class NCam(gtk.VBox):
 
 
     def ask_to_create_standalone(self, fromdirs) :
-        dir_exists = False
         for d in fromdirs:
             if os.path.isdir(os.path.join(NCAM_DIR, d)) :
-                dir_exists = True
-                break
-        if not dir_exists:
-            msg = _('Standalone Directory :\n\n%(dir)s\n\nContinue?') % {'dir':NCAM_DIR}
-            if not mess_yesno(msg, title = _("NativeCAM CREATE")) :
-                sys.exit(0)
+                return
+        msg = _('Create Standalone Directory :\n\n%(dir)s\n\nContinue?') % {'dir':NCAM_DIR}
+        if not mess_yesno(msg, title = _("NativeCAM CREATE")) :
+            sys.exit(0)
 
     def update_user_tree(self, fromdirs, todir):
 
@@ -2342,17 +2300,6 @@ class NCam(gtk.VBox):
             os.mkdir(srcdir, 0o755)
 
         srcdir = os.path.join(NCAM_DIR, LIB_DIR)
-#        if os.path.exists(srcdir) and not os.path.islink(srcdir) :
-#            msg = _('\nAn updated system is available\n\n'
-#                'A new structure will replace the old one if you continue\n\n'
-#                'If you have modified files in cfg, lib or graphics\n'
-#                'sub-directories, you should chose CANCEL on the\n'
-#                'next screen and exit the application to copy those files\n'
-#                'in the newly created \'%(dir)s\' sub-directory. Other\n'
-#                'un-needed files will be transfered to \'%(dir)s\' automatically.\n'
-#                'It is up to you to delete them.\n\n'
-#                'Take time to read the README file in \'%(dir)s\'' % {'dir':CUSTOM_DIR})
-#            mess_dlg(msg, 'NativeCAM major update')
 
         # copy system files to user, make dirs if necessary
         mode = copymode.one_at_a_time
@@ -2379,7 +2326,7 @@ class NCam(gtk.VBox):
             srcdir = os.path.join(SYS_DIR, DEFAULTS_DIR, s)
             if os.path.exists(srcdir) :
                 for f in os.listdir(srcdir) :
-                    dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, f)
+                    dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, PROJECTS_DIR, f)
                     if not os.path.exists(dst) :
                         try :
                             shutil.copy(os.path.join(srcdir, f), dst)
@@ -2393,6 +2340,11 @@ class NCam(gtk.VBox):
                 dst = os.path.join(NCAM_DIR, CATALOGS_DIR, s, PROJECTS_DIR, EXAMPLES_DIR)
                 if os.path.exists(dst) and not os.path.islink(dst) :
                     shutil.rmtree(dst)
+                    if os.path.exists(dst) :
+                        try :
+                            os.remove(dst)
+                        except OSError :
+                            os.rmdir(dst)
                 if not os.path.exists(dst) :
                     try :
                         os.symlink(srcdir, dst)
@@ -2431,14 +2383,6 @@ class NCam(gtk.VBox):
             # replace dir with a link
             if not os.path.isdir(srcdir) :
                 os.symlink(tdir, srcdir)
-
-        # move current work and default template
-        srcdir = os.path.join(NCAM_DIR, CATALOGS_DIR, self.catalog_dir)
-        for s in [CURRENT_WORK, DEFAULT_TEMPLATE] :
-            src_f = os.path.join(srcdir, s)
-            if os.path.isfile(src_f) :
-                shutil.copy(src_f, os.path.join(srcdir, PROJECTS_DIR, s))
-                os.remove(src_f)
 
     def create_menubar(self):
         def create_mi(_action, imgfile = None):
@@ -2500,9 +2444,6 @@ class NCam(gtk.VBox):
         ed_menu.append(self.adt_mi)
         self.art_mi = create_mi(self.actionRevertType)
         ed_menu.append(self.art_mi)
-
-#         ed_menu.append(create_mi(self.actionSaveUser))
-#         ed_menu.append(create_mi(self.actionDeleteUser))
 
         edit_menu = create_mi(self.actionEditMenu)
         edit_menu.set_submenu(ed_menu)
@@ -4627,7 +4568,7 @@ def verify_ini(fname, ctlog, in_tab) :
 
             try :
                 c = parser.get('DISPLAY', 'LATHE')
-                if c == '1' :
+                if c.lower() in ['1', 'true'] :
                     ctlog = 'lathe'
             except :
                 pass
@@ -4648,15 +4589,14 @@ def verify_ini(fname, ctlog, in_tab) :
                     except :
                         txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
-            else :
-                newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=%s %s\n' % (req, ctlog, path2ui)
-                try :
-                    oldstr = 'EMBED_TAB_COMMAND = %s' % parser.get('DISPLAY', 'embed_tab_command')
-                    txt = re.sub(r"%s" % oldstr, newstr, txt)
-                except :
+            elif (dp == 'gmoccapy') :
+                if in_tab :
+                    newstr = '%s%s%s%s%s %s\n' % (req, 'EMBED_TAB_NAME = NativeCAM\n', \
+                            'EMBED_TAB_LOCATION = ntb_user_tabs\n', \
+                            'EMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=', \
+                            ctlog, path2ui)
                     txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
-
-                if dp == 'gmoccapy' :
+                else :
                     newstr = '%sEMBED_TAB_LOCATION = box_right\n' % req
                     try :
                         oldstr = 'EMBED_TAB_LOCATION = %s' % parser.get('DISPLAY', 'embed_tab_location')
@@ -4670,20 +4610,35 @@ def verify_ini(fname, ctlog, in_tab) :
                         txt = re.sub(r"%s" % oldstr, newstr, txt)
                     except :
                         txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
-                else :  # gscreen
-                    newstr = '%sEMBED_TAB_LOCATION = vcp_box\n' % req
+
+                    newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=%s %s\n' % (req, ctlog, path2ui)
                     try :
-                        oldstr = 'EMBED_TAB_LOCATION = %s' % parser.get('DISPLAY', 'embed_tab_location')
+                        oldstr = 'EMBED_TAB_COMMAND = %s' % parser.get('DISPLAY', 'embed_tab_command')
                         txt = re.sub(r"%s" % oldstr, newstr, txt)
                     except :
                         txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
-                    newstr = '%sEMBED_TAB_NAME = Embedded 2\n' % req
-                    try :
-                        oldstr = 'EMBED_TAB_NAME = %s' % parser.get('DISPLAY', 'embed_tab_name')
-                        txt = re.sub(r"%s" % oldstr, newstr, txt)
-                    except :
-                        txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+            else :  # gscreen
+                newstr = '%sEMBED_TAB_COMMAND = gladevcp -x {XID} -U --catalog=%s %s\n' % (req, ctlog, path2ui)
+                try :
+                    oldstr = 'EMBED_TAB_COMMAND = %s' % parser.get('DISPLAY', 'embed_tab_command')
+                    txt = re.sub(r"%s" % oldstr, newstr, txt)
+                except :
+                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+                newstr = '%sEMBED_TAB_LOCATION = vcp_box\n' % req
+                try :
+                    oldstr = 'EMBED_TAB_LOCATION = %s' % parser.get('DISPLAY', 'embed_tab_location')
+                    txt = re.sub(r"%s" % oldstr, newstr, txt)
+                except :
+                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
+
+                newstr = '%sEMBED_TAB_NAME = NativeCAM\n' % req
+                try :
+                    oldstr = 'EMBED_TAB_NAME = %s' % parser.get('DISPLAY', 'embed_tab_name')
+                    txt = re.sub(r"%s" % oldstr, newstr, txt)
+                except :
+                    txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
             newstr = '%sPROGRAM_PREFIX = ncam/scripts/\n' % req
             try :
@@ -4723,7 +4678,7 @@ Options :
    -h | --help                 this text
    (-i | --ini=) inifilename   inifile used
    (-c | --catalog=) catalog   valid catalogs = mill, plasma, lathe
-   -t | --tab                  only if you use axis it will be in a tab
+   -t | --tab                  with axis and gmoccapy it will be in a tab
 
 To prepare your inifile to use NativeCAM embedded,
    a) Start in a working directory with your LinuxCNC configuration ini file

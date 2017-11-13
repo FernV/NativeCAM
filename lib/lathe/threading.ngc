@@ -1,0 +1,94 @@
+o<threading> sub
+(author : Fernand Veilleux)
+(CALL begin_z, end_z, units, large diameter, small diameter, pitch, degression, init_depth, peak, taper, finish_passes)
+
+	#<begin_z> = #1
+	#<end_z> = #2
+	#<degress> = #7
+	#<taper> = #10
+	#<finish_passes> = #11
+
+	o91 if [[#<_metric> EQ 1] AND [#3 EQ 0]] (metric machine units and inch threads)
+		#<dia>    = [25.4 * #4]
+		#<pitch>  = [25.4 / #6]
+		#<depth>  = [25.4 * ABS[#4 - #5]]
+		#<idepth> = [25.4 * #8]
+	o91 elseif [[#<_metric> EQ 0] AND [#3 EQ 1]] (imperial machine units and metric threads)
+		#<dia>    = [#4  / 25.4]
+		#<pitch>  = [#6  / 25.4]
+		#<depth>  = [ABS[#4 - #5] / 25.4]
+		#<idepth> = [#8 / 25.4]
+	o91 else (machine and thread units are same)
+		o92 if [[#<_metric> EQ 0] AND [#3 EQ 0]] (imperial machine units and threads)
+			#<pitch>  = [1 / #6]
+		o92 else
+			#<pitch>  = #6
+		o92 endif
+		#<dia>    = #4
+		#<depth>  = ABS[#4 - #5]
+		#<idepth> = #8
+	o91 endif
+
+	o95 if [#<_lathe_radius_mode>]
+		#<dia>    = [#<dia> / 2]
+		#<depth>  = [#<depth> / 2]
+		#<idepth> = [#<idepth> / 2]
+		#<peak>   = [#9 / 2]
+	o95 else
+		#<peak>   = #9
+	o95 endif
+
+	o61 if [#<peak> GT 0] (external threads)
+		o<in_list> CALL [#5413] [2] [0] [6]
+		o62 if [#<_in_list> EQ 0]
+			(debug,Threading: Cutter orientation should be 6 or None)
+			(print,)
+			(print,Threading: Cutter orientation should be 6 or None)
+			(AXIS,notify,Threading: Cutter orientation should be 6 or None)
+		o62 endif
+	o61 else
+		o<in_list> CALL [#5413] [2] [0] [8]
+		o63 if [#<_in_list> EQ 0]
+			(debug,Threading: Cutter orientation should be 8 or None)
+			(print,)
+			(print,Threading: Cutter orientation should be 8 or None)
+			(AXIS,notify,Threading: Cutter orientation should be 8 or None)
+		o63 endif
+	o61 endif
+
+	o71 if [#<_x> LT [#<_wp_dia_od> + #<_X_rapid>]]
+		G0 X[#<_wp_dia_od> + #<_X_rapid>]
+	o71 endif
+
+	o81 if [#<peak> GT 0.0]
+		o82 if [#<begin_z> LT #<end_z>]
+			G0 Z[#<begin_z>]
+		o82 else
+			G0 Z[#<begin_z> + #<_z_clear>]
+		o82 endif
+		G0 X[#<dia> + #<peak>]
+	o81 else
+		o83 if [#<begin_z> LT #<end_z>]
+			G0 Z[#<end_z> + #<_z_rapid>]
+			G0 X[#<dia> - #<depth> + #<peak>]
+			G0 Z[#<begin_z>]
+		o83 else
+			G0 Z[#<begin_z> + #<_z_rapid>]
+			G0 X[#<dia> - #<depth> + #<peak>]
+			G0 Z[#<begin_z> + #<_z_clear>]
+		o83 endif
+	o81 endif
+	
+	G76 P#<pitch> Z#<end_z> I-#<peak> J#<idepth> R#<degress> K#<depth> Q30 H#<finish_passes> E#<depth> L#<taper>
+
+	o97 if [#<peak> LT 0.0]
+		o98 if [#<begin_z> GT #<end_z>]
+			G0 Z[#<begin_z> + #<_z_rapid>]
+		o98 else
+			G0 Z[#<end_z> + #<_z_rapid>]
+		o98 endif
+	o97 endif
+	G0 X[#<dia> + #<_x_rapid>]
+	G0 X[#<_wp_dia_od> + #<_X_rapid>]
+	
+o<threading> endsub

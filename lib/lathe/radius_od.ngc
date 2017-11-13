@@ -1,128 +1,154 @@
 (author : Fernand Veilleux)
 o<radius_od> sub
-(CALL [#end_x] [#start_z] [#radius] [#fine_finish] [#dir])
+(CALL [peak_x] [peak_z] [#radius] [direction] [#finishing_passes])
 
-	#<start_x>     = [#1 - #3]
-	#<end_x>       = #1
-	#<start_z>     = #2
-	#<radius>      = #3
-	#<fine_finish> = #4
-	#<dir>         = #5
-	#<tool_path>   = 1
-	/ #<tool_path> = 0
+	#<peak_x>           = #1
+	#<peak_z>           = #2
+	#<radius>           = #3
+	#<direction>        = #4 ("X- to Z- = 0 : Z+ to X- = 1 : Z- to X- = 2 : X- to Z+ = 3")
+	#<finishing_passes> = #5
 
-	(must change to radius mode)
-	#<prev_mode> = #<_lathe_diameter_mode>
-	G8
+	#<total_cut> = [#<radius> * [SQRT[2] - 1]]
 
-	o00 if [#<prev_mode> EQ 1] (correct for previous diameter mode)
-		#<dm> = 0.5
-	o00 else
-		#<dm> = 1.0
-	o00 endif
-
-	o01 if [#<dir> EQ -1]
-		#<p_dir> = 2
-	o01 else
-		#<p_dir> = 3
-	o01 endif
-	
-	#<end_z> = [#<start_z> - #<radius> * #<dir>]
-	o10 if [#<fine_finish> GT 0]
-		#<cut_rough_total> = [#<radius> - #<_finish_cut>]
+	o10 if [#<finishing_passes> EQ 0]
+		#<cut_rough_total> = #<total_cut>
 	o10 else
-		#<cut_rough_total> = #<radius>
+		#<cut_rough_total> = [#<total_cut> - #<_finish_cut>]
 	o10 endif
 
-	#<rough_pass> = FUP[#<cut_rough_total> / #<_rough_cut>]
-	o11 if [#<rough_pass> GT 0]
-		#<each_cut> = [#<cut_rough_total> / #<rough_pass>]
-		F#<_rough_feed>
-	o11 elseif [#<rough_pass> LT 0]
-		o<radius_od> return
+	#<rough_passes> = FUP[#<cut_rough_total> / #<_rough_cut>]
+	o11 if [#<rough_passes> GT 0]
+		#<z_step> = [#<radius> * #<cut_rough_total> / #<total_cut> / #<rough_passes>]
+	o11 elseif [#<rough_passes> LT 0]
+;		o<radius_od> return
 	o11 endif
-	#<p_dir> = 2
-;	G0 X[#<_wp_dia_od> + #<_x_rapid>]
+
+	o50 if [#<_lathe_diameter_mode> EQ 1]
+		#<x_radius> = [#<radius> * 2]
+		#<xtend> = [#5410 * 2]
+		#<x_step> = [#<z_step> * 2]
+	o50 else
+		#<x_radius> = [#<radius>]
+		#<xtend> = [#5410]
+		#<x_step> = [#<z_step>]
+	o50 endif
+
+	o31 if [#<direction> EQ 0]
+		#<mode> = 1 (begin on X axis)
+		#<dir> = 3
+		#<pv_dir> = 2 (preview dir)
+		#<z_factor> = -1
+		#<comp> = 42
+	o31 elseif [#<direction> EQ 1]
+		#<mode> = 2 (begin on Z axis)
+		#<dir> = 3
+		#<pv_dir> = 3
+		#<z_factor> = 1
+		#<comp> = 42
+	o31 elseif [#<direction> EQ 2]
+		#<mode> = 2
+		#<dir> = 2
+		#<pv_dir> = 2
+		#<z_factor> = -1
+		#<comp> = 41
+	o31 else
+		#<mode> = 1
+		#<dir> = 2
+		#<pv_dir> = 3
+		#<z_factor> = 1
+		#<comp> = 41
+	o31 endif
+	
+	/ F10
+	/ G0 X[#<peak_x>] Z[#<peak_z> + #<radius> * #<z_factor>]
+	/ G#<pv_dir> X[#<peak_x> - #<x_radius>] Z[#<peak_z>] I-#<radius>
+	/ o<radius_od> return
+
+	o998 if [[#<direction> MOD 2] EQ 0]
+		o<in_list> CALL [#5413] [3] [0] [2] [9]
+		o999 if [#<_in_list> EQ 0]
+			(debug,Radius OD: Cutter orientation should be 2, 9 or None)
+			(print,)
+			(print,Radius OD: Cutter orientation should be 2, 9 or None)
+			(AXIS,notify,Radius OD: Cutter orientation should be 2 or 9 or None)
+;			o<radius_od> return
+		o999 endif
+	o998 else
+		o<in_list> CALL [#5413] [3] [0] [1] [9]
+		o997 if [#<_in_list> EQ 0]
+			(debug,Radius OD: Cutter orientation should be 1, 9 or None)
+			(print,)
+			(print,Radius OD: Cutter orientation should be 1, 9 or None)
+			(AXIS,notify,Radius OD: Cutter orientation should be 1 or 9 or None)
+;			o<radius_od> return
+		o997 endif
+	o998 endif
+
+	o51 if [#<_x> LT [#<peak_x> + #<_x_rapid>]]
+		G0 X[#<peak_x> + #<_x_rapid>]
+	o51 endif
+
+	G#<comp>
+	G0 X[#<peak_x> + #<_x_clear>] Z[#<peak_z> - [#<_z_clear> + 0] * #<z_factor>]
+	
 	M#<_cooling_mode>
-;	G0 Z[#<start_z>]; - #5410 * #<dir>]
-;	G0 X[#<end_x> + 0.1]; + #5410 * 5 * #<dir>]
-;	(print,dir = #<dir>)
-;	G0 X#<end_x> Z[#<start_z> + #5410 * #<dir> * 5]
-;	G41
-	#<pass> = 0
-;	o12 while [#<pass> LT #<rough_pass>]
-;		#<pass> = [#<pass> + 1]
-;		(print,pass = #<pass>)
-;		#<step> = [#<pass> * #<each_cut>]
-;		#<s_x> = [#<end_x> - #<each_cut> * #<pass>]
-;		#<s_z> = [#<start_z> - #<step> * #<dir>]
-;		#<e_x> = [#<end_x> - #<step>]
-;		(print,step = #<step>, sz = #<s_z>, e_x = #<e_x>)
-
-#<z_step> = #<_rough_cut>
-#<x_step> = [#<end_x> - [#<_rough_cut> * 1]]
-
-;G0 X[#<end_x> + 0.50] Z[#<start_z>]
-G42
-o100 while [#<radius> GT #<z_step>]
-G0 Z[#<start_z> + #<_z_clear>]
-G0 X[#<end_x> + #5410 + #<_rough_cut>]
-G0 Z[#<start_z> - #<z_step> - #5410]
-G1 X#<end_x> Z[#<start_z> - #<z_step>]
-;G0 Z[#<start_z> - #<z_step>]
-G2 X#<x_step> Z#<start_z> I-#<z_step> K0.0
-#<x_step> = [#<x_step> - #<_rough_cut>]
-#<z_step> = [#<z_step> + #<_rough_cut>]
-o100 endwhile
-
-;		o121 if [[#<_tool_usage> LE 1] AND [#<tool_path> EQ 1]]
-;			G0 Z[#<start_z> - #5410 * #<dir>]
-;			G0 X[#<end_x> + #5410 / 2]; + #5410 * 5 * #<dir>]
-;			G0 Z[#<start_z> + #5410 * #<dir> * 5]
-;			G0 Z#<s_z>
-;			G1 X#<end_x>
-			
-;			G#<p_dir> X#<x> Z#<start_z> I[#5410 * #<dir> * 2.5] K[-#5410 * #<dir> * 2.5]
-;			G#<p_dir> X#<e_x> Z#<start_z> I[-#<step>] ;K[-#<radius> * #<dir>]
-;			G0 Z[#<start_z> + #<_z_clear> * #<dir>]
-;			G0 X[#<end_x> + #<_x_clear> * #<dm>]
-;			G0 Z[#<start_z> + #<_x_clear> * #<dir>]
-
-		;			G0 X[#<x>]; + #5410 * 5 * #<dir>]
-;			G0 Z[#<start_z> + #5410 * #<dir> * 5]
-;			G0 Z#<start_z>
-;			G1 X#<x> Z#<start_z>
-;			G#<p_dir> X#<x> Z#<start_z> I[#5410 * #<dir> * 2.5] K[-#5410 * #<dir> * 2.5]
-;			G#<p_dir> X#<end_x> Z#<z> I[-#<x> + #<end_x> - #<radius>] K[-#<radius> * #<dir>]
-;			G0 Z[#<z> - #<_z_clear> * #<dir>]
-;			G0 X[#<end_x> + #<_x_clear> * #<dm>]
-;			G0 Z[#<start_z> + #<_x_clear> * #<dir>]
-;		o121 endif
-;	o12 endwhile
-
-;	o20 if [0 and #<fine_finish> AND [#<_tool_usage> NE 1] AND [#<tool_path> EQ 1]]
-;		F#<_finish_feed>
-;		G0 X#<start_x>
-;		o21 repeat [#<fine_finish>]
-;			G0 X[#<start_x> - #<_x_clear> / 2] Z[#<start_z> + #<_z_clear> * #<dir>]
-;			G1 Z#<start_z>
-;			G1 X#<start_x>
-;			G#<p_dir> X#<end_x> Z[#<start_z> - #<radius> * #<dir>] K[-#<radius> * #<dir>]
-;			G1 Z[#<z> - #<_z_clear> * #<dir>]
-;			G0 X[#<end_x> + #<_x_clear>]
-;			G0 Z[#<start_z> + #<_z_clear> * #<dir>]
-;		o21 endrepeat
-;	o20 endif
+	
+	o15 if [#<_tool_usage> LE 1]
+		F#<_rough_feed>
+		#<pass> = 1
+		o14 if [#<mode> EQ 1] (begin on X axis)
+			o<loop00> while [#<pass> LE #<rough_passes>]
+				G0 X[#<peak_x> - [#<x_step> * #<pass> + #<xtend>]]
+				G0 Z[#<peak_z>]
+				G1 X[#<peak_x> - #<x_step> * #<pass>]
+				G#<dir> X[#<peak_x>] Z[#<peak_z> + #<z_step> * #<pass> * #<z_factor>] K[#<z_step> * #<pass> * #<z_factor>]
+				G1 Z[#<peak_z> + [#<z_step> * #<pass> + #5410] * #<z_factor>]
+				G0 X[#<peak_x> + #<_x_clear>]
+				G0 Z[#<peak_z> - #<_z_clear> * #<z_factor>]
+				#<pass> = [#<pass> + 1]
+			o<loop00> endwhile (begin on Z axis)
+		o14 else
+			o<loop01> while [#<pass> LT #<rough_passes>]
+				G0 Z[#<peak_z> + [#<z_step> * #<pass> + #5410] * #<z_factor>]
+				G0 X[#<peak_x>]
+				G1 Z[#<peak_z> + [#<z_step> * #<pass>] * #<z_factor>]
+				G#<dir> X[#<peak_x> - #<x_step> * #<pass>] Z[#<peak_z>] I-[#<z_step> * #<pass>]
+				G1 X[#<peak_x> - #<x_step> * #<pass> - #<xtend>]
+				G0 Z[#<peak_z> - #<_z_clear> * #<z_factor>]
+				G0 X[#<peak_x> + #<_x_clear>]
+				#<pass> = [#<pass> + 1]
+			o<loop01> endwhile
+		o14 endif
+	o15 endif
+	
+	o25 if [[#<_tool_usage> NE 1] AND [#<finishing_passes> GT 0]]
+		F#<_finish_feed>
+		o24 if [#<mode> EQ 1] (begin on X axis)
+			o<loop10> repeat [#<finishing_passes>]
+				G0 X[#<peak_x> - [#<x_radius> + #<xtend>]]
+				G0 Z[#<peak_z>]
+				G1 X[#<peak_x> - #<x_radius>]
+				G#<dir> X[#<peak_x>] Z[#<peak_z> + #<radius> * #<z_factor>] K[#<radius> * #<z_factor>]
+				G1 Z[#<peak_z> + [#<radius> + #5410] * #<z_factor>]
+				G0 X[#<peak_x> + #<_x_clear>]
+				G0 Z[#<peak_z> - #<_z_clear> * #<z_factor>]
+			o<loop10> endrepeat (begin on Z axis)
+		o24 else
+			o<loop11> repeat [#<finishing_passes>]
+				G0 Z[#<peak_z> + [#<radius> + #5410] * #<z_factor>]
+				G0 X[#<peak_x>]
+				G1 Z[#<peak_z> + #<radius> * #<z_factor>]
+				G#<dir> X[#<peak_x> - #<x_radius>] Z[#<peak_z>] I-[#<radius>]
+				G1 X[#<peak_x> - #<x_radius> - #<xtend>]
+				G0 Z[#<peak_z> - #<_z_clear> * #<z_factor>]
+				G0 X[#<peak_x> + #<_x_clear>]
+			o<loop11> endrepeat
+		o24 endif
+	o25 endif
 	
 	M9 (cooling off)
-	G40
-	
-	/ G0 X#<end_x> Z[#<start_z> - #<radius> * #<dir>]
-	/ G#<p_dir> X[#<end_x> - #<radius>] Z#<start_z> I-#<radius>
-	
-	G[8 - #<prev_mode>]
 
-	o<get_max> CALL [41] [2] [#<_wp_dia_od>] [#<end_x>]
-	G0 X[#41 + #<_x_rapid>]
+	G40
+	G0 X[#<_wp_dia_od> + #<_x_rapid>]
 	
 o<radius_od> endsub

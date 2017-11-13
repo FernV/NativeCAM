@@ -1,3 +1,17 @@
+nativecam (0.1.11) UNRELEASED; urgency=medium
+
+  first usable lathe subroutines
+  delete unusable lathe subroutines
+  new mill subroutine
+  edit configs file
+  added gscreen configuration
+  update default template
+  new icons
+  code clean-up
+  minor bug fixes
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Sun, 12 Nov 2017 21:06:00 -0500
+
 nativecam (0.1.10) UNRELEASED; urgency=medium
 
   fix calculator again
