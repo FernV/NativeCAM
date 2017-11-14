@@ -262,7 +262,7 @@ def search_path(warn, f, *argsl) :
     while i < j :
         src = os.path.join(src, argsl[i])
         i += 1
-    src = os.path.join(src, f)
+    src = os.path.abspath(os.path.join(src, f))
     if os.path.isfile(src) :
         return src
 
@@ -1487,6 +1487,9 @@ class Feature(object):
     def get_value(self):
         return self.attr["value"] if "value" in self.attr else ""
 
+    def get_version(self):
+        return get_float(self.attr["version"]) if "version" in self.attr else 0.0
+
     def get_display_string(self):
         return self.get_value()
 
@@ -1529,7 +1532,6 @@ class Feature(object):
                 conf[section][item] = s
         self.attr = conf["SUBROUTINE"]
 
-        self.attr["src"] = src
         ftype = self.attr["type"]
         if ftype is None :
             raise Exception(_('Type not defined for\n%s') % src)
@@ -1658,7 +1660,7 @@ class Feature(object):
             old_stdout = sys.stdout
             redirected_output = StringIO()
             sys.stdout = redirected_output
-            exec(s) in {"self":self}
+#            exec(s) in {"self":self}
             sys.stdout = old_stdout
             redirected_output.reset()
             out = str(redirected_output.read())
@@ -3551,7 +3553,10 @@ class NCam(gtk.VBox):
         return True
 
     def treestore_from_xml(self, xml):
-        def recursive(treestore, itr, xmlpath):
+
+        treestore = gtk.TreeStore(object, str, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN)
+
+        def recursive(itr, xmlpath):
             for xml in xmlpath :
                 if xml.tag == "feature" :
                     f = Feature(xml = xml)
@@ -3581,7 +3586,7 @@ class NCam(gtk.VBox):
                         if p_type == "items" :
                             piter = treestore.append(citer, [p, tool_tip, m_visible, is_visible])
                             xmlpath_ = xml.find(".//param[@type='items']")
-                            recursive(treestore, piter, xmlpath_)
+                            recursive(piter, xmlpath_)
                         elif p_type in ['header', 'sub-header'] :
                             if (header_name == '') :
                                 hiter = treestore.append(citer, [p, tool_tip, m_visible, is_visible])
@@ -3616,9 +3621,8 @@ class NCam(gtk.VBox):
                                     hiter = treestore.iter_parent(hiter)
 
 
-        treestore = gtk.TreeStore(object, str, gobject.TYPE_BOOLEAN, gobject.TYPE_BOOLEAN)
         if xml is not None :
-            recursive(treestore, treestore.get_iter_root(), xml)
+            recursive(treestore.get_iter_root(), xml)
         self.treestore = treestore
         self.master_filter = self.treestore.filter_new()
         self.master_filter.set_visible_column(2)
@@ -3836,11 +3840,11 @@ class NCam(gtk.VBox):
         if keyname in ['Return', 'KP_Enter']:
             self.newnamedlg.response(gtk.RESPONSE_OK)
 
-    def import_xml(self, xml_) :
-        if xml_.tag != XML_TAG:
-            xml_ = xml_.find(".//%s" % XML_TAG)
+    def import_xml(self, xml_i) :
+        if xml_i.tag != XML_TAG:
+            xml_i = xml_i.find(".//%s" % XML_TAG)
 
-        if xml_ is not None :
+        if xml_i is not None :
             xml = self.treestore_to_xml()
             if self.iter_selected_type == tv_select.none :
                 opt = 0
@@ -3862,7 +3866,7 @@ class NCam(gtk.VBox):
                 next_path = (self.selected_feature_path[0:l_path - 1] + \
                         (self.selected_feature_path[l_path - 1] + 1,))
 
-            for x in xml_ :
+            for x in xml_i :
                 if opt == 1 :
                     i += 1
                     parent.insert(i, x)
@@ -3896,7 +3900,7 @@ class NCam(gtk.VBox):
         if src_data.find(".//%s" % XML_TAG) > -1 :
             xml = etree.parse(src_file).getroot()
         elif src_data.find('[SUBROUTINE]') > -1 :
-            f = Feature(src_file)
+            f = Feature(src = src_file)
             f.attr['src'] = src
             xml = etree.Element(XML_TAG)
             xml.append(f.to_xml())
@@ -4063,13 +4067,14 @@ class NCam(gtk.VBox):
         fn = search_path(search_warning.none, CURRENT_WORK, \
                          CATALOGS_DIR, self.catalog_dir, PROJECTS_DIR)
         if fn is not None :
-            xml = etree.parse(fn)
-            self.treestore_from_xml(xml.getroot())
+            xml = etree.parse(fn).getroot()
+            nxml = self.update_features(xml)
+            self.treestore_from_xml(nxml)
             self.expand_and_select((0,))
             CURRENT_PROJECT = _('Untitle.xml')
             self.display_proj_name()
             self.file_changed = False
-            self.action(xml.getroot())
+            self.action(nxml)
         else :
             print(_('Previous work not saved as current work'))
             self.action_new_project()
@@ -4084,8 +4089,9 @@ class NCam(gtk.VBox):
         if fn is None :
             print(_('No default template saved'))
         else :
-            xml = etree.parse(fn)
-            self.treestore_from_xml(xml.getroot())
+            xml = etree.parse(fn).getroot()
+            xml = self.update_features(xml)
+            self.treestore_from_xml(xml)
             self.expand_and_select((0,))
         CURRENT_PROJECT = _('Untitle.xml')
         self.display_proj_name()
@@ -4389,12 +4395,71 @@ class NCam(gtk.VBox):
             if filechooserdialog.run() == gtk.RESPONSE_OK:
                 fname = filechooserdialog.get_filename()
                 try :
-                    self.import_xml(etree.parse(fname).getroot())
+                    xml = self.update_features(etree.parse(fname).getroot())
+                    self.import_xml(xml)
                     self.file_changed = True
                 except etree.ParseError as err :
                     mess_dlg(err, _("Import project"))
         finally:
             filechooserdialog.destroy()
+
+    # will update with new features and keep the previous values
+    def update_features(self, xml_i):
+        new_xml = etree.Element(XML_TAG)
+
+        def recursive(xmlpath, dst):
+            for xml in xmlpath :
+                if xml.tag == "feature" :
+                    f_A = Feature(xml = xml)
+                    src_f = search_path(search_warning.none, f_A.get_attr('src'), CFG_DIR)
+                    if src_f is None :
+                        f_xml = f_A.to_xml()
+                    else :
+                        f_B = Feature(src = src_f)
+                        if f_B.get_version() > f_A.get_version() :
+                            f_B.attr['src'] = f_A.get_attr('src')
+                            # assign all old values
+                            f_B.attr['name'] = f_A.attr['name']
+                            if f_A.get_value() != '' :
+                                f_B.set_value(f_A.get_value())
+                            if 'hidden_count' in f_A.attr :
+                                f_B.attr['hidden_count'] = f_A.attr['hidden_count']
+
+                            for p in f_A.param :
+                                    call = p.attr['call']
+                                    for q in f_B.param :
+                                        if q.attr['call'] == call :
+                                            q.attr['path'] = p.attr['path']
+                                            if 'value' in p.attr :
+                                                q.attr['value'] = p.attr['value']
+                                            if 'metric_value' in p.attr :
+                                                q.attr['metric_value'] = p.attr['metric_value']
+                                            if 'minimum_value' in p.attr :
+                                                q.attr['minimum_value'] = p.attr['minimum_value']
+                                            if 'maximum_value' in p.attr :
+                                                q.attr['maximum_value'] = p.attr['maximum_value']
+                                            if 'hidden' in p.attr :
+                                                q.attr['hidden'] = p.attr['hidden']
+                                            if 'no_zero' in p.attr :
+                                                q.attr['no_zero'] = p.attr['no_zero']
+                                            break
+                            f_xml = f_B.to_xml()
+                        else :
+                            f_xml = f_A.to_xml()
+
+                    if dst is None :
+                        new_xml.append(f_xml)
+                    else :
+                        dest = new_xml.find(".//*[@path='%s']" % dst)
+                        dest.append(f_xml)
+
+                xmlp = xml.find(".//param[@type='items']")
+                if xmlp is not None :
+                    recursive(xmlp, xmlp.get("path"))
+
+        recursive(xml_i, None)
+        return new_xml
+
 
     def action_save_project(self, *arg) :
         global CURRENT_PROJECT
@@ -4466,6 +4531,7 @@ class NCam(gtk.VBox):
                     subprocess.call(["xdg-open '%s'" % filename], shell = True)
                 else :
                     xml = etree.fromstring(src_data)
+                    xml = self.update_features(xml)
                     self.treestore_from_xml(xml)
                     self.expand_and_select(self.path_to_old_selected)
                     self.clear_undo()
