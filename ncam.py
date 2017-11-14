@@ -4413,13 +4413,16 @@ class NCam(gtk.VBox):
                     f_A = Feature(xml = xml)
                     src_f = search_path(search_warning.none, f_A.get_attr('src'), CFG_DIR)
                     if src_f is None :
-                        f_xml = f_A.to_xml()
+                        f = f_A
                     else :
                         f_B = Feature(src = src_f)
                         if f_B.get_version() > f_A.get_version() :
                             f_B.attr['src'] = f_A.get_attr('src')
                             # assign all old values
                             f_B.attr['name'] = f_A.attr['name']
+                            f_B.attr['expanded'] = f_A.attr['expanded']
+                            f_B.attr['old-selected'] = f_A.attr['old-selected']
+                            f_B.attr['new-selected'] = f_A.attr['new-selected']
                             if f_A.get_value() != '' :
                                 f_B.set_value(f_A.get_value())
                             if 'hidden_count' in f_A.attr :
@@ -4443,15 +4446,19 @@ class NCam(gtk.VBox):
                                             if 'no_zero' in p.attr :
                                                 q.attr['no_zero'] = p.attr['no_zero']
                                             break
-                            f_xml = f_B.to_xml()
+                            f = f_B
                         else :
-                            f_xml = f_A.to_xml()
+                            f = f_A
+
+                    f.get_id(new_xml)
+                    if 'short_id' in f.attr :
+                        del f.attr['short_id']
 
                     if dst is None :
-                        new_xml.append(f_xml)
+                        new_xml.append(f.to_xml())
                     else :
                         dest = new_xml.find(".//*[@path='%s']" % dst)
-                        dest.append(f_xml)
+                        dest.append(f.to_xml())
 
                 xmlp = xml.find(".//param[@type='items']")
                 if xmlp is not None :
