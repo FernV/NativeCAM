@@ -37,28 +37,40 @@ override_dh_install:
 		
 	# Examples for Configuration Selector:
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/axis
-	cp -pr configs/sim/axis/ncam_demo/*\
+	cp -pr configs/sim/axis/ncam_demo/* \
+	       debian/tmp/$(EXAMPLES_DIR)/2.7/axis
+	cp -pr configs/common/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.7/axis
 	       
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/gmoccapy
 	cp -pr configs/sim/gmoccapy/ncam_demo/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.7/gmoccapy
+	cp -pr configs/common/* \
+	       debian/tmp/$(EXAMPLES_DIR)/2.7/gmoccapy
 	       
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.7/gscreen
 	cp -pr configs/sim/gscreen/ncam_demo/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.7/gscreen
+	cp -pr configs/common/* \
+	       debian/tmp/$(EXAMPLES_DIR)/2.7/gscreen
 	
 	# Examples for 2.8 (joints_axes)
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.8/axis
-	cp -pr configs/sim/axis/ncam_demo.2.8/*\
+	cp -pr configs/sim/axis/ncam_demo.2.8/* \
+	       debian/tmp/$(EXAMPLES_DIR)/2.8/axis
+	cp -pr configs/common/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.8/axis
 
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.8/gmoccapy
 	cp -pr configs/sim/gmoccapy/ncam_demo.2.8/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.8/gmoccapy
+	cp -pr configs/common/* \
+	       debian/tmp/$(EXAMPLES_DIR)/2.8/gmoccapy
 	
 	mkdir -p debian/tmp/$(EXAMPLES_DIR)/2.8/gscreen
 	cp -pr configs/sim/gscreen/ncam_demo.2.8/* \
+	       debian/tmp/$(EXAMPLES_DIR)/2.8/gscreen
+	cp -pr configs/common/* \
 	       debian/tmp/$(EXAMPLES_DIR)/2.8/gscreen
 
 	# Manpage:

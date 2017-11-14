@@ -1,3 +1,11 @@
+nativecam (0.1.12) UNRELEASED; urgency=medium
+
+  add versioning of cfg files
+  automatic update to new versions
+  minor bug fixes
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Tue, 14 Nov 2017 09:09:00 -0500
+
 nativecam (0.1.11) UNRELEASED; urgency=medium
 
   first usable lathe subroutines
