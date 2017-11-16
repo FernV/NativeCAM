@@ -1,3 +1,10 @@
+nativecam (0.1.13) UNRELEASED; urgency=medium
+
+  add threading automatic thread depth and multithreads
+  minor fixes
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Wed, 15 Nov 2017 20:47:00 -0500
+
 nativecam (0.1.12) UNRELEASED; urgency=medium
 
   add versioning of cfg files

@@ -54,5 +54,6 @@ o<show_stock> sub
 			#<pass> = [#<pass> + 1]
 		o13 endwhile
 	o21 endif
+	G0 X[#<_wp_dia_od>] Z#<z>
 	
 o<show_stock> endsub
