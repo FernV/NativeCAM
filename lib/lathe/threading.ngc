@@ -47,24 +47,6 @@ o<threading> sub
 		#<t_len>  = [TAN[#<taper_angle>] * #<depth> / 2]
 	o95 endif
 
-	o61 if [#<peak> GT 0] (external threads)
-		o<in_list> CALL [#5413] [2] [0] [6]
-		o62 if [#<_in_list> EQ 0]
-			(debug,Threading: Cutter orientation should be 6 or None)
-			(print,)
-			(print,Threading: Cutter orientation should be 6 or None)
-			(AXIS,notify,Threading: Cutter orientation should be 6 or None)
-		o62 endif
-	o61 else
-		o<in_list> CALL [#5413] [2] [0] [8]
-		o63 if [#<_in_list> EQ 0]
-			(debug,Threading: Cutter orientation should be 8 or None)
-			(print,)
-			(print,Threading: Cutter orientation should be 8 or None)
-			(AXIS,notify,Threading: Cutter orientation should be 8 or None)
-		o63 endif
-	o61 endif
-
 	#<pass> = 1
 	#<z_step> = [TAN[30] * #<depth>]
 	o102 if [#<_lathe_diameter_mode>]

@@ -2,21 +2,20 @@
 o<facing> sub
 (CALL [#begin_x] [#end_x] [#begin_z] [#end_z] [#finishing_passes] [#set_to_0])
 	
-	#<begin_x>          = #1
-	#<end_x>            = #2
+	o01 if [#<_lathe_diameter_mode> EQ 1]
+		#<begin_x>   = #1
+		#<end_x>     = #2
+	o01 else
+		#<begin_x>   = [#1 / 2]
+		#<end_x>     = [#2 / 2]
+	o01 endif
+	
 	#<begin_z>          = #3
 	#<end_z>            = #4
 	#<finishing_passes> = #5
 
-	o151 if [#<end_x> GT #<begin_x>]
-		(debug,Facing: End X must be less than Begin X)
-		(print,)
-		(print,Facing: End X must be less than Begin X)
-		(AXIS,notify,Facing: End X must be less than Begin X)
-		o<facing> return
-	o151 endif
 
-    / G0 X#<begin_x> Z#<end_z>
+	/ G0 X#<begin_x> Z#<end_z>
     / F10
     / G1 X#<end_x>
 	/ o<facing> return
@@ -32,31 +31,14 @@ o<facing> sub
 	o11 elseif [#<rough_passes> LT 0]
 ;		o<facing> return
 	o11 endif
-
+	
 	o13 if [#<begin_z> GT #<end_z>]
 		#<z_factor> = 1
-		o<in_list> CALL [#5413] [5] [0] [2] [3] [7] [9]
-		o998 if [#<_in_list> EQ 0]
-			(debug,Facing: Cutter orientation should be 7, 2, 9, 3 or None)
-			(print,)
-			(print,Facing: Cutter orientation should be 7, 2, 9, 3 or None)
-			(AXIS,notify,Facing: Cutter orientation should be 7 or 2 or 9 or 3 or None)
-;			o<facing> return
-		o998 endif
 	o13 else
 		#<z_factor> = -1
-		o<in_list> CALL [#5413] [5] [0] [1] [4] [5] [9]
-		o999 if [#<_in_list> EQ 0]
-			(debug,Facing: Cutter orientation should be 5, 1, 9, 4 or None)
-			(print,)
-			(print,Facing: Cutter orientation should be 5, 1, 9, 4 or None)
-			(AXIS,notify,Facing: Cutter orientation should be 5 or 1 or 9 or 4 or None)
-;			o<facing> return
-		o999 endif
 	o13 endif
 	
-	G0 Z[#<begin_z> + #<_z_rapid> * #<z_factor>]
-;	G0 X[#<begin_x>]
+	G0 Z[#<begin_z> + #<_z_clear> * #<z_factor>]
 	M#<_cooling_mode>
 	
 	o121 if [#<_tool_usage> LE 1]

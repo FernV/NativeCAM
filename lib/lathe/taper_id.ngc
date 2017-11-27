@@ -1,102 +1,103 @@
 (author : Fernand Veilleux)
 o<taper_id> sub
-(CALL [#start_x] [#end_x] [#start_z] [#angle] [#fine_finish])
+(CALL [#begin_x] [#end_x] [#begin_z] [#angle] [#fine_finish])
 
-	#<start_x>     = #1
-	#<end_x>       = #2
-	#<start_z>     = #3
+	#<begin_z>     = #3
 	#<angle>       = #4
 	#<fine_finish> = #5
+	#<path>        = #6 (Follow drive line = 0 : Angular = 1)
 
 	o00 if [#<_lathe_diameter_mode> EQ 1]
-		#<roughcut> = [#<_rough_cut> * 2]
+		#<begin_x>   = #1
+		#<end_x>     = #2
+		#<roughcut>  = [#<_rough_cut> * 2]
 		#<finishcut> = [#<_finish_cut> * 2]
-		#<diff_x> = [[#<start_x> - #<end_x>] / 2]
+		#<diff_x>    = [[#<begin_x> - #<end_x>] / 2]
 	o00 else
-		#<roughcut> = #<_rough_cut>
+		#<begin_x>   = [#1 / 2]
+		#<end_x>     = [#2 / 2]
+		#<roughcut>  = #<_rough_cut>
 		#<finishcut> = #<_finish_cut>
-		#<diff_x> = [#<start_x> - #<end_x>]
+		#<diff_x>    = [#<begin_x> - #<end_x>]
 	o00 endif
 
-	#<end_z> = [#<start_z> - [#<diff_x> * TAN[#<angle> - 90]]]
+	#<end_z> = [#<begin_z> - [#<diff_x> * TAN[#<angle> - 90]]]
 
-	o123 if [#<start_x> GT #<end_x>]
-		(debug,Taper ID: Begin X must be less than End X)
-		(print,)
-		(print,Taper ID: Begin X must be less than End X)
-		(AXIS,notify,Taper ID: Begin X must be less than End X)
-		o<taper_id> return
-	o123 endif
-
-	o122 if [#<start_z> LT #<end_z>]
-		(debug,Taper ID: Begin Z must be greater than End Z)
-		(print,)
-		(print,Taper ID: Begin Z must be greater than End Z)
-		(AXIS,notify,Taper ID: Begin Z must be greater than End Z)
-		o<taper_id> return
-	o122 endif
-
-	o<in_list> CALL [#5413] [3] [0] [3] [9]
-	o999 if [#<_in_list> EQ 0]
-		(debug,Taper ID: Cutter orientation should be 3, 9 or None)
-		(print,)
-		(print,Taper ID: Cutter orientation should be 3, 9 or None)
-		(AXIS,notify,Taper ID: Cutter orientation should be 3 or 9 or None)
-;		o<taper_id> return
-	o999 endif
-
-	/ G0 X#<start_x> Z#<end_z>
+	/ G0 X#<begin_x> Z#<end_z>
 	/ F10
-	/ G1 X#<end_x> Z#<start_z>
+	/ G1 X#<end_x> Z#<begin_z>
 	/ o<taper_id> return
 
 	o10 if [#<fine_finish> GT 0]
-		#<cut_x_total> = [[#<end_x> - #<start_x>] - #<finishcut>]
+		#<cut_x_total> = [[#<end_x> - #<begin_x>] - #<finishcut>]
 	o10 else
-		#<cut_x_total> = [#<end_x> - #<start_x>]
+		#<cut_x_total> = [#<end_x> - #<begin_x>]
 	o10 endif
 
 	F#<_rough_feed>
-	#<rough_pass> = FUP[#<cut_x_total> / #<roughcut>]
-	o11 if [#<rough_pass> GT 0]
-		#<x_step> = [#<cut_x_total> / #<rough_pass>]
-	o11 elseif [#<rough_pass> LT 0]
-;		o<taper_id> return
-	o11 endif
+	#<rough_passes> = FUP[#<cut_x_total> / #<roughcut>]
+	#<x_step> = [#<cut_x_total> / #<rough_passes>]
+	
+	G0 X[#<_wp_dia_od> + #<_X_rapid>]
+	o131 if [#<begin_z> GT #<end_z>]
+		G0 Z[#<begin_z> + #<_z_rapid>]
+	o131 else
+		G0 Z[#<end_z> + #<_z_rapid>]
+	o131 endif
 
 	#<rough_cut_z_total> = [#<cut_x_total> * SIN[#<angle> - 90] / SIN[#<angle>]]
-	#<z_step> = [#<rough_cut_z_total> / #<rough_pass> / [#<_lathe_diameter_mode> + 1]]
+	#<z_step> = [#<rough_cut_z_total> / #<rough_passes> / [#<_lathe_diameter_mode> + 1]]
 
-	G0 Z[#<start_z> + #<_z_rapid>]
 	M#<_cooling_mode>
+	
 	o121 if [#<_tool_usage> LE 1]
-		#<x> = #<start_x>
+		#<x> = #<begin_x>
 		#<pass> = 1
 		G0 X[#<x> - #<_ix_clear>]
-		o12 repeat [#<rough_pass>]
-			G0 Z[#<start_z>]
-			#<x> = [#<x> + #<x_step>]
-			G0 X#<x>
-			G0 Z[#<start_z>]
-			G1 X#<start_x> Z[#<start_z> + [#<z_step> * #<pass>]]
-			G0 X[#<start_x> - #<_ix_clear>]
-			#<pass> = [#<pass> + 1]
-		o12 endrepeat
+		o122 if [#<path> EQ 0] (0 == Follow drive line)
+			#<e_z> = [#<begin_z> + #<z_step> * [#<rough_passes> - 1]]
+			o12 repeat [#<rough_passes>]
+				G0 X[#<x> - #<_ix_clear>] Z[#<begin_z>]
+				G0 X[#<x> + #<x_step>]
+				G1 Z[#<e_z>]
+				G1 X[#<x>] Z[#<e_z> + #<z_step>]
+				G0 X[#<x> - #<_ix_clear>]
+				#<x> = [#<x> + #<x_step>]
+				#<e_z> = [#<e_z> - #<z_step>]
+				#<pass> = [#<pass> + 1]
+			o12 endrepeat
+		
+		o122 else (1 == Angular)
+			o13 repeat [#<rough_passes>]
+				G0 Z[#<begin_z>]
+				#<x> = [#<x> + #<x_step>]
+				G0 X#<x>
+				G0 Z[#<begin_z>]
+				G1 X#<begin_x> Z[#<begin_z> + [#<z_step> * #<pass>]]
+				G0 X[#<begin_x> - #<_ix_clear>]
+				#<pass> = [#<pass> + 1]
+			o13 endrepeat
+		o122 endif
 	o121 endif
 
 	o20 if [#<fine_finish> AND #<_tool_usage> NE 1]
 		F#<_finish_feed>
 		o21 repeat [#<fine_finish>]
-			G0 X[#<end_x> - #<_ix_clear>] Z[#<start_z>]
+			G0 X[#<end_x> - #<_ix_clear>] Z[#<begin_z>]
 			G0 X#<end_x>
-			G0 Z#<start_z>
-			G1 X#<start_x> Z#<end_z>
-			G0 X[#<start_x> - #<_ix_clear>]
+			G0 Z#<begin_z>
+			G1 X#<begin_x> Z#<end_z>
+			G0 X[#<begin_x> - #<_ix_clear>]
 		o21 endrepeat
 	o20 endif
 
 	M9 (cooling off)
 	
-	G0 Z[#<start_z> + #<_z_rapid>]
-	
+	o132 if [#<begin_z> GT #<end_z>]
+		G0 Z[#<begin_z> + #<_z_rapid>]
+	o132 else
+		G0 Z[#<end_z> + #<_z_rapid>]
+	o132 endif
+	G0 X[#<_wp_dia_od> + #<_X_rapid>]
+
 o<taper_id> endsub

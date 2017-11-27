@@ -48,6 +48,14 @@ DEFAULT_USE_NO_ICON = True
 NO_ICON_FILE = 'no-icon.png'
 
 # info at http://www.pygtk.org/pygtk2reference/pango-markup-language.html
+# when grayed, uses these format
+gray_header_fmt_str = '<span foreground="gray" style="oblique">%s...</span>'
+gray_sub_header_fmt_str = '<span foreground="gray" style="oblique">%s...</span>'
+gray_sub_header_fmt_str2 = '<span foreground="gray" style="oblique" weight="bold">%s</span>'
+gray_feature_fmt_str = '<span foreground="gray" weight="bold">%s</span>'
+gray_items_fmt_str = '<span foreground="gray" style="oblique" weight="bold">%s</span>'
+gray_val = '<span foreground="gray">%s</span>'
+# when NOT grayed
 header_fmt_str = '<i>%s...</i>'
 sub_header_fmt_str = '<i>%s...</i>'
 sub_header_fmt_str2 = '<b><i>%s</i></b>'
@@ -99,6 +107,7 @@ CUSTOM_DIR = 'my-stuff'
 # files
 DEFAULT_TEMPLATE = 'default_template.xml'
 USER_DEFAULT_FILE = 'custom_defaults.conf'
+EXCL_MSG_FILE = 'excluded_msg.conf'
 CURRENT_WORK = "current_work.xml"
 PREFERENCES_FILE = "default.conf"
 CONFIG_FILE = 'ncam.conf'
@@ -134,7 +143,9 @@ PIXBUF_DICT = {}
 USER_VALUES = {}
 USER_SUBROUTINES = []
 TB_CATALOG = {}
-UNIQUE_ID = 1
+EXCL_MESSAGES = {}
+GLOBAL_PREF = None
+UNIQUE_ID = 9
 
 UI_INFO = '''
 <ui>
@@ -248,6 +259,13 @@ def get_float(s10) :
             return locale.atof(s10)
         except :
             return 0.0
+
+def get_string(float_val, digits, localized = True):
+    fmt = '%' + '0.%sf' % digits
+    if localized :
+        return (locale.format(fmt, float_val))
+    else :
+        return (fmt % float_val)
 
 def search_path(warn, f, *argsl) :
     if f == "" :
@@ -469,6 +487,9 @@ def require_ini_items(fname, ini_instance):
             "PROGRAM_PREFIX = abs or relative path to scripts directory\n"
             "i.e. PROGRAM_PREFIX = ./scripts or ~/ncam/scripts")
         err_exit(msg)
+    else :
+        if ':' in val :
+            val = val.split(':')[0]
 
     val = os.path.expanduser(val)
     if os.path.isabs(val) :
@@ -512,12 +533,49 @@ def require_ncam_lib(fname, ini_instance):
     except Exception as detail :
         err_exit(_('Required NativeCAM lib\n%(err_details)s') % {'err_details':detail})
 
+def get_short_id():
+    global UNIQUE_ID
+    UNIQUE_ID += 1
+    return str(UNIQUE_ID)
+
+def create_M_file() :
+    p = os.path.join(NCAM_DIR, NGC_DIR, 'M123')
+    with open(p, 'wb') as f :
+        f.write('#!/usr/bin/env python\n# coding: utf-8\n')
+
+        f.write("import gtk\nimport os\nimport pygtk\npygtk.require('2.0')\nfrom gtk import gdk\n\n")
+
+        f.write("fname = '%s'\n" % os.path.join(NCAM_DIR, CATALOGS_DIR, 'no_skip_dlg.conf'))
+        f.write('if os.path.isfile(fname) :\n    exit(0)\n\n')
+
+        f.write("msg = '%s'\n" % _('Stop LinuxCNC program,&#10;toggle the shown button,&#10;then restart'))
+        f.write("msg1 = '%s'\n" % _('Skip block not active'))
+        f.write("icon_fname = '%s'\n\n" % os.path.join(NCAM_DIR, GRAPHICS_DIR, 'skip_block.png'))
+
+        f.write('dlg = gtk.MessageDialog(parent = None, flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, type = gtk.MESSAGE_WARNING, buttons = gtk.BUTTONS_NONE, message_format = msg1)\n\n')
+
+        f.write("dlg.set_title('NativeCAM')\ndlg.format_secondary_markup(msg)\n\n")
+
+        f.write('dlg.set_image(gtk.Image())\n')
+        f.write('dlg.get_image().set_from_pixbuf(gdk.pixbuf_new_from_file_at_size(icon_fname, 80, 80))\n\n')
+
+        f.write('cb = gtk.CheckButton(label = "%s")\n' % _("Do not show again"))
+        f.write('dlg.get_content_area().pack_start(cb, True, True, 0)\n')
+        f.write('dlg.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK).grab_focus()\n\n')
+
+        f.write('dlg.set_keep_above(True)\ndlg.show_all()\n\ndlg.run()\n')
+        f.write("if cb.get_active() :\n    open(fname, 'w').close()\n")
+        f.write('exit(0)\n')
+
+    os.chmod(p, 0o755)
+    mess_dlg(_('LinuxCNC needs to be restarted now'))
 
 class Tools(object):
 
     def __init__(self):
         self.table_fname = None
         self.list = ''
+        self.orientation = 0
 
     def set_file(self, tool_table_file):
         fn = search_path(search_warning.dialog, tool_table_file)
@@ -532,19 +590,23 @@ class Tools(object):
             tbl = open(self.table_fname).read().split("\n")
             for s in tbl :
                 s = s.strip()
-                if s.find(";") > 1:
+                if ";" in s:
                     tnumber = '0'
+                    torient = '0'
                     s = s.split(";")
                     tdesc = s[1][0:]
                     s = s[0][0:]
                     s1 = s.split(" ")
                     for s2 in s1 :
-                        if (len(s2) > 1) and (s2[0] == 'T') :
-                            tnumber = s2[1:]
+                        if (len(s2) > 1) :
+                            if (s2[0] == 'T') :
+                                tnumber = s2[1:]
+                            elif (s2[0] == 'Q') :
+                                torient = s2[1:]
                     if tnumber != '0' :
                         if tdesc == '' :
                             tdesc = _('no description')
-                        self.table.append([int(tnumber), tnumber, tdesc])
+                        self.table.append([int(tnumber), tnumber, tdesc, torient])
         self.table.append ([0, '0', _('None')])
         self.table.sort()
 
@@ -558,6 +620,378 @@ class Tools(object):
             if tool[1] == tn :
                 return tool[1] + ' - ' + tool[2]
         return '0 - ' + _('None')
+
+    def save_tool_orient(self, tn):
+        if tn == 0 :
+            self.orientation = 0
+        else :
+            for tool in self.table :
+                if tool[0] == tn :
+                    self.orientation = get_int(tool[3])
+
+    def get_tool_orient(self):
+        return self.orientation
+
+class VKB():
+
+    def __init__(self, toplevel, tooltip, min_value, max_value, data_type, convertible) :
+        self.dlg = gtk.Dialog(parent = toplevel)
+        self.dlg.set_decorated(False)
+        self.dlg.set_transient_for(None)
+        self.dlg.set_border_width(3)
+        self.dlg.set_property("skip-taskbar-hint", True)
+
+        lbl = gtk.Label('')
+        lbl.set_line_wrap(True)
+        self.dlg.vbox.pack_start(lbl, expand = False)
+        lbl.set_markup(tooltip)
+
+        self.entry = gtk.Label('')
+        self.entry.modify_font(pango.FontDescription('sans 14'))
+        self.entry.set_alignment(1.0, 0.5)
+        self.entry.set_property('ellipsize', pango.ELLIPSIZE_START)
+
+        self.min_value = min_value
+        self.max_value = max_value
+        self.data_type = data_type
+        self.convertible_units = convertible
+
+        box = gtk.EventBox()
+        box.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color('#FFFFFF'))
+
+        box.add(self.entry)
+        frame = gtk.Frame()
+        frame.add(box)
+
+        tbl = gtk.Table(rows = 6, columns = 5, homogeneous = True)
+        tbl.attach(frame, 0, 5, 0, 1,
+                   xoptions = gtk.EXPAND | gtk.FILL,
+                   yoptions = gtk.EXPAND | gtk.FILL)
+
+        self.dlg.vbox.pack_start(tbl)
+
+        btn = gtk.Button(_('BS'))
+        btn.connect("clicked", self.input, 'BS')
+        btn.set_can_focus(False)
+        tbl.attach(btn, 4, 5, 2, 3)
+
+        i = 0
+        for lbl in ['F2', 'Pi', '()', '=', 'C'] :
+            btn = gtk.Button(lbl)
+            btn.connect("clicked", self.input, lbl)
+            btn.set_can_focus(False)
+            tbl.attach(btn, i, i + 1, 1, 2)
+            i = i + 1
+
+        i = 2
+        for lbl in ['/', '*', '-', '+'] :
+            btn = gtk.Button(lbl)
+            btn.connect("clicked", self.input, lbl)
+            btn.set_can_focus(False)
+            tbl.attach(btn, 3, 4, i, i + 1)
+            i = i + 1
+
+        k = 10
+        for i in range(2, 5) :
+            k = k - 3
+            for j in range(0, 3):
+                lbl = str(k + j)
+                btn = gtk.Button(lbl)
+                btn.connect("clicked", self.input, lbl)
+                btn.set_can_focus(False)
+                tbl.attach(btn, j, j + 1, i, i + 1)
+
+        if (self.min_value < 0.0) :
+            btn = gtk.Button('+/-')
+            btn.connect("clicked", self.input, '+/-')
+            btn.set_can_focus(False)
+            tbl.attach(btn, 2, 3, 5, 6)
+            last_col = 2
+        else :
+            last_col = 3
+
+        if self.data_type == 'float' :  # and get_int(self.digits) > 0 :
+            btn = gtk.Button(decimal_point)
+            btn.connect("clicked", self.input, decimal_point)
+            btn.set_can_focus(False)
+            tbl.attach(btn, last_col - 1, last_col, 5, 6)
+            last_col = last_col - 1
+
+        btn = gtk.Button('0')
+        btn.connect("clicked", self.input, '0')
+        btn.set_can_focus(False)
+        tbl.attach(btn, 0, last_col, 5, 6)
+
+        btn = gtk.Button()
+        img = gtk.Image()
+        img.set_from_stock('gtk-cancel', menu_icon_size)
+        btn.set_image(img)
+        btn.connect("clicked", self.cancel)
+        btn.set_can_focus(False)
+        tbl.attach(btn, 4, 5, 3, 4)
+
+        if self.convertible_units :
+            btn = gtk.Button()
+            img = gtk.Image()
+            img.set_from_pixbuf(get_pixbuf('mm2in.png', treeview_icon_size))
+            btn.set_image(img)
+            btn.connect("clicked", self.input, 'CV')
+            btn.set_can_focus(False)
+            tbl.attach(btn, 4, 5, 4, 5)
+
+        self.OKbtn = gtk.Button()
+        img = gtk.Image()
+        img.set_from_stock('gtk-ok', menu_icon_size)
+        self.OKbtn.set_image(img)
+        self.OKbtn.connect("clicked", self.ok)
+        self.OKbtn.set_can_focus(False)
+        if self.convertible_units :
+            tbl.attach(self.OKbtn, 4, 5, 5, 6)
+        else :
+            tbl.attach(self.OKbtn, 4, 5, 4, 6)
+
+        self.dlg.connect('key-press-event', self.key_press_event)
+        self.dlg.connect('focus-out-event', self.focus_out)
+        self.dlg.set_keep_above(True)
+
+    def __enter__(self):
+        self.not_allowed_msg = _("Not allowed - F2 edit")
+        self.err_msg = _("Error - F2 edit")
+        return self
+
+    def initvalue(self, value, saved, initialize):
+        self.entry.set_markup('<b>%s</b>' % value)
+        self.save_edit = saved
+        self.initialize = initialize
+
+    def run(self, not_allowed):
+
+        def show_error(errm) :
+            self.entry.set_markup('<b>%s</b>' % errm)
+            self.initialize = True
+
+        self.opened_paren = 0
+        while True :
+            self.convert_units = False
+            self.OKbtn.grab_focus()
+            response = self.dlg.run()
+            if response == gtk.RESPONSE_OK:
+                if self.entry.get_text() in ['', self.not_allowed_msg, self.err_msg] :
+                    self.entry.set_markup('<b>0</b>')
+                is_good, rval = self.compute(self.entry.get_text())
+                if not is_good :
+                    show_error(self.err_msg)
+                elif self.data_type == 'int' :
+                    val = int(rval)
+                    a_min = int(self.min_value)
+                    a_max = int(self.max_value)
+
+                    if val > a_max :
+                        val = a_max
+                    elif val < a_min :
+                        val = a_min
+
+                    if not_allowed is not None :
+                        for na in not_allowed.split(':') :
+                            if get_int(na) == val :
+                                is_good = False
+                                show_error(self.not_allowed_msg)
+                                break
+                    if is_good :
+                        return response, str(val)
+                else:
+                    if self.convert_units :
+                        if default_metric :
+                            rval = rval * 25.4
+                        else :
+                            rval = rval / 25.4
+
+                    if rval > self.max_value :
+                        rval = self.max_value
+                    elif rval < self.min_value :
+                        rval = self.min_value
+
+                    if not_allowed is not None :
+                        for na in not_allowed.split(':') :
+                            if get_float(na) == rval :
+                                is_good = False
+                                show_error(self.not_allowed_msg)
+                                break
+                    if is_good :
+                        return response, str(rval)
+            else :
+                return response, None
+
+    def input(self, btn, data):
+        if self.initialize :
+            lbl = '0'
+            self.initialize = False
+            self.opened_paren = 0
+        else :
+            lbl = self.entry.get_text()
+            if lbl in ['0.0', '0.00', '0.000', '0.0000', '0.00000', '0.000000'] :
+                lbl = '0'
+
+        if data == 'C' :
+            self.entry.set_markup('<b>0</b>')
+            self.opened_paren = 0
+
+        elif data == '=' :
+            is_good, rval = self.compute(self.entry.get_text())
+            if not is_good :
+                self.show_error(_("Error - F2 to edit"))
+            elif self.data_type == 'int' :
+                self.entry.set_markup('<b>%d</b>' % int(rval))
+            else :
+                self.entry.set_markup('<b>%s</b>' % locale.format('%0.6f', rval))
+
+        elif data == 'F2' :
+            self.entry.set_markup('<b>%s</b>' % self.save_edit)
+
+        elif data == 'BS' :
+            if (len(lbl) == 1) or lbl == 'Pi':
+                self.input(None, 'C')
+                return
+            elif lbl[-1] == 'i' :
+                self.entry.set_markup('<b>%s</b>' % lbl[0:-2])
+            elif lbl[-1] == ')' :
+                self.opened_paren += self.opened_paren
+                self.entry.set_markup('<b>%s</b>' % lbl[0:-1])
+            elif lbl[-1] == '(' :
+                self.entry.set_markup('<b>%s</b>' % lbl[0:-1])
+                self.opened_paren -= 1
+            else :
+                self.entry.set_markup('<b>%s</b>' % lbl[0:-1])
+
+        elif data == 'CV' :
+            self.convert_units = True
+            self.dlg.response(gtk.RESPONSE_OK)
+
+        elif data == '+/-' :
+            if lbl == '0' :
+                self.entry.set_markup('<b>-</b>')
+            elif lbl.find('-') == 0 :
+                self.entry.set_markup('<b>%s</b>' % lbl[1:])
+            else :
+                self.entry.set_markup('<b>-%s</b>' % lbl)
+
+        elif data == 'Pi' :
+            if lbl == '0' :
+                self.entry.set_markup('<b>%s</b>' % data)
+            elif lbl[-1] in ['+', '-', '*', '/', '('] :
+                self.entry.set_markup('<b>%s%s</b>' % (lbl, data))
+
+        elif data in ['*', '/', '+'] :
+            if lbl != '0' and not lbl[-1] in ['+', '-', '*', '/', '('] :
+                self.entry.set_markup('<b>%s%s</b>' % (lbl, data))
+
+        elif data == '()' :
+            if lbl == '0' :
+                self.entry.set_markup('<b>(</b>')
+                self.opened_paren = 1
+            elif lbl[-1] in ['+', '-', '*', '/', '('] :
+                self.entry.set_markup('<b>%s(</b>' % lbl)
+                self.opened_paren += 1
+            elif lbl[-1] not in ['+', '-', '*', '/', '('] :
+                if self.opened_paren > 0 :
+                    self.entry.set_markup('<b>%s)</b>' % lbl)
+                    self.opened_paren -= 1
+
+        elif data == decimal_point :
+            if lbl == '0' :
+                self.entry.set_markup('<b>0%s</b>' % data)
+            elif lbl[-1] in ['+', '-', '*', '/', '('] :
+                self.entry.set_markup('<b>%s0%s</b>' % (lbl, data))
+            elif lbl[-1] >= '0' and lbl[-1] <= '9' :
+                j = len(lbl)
+                i = 0
+                while (i < j) :
+                    car = lbl[-i]
+                    i += 1
+                    if car == decimal_point :
+                        return
+                    if car in ['+', '-', '*', '/', '('] :
+                        self.entry.set_markup('<b>%s%s</b>' % (lbl, data))
+                        return
+                self.entry.set_markup('<b>%s%s</b>' % (lbl, data))
+
+        else :
+            if lbl == '0' :  # numbers and minus sign
+                self.entry.set_markup('<b>%s</b>' % data)
+            elif lbl[-1] not in [')', 'i'] :
+                self.entry.set_markup('<b>%s%s</b>' % (lbl, data))
+
+    def key_press_event(self, win, event):
+        if event.type == gdk.KEY_PRESS:
+            k_name = gdk.keyval_name(event.keyval)
+#            print(k_name)
+            if ((k_name >= 'KP_0' and k_name <= 'KP_9') or \
+                    (k_name >= '0' and k_name <= '9')) :
+                self.input(None, k_name[-1])
+            elif k_name in ['KP_Decimal', 'period', 'comma', 'KP_Separator'] :
+                if (self.data_type == 'float'):
+                    self.input(None, decimal_point)
+            elif k_name in ['KP_Divide', 'slash'] :
+                self.input(None, '/')
+            elif k_name in ['KP_Multiply', 'asterisk'] :
+                self.input(None, '*')
+            elif k_name in ['parenleft', 'parenright'] :
+                self.input(None, '()')
+            elif k_name == 'F2' :
+                self.input(None, 'F2')
+            elif k_name in ['C', 'c'] :
+                self.input(None, 'C')
+            elif k_name == 'equal' :
+                self.input(None, '=')
+            elif k_name in ['KP_Subtract', 'minus'] :
+                self.input(None, '-')
+            elif k_name in ['KP_Add', 'plus'] :
+                self.input(None, '+')
+            elif k_name == 'BackSpace' :
+                self.input(None, 'BS')
+            elif k_name in ['KP_Enter', 'Return', 'space']:
+                self.dlg.response(gtk.RESPONSE_OK)
+
+    def ok(self, btn):
+        self.convert_units = False
+        self.dlg.response(gtk.RESPONSE_OK)
+
+    def cancel(self, btn):
+        self.dlg.response(gtk.RESPONSE_CANCEL)
+
+    def focus_out(self, widget, event):
+        if vkb_cancel_on_out:
+            self.dlg.response(gtk.RESPONSE_CANCEL)
+        else :
+            self.dlg.response(gtk.RESPONSE_OK)
+
+    def compute(self, input_string):
+        while input_string.count('(') > input_string.count(')') :
+            input_string = input_string + ')'
+        self.opened_paren = 0
+        self.save_edit = input_string
+
+        for i in('-', '+', '/', '*', '(', ')'):
+            input_string = input_string.replace(i, " %s " % i)
+        input_string = input_string.replace('Pi', str(math.pi))
+
+        qualified = ''
+        for i in input_string.split():
+            try:
+                i = str(locale.atof(i))
+                qualified = qualified + str(float(i))
+            except:
+                qualified = qualified + i
+
+        try :
+            return True, eval(qualified)
+        except :
+            return False, 0.0
+
+    def __exit__(self, type, value, traceback):
+        self.dlg.hide()
+        self.dlg.destroy()
+        self.dlg = None
 
 
 class CellRendererMx(gtk.CellRendererText):
@@ -573,7 +1007,6 @@ class CellRendererMx(gtk.CellRendererText):
         self.data_type = 'string'
         self.tv = treeview
         self.options = ''
-        self.digits = '3'
         self.param_value = ''
         self.combo_values = []
         self.tooltip = ''
@@ -582,7 +1015,7 @@ class CellRendererMx(gtk.CellRendererText):
         self.refresh_fn = None
         self.inputKey = ''
         self.tool_list = []
-        self.not_zero = '0'
+        self.not_allowed = None
         self.convertible_units = False
         self.convert_units = False
         self.save_edit = ''
@@ -600,8 +1033,8 @@ class CellRendererMx(gtk.CellRendererText):
     def set_param_value(self, value):
         self.param_value = value
 
-    def set_not_zero(self, value):
-        self.not_zero = value
+    def set_not_allowed(self, value):
+        self.not_allowed = value
 
     def set_min_value(self, value):
         self.min_value = value
@@ -635,389 +1068,47 @@ class CellRendererMx(gtk.CellRendererText):
     def set_preediting(self, value):
         self.preedit = value
 
-    def do_get_property(self, pspec):
-        return getattr(self, pspec.name)
-
-    def do_set_property(self, pspec, value):
-        setattr(self, pspec.name, value)
-
     def get_treeview(self):
         return self.tv
-
-    def create_VKB(self, cell_area):
-        self.vkb = gtk.Dialog(parent = self.tv.get_toplevel())
-        self.vkb.set_decorated(False)
-        self.vkb.set_transient_for(None)
-        self.vkb.set_border_width(3)
-        self.vkb.set_property("skip-taskbar-hint", True)
-
-        lbl = gtk.Label('')
-        lbl.set_line_wrap(True)
-        self.vkb.vbox.pack_start(lbl, expand = False)
-        lbl.set_markup(self.tooltip)
-
-        self.vkb_entry = gtk.Label('')
-        self.vkb_entry.modify_font(pango.FontDescription('sans 14'))
-        self.vkb_entry.set_alignment(1.0, 0.5)
-        self.vkb_entry.set_property('ellipsize', pango.ELLIPSIZE_START)
-
-        box = gtk.EventBox()
-        box.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color('#FFFFFF'))
-
-        box.add(self.vkb_entry)
-        frame = gtk.Frame()
-        frame.add(box)
-
-        tbl = gtk.Table(rows = 6, columns = 5, homogeneous = True)
-        tbl.attach(frame, 0, 5, 0, 1,
-                   xoptions = gtk.EXPAND | gtk.FILL,
-                   yoptions = gtk.EXPAND | gtk.FILL)
-
-        self.vkb.vbox.pack_start(tbl)
-
-        btn = gtk.Button(_('BS'))
-        btn.connect("clicked", self.vkb_input, 'BS')
-        btn.set_can_focus(False)
-        tbl.attach(btn, 4, 5, 2, 3)
-
-        i = 0
-        for lbl in ['F2', 'Pi', '()', '=', 'C'] :
-            btn = gtk.Button(lbl)
-            btn.connect("clicked", self.vkb_input, lbl)
-            btn.set_can_focus(False)
-            tbl.attach(btn, i, i + 1, 1, 2)
-            i = i + 1
-
-        i = 2
-        for lbl in ['/', '*', '-', '+'] :
-            btn = gtk.Button(lbl)
-            btn.connect("clicked", self.vkb_input, lbl)
-            btn.set_can_focus(False)
-            tbl.attach(btn, 3, 4, i, i + 1)
-            i = i + 1
-
-        k = 10
-        for i in range(2, 5) :
-            k = k - 3
-            for j in range(0, 3):
-                lbl = str(k + j)
-                btn = gtk.Button(lbl)
-                btn.connect("clicked", self.vkb_input, lbl)
-                btn.set_can_focus(False)
-                tbl.attach(btn, j, j + 1, i, i + 1)
-
-        if (self.min_value < 0.0) :
-            btn = gtk.Button('+/-')
-            btn.connect("clicked", self.vkb_input, '+/-')
-            btn.set_can_focus(False)
-            tbl.attach(btn, 2, 3, 5, 6)
-            last_col = 2
-        else :
-            last_col = 3
-
-        if self.editdata_type == 'float' and get_int(self.digits) > 0 :
-            btn = gtk.Button(decimal_point)
-            btn.connect("clicked", self.vkb_input, decimal_point)
-            btn.set_can_focus(False)
-            tbl.attach(btn, last_col - 1, last_col, 5, 6)
-            last_col = last_col - 1
-
-        btn = gtk.Button('0')
-        btn.connect("clicked", self.vkb_input, '0')
-        btn.set_can_focus(False)
-        tbl.attach(btn, 0, last_col, 5, 6)
-
-        btn = gtk.Button()
-        img = gtk.Image()
-        img.set_from_stock('gtk-cancel', menu_icon_size)
-        btn.set_image(img)
-        btn.connect("clicked", self.vkb_cancel)
-        btn.set_can_focus(False)
-        tbl.attach(btn, 4, 5, 3, 4)
-
-        if self.convertible_units :
-            btn = gtk.Button()
-            img = gtk.Image()
-            img.set_from_pixbuf(get_pixbuf('mm2in.png', treeview_icon_size))
-            btn.set_image(img)
-            btn.connect("clicked", self.vkb_input, 'CV')
-            btn.set_can_focus(False)
-            tbl.attach(btn, 4, 5, 4, 5)
-
-        self.OKbtn = gtk.Button()
-        img = gtk.Image()
-        img.set_from_stock('gtk-ok', menu_icon_size)
-        self.OKbtn.set_image(img)
-        self.OKbtn.connect("clicked", self.vkb_ok)
-        self.OKbtn.set_can_focus(False)
-        if self.convertible_units :
-            tbl.attach(self.OKbtn, 4, 5, 5, 6)
-        else :
-            tbl.attach(self.OKbtn, 4, 5, 4, 6)
-
-        (tree_x, tree_y) = self.tv.get_bin_window().get_origin()
-        (tree_w, tree_h) = self.tv.window.get_geometry()[2:4]
-
-        self.vkb.set_size_request(vkb_width, vkb_height)
-        self.vkb.resize(vkb_width, vkb_height)
-
-        x = tree_w - vkb_width
-        if x > cell_area.x :
-            x = cell_area.x
-        y = tree_y + cell_area.y + cell_area.height
-        self.vkb.move(tree_x + x + 2, y)
-
-        self.vkb.set_keep_above(True)
-
-        self.vkb.connect('key-press-event', self.vkb_key_press_event)
-        self.vkb.connect('focus-out-event', self.vkb_focus_out)
-
-        if (self.editdata_type == 'int') :
-            self.save_edit = str(locale.format('%i', get_int(self.param_value)))
-        else :
-            self.save_edit = str(locale.format('%f', get_float(self.param_value)).rstrip('0'))
-            if self.save_edit[-1] == decimal_point :
-                self.save_edit = self.save_edit + '0'
-
-        if self.inputKey > '' :
-            self.vkb_initialize = False
-            if ((self.editdata_type == 'int') and \
-                    (self.inputKey.find(decimal_point) >= 0)) or \
-                    (self.inputKey == 'BS') :
-                self.vkb_entry.set_markup('<b>0</b>')
-            else :
-                self.vkb_entry.set_markup('<b>%s</b>' % self.inputKey)
-
-            self.inputKey = ''
-        else :
-            self.vkb_entry.set_markup('<b>%s</b>' % self.save_edit)
-            self.vkb_initialize = True
-
-        self.vkb.show_all()
-
-    def vkb_input(self, btn, data):
-        if self.vkb_initialize :
-            lbl = '0'
-            self.vkb_initialize = False
-            self.opened_paren = 0
-        else :
-            lbl = self.vkb_entry.get_text()
-            if lbl in ['0.0', '0.00', '0.000', '0.0000', '0.00000', '0.000000'] :
-                lbl = '0'
-
-        if data == 'C' :
-            self.vkb_entry.set_markup('<b>0</b>')
-            self.opened_paren = 0
-
-        elif data == '=' :
-            is_good, rval = self.compute()
-            if not is_good :
-                self.show_error(_("Error - F2 to edit"))
-            elif self.editdata_type == 'int' :
-                self.vkb_entry.set_markup('<b>%d</b>' % int(rval))
-            else :
-                fmt = '%' + '0.%sf' % self.digits
-                self.vkb_entry.set_markup('<b>%s</b>' % locale.format(fmt, rval))
-
-        elif data == 'F2' :
-            self.vkb_entry.set_markup('<b>%s</b>' % self.save_edit)
-
-        elif data == 'BS' :
-            if (len(lbl) == 1) or lbl == 'Pi':
-                self.vkb_input(None, 'C')
-            elif lbl[-1] == 'i' :
-                self.vkb_entry.set_markup('<b>%s</b>' % lbl[0:-2])
-            elif lbl[-1] == ')' :
-                self.opened_paren = self.opened_paren + 1
-                self.vkb_entry.set_markup('<b>%s</b>' % lbl[0:-1])
-            elif lbl[-1] == '(' :
-                self.vkb_entry.set_markup('<b>%s</b>' % lbl[0:-1])
-                self.opened_paren = self.opened_paren - 1
-            else :
-                self.vkb_entry.set_markup('<b>%s</b>' % lbl[0:-1])
-
-        elif data == 'CV' :
-            self.convert_units = True
-            self.vkb.response(gtk.RESPONSE_OK)
-
-        elif data == '+/-' :
-            if lbl == '0' :
-                self.vkb_entry.set_markup('<b>-</b>')
-            elif lbl.find('-') == 0 :
-                self.vkb_entry.set_markup('<b>%s</b>' % lbl[1:])
-            else :
-                self.vkb_entry.set_markup('<b>-%s</b>' % lbl)
-
-        elif data == 'Pi' :
-            if lbl == '0' :
-                self.vkb_entry.set_markup('<b>%s</b>' % data)
-            elif lbl[-1] in ['+', '-', '*', '/', '('] :
-                self.vkb_entry.set_markup('<b>%s%s</b>' % (lbl, data))
-
-        elif data in ['*', '/', '+'] :
-            if lbl != '0' and not lbl[-1] in ['+', '-', '*', '/', '('] :
-                self.vkb_entry.set_markup('<b>%s%s</b>' % (lbl, data))
-
-        elif data == '()' :
-            if lbl == '0' :
-                self.vkb_entry.set_markup('<b>(</b>')
-                self.opened_paren = 1
-            elif lbl[-1] in ['+', '-', '*', '/', '('] :
-                self.vkb_entry.set_markup('<b>%s(</b>' % lbl)
-                self.opened_paren = self.opened_paren + 1
-            elif lbl[-1] not in ['+', '-', '*', '/', '('] :
-                if self.opened_paren > 0 :
-                    self.vkb_entry.set_markup('<b>%s)</b>' % lbl)
-                    self.opened_paren = self.opened_paren - 1
-
-        elif data == decimal_point :
-            if lbl == '0' :
-                self.vkb_entry.set_markup('<b>0%s</b>' % data)
-            elif lbl[-1] in ['+', '-', '*', '/', '('] :
-                self.vkb_entry.set_markup('<b>%s0%s</b>' % (lbl, data))
-            elif lbl[-1] >= '0' and lbl[-1] <= '9' :
-                self.vkb_entry.set_markup('<b>%s%s</b>' % (lbl, data))
-
-        else :
-            if lbl == '0' :  # numbers and minus sign
-                self.vkb_entry.set_markup('<b>%s</b>' % data)
-            else :
-                self.vkb_entry.set_markup('<b>%s%s</b>' % (lbl, data))
-
-    def vkb_key_press_event(self, win, event):
-        if event.type == gdk.KEY_PRESS:
-            k_name = gdk.keyval_name(event.keyval)
-#            print(k_name)
-            if ((k_name >= 'KP_0' and k_name <= 'KP_9') or \
-                    (k_name >= '0' and k_name <= '9')) :
-                self.vkb_input(None, k_name[-1])
-            elif k_name in ['KP_Decimal', 'period', 'comma', 'KP_Separator'] :
-                if (self.editdata_type == 'float'):
-                    self.vkb_input(None, decimal_point)
-            elif k_name in ['KP_Divide', 'slash'] :
-                self.vkb_input(None, '/')
-            elif k_name in ['KP_Multiply', 'asterisk'] :
-                self.vkb_input(None, '*')
-            elif k_name in ['parenleft', 'parenright'] :
-                self.vkb_input(None, '()')
-            elif k_name == 'F2' :
-                self.vkb_input(None, 'F2')
-            elif k_name in ['C', 'c'] :
-                self.vkb_input(None, 'C')
-            elif k_name == 'equal' :
-                self.vkb_input(None, '=')
-            elif k_name in ['KP_Subtract', 'minus'] :
-                self.vkb_input(None, '-')
-            elif k_name in ['KP_Add', 'plus'] :
-                self.vkb_input(None, '+')
-            elif k_name == 'BackSpace' :
-                self.vkb_input(None, 'BS')
-            elif k_name in ['KP_Enter', 'Return', 'space']:
-                self.vkb.response(gtk.RESPONSE_OK)
-
-    def vkb_ok(self, btn):
-        self.convert_units = False
-        self.vkb.response(gtk.RESPONSE_OK)
-
-    def vkb_cancel(self, btn):
-        self.vkb.response(gtk.RESPONSE_CANCEL)
-
-    def vkb_focus_out(self, widget, event):
-        if vkb_cancel_on_out:
-            self.vkb.response(gtk.RESPONSE_CANCEL)
-        else :
-            self.vkb.response(gtk.RESPONSE_OK)
 
     def do_get_size(self, widget, cell_area):
         return (gtk.CellRendererText.do_get_size(self, widget, cell_area))
 
-    def compute(self):
-        temp = self.vkb_entry.get_text()
-        while temp.count('(') > temp.count(')') :
-            temp = temp + ')'
-        self.opened_paren = 0
-        self.save_edit = temp
-
-        temp = temp.replace('Pi', str(math.pi).replace(".", decimal_point))
-        for i in('-', '+', '/', '*', '(', ')'):
-            temp = temp.replace(i, " %s " % i)
-
-        qualified = ''
-        for i in temp.split():
-            try:
-                i = str(locale.atof(i))
-                qualified = qualified + str(float(i))
-            except:
-                qualified = qualified + i
-
-        try :
-            return True, eval(qualified)
-        except :
-            return False, 0.0
-
-    def show_error(self, errm) :
-        self.vkb_entry.set_markup('<b>%s</b>' % errm)
-        self.vkb_initialize = True
-
     def edit_number(self, time_out = 0.05) :
-        self.create_VKB(self.cell_area)
-        time.sleep(time_out)
-        str_val = self.param_value
-        self.opened_paren = 0
 
-        while True :
-            self.convert_units = False
-            self.OKbtn.grab_focus()
-            response = self.vkb.run()
-            if response == gtk.RESPONSE_OK:
-                if self.vkb_entry.get_text() in ['', _("0 not allowed - F2 to edit"), _("Error - F2 to edit")] :
-                    self.vkb_entry.set_text('0')
-                is_good, rval = self.compute()
-                if not is_good :
-                    self.show_error(_("Error - F2 to edit"))
-                elif self.editdata_type == 'int' :
-                    val = int(rval)
-                    a_min = int(self.min_value)
-                    a_max = int(self.max_value)
+        with VKB(self.tv.get_toplevel(), self.tooltip, self.min_value, self.max_value,
+                 self.editdata_type, self.convertible_units) as vkb :
 
-                    if val > a_max :
-                        str_val = str(a_max)
-                        val = a_max
-                    elif val < a_min :
-                        str_val = str(a_min)
-                        val = a_min
+            tree_x, tree_y = self.tv.get_bin_window().get_origin()
+            tree_w, tree_h = self.tv.window.get_geometry()[2:4]
 
-                    if (val == 0) and (self.not_zero != '0'):
-                        self.show_error(_("0 not allowed - F2 to edit"))
-                    else :
-                        str_val = str(val)
-                        break
-                else:
-                    if self.convert_units :
-                        if default_metric :
-                            rval = rval * 25.4
-                        else :
-                            rval = rval / 25.4
+            vkb.dlg.set_size_request(vkb_width, vkb_height)
+            vkb.dlg.resize(vkb_width, vkb_height)
 
-                    if rval > self.max_value :
-                        str_val = str(self.max_value)
-                        rval = self.max_value
-                    elif rval < self.min_value :
-                        str_val = str(self.min_value)
-                        rval = self.min_value
+            x = tree_w - vkb_width
+            if x > self.cell_area.x :
+                x = self.cell_area.x
+            y = tree_y + self.cell_area.y + self.cell_area.height
+            vkb.dlg.move(tree_x + x + 2, y)
 
-                    if (rval == 0.0) and (self.not_zero != '0'):
-                        self.show_error(_("0 not allowed - F2 to edit"))
-                    else :
-                        str_val = str(rval)
-                        break
+            initialize = self.inputKey == ''
+            if not initialize :
+                if ((self.data_type == 'int') and \
+                        (decimal_point in self.inputKey)) or \
+                        (self.inputKey == 'BS') :
+                    vkb.initvalue('0', self.param_value, initialize)
+                else :
+                    vkb.initvalue(self.inputKey, self.param_value, initialize)
+
+                self.inputKey = ''
             else :
-                break
+                vkb.initvalue(self.param_value, self.param_value, initialize)
 
-        self.vkb.destroy()
-        return response, str_val
+            vkb.dlg.show_all()
+            time.sleep(time_out)
+            return vkb.run(self.not_allowed)
 
-    def edit_list(self, time_out = 0.0):
+    def edit_list(self, time_out = 0.05):
         self.list_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.list_window.set_border_width(0)
         self.list_window.set_decorated(False)
@@ -1079,10 +1170,12 @@ class CellRendererMx(gtk.CellRendererText):
 
         model, ls_itr = ls_view.get_selection().get_selected()
         new_val = model.get_value(ls_itr, 1)
+        self.list_window.hide()
         self.list_window.destroy()
+        time.sleep(time_out)
         return response, new_val
 
-    def edit_string(self, time_out = 0.0):
+    def edit_string(self, time_out = 0.05):
         self.stringedit_window = gtk.Dialog(parent = self.tv.get_toplevel())
         self.stringedit_window.hide()
         self.stringedit_window.set_decorated(False)
@@ -1091,13 +1184,10 @@ class CellRendererMx(gtk.CellRendererText):
         self.stringedit_window.set_property("skip-taskbar-hint", True)
 
         self.stringedit_entry = gtk.Entry()
+        self.stringedit_window.vbox.add(self.stringedit_entry)
         self.stringedit_entry.set_editable(True)
-        if self.inputKey != 'BS' :
-            self.stringedit_entry.set_text(self.param_value)
-        self.inputKey = ''
 
         self.stringedit_entry.connect('key-press-event', self.string_edit_keyhandler)
-        self.stringedit_window.vbox.add(self.stringedit_entry)
 
         # position the popup on the edited cell
         (tree_x, tree_y) = self.tv.get_bin_window().get_origin()
@@ -1110,8 +1200,13 @@ class CellRendererMx(gtk.CellRendererText):
         self.stringedit_entry.grab_focus()
         self.stringedit_entry.connect('focus-out-event', self.string_edit_focus_out)
 
+        time.sleep(time_out)
+        if self.inputKey != 'BS' :
+            self.stringedit_entry.set_text(self.param_value)
+        self.inputKey = ''
         response = self.stringedit_window.run()
         new_val = self.stringedit_entry.get_text()
+        self.stringedit_window.hide()
         self.stringedit_window.destroy()
         return response, new_val
 
@@ -1139,7 +1234,7 @@ class CellRendererMx(gtk.CellRendererText):
         else :
             self.preedit(self, treeview, path)
 
-        if self.editdata_type in GROUP_HEADER_TYPES :
+        if self.editdata_type in GROUP_HEADER_TYPES or self.editdata_type == 'grayed' :
             self.inputKey = ''
             return None
 
@@ -1258,6 +1353,7 @@ class CellRendererMx(gtk.CellRendererText):
                 (iter_first, iter_last) = self.textbuffer.get_bounds()
                 text = self.textbuffer.get_text(iter_first, iter_last)
                 self.edited(self, path, text)
+            self.textedit_window.hide()
             self.textedit_window.destroy()
             self.refresh_fn(self.tv)
             return None
@@ -1316,16 +1412,11 @@ class Parameter(object) :
         ini = dict(ini)
         for i in ini :
             self.attr[i] = ini[i]
-        if "type" in self.attr :
-            self.attr["type"] = self.attr["type"].lower()
-        else :
-            self.attr["type"] = 'string'
-        if self.attr["type"] not in SUPPORTED_DATA_TYPES :
+        if "type" not in self.attr or self.attr["type"] not in SUPPORTED_DATA_TYPES :
             self.attr["type"] = 'string'
 
         if "call" not in self.attr :
-            self.attr["call"] = "#" + ini_id.lower()
-        self.id = ini_id
+            self.attr["call"] = "#" + ini_id
 
     def from_xml(self, xml) :
         for i in list(xml.keys()) :
@@ -1341,40 +1432,58 @@ class Parameter(object) :
         icon = self.get_attr("icon")
         return get_pixbuf(icon, icon_size)
 
-    def get_value(self, ngc = False) :
-        if ngc and self.get_type() == 'gcode' :
+    def get_value(self, editor = False) :
+        if self.get_type() == 'float' :
+            if default_metric and "metric_value" in self.attr :
+                return get_string(get_float(self.attr["value"]) * 25.4, 6, editor)
+            else :
+                return get_string(get_float(self.attr["value"]), 6, editor)
+        else :
+            return self.attr["value"] if "value" in self.attr else ""
+
+    def get_ngc_value(self):
+        if self.get_type() == 'gcode' :
             val = self.attr["value"] if "value" in self.attr else ""
             if val == '' :
                 return '0'
             else :
                 return val
-        elif default_metric and "metric_value" in self.attr :
-            return str(get_float(self.attr["value"]) * 25.4)
+        if self.get_type() == 'float' :
+            if machine_metric :  # and "metric_value" in self.attr :
+                return get_string(get_float(self.attr["value"]) * 25.4, 6, False)
+            else :
+                return get_string(get_float(self.attr["value"]), 6, False)
         else :
             return self.attr["value"] if "value" in self.attr else ""
 
-    def get_strict_value(self) :
-        return self.attr["value"] if "value" in self.attr else ""
-
-    def set_value(self, new_val) :
-        if self.get_type() == "float" :
-            a_val = get_float(new_val)
-            if default_metric and "metric_value" in self.attr :
-                self.attr["value"] = str(a_val / 25.4)
+    def set_value(self, new_val, parent) :
+        done = False
+        cancel = False
+        if 'on_change' in self.attr :
+            exec(self.attr['on_change'])
+        if cancel :
+            return False
+        if not done :
+            if self.get_type() == "float" :
+                factor = 25.4 if (default_metric and "metric_value" in self.attr) else 1
+                new_val = get_string(get_float(new_val) / factor, 10, False)
+                old_val = get_string(get_float(self.attr["value"]), 10, False)
             else :
-                self.attr["value"] = str(a_val)
-        elif self.get_type() == 'int' :
-            self.attr['value'] = str(get_int(new_val))
-        else :
-            self.attr["value"] = new_val
+                old_val = self.attr["value"]
+            if new_val == old_val :
+                return False
+            else :
+                self.attr["value"] = new_val
+        if 'value_changed' in self.attr :
+            exec(self.attr['value_changed'])
+        return True
 
     def get_display_string(self) :
         if self.get_type() == "float" :
-            fmt = '%' + '0.%sf' % self.get_digits()
             if default_metric and "metric_value" in self.attr :
-                return str(locale.format(fmt, get_float(self.attr["value"]) * 25.4))
+                return get_string(get_float(self.attr["value"]) * 25.4, self.get_digits())
             else :
-                return str(locale.format(fmt, get_float(self.attr["value"])))
+                return get_string(get_float(self.attr["value"]), self.get_digits())
         else :
             return self.attr["value"] if "value" in self.attr else ""
 
@@ -1385,6 +1494,15 @@ class Parameter(object) :
             self.attr['hidden'] = '0'
             return 1
         return 0
+
+    def get_grayed(self):
+        return (self.attr["grayed"] == '1') if "grayed" in self.attr else False
+
+    def set_grayed(self, value):
+        if value :
+            self.attr["grayed"] = '1'
+        else :
+            self.attr["grayed"] = '0'
 
     def change_group(self):
         t = self.get_type()
@@ -1447,9 +1565,6 @@ class Parameter(object) :
         else :
             return self.attr["digits"] if "digits" in self.attr else default_digits
 
-    def get_not_zero(self):
-        return self.attr["no_zero"] if "no_zero" in self.attr else '0'
-
     def set_digits(self, new_digits) :
         self.attr["digits"] = new_digits
 
@@ -1481,6 +1596,9 @@ class Feature(object):
     def __repr__(self) :
         return etree.tostring(self.to_xml(), pretty_print = True)
 
+    def get_grayed(self):
+        return (self.attr["grayed"] == '1') if "grayed" in self.attr else False
+
     def get_icon(self, icon_size) :
         return get_pixbuf(self.get_attr("icon"), icon_size)
 
@@ -1506,6 +1624,12 @@ class Feature(object):
 
     def get_attr(self, attr) :
         return self.attr[attr] if attr in self.attr else None
+
+    def get_param(self, param_id):
+        for p in self.param :
+            if 'call' in p.attr and p.attr['call'] == "#%s" % param_id :
+                return p
+        return None
 
     def get_name(self):
         return _(self.attr["name"]) if "name" in self.attr else _("unname")
@@ -1551,14 +1675,14 @@ class Feature(object):
                     (p[:6] == "PARAM_" and p not in self.attr["order"])]
         for s in parameters :
             if s in conf :
-                p = Parameter(ini = conf[s], ini_id = s.lower())
+                pn = s.lower()
+                p = Parameter(ini = conf[s], ini_id = pn)
 
-                if default_metric and p.attr['type'] == 'float' \
-                        and 'metric_value' in p.attr :
-                    a_val = get_float(p.attr['metric_value']) / 25.4
-                    p.attr["value"] = str(a_val)
+                if 'on_init' in p.attr :
+                    exec(p.attr['on_init'])
+                    del p.attr['on_init']
 
-                p_id = "%s:%s" % (ftype, p.id)
+                p_id = "%s:%s" % (ftype, pn)
                 if (p_id + '--type') in USER_VALUES :
                     p.set_type(USER_VALUES[p_id + '--type'])
 
@@ -1567,7 +1691,12 @@ class Feature(object):
                     p.set_hidden(True)
                     self.hide_field()
 
-                # set the value to user preference
+                if (p_id + '--grayed') in USER_VALUES :
+                    p.attr["grayed"] = USER_VALUES[p_id + '--grayed']
+
+                if (p_id + '--name') in USER_VALUES :
+                    p.attr["name"] = USER_VALUES[p_id + '--name']
+
                 if (p_id + '--value') in USER_VALUES :
                     p.attr["value"] = USER_VALUES[p_id + '--value']
 
@@ -1576,7 +1705,7 @@ class Feature(object):
         self.attr["id"] = ftype + '_000'
 
         # get gcode parameters
-        for l in ["DEFINITIONS", "BEFORE", "CALL", "AFTER"] :
+        for l in ["DEFINITIONS", "BEFORE", "CALL", "AFTER", "VALIDATION", "INIT"] :
             if l in conf and "content" in conf[l] :
                 self.attr[l.lower()] = re.sub(r"(?m)\r?\n\r?\.", "\n",
                                               conf[l]["content"])
@@ -1584,7 +1713,6 @@ class Feature(object):
                 self.attr[l.lower()] = ""
 
     def from_xml(self, xml) :
-        global UNIQUE_ID
         self.attr = {}
         for i in xml.keys() :
             self.attr[i] = xml.get(i)
@@ -1610,11 +1738,6 @@ class Feature(object):
             num = max([get_int(i.get("id")[-3: ]) for i in l] + [0]) + 1
         self.attr["id"] = self.attr["type"] + "_%03d" % num
 
-    def get_short_id(self):
-        global UNIQUE_ID
-        self.attr["short_id"] = str(UNIQUE_ID)
-        UNIQUE_ID += 1
-
     def get_definitions(self) :
         s = self.attr["definitions"] if "definitions" in self.attr else ''
         if s != '' :
@@ -1633,6 +1756,32 @@ class Feature(object):
             INCLUDE.append(src)
             return self.include(src)
         return ""
+
+    def replace_params(self, s):
+        for p in self.param :
+            if "call" in p.attr and "value" in p.attr :
+                if p.attr['type'] == 'text' :
+                    note_lines = p.get_value().split('\n')
+                    lines = ''
+                    for line in note_lines :
+                        lines = lines + '( ' + line + ' )\n'
+                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
+                        (re.escape(p.attr["call"])), r"%s\1" %
+                        lines, s)
+                elif p.attr['type'] == 'gc-lines' :
+                    note_lines = p.get_value().split('\n')
+                    lines = '\n'
+                    for line in note_lines :
+                        lines = lines + '\t' + line + '\n'
+                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
+                        (re.escape(p.attr["call"])), r"%s\1" %
+                        lines, s)
+
+                else :
+                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
+                       (re.escape(p.attr["call"])), r"%s\1" %
+                       p.get_ngc_value(), s)
+        return s
 
     def process(self, s, line_leader = '') :
 
@@ -1660,7 +1809,6 @@ class Feature(object):
             old_stdout = sys.stdout
             redirected_output = StringIO()
             sys.stdout = redirected_output
-#            exec(s) in {"self":self}
             sys.stdout = old_stdout
             redirected_output.reset()
             out = str(redirected_output.read())
@@ -1698,29 +1846,7 @@ class Feature(object):
             if fname is not None :
                 return str(open(fname).read())
 
-        for p in self.param :
-            if "call" in p.attr and "value" in p.attr :
-                if p.attr['type'] == 'text' :
-                    note_lines = p.get_value().split('\n')
-                    lines = ''
-                    for line in note_lines :
-                        lines = lines + '( ' + line + ' )\n'
-                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
-                        (re.escape(p.attr["call"])), r"%s\1" %
-                        lines, s)
-                elif p.attr['type'] == 'gc-lines' :
-                    note_lines = p.get_value().split('\n')
-                    lines = '\n'
-                    for line in note_lines :
-                        lines = lines + '\t' + line + '\n'
-                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
-                        (re.escape(p.attr["call"])), r"%s\1" %
-                        lines, s)
-
-                else :
-                    s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
-                       (re.escape(p.attr["call"])), r"%s\1" %
-                       p.get_value(True), s)
+        s = self.replace_params(s)
 
         s = re.sub(r"#sub_name", "%s" % self.attr['name'], s)
         s = re.sub(r"%SYS_DIR%", "%s" % SYS_DIR, s)
@@ -1733,7 +1859,10 @@ class Feature(object):
         s = re.sub(r"(?ims)(<subprocess>(.*?)</subprocess>)",
                    subprocess_callback, s)
 
-        s = re.sub(r"#ID", "%s" % self.attr["short_id"], s)
+        if "#ID" in s :
+            if 'short_id' not in self.attr :
+                self.attr['short_id'] = get_short_id()
+            s = re.sub(r"#ID", "%s" % self.attr['short_id'], s)
 
         s = s.lstrip('\n').rstrip('\n\t')
         if s == '' :
@@ -1769,10 +1898,59 @@ class Feature(object):
         else :
             return False
 
+    def msg_inv(self, msg, msgid):
+        msg = msg.replace('&#176;', '°')
+        print('\n%(feature_name)s : %(msg)s' % {'feature_name':self.get_name(), 'msg':msg})
+
+        if (("ALL:msgid-0" in EXCL_MESSAGES) or
+                ("%s:msgid-0" % (self.get_type()) in EXCL_MESSAGES) or
+                (("%s:msgid-%d" % (self.get_type(), msgid)) in EXCL_MESSAGES)) :
+            return
+
+        # create dialog with image and checkbox
+        dlg = gtk.MessageDialog(parent = None,
+            flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+            type = gtk.MESSAGE_WARNING,
+            buttons = gtk.BUTTONS_NONE,
+            message_format = self.get_name())
+        dlg.set_title('NativeCAM')
+        dlg.format_secondary_text(msg)
+        img = gtk.Image()
+        img.set_from_pixbuf(self.get_icon(add_dlg_icon_size))
+        dlg.set_image(img)
+        cb = gtk.CheckButton(label = _("Do not show again"))
+        dlg.get_content_area().pack_start(cb, True, True, 0)
+        dlg.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK).grab_focus()
+
+        dlg.set_keep_above(True)
+        dlg.show_all()
+        dlg.run()
+        if cb.get_active() :
+            GLOBAL_PREF.add_excluded_msg(self.get_type(), msgid)
+        dlg.destroy()
+
+    def check_hash(self, s, default = 0):
+        try :
+            return (0 + eval(s.strip('[]')))
+        except :
+            print(_('%(feature_name)s : can not evaluate %(value)s') % \
+                  {'feature_name':self.get_name(), 'value':s})
+            return default
+
+    def validate(self):
+        VALIDATED = True
+        s = self.attr["validation"]
+        s = self.replace_params(s)
+        s = re.sub(r"#", r"""#""", s)
+        exec(s)
+        if not VALIDATED :
+            print('%s failed validation\n' % self.get_name())
+        return True
+
 class Preferences(object):
 
     def __init__(self):
-        global default_metric
+        global default_metric, machine_metric
         default_metric = None
         self.pref_file = None
         self.cfg_file = None
@@ -1780,7 +1958,7 @@ class Preferences(object):
         self.cat_name = None
         self.has_Z_axis = True
 
-    def read(self, cat_name):
+    def read(self, cat_name, read_all = True):
         global default_digits, default_metric, add_menu_icon_size, \
             add_dlg_icon_size, quick_access_icon_size, menu_icon_size, \
             treeview_icon_size, vkb_width, vkb_height, vkb_cancel_on_out, \
@@ -1817,38 +1995,36 @@ class Preferences(object):
         def read_int(cf, section, key, default):
             return int(round(read_float(cf, section, key, default), 0))
 
-        if self.cat_name is None :
-            self.cat_name = cat_name
-
-        if self.cfg_file is None :
-            self.cfg_file = os.path.join(NCAM_DIR, CATALOGS_DIR, CONFIG_FILE)
-
         config = ConfigParser.ConfigParser()
 
-        config.read(self.cfg_file)
+        if read_all :
+            self.cat_name = cat_name
+            self.cfg_file = os.path.join(NCAM_DIR, CATALOGS_DIR, CONFIG_FILE)
+            self.pref_file = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, PREFERENCES_FILE)
 
-        self.w_adj_value = read_int(config, 'display', 'width', 550)
-        self.col_width_adj_value = read_int(config, 'display', 'name_col_width', 160)
-        self.tv_w_adj_value = read_int(config, 'display', 'master_tv_width', 175)
-        self.restore_expand_state = read_boolean(config, 'display', 'restore_expand_state', True)
-        self.tv2_expandable = read_boolean(config, 'display', 'tv2_expandable', False)
-        self.tv_expandable = read_boolean(config, 'display', 'tv_expandable', False)
-        self.use_dual_views = read_boolean(config, 'layout', 'dual_view', True)
-        self.side_by_side = read_boolean(config, 'layout', 'side_by_side', True)
-        self.sub_hdrs_in_tv1 = read_boolean(config, 'layout', 'subheaders_in_master', False)
-        self.hide_value_column = read_boolean(config, 'layout', 'hide_value_column', False)
-        treeview_icon_size = read_int(config, 'icons_size', 'treeview', 28)
-        add_menu_icon_size = read_int(config, 'icons_size', 'add_menu', 24)
-        menu_icon_size = read_int(config, 'icons_size', 'menu', 4)
-        toolbar_icon_size = read_int(config, 'icons_size', 'toolbar', 5)
-        add_dlg_icon_size = read_int(config, 'icons_size', 'add_dlg', 70)
-        quick_access_icon_size = read_int(config, 'icons_size', 'ncam_toolbar', 30)
-        vkb_width = read_int(config, 'virtual_kb', 'minimum_width', 260)
-        vkb_height = read_int(config, 'virtual_kb', 'height', 260)
-        vkb_cancel_on_out = read_boolean(config, 'virtual_kb', 'cancel_on_focus_out', True)
-        self.name_ellipsis = read_int(config, 'display', 'name-ellipsis', 2)
+            config.read(self.cfg_file)
 
-        self.pref_file = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, PREFERENCES_FILE)
+            self.w_adj_value = read_int(config, 'display', 'width', 550)
+            self.col_width_adj_value = read_int(config, 'display', 'name_col_width', 160)
+            self.tv_w_adj_value = read_int(config, 'display', 'master_tv_width', 175)
+            self.restore_expand_state = read_boolean(config, 'display', 'restore_expand_state', True)
+            self.tv2_expandable = read_boolean(config, 'display', 'tv2_expandable', False)
+            self.tv_expandable = read_boolean(config, 'display', 'tv_expandable', False)
+            self.use_dual_views = read_boolean(config, 'layout', 'dual_view', True)
+            self.side_by_side = read_boolean(config, 'layout', 'side_by_side', True)
+            self.sub_hdrs_in_tv1 = read_boolean(config, 'layout', 'subheaders_in_master', False)
+            self.hide_value_column = read_boolean(config, 'layout', 'hide_value_column', False)
+            treeview_icon_size = read_int(config, 'icons_size', 'treeview', 28)
+            add_menu_icon_size = read_int(config, 'icons_size', 'add_menu', 24)
+            menu_icon_size = read_int(config, 'icons_size', 'menu', 4)
+            toolbar_icon_size = read_int(config, 'icons_size', 'toolbar', 5)
+            add_dlg_icon_size = read_int(config, 'icons_size', 'add_dlg', 70)
+            quick_access_icon_size = read_int(config, 'icons_size', 'ncam_toolbar', 30)
+            vkb_width = read_int(config, 'virtual_kb', 'minimum_width', 260)
+            vkb_height = read_int(config, 'virtual_kb', 'height', 260)
+            vkb_cancel_on_out = read_boolean(config, 'virtual_kb', 'cancel_on_focus_out', True)
+            self.name_ellipsis = read_int(config, 'display', 'name-ellipsis', 2)
+
         config.read(self.pref_file)
 
         if self.ngc_init_str is None :
@@ -1859,7 +2035,7 @@ class Preferences(object):
 
         self.timeout_value = read_int(config, 'general', 'time_out', 0.300) * 1000
         self.autosave = read_boolean(config, 'general', 'autosave', False)
-        default_digits = str(read_int(config, 'general', 'digits', 3))
+        default_digits = read_str(config, 'general', 'digits', '3')
 
         if no_ini :
             default_metric = read_int(config, 'general', 'default_metric', 1) == 1
@@ -1917,6 +2093,7 @@ class Preferences(object):
         self.plasma_test_mode = read_sbool(config, 'plasma', 'test_mode', True)
 
         self.read_user_values()
+        self.read_excluded_msgs()
         self.create_defaults()
 
     def read_user_values(self):
@@ -1931,6 +2108,70 @@ class Preferences(object):
             for key, val in config.items(section) :
                 USER_VALUES[section + ':' + key] = val
 
+    def read_excluded_msgs(self):
+        global EXCL_MESSAGES
+
+        EXCL_MESSAGES = {}
+        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, EXCL_MSG_FILE)
+        config = ConfigParser.ConfigParser()
+        config.read(fname)
+        for section in config.sections() :
+            for key, val in config.items(section) :
+                EXCL_MESSAGES[section + ':' + key] = val
+
+    def add_excluded_msg(self, ftype, msgid):
+        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, EXCL_MSG_FILE)
+        parser = ConfigParser.ConfigParser()
+        parser.read(fname)
+
+        if not parser.has_section(ftype) :
+            parser.add_section(ftype)
+        parser.set(ftype, 'msgid-%d' % msgid, 'exclude')
+
+        with open(fname, 'wb') as configfile:
+            parser.write(configfile)
+
+        self.read_excluded_msgs()
+
+    def val_show_all(self, ftype = None):
+        global EXCL_MESSAGES
+        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, EXCL_MSG_FILE)
+
+        if ftype is None :
+            EXCL_MESSAGES = {}
+            if os.path.isfile(fname) :
+                os.remove(fname)
+        else :
+            parser = ConfigParser.ConfigParser()
+            parser.read(fname)
+
+            if parser.has_section(ftype) :
+                parser.remove_section(ftype)
+
+                with open(fname, 'wb') as configfile:
+                    parser.write(configfile)
+
+                self.read_excluded_msgs()
+
+    def val_show_none(self, ftype = None) :
+        fname = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, EXCL_MSG_FILE)
+        parser = ConfigParser.ConfigParser()
+
+        if ftype is None :
+            parser.add_section('ALL')
+            parser.set('ALL', 'msgid-0', 'exclude')
+
+        else :
+            parser.read(fname)
+            if not parser.has_section(ftype) :
+                parser.add_section(ftype)
+            parser.set(ftype, 'msgid-0', 'exclude')
+
+        with open(fname, 'wb') as configfile:
+            parser.write(configfile)
+
+        self.read_excluded_msgs()
+
     def edit(self, nc):
         if pref_edit.edit_preferences(nc, default_metric, self.cat_name, NCAM_DIR, \
                 self.ngc_init_str, self.ngc_post_amble, SYS_DIR) :
@@ -1939,6 +2180,8 @@ class Preferences(object):
         return False
 
     def create_defaults(self):
+        global machine_metric
+
         if self.use_pct :
             self.default = '%\n'
         else :
@@ -1949,11 +2192,11 @@ class Preferences(object):
         self.default +=     '30840-new-syntax-highlighting-for-gedit)\n'
         self.default += '(or https://github.com/FernV/Gcode-highlight-for-Kate)\n\n'
 
-        self.default += (self.ngc_init_str + "\n")
-        if default_metric :
-            self.default += _("G21  (metric)\n\n")
+        if machine_metric :
+            self.default += _("G21  (metric)\n")
         else :
-            self.default += _("G20  (imperial/inches)\n\n")
+            self.default += _("G20  (imperial/inches)\n")
+        self.default += (self.ngc_init_str + "\n\n")
 
         if self.cat_name == 'mill' :
             self.default += ("\n#<center_drill_depth>       = " + self.drill_center_depth + "\n\n")
@@ -2014,26 +2257,27 @@ class Preferences(object):
 
         self.default += _("(end defaults)\n\n")
 
-        self.default += _("(next values for backward compatibility only)\n")
-        self.default += ("#<_units_radius>            = 1  (factor for radius and diameter)\n")
-        self.default += ("#<_units_width>             = 1  (factor for width, height, length)\n")
+        self.default += ("#<_units_radius>            = 1  (for backward compatibility)\n")
+        self.default += ("#<_units_width>             = 1  (for backward compatibility)\n")
         if self.cat_name in ['mill', 'lathe'] :
-            self.default += ("#<_units_cut_depth>         = 1  (factor for depth)\n")
+            self.default += ("#<_units_cut_depth>         = 1  (for backward compatibility)\n\n")
         self.default += ("#<_tool_dynamic_dia>        = 0.0\n\n")
 
         self.default += _('(This is a built-in safety to help avoid gouging into your work piece)\n')
         if self.cat_name in ['mill', 'plasma'] :
             self.default += ("/ o<safety_999> if [#<_show_final_cuts>]\n")
             self.default += ("/    o<safety_9999> repeat [1000]\n")
+            self.default += ("/       M123\n")
             self.default += ("/       M0\n")
             self.default += ("/    o<safety_9999> endrepeat\n")
-            self.default += ("/ o<safety_999> endif")
+            self.default += ("/ o<safety_999> endif\n\n")
         else :
             self.default += ("/  o<safety_9999> repeat [1000]\n")
+            self.default += ("/    M123\n")
             self.default += ("/    M0\n")
-            self.default += ("/  o<safety_9999> endrepeat")
+            self.default += ("/  o<safety_9999> endrepeat\n\n")
 
-        self.default += _('\n\n(sub definitions)\n')
+        self.default += _('\n(sub definitions)\n')
 
 class NCam(gtk.VBox):
     __gtype_name__ = "NCam"
@@ -2041,7 +2285,8 @@ class NCam(gtk.VBox):
     __gproperties = __gproperties__
 
     def __init__(self, *a, **kw):
-        global NCAM_DIR, default_metric, NGC_DIR, SYS_DIR, no_ini
+        global NCAM_DIR, default_metric, NGC_DIR, SYS_DIR, no_ini, TOOL_TABLE, \
+            GLOBAL_PREF, machine_metric
 
         arg_start = (sys.argv[0:].index('-U') + 1) if "-U" in sys.argv[0:] else 1
         opt, optl = 'U:x:c:i:t', ["catalog=", "ini="]
@@ -2101,7 +2346,9 @@ class NCam(gtk.VBox):
         self.undo_pointer = -1
 
         self.pref = Preferences()
-        self.tools = Tools()
+        TOOL_TABLE = Tools()
+
+        machine_metric = True
 
         if "-c" in optlist :
             self.catalog_dir = optlist["-c"]
@@ -2142,11 +2389,11 @@ class NCam(gtk.VBox):
                 val = ini_instance.find('DISPLAY', 'EMBED_TAB_COMMAND')
 
             if val is not None :
-                if (val.find('--catalog=mill') > 0) or (val.find('-cmill') > 0) :
+                if 'mill' in val :
                     self.catalog_dir = 'mill'
-                elif (val.find('--catalog=lathe') > 0) or (val.find('-clathe') > 0) :
+                elif 'lathe' in val :
                     self.catalog_dir = 'lathe'
-                elif (val.find('--catalog=plasma') > 0) or (val.find('-cplasma') > 0) :
+                elif 'plasma'in val :
                     self.catalog_dir = 'plasma'
 
             val = ini_instance.find('DISPLAY', 'LATHE')
@@ -2156,9 +2403,10 @@ class NCam(gtk.VBox):
             self.pref.ngc_init_str = ini_instance.find('RS274NGC', 'RS274NGC_STARTUP_CODE')
 
             val = ini_instance.find('EMCIO', 'TOOL_TABLE')
-            self.tools.set_file(os.path.join(os.path.dirname(ini), val))
+            TOOL_TABLE.set_file(os.path.join(os.path.dirname(ini), val))
 
-            default_metric = ini_instance.find('TRAJ', 'LINEAR_UNITS') in ['mm', 'metric']
+            machine_metric = ini_instance.find('TRAJ', 'LINEAR_UNITS') in ['mm', 'metric']
+            default_metric = machine_metric
 
             val = ini_instance.find('DISPLAY', 'EDITOR')
             if val is not None :
@@ -2166,7 +2414,7 @@ class NCam(gtk.VBox):
 
             val = ini_instance.find('TRAJ', 'COORDINATES')
             if val is not None :
-                self.pref.has_Z_axis = val.find('Z') > -1
+                self.pref.has_Z_axis = ('Z' in val)
 
         print("\nNativeCAM info:")
         print("   inifile = %s" % inifilename)
@@ -2186,7 +2434,7 @@ class NCam(gtk.VBox):
         if ini is not None :
             require_ncam_lib(inifilename, ini_instance)
 
-        self.tools.load_table()
+        TOOL_TABLE.load_table()
 
         # find the catalog and menu file
         catname = self.catalog_dir + '/menu-custom.xml'
@@ -2207,6 +2455,7 @@ class NCam(gtk.VBox):
         self.catalog = etree.fromstring(mnu_xml)
 
         self.pref.read(self.catalog_dir)
+        GLOBAL_PREF = self.pref
 
         # main_window
         gtk.VBox.__init__(self, *a, **kw)
@@ -2264,6 +2513,9 @@ class NCam(gtk.VBox):
 
         self.builder.connect_signals(self)
         self.set_preferences()
+
+        if not os.path.isfile(os.path.join(NCAM_DIR, NGC_DIR, 'M123')):
+            create_M_file()
 
         self.load_currentWork()
         self.get_selected_feature(self.treeview)
@@ -2401,6 +2653,9 @@ class NCam(gtk.VBox):
             self.menubar.destroy()
         self.menubar = gtk.MenuBar()
 
+#        a = create_mi(self.actionOpen)
+#        a.destroy
+
         # Projects menu
         file_menu = gtk.Menu()
         file_menu.append(create_mi(self.actionNew))
@@ -2504,12 +2759,28 @@ class NCam(gtk.VBox):
 
         # Utilities menu
         menu_utils = gtk.Menu()
+
+        menu_utils.append(self.actionChUnits.create_menu_item())
         menu_utils.append(self.actionAutoRefresh.create_menu_item())
         menu_utils.append(gtk.SeparatorMenuItem())
         menu_utils.append(create_mi(self.actionLoadTools))
         menu_utils.append(gtk.SeparatorMenuItem())
         menu_utils.append(create_mi(self.actionSaveUser))
         menu_utils.append(create_mi(self.actionDeleteUser))
+
+        menu_utils.append(gtk.SeparatorMenuItem())
+
+        menu_val = gtk.Menu()
+        menu_val.append(create_mi(self.actionValAllDlg))
+        menu_val.append(create_mi(self.actionValNoDlg))
+        menu_val.append(gtk.SeparatorMenuItem())
+        menu_val.append(create_mi(self.actionValFeatDlg))
+        menu_val.append(create_mi(self.actionValFeatNone))
+
+        u_menu = create_mi(self.actionValidationMenu)
+        u_menu.set_submenu(menu_val)
+        menu_utils.append(u_menu)
+
         menu_utils.append(gtk.SeparatorMenuItem())
         menu_utils.append(create_mi(self.actionPreferences))
 
@@ -2555,19 +2826,32 @@ class NCam(gtk.VBox):
 
     def action_paste(self, *arg):
         txt = self.clipboard.wait_for_text()
-        if txt and txt.find(XML_TAG) > -1 :
+        if txt and (XML_TAG in txt) :
             self.import_xml(etree.fromstring(txt))
 
     def edit_menu_activate(self, *arg):
         txt = self.clipboard.wait_for_text()
         if txt:
-            self.actionPaste.set_sensitive(txt.find(XML_TAG) > -1)
+            self.actionPaste.set_sensitive(XML_TAG in txt)
         else:
             self.actionPaste.set_sensitive(False)
 
         self.adt_mi.set_visible(self.selected_type in ['float', 'int'])
         self.art_mi.set_visible(self.selected_type == 'gcode')
         self.sep1.set_visible(self.selected_type in ['float', 'int', 'gcode'])
+
+    def utilMenu_activate(self, *arg):
+        if default_metric :
+            self.actionChUnits.set_label(_("Change Units to Imperial"))
+        else :
+            self.actionChUnits.set_label(_("Change Units to Metric"))
+
+    def validation_menu_activate(self, *arg):
+        self.actionValFeatDlg.set_sensitive(self.selected_feature is not None)
+        self.actionValFeatNone.set_sensitive(self.selected_feature is not None)
+        if self.selected_feature is not None :
+            self.actionValFeatDlg.set_label('%s %s' % (_('Show All For'), self.selected_feature.get_name()))
+            self.actionValFeatNone.set_label('%s %s' % (_('Show None For'), self.selected_feature.get_name()))
 
     def view_menu_activate(self, *arg):
         self.agrp_mi.set_visible(self.selected_type in ["sub-header", "header"] and \
@@ -2608,6 +2892,19 @@ class NCam(gtk.VBox):
 
             self.set_preferences()
             self.autorefresh_call()
+
+    def action_ValAllDlg(self, *arg):
+        self.pref.val_show_all()
+        self.to_gcode()
+
+    def action_ValNoDlg(self, *arg):
+        self.pref.val_show_none()
+
+    def action_ValFeatDlg(self, *arg):
+        self.pref.val_show_all(self.selected_feature.get_type())
+
+    def action_ValFeatNone(self, *arg):
+        self.pref.val_show_none(self.selected_feature.get_type())
 
     def action_youTube(self, *arg):
         webbrowser.open('https://www.youtube.com/channel/UCjOe4VxKL86HyVrshTmiUBQ')
@@ -2799,13 +3096,15 @@ class NCam(gtk.VBox):
 
         for p in self.selected_feature.param :
             t = p.get_type()
-            if t in SUPPORTED_DATA_TYPES :
-                s = p.attr['call'].lstrip('#')
-                parser.set(section, s + '--type', t)
-                if 'value' in p.attr :
-                    parser.set(section, s + '--value', p.get_strict_value())
-                if p.get_hidden() :
-                    parser.set(section, s + '--hidden', '2')
+            s = p.attr['call'].lstrip('#')
+            parser.set(section, s + '--type', t)
+#            parser.set(section, s + '--name', p.attr['name'])
+            if 'value' in p.attr :
+                parser.set(section, s + '--value', p.attr['value'])
+            if p.get_hidden() :
+                parser.set(section, s + '--hidden', '2')
+            if 'grayed' in p.attr :
+                parser.set(section, s + '--grayed', p.attr['grayed'])
 
         with open(fname, 'wb') as configfile:
             parser.write(configfile)
@@ -2822,7 +3121,8 @@ class NCam(gtk.VBox):
         section = self.selected_feature.get_type()
         if parser.has_section(section) :
             parser.remove_section(section)
-            parser.write(io.open(fname, 'wb'))
+            with open(fname, 'wb') as configfile:
+                parser.write(configfile)
             self.pref.read_user_values()
             self.actionDeleteUser.set_sensitive(self.selected_feature.get_type() in USER_SUBROUTINES)
 
@@ -2860,6 +3160,7 @@ class NCam(gtk.VBox):
 
     def action_digits(self, *arg) :
         self.treestore.get(self.selected_param, 0)[0].set_digits(arg[1][0])
+        self.refresh_views()
 
     def create_second_treeview(self):
         self.treeview2 = gtk.TreeView()
@@ -2991,7 +3292,7 @@ class NCam(gtk.VBox):
         self.actionNew = ca("New", gtk.STOCK_NEW, None, "<control>N", None, self.action_new_project)
         self.actionOpen = ca("Open", gtk.STOCK_OPEN, None, "<control>O", None, self.action_open_project, 0)
         self.actionOpenExample = ca("OpenExample", None, _('Open Example'), '', _('Open Example Project'), self.action_open_project, 1)
-        self.actionSave = ca("Save", gtk.STOCK_SAVE, None, None, _("Save project as xml file"), self.action_save_project)
+        self.actionSave = ca("Save", gtk.STOCK_SAVE, None, "<control>S", _("Save project as xml file"), self.action_save_project)
         self.actionSaveTemplate = ca("SaveTemplate", None, _('Save as Default Template'), '', _("Save project as default template"), self.action_save_template)
         self.actionSaveNGC = ca("SaveNGC", None, _('Export gcode as RS274NGC'), '', _('Export gcode as RS274NGC'), self.action_save_ngc)
 
@@ -3048,13 +3349,22 @@ class NCam(gtk.VBox):
         self.action_group.add_action(self.actionSubHdrs)
 
         # actions related to utilities
-        self.actionUtilMenu = ca("UtilitiesMenu", None, _("_Utilities"), None, None, None)
-        self.actionLoadTools = ca("LoadTools", gtk.STOCK_REFRESH, _("Reload Tool Table"), None, _("Reload Tool Table"), self.tools.load_table)
+        self.actionUtilMenu = ca("UtilitiesMenu", None, _("_Utilities"), None, None, self.utilMenu_activate)
+        self.actionLoadTools = ca("LoadTools", gtk.STOCK_REFRESH, _("Reload Tool Table"), None, _("Reload Tool Table"), TOOL_TABLE.load_table)
         self.actionPreferences = ca("Preferences", gtk.STOCK_PREFERENCES, _("Edit Preferences"), None, _("Edit Preferences"), self.action_preferences)
 
         self.actionAutoRefresh = gtk.ToggleAction("AutoRefresh", _("Auto-refresh"), _('Auto-refresh LinuxCNC'), None)
         self.actionAutoRefresh.set_active(True)
         self.action_group.add_action(self.actionAutoRefresh)
+
+        self.actionChUnits = ca("ChUnits", None, _("Change Units"), None, _(""), self.action_chUnits)
+
+        # actions related to validations
+        self.actionValidationMenu = ca("ValidationMenu", gtk.STOCK_INFO, _("_Validation Messages"), None, None, self.validation_menu_activate)
+        self.actionValAllDlg = ca("ValAllDlg", gtk.STOCK_YES, _("Show All"), None, _("Show All Non-validation Messages"), self.action_ValAllDlg)
+        self.actionValNoDlg = ca("ValNoDlg", gtk.STOCK_NO, _("Show None"), None, _("Do Not Show Any Messages"), self.action_ValNoDlg)
+        self.actionValFeatDlg = ca("ValFeatDlg", gtk.STOCK_YES, _("Show All For Current Type"), None, None, self.action_ValFeatDlg)
+        self.actionValFeatNone = ca("ValFeatNone", gtk.STOCK_NO, _("Show None For Current Type"), None, None, self.action_ValFeatNone)
 
         # actions related to help
         self.actionHelpMenu = ca("HelpMenu", None, _("_Help"), None, None, None)
@@ -3095,7 +3405,8 @@ class NCam(gtk.VBox):
         parser.set('layout', 'dual_view', self.actionDualView.get_active())
         parser.set('layout', 'side_by_side', self.actionSideSide.get_active())
 
-        parser.write(io.open(cfg_file, 'wb'))
+        with open(cfg_file, 'wb') as configfile:
+            parser.write(configfile)
 
     def set_preferences(self):
         self.main_box.reorder_child(self.menubar, 0)
@@ -3213,7 +3524,7 @@ class NCam(gtk.VBox):
             if self.iter_next :
                 self.can_move_down = (self.iter_selected_type == tv_select.feature)
                 s = str(model.get(self.iter_next, 0)[0])
-                self.can_add_to_group = (s.find('type="items"') > -1) and \
+                self.can_add_to_group = ('type="items"' in s) and \
                         (self.iter_selected_type == tv_select.feature)
             else :
                 self.can_add_to_group = False
@@ -3632,7 +3943,7 @@ class NCam(gtk.VBox):
 
     def to_gcode(self, *arg) :
         global UNIQUE_ID
-        UNIQUE_ID = 21
+        UNIQUE_ID = 9
 
         def recursive(itr, ldr) :
             gcode_def = ""
@@ -3640,7 +3951,7 @@ class NCam(gtk.VBox):
             sub_ldr = ldr
             f = self.treestore.get(itr, 0)[0]
             if f.__class__ == Feature :
-                f.get_short_id()
+                f.validate()
                 sub_ldr += f.getindent()
                 gcode_def += f.get_definitions()
                 gcode += f.process(f.attr["before"], ldr)
@@ -3693,8 +4004,8 @@ class NCam(gtk.VBox):
                 filename = filechooserdialog.get_filename()
                 if filename[-4] != ".ngc" not in filename :
                     filename += ".ngc"
-                f = open(filename, "w")
-                f.write(gcode)
+                with open(fname, "wb") as f:
+                    f.write(self.to_gcode())
                 f.close()
         finally :
             filechooserdialog.destroy()
@@ -3704,8 +4015,14 @@ class NCam(gtk.VBox):
         itr = renderer.get_treeview().get_model().get_iter(path)
         itr = renderer.get_treeview().get_model().convert_iter_to_child_iter(itr)
         param = self.treestore.get_value(itr, 0)
-        old_value = param.get_value()
-        r = gtk.RESPONSE_NONE
+
+        # find parent to pass as arg to param.set_value
+        parent_itr = self.treestore.iter_parent(itr)
+        while self.treestore.get(parent_itr, 0)[0].__class__ != Feature :
+            parent_itr = self.treestore.iter_parent(parent_itr)
+        parent = self.treestore.get_value(parent_itr, 0)
+
+        value_changed = False
 
         if renderer.editdata_type == 'combo-user' :
             p_name = None
@@ -3731,40 +4048,30 @@ class NCam(gtk.VBox):
                     itr_n = self.treestore.iter_next(itr_n)
 
                 if param_e is not None :
+                    r = gtk.RESPONSE_NONE
                     renderer.set_tooltip(param_e.get_tooltip())
                     dt = param_e.get_type()
                     renderer.set_edit_datatype(dt)
-                    val = param_e.get_value()
-                    renderer.set_param_value(val)
+                    renderer.set_param_value(param_e.get_value(True))
                     if dt in NUMBER_TYPES :
-                        renderer.set_param_value(str(locale.format("%f", get_float(val))))
                         renderer.set_max_value(get_float(param_e.get_max_value()))
                         renderer.set_min_value(get_float(param_e.get_min_value()))
-                        renderer.set_digits(param_e.get_digits())
-                        renderer.set_not_zero(param_e.get_not_zero())
+                        renderer.set_not_allowed(param_e.get_attr('not_allowed'))
                         r, v = renderer.edit_number(gmoccapy_time_out)
-                        if r == gtk.RESPONSE_OK :
-                            param_e.set_value(v)
-                        else :
-                            return
 
                     elif dt in ['string', 'gcode'] :
                         r, v = renderer.edit_string(gmoccapy_time_out)
-                        if r == gtk.RESPONSE_OK :
-                            param_e.set_value(v)
-                        else :
-                            return
 
                     elif dt == 'list' :
                         renderer.set_options(param_e.get_options())
                         r, v = renderer.edit_list(gmoccapy_time_out)
-                        if r == gtk.RESPONSE_OK :
-                            param_e.set_value(v)
-                        else :
-                            return
 
-        if (old_value != new_value) or (r == gtk.RESPONSE_OK):
-            param.set_value(new_value)
+                    if r == gtk.RESPONSE_OK :
+                        value_changed = param_e.set_value(v, parent)
+                    else :
+                        return
+
+        if param.set_value(new_value, parent) or value_changed:
             self.action()
         self.focused_widget.grab_focus()
 
@@ -3832,7 +4139,7 @@ class NCam(gtk.VBox):
             newname = edit_entry.get_text().lstrip(' ')
             if newname > '' :
                 self.selected_feature.attr['name'] = newname
-                self.treeview.queue_draw()
+                self.refresh_views()
         self.newnamedlg.destroy()
 
     def action_rename_keyhandler(self, widget, event):
@@ -3896,10 +4203,11 @@ class NCam(gtk.VBox):
         if src_file is None:
             return
 
-        src_data = open(src_file).read()
-        if src_data.find(".//%s" % XML_TAG) > -1 :
+        with open(src_file) as a :
+            src_data = a.read()
+        if (".//%s" % XML_TAG) in src_data :
             xml = etree.parse(src_file).getroot()
-        elif src_data.find('[SUBROUTINE]') > -1 :
+        elif ('[SUBROUTINE]' in src_data)  :
             f = Feature(src = src_file)
             f.attr['src'] = src
             xml = etree.Element(XML_TAG)
@@ -3913,15 +4221,14 @@ class NCam(gtk.VBox):
         if not self.actionAutoRefresh.get_active() :
             return False
         fname = os.path.join(NGC_DIR, GENERATED_FILE)
-        f = open(fname, "w")
-        f.write(self.to_gcode())
-        f.close()
+        with open(fname, "wb") as f:
+            f.write(self.to_gcode())
+
         try:
             linuxCNC = linuxcnc.command()
             stat = linuxcnc.stat()
             stat.poll()
             if stat.interp_state == linuxcnc.INTERP_IDLE :
-                connected = True
                 try :
                     Tkinter.Tk().tk.call("send", "axis", ("remote", "open_file_name", fname))
                 except Tkinter.TclError as detail:
@@ -3930,11 +4237,7 @@ class NCam(gtk.VBox):
                     linuxCNC.mode(linuxcnc.MODE_AUTO)
                     linuxCNC.program_open(fname)
                     time.sleep(0.05)
-
         except Exception as e:
-            connected = False
-
-        if not connected :
             self.actionAutoRefresh.set_active(False)
             if self.show_not_connected :
                 mess_dlg(_('LinuxCNC not running\n\nStart LinuxCNC and\nactivate Auto-refresh menu item'))
@@ -3974,18 +4277,25 @@ class NCam(gtk.VBox):
     def action_gcode(self, *arg) :
         self.treestore.get(self.selected_param, 0)[0].set_type('gcode')
         self.selected_type = 'gcode'
-        self.treeview.queue_draw()
-        if self.treeview2 is not None :
-            self.treeview2.queue_draw()
+        self.refresh_views()
         self.action()
 
     def action_revert_type(self, *arg) :
         self.treestore.get(self.selected_param, 0)[0].revert_type()
         self.selected_type = self.treestore.get(self.selected_param, 0)[0].get_type()
+        self.refresh_views()
+        self.action()
+
+    def action_chUnits(self, *args):
+        global default_metric
+        default_metric = not default_metric
+        self.pref.read(None, False)
+        self.refresh_views()
+
+    def refresh_views(self):
         self.treeview.queue_draw()
         if self.treeview2 is not None :
             self.treeview2.queue_draw()
-        self.action()
 
     def action(self, xml = None, refresh = True) :
         if xml is None :
@@ -4155,29 +4465,49 @@ class NCam(gtk.VBox):
     def get_col_name(self, column, cell, model, itr, *arg) :
         data_type = model.get_value(itr, 0).get_type()
         val = model.get_value(itr, 0).get_name()
-        if data_type == 'header' :
-            cell.set_property('markup', header_fmt_str % val)
-        elif data_type == 'sub-header' :
-            if  self.actionDualView.get_active() and not self.actionSubHdrs.get_active() :
-                cell.set_property('markup', sub_header_fmt_str2 % val)
+        if model.get_value(itr, 0).get_grayed() :
+            if data_type == 'header' :
+                cell.set_property('markup', gray_header_fmt_str % val)
+            elif data_type == 'sub-header' :
+                if  self.actionDualView.get_active() and not self.actionSubHdrs.get_active() :
+                    cell.set_property('markup', gray_sub_header_fmt_str2 % val)
+                else :
+                    cell.set_property('markup', gray_sub_header_fmt_str % val)
+            elif data_type == 'items' :
+                cell.set_property('markup', gray_items_fmt_str % val)
+            elif data_type in SUPPORTED_DATA_TYPES :
+                cell.set_property('markup', gray_val % val)
             else :
-                cell.set_property('markup', sub_header_fmt_str % val)
-        elif data_type == 'items' :
-            cell.set_property('markup', items_fmt_str % val)
-        elif data_type in SUPPORTED_DATA_TYPES :
-            cell.set_property('markup', val)
+                cell.set_property('markup', gray_feature_fmt_str % val)
+
         else :
-            cell.set_property('markup', feature_fmt_str % val)
+            if data_type == 'header' :
+                cell.set_property('markup', header_fmt_str % val)
+            elif data_type == 'sub-header' :
+                if  self.actionDualView.get_active() and not self.actionSubHdrs.get_active() :
+                    cell.set_property('markup', sub_header_fmt_str2 % val)
+                else :
+                    cell.set_property('markup', sub_header_fmt_str % val)
+            elif data_type == 'items' :
+                cell.set_property('markup', items_fmt_str % val)
+            elif data_type in SUPPORTED_DATA_TYPES :
+                cell.set_property('markup', val)
+            else :
+                cell.set_property('markup', feature_fmt_str % val)
 
     def get_editinfo(self, cell, treeview, path):
         model = treeview.get_model()
         itr = model.get_iter(path)
         param = model.get_value(itr, 0)
 
-        data_type = param.get_type()
+        if param.get_grayed() :
+            data_type = 'grayed'
+        else :
+            data_type = param.get_type()
+            cell.set_param_value(param.get_value(True))
+            cell.set_tooltip(_(param.get_tooltip()))
+
         cell.set_edit_datatype(data_type)
-        cell.set_param_value(param.get_value())
-        cell.set_tooltip(_(param.get_tooltip()))
 
         if data_type in ['combo', 'combo-user', 'list']:
             cell.set_options(_(param.get_options()))
@@ -4185,12 +4515,11 @@ class NCam(gtk.VBox):
         elif data_type in NUMBER_TYPES:
             cell.set_max_value(get_float(param.get_max_value()))
             cell.set_min_value(get_float(param.get_min_value()))
-            cell.set_digits(param.get_digits())
-            cell.set_not_zero(param.get_not_zero())
+            cell.set_not_allowed(param.get_attr('not_allowed'))
             cell.set_convertible_units('metric_value' in param.attr)
 
         elif data_type == 'tool' :
-            cell.set_options(self.tools.list)
+            cell.set_options(TOOL_TABLE.list)
 
         elif data_type == 'filename' :
             cell.set_fileinfo(param.attr['patterns'], \
@@ -4218,7 +4547,7 @@ class NCam(gtk.VBox):
             dval, h = os.path.splitext(dval)
 
         elif data_type == 'tool' :
-            dval = self.tools.get_text(val)
+            dval = TOOL_TABLE.get_text(val)
 
         if data_type == 'combo':
             options = _(param.get_attr('options'))
@@ -4282,7 +4611,10 @@ class NCam(gtk.VBox):
             cell.set_property("wrap-width", 180)
         else :
             cell.set_property("wrap-width", -1)
-        cell.set_property('text', dval.replace('&#176;', '°'))
+        if param.get_grayed() :
+            cell.set_property('markup', gray_val % dval.replace('&#176;', '°'))
+        else :
+            cell.set_property('text', dval.replace('&#176;', '°'))
 
 
     def get_col_icon(self, column, cell, model, itr) :
@@ -4403,7 +4735,7 @@ class NCam(gtk.VBox):
         finally:
             filechooserdialog.destroy()
 
-    # will update with new features and keep the previous values
+    # will update with new features version and keep the previous values
     def update_features(self, xml_i):
         new_xml = etree.Element(XML_TAG)
 
@@ -4417,7 +4749,7 @@ class NCam(gtk.VBox):
                     else :
                         f_B = Feature(src = src_f)
                         if f_B.get_version() > f_A.get_version() :
-                            f_B.attr['src'] = f_A.get_attr('src')
+                            f_B.attr['src'] = f_A.attr['src']
                             # assign all old values
                             f_B.attr['name'] = f_A.attr['name']
                             f_B.attr['expanded'] = f_A.attr['expanded']
@@ -4429,23 +4761,21 @@ class NCam(gtk.VBox):
                                 f_B.attr['hidden_count'] = f_A.attr['hidden_count']
 
                             for p in f_A.param :
-                                    call = p.attr['call']
-                                    for q in f_B.param :
-                                        if q.attr['call'] == call :
-                                            q.attr['path'] = p.attr['path']
-                                            if 'value' in p.attr :
-                                                q.attr['value'] = p.attr['value']
-                                            if 'metric_value' in p.attr :
-                                                q.attr['metric_value'] = p.attr['metric_value']
-                                            if 'minimum_value' in p.attr :
-                                                q.attr['minimum_value'] = p.attr['minimum_value']
-                                            if 'maximum_value' in p.attr :
-                                                q.attr['maximum_value'] = p.attr['maximum_value']
-                                            if 'hidden' in p.attr :
-                                                q.attr['hidden'] = p.attr['hidden']
-                                            if 'no_zero' in p.attr :
-                                                q.attr['no_zero'] = p.attr['no_zero']
-                                            break
+                                call = p.attr['call']
+                                for q in f_B.param :
+                                    if q.attr['call'] == call :
+                                        q.attr['path'] = p.attr['path']
+                                        if 'value' in p.attr :
+                                            q.attr['value'] = p.attr['value']
+                                        if 'minimum_value' in p.attr :
+                                            q.attr['minimum_value'] = p.attr['minimum_value']
+                                        if 'maximum_value' in p.attr :
+                                            q.attr['maximum_value'] = p.attr['maximum_value']
+                                        if 'hidden' in p.attr :
+                                            q.attr['hidden'] = p.attr['hidden']
+                                        if 'grayed' in p.attr :
+                                            q.attr['grayed'] = p.attr['grayed']
+                                        break
                             f = f_B
                         else :
                             f = f_A
@@ -4453,6 +4783,12 @@ class NCam(gtk.VBox):
                     f.get_id(new_xml)
                     if 'short_id' in f.attr :
                         del f.attr['short_id']
+                    if "validation" not in f.attr :
+                        f.attr["validation"] = ""
+                    for p in f_A.param :
+                        if 'no_zero' in p.attr :
+                            del p.attr['no_zero']
+                            p.attr['not_allowed'] = '0'
 
                     if dst is None :
                         new_xml.append(f.to_xml())
@@ -4607,11 +4943,13 @@ def verify_ini(fname, ctlog, in_tab) :
     path2ui = os.path.join(SYS_DIR, 'ncam.ui')
     req = '# required NativeCAM item :\n'
 
-    txt = open(fname, 'r').read()
-    if (txt.find(path2ui) == -1) or (txt.find('my-stuff') == -1) :
+    with open(fname, 'r') as b :
+        txt = b.read()
+    if (path2ui not in txt) or ('my-stuff' not in txt) :
         if not os.path.exists(fname + '.bak') :
-            open(fname + '.bak', 'w').write(txt)
-            print(_('Backup file created : %s.bak') % fname)
+            with open(fname + '.bak', 'w') as b :
+                b.write(txt)
+                print(_('Backup file created : %s.bak') % fname)
 
         if (txt.find('--catalog=mill') > 0) or (txt.find('-cmill') > 0) :
             ctlog = 'mill'
@@ -4727,17 +5065,20 @@ def verify_ini(fname, ctlog, in_tab) :
             except :
                 txt = re.sub(r"\[DISPLAY\]", "[DISPLAY]\n" + newstr, txt)
 
-            newstr = '%sSUBROUTINE_PATH = ncam/my-stuff:ncam/lib/%s:ncam/lib/utilities%s\n' % \
+            if not 'ncam/my-stuff:ncam/lib/' in old_sub_path :
+                newstr = '%sSUBROUTINE_PATH = ncam/my-stuff:ncam/lib/%s:ncam/lib/utilities%s\n' % \
                     (req, ctlog, old_sub_path)
-            try :
-                oldstr = 'SUBROUTINE_PATH = ' + parser.get('RS274NGC', 'subroutine_path')
-                txt = re.sub(r"%s" % oldstr, newstr, txt)
-            except :
-                txt = re.sub(r"\[RS274NGC\]", "[RS274NGC]\n" + newstr, txt)
+                try :
+                    oldstr = 'SUBROUTINE_PATH = ' + parser.get('RS274NGC', 'subroutine_path')
+                    txt = re.sub(r"%s" % oldstr, newstr, txt)
+                except :
+                    txt = re.sub(r"\[RS274NGC\]", "[RS274NGC]\n" + newstr, txt)
 
             open(fname, 'w').write(txt)
 
-            print(_('Success in modifying inifile :\n  %s') % fname)
+            with open(fname, 'w') as b :
+                b.write(txt)
+                print(_('Success in modifying inifile :\n  %s') % fname)
 
         except Exception as detail :
             err_exit(_('Error modifying ini file\n%(err_details)s') % {'err_details':detail})
@@ -4748,10 +5089,10 @@ Standalone Usage:
    ncam [Options]
 
 Options :
-   -h | --help                 this text
+    -h | --help                this text
    (-i | --ini=) inifilename   inifile used
    (-c | --catalog=) catalog   valid catalogs = mill, plasma, lathe
-   -t | --tab                  with axis and gmoccapy it will be in a tab
+    -t | --tab                 axis and gmoccapy only, put NativeCAM in a new tab
 
 To prepare your inifile to use NativeCAM embedded,
    a) Start in a working directory with your LinuxCNC configuration ini file

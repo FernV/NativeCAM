@@ -11,7 +11,7 @@ o<isect_line_arc> sub
 		(print,)
 		(print,isect_line_arc : finding intersection of 1 arc/circle and a line,    tracking = #10)
 		(print,line : X#1, Y#2  to  X#3, Y#4)
-		(print,arc  : cx,cy = #4,#5   radius = #6)
+		(print,arc  : cx,cy = #5,#6   radius = #7)
 	o10 endif
 
 	#<dx> = [#3 - #1]
@@ -63,9 +63,9 @@ o<isect_line_arc> sub
 			(print,2 intersections found at : X#<x1>, Y#<y1>  and  X#<x2>, Y#<y2>)
 		o<debug03> endif
 
-		o<line> CALL [#8] [#9] [#<x1>] [#<y1>] [#10]
+		o<line> CALL [#8] [#9] [#<x1>] [#<y1>] ;[#10]
 		#<len0> = #<_line_len>
-		o<line> CALL [#8] [#9] [#<x2>] [#<y2>] [#10]
+		o<line> CALL [#8] [#9] [#<x2>] [#<y2>] ;[#10]
 			
 		o<if000> if [#<len0> LE #<_line_len>]
 			#<_isect_x> = #<x1>
@@ -82,6 +82,7 @@ o<isect_line_arc> sub
 				#16 = [#<_line_len> - #<len0>]
 			o11 endif
 			(print,result : X#<_isect_x>, Y#<_isect_y> is closer to reference X#8, Y#9 by #16)
+			(print,        ===========================)
 		o<debug02> endif
 		
 		o<if02> if [[#11 GT 30] AND [#12 GT 30]]

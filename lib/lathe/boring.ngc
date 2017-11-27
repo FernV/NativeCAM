@@ -2,43 +2,28 @@
 o<boring> sub
 (CALL [#begin_x] [#end_x] [#begin_z] [#end_z] [#finishing_passes])
 
-	#<begin_x>          = #1
-	#<end_x>            = #2
 	#<begin_z>          = #3
 	#<end_z>            = #4
 	#<finishing_passes> = #5
 	#<taper>            = #6
 
-	o151 if [#<end_x> LT #<begin_x>]
-		(debug,Boring: End X must be greater than Begin X)
-		(print,)
-		(print,Boring: End X must be greater than Begin X)
-		(AXIS,notify,Boring: End X must be greater than Begin X)
-		o<boring> return
-	o151 endif
-
+	o01 if [#<_lathe_diameter_mode> EQ 1]
+		#<begin_x>   = #1
+		#<end_x>     = #2
+		#<roughcut>  = [#<_rough_cut> * 2]
+		#<finishcut> = [#<_finish_cut> * 2]
+	o01 else
+		#<begin_x>   = [#1 / 2]
+		#<end_x>     = [#2 / 2]
+		#<roughcut>  = #<_rough_cut>
+		#<finishcut> = #<_finish_cut>
+	o01 endif
+	
 	/ G0 X#<end_x> Z#<begin_z>
 	/ F10
 	/ G1 Z#<end_z>
 	/ o<boring> return
 
-	o<in_list> CALL [#5413] [5] [0] [3] [8] [4] [9]
-	o998 if [#<_in_list> EQ 0]
-		(debug,Boring: Cutter orientation should be 3, 9, 8, 4 or None)
-		(print,)
-		(print,Boring: Cutter orientation should be 3, 9, 8, 4 or None)
-		(AXIS,notify,Boring: Cutter orientation should be 3 or 9 or 8 or 4 or None)
-;		o<boring> return
-	o998 endif
-
-	o01 if [#<_lathe_diameter_mode> EQ 1]
-		#<roughcut> = [#<_rough_cut> * 2]
-		#<finishcut> = [#<_finish_cut> * 2]
-	o01 else
-		#<roughcut> = #<_rough_cut>
-		#<finishcut> = #<_finish_cut>
-	o01 endif
-	
 	o10 if [#<finishing_passes> GT 0]
 		#<cut_rough_total> = [#<end_x> - #<begin_x> - #<finishcut>]
 	o10 else
@@ -49,7 +34,7 @@ o<boring> sub
 	o11 if [#<rough_passes> GT 0]
 		#<each_cut> = [#<cut_rough_total> / #<rough_passes>]
 	o11 elseif [#<rough_passes> LT 0]
-		;o<boring> return
+	
 	o11 endif
 	
 	o13 if [#<begin_z> GT #<end_z>]

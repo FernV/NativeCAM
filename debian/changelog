@@ -1,3 +1,15 @@
+nativecam (0.1.14) UNRELEASED; urgency=medium
+
+  add validation of inputs with dialog
+  add warning dialog when skip block not active
+  new class for calculator dialog
+  update lathe ngc files except threading
+  change units on the fly
+  add complementary python code in cfg files
+  minor changes
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Fri, 24 Nov 2017 00:13:00 -0500
+
 nativecam (0.1.13) UNRELEASED; urgency=medium
 
   add threading automatic thread depth and multithreads

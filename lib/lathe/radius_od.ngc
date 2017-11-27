@@ -2,7 +2,6 @@
 o<radius_od> sub
 (CALL [peak_x] [peak_z] [#radius] [direction] [#finishing_passes])
 
-	#<peak_x>           = #1
 	#<peak_z>           = #2
 	#<radius>           = #3
 	#<direction>        = #4 ("X- to Z- = 0 : Z+ to X- = 1 : Z- to X- = 2 : X- to Z+ = 3")
@@ -24,10 +23,12 @@ o<radius_od> sub
 	o11 endif
 
 	o50 if [#<_lathe_diameter_mode> EQ 1]
+		#<peak_x>           = [#1 * 1]
 		#<x_radius> = [#<radius> * 2]
 		#<xtend> = [#5410 * 2]
 		#<x_step> = [#<z_step> * 2]
 	o50 else
+		#<peak_x>           = [#1 * 0.5]
 		#<x_radius> = [#<radius>]
 		#<xtend> = [#5410]
 		#<x_step> = [#<z_step>]
@@ -64,32 +65,10 @@ o<radius_od> sub
 	/ G#<pv_dir> X[#<peak_x> - #<x_radius>] Z[#<peak_z>] I-#<radius>
 	/ o<radius_od> return
 
-	o998 if [[#<direction> MOD 2] EQ 0]
-		o<in_list> CALL [#5413] [3] [0] [2] [9]
-		o999 if [#<_in_list> EQ 0]
-			(debug,Radius OD: Cutter orientation should be 2, 9 or None)
-			(print,)
-			(print,Radius OD: Cutter orientation should be 2, 9 or None)
-			(AXIS,notify,Radius OD: Cutter orientation should be 2 or 9 or None)
-;			o<radius_od> return
-		o999 endif
-	o998 else
-		o<in_list> CALL [#5413] [3] [0] [1] [9]
-		o997 if [#<_in_list> EQ 0]
-			(debug,Radius OD: Cutter orientation should be 1, 9 or None)
-			(print,)
-			(print,Radius OD: Cutter orientation should be 1, 9 or None)
-			(AXIS,notify,Radius OD: Cutter orientation should be 1 or 9 or None)
-;			o<radius_od> return
-		o997 endif
-	o998 endif
-
-	o51 if [#<_x> LT [#<peak_x> + #<_x_rapid>]]
-		G0 X[#<peak_x> + #<_x_rapid>]
-	o51 endif
+	G0 X[#<_wp_dia_od> + #<_X_rapid>]
+	G0 Z[#<peak_z> - [#<_z_clear> + 0] * #<z_factor>]
 
 	G#<comp>
-	G0 X[#<peak_x> + #<_x_clear>] Z[#<peak_z> - [#<_z_clear> + 0] * #<z_factor>]
 	
 	M#<_cooling_mode>
 	
