@@ -10,14 +10,9 @@ o<show_stock> sub
 	o01 else
 		#<zstep> = 0.2
 	o01 endif
+	#<xstep> = #<zstep>
 	#<zsteps> = FUP[#<l> / 2 / #<zstep>]
-	
-	o02 if [#<_lathe_diameter_mode> EQ 1]
-		#<xstep> = #<zstep>
-	o02 else
-		#<xstep> = [#<zstep>]
-	o02 endif
-	#<xsteps> = FUP[#<_wp_dia_od> / 2 / #<xstep>]
+	#<xsteps> = FUP[#<_wp_dia_od> / 2 / #<zstep>]
 
 	G0 X[0] Z[#<z>] F10
 	#<pass> = 1

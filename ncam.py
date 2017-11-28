@@ -632,7 +632,7 @@ class Tools(object):
     def get_tool_orient(self):
         return self.orientation
 
-class VKB():
+class VKB(object):
 
     def __init__(self, toplevel, tooltip, min_value, max_value, data_type, convertible) :
         self.dlg = gtk.Dialog(parent = toplevel)
@@ -1678,10 +1678,6 @@ class Feature(object):
                 pn = s.lower()
                 p = Parameter(ini = conf[s], ini_id = pn)
 
-                if 'on_init' in p.attr :
-                    exec(p.attr['on_init'])
-                    del p.attr['on_init']
-
                 p_id = "%s:%s" % (ftype, pn)
                 if (p_id + '--type') in USER_VALUES :
                     p.set_type(USER_VALUES[p_id + '--type'])
@@ -1711,6 +1707,9 @@ class Feature(object):
                                               conf[l]["content"])
             else :
                 self.attr[l.lower()] = ""
+
+        parent = self
+        exec(self.attr['init'])
 
     def from_xml(self, xml) :
         self.attr = {}
@@ -1955,7 +1954,7 @@ class Preferences(object):
         self.pref_file = None
         self.cfg_file = None
         self.ngc_init_str = None
-        self.cat_name = None
+#        self.cat_name = None
         self.has_Z_axis = True
 
     def read(self, cat_name, read_all = True):
@@ -1995,10 +1994,12 @@ class Preferences(object):
         def read_int(cf, section, key, default):
             return int(round(read_float(cf, section, key, default), 0))
 
+        if cat_name is not None :
+            self.cat_name = cat_name
+
         config = ConfigParser.ConfigParser()
 
         if read_all :
-            self.cat_name = cat_name
             self.cfg_file = os.path.join(NCAM_DIR, CATALOGS_DIR, CONFIG_FILE)
             self.pref_file = os.path.join(NCAM_DIR, CATALOGS_DIR, self.cat_name, PREFERENCES_FILE)
 
@@ -3098,7 +3099,6 @@ class NCam(gtk.VBox):
             t = p.get_type()
             s = p.attr['call'].lstrip('#')
             parser.set(section, s + '--type', t)
-#            parser.set(section, s + '--name', p.attr['name'])
             if 'value' in p.attr :
                 parser.set(section, s + '--value', p.attr['value'])
             if p.get_hidden() :
@@ -3950,7 +3950,7 @@ class NCam(gtk.VBox):
             gcode = ""
             sub_ldr = ldr
             f = self.treestore.get(itr, 0)[0]
-            if f.__class__ == Feature :
+            if f.__class__ is Feature :
                 f.validate()
                 sub_ldr += f.getindent()
                 gcode_def += f.get_definitions()
@@ -3962,7 +3962,7 @@ class NCam(gtk.VBox):
                 gcode += g
                 gcode_def += d
                 itr = self.treestore.iter_next(itr)
-            if f.__class__ == Feature :
+            if f.__class__ is Feature :
                 gcode += f.process(f.attr["after"], ldr)
             return gcode, gcode_def
 
@@ -4004,7 +4004,7 @@ class NCam(gtk.VBox):
                 filename = filechooserdialog.get_filename()
                 if filename[-4] != ".ngc" not in filename :
                     filename += ".ngc"
-                with open(fname, "wb") as f:
+                with open(filename, "wb") as f:
                     f.write(self.to_gcode())
                 f.close()
         finally :
@@ -4018,7 +4018,7 @@ class NCam(gtk.VBox):
 
         # find parent to pass as arg to param.set_value
         parent_itr = self.treestore.iter_parent(itr)
-        while self.treestore.get(parent_itr, 0)[0].__class__ != Feature :
+        while self.treestore.get(parent_itr, 0)[0].__class__ is not Feature :
             parent_itr = self.treestore.iter_parent(parent_itr)
         parent = self.treestore.get_value(parent_itr, 0)
 
@@ -4072,6 +4072,7 @@ class NCam(gtk.VBox):
                         return
 
         if param.set_value(new_value, parent) or value_changed:
+            self.refresh_views()
             self.action()
         self.focused_widget.grab_focus()
 
@@ -4626,7 +4627,7 @@ class NCam(gtk.VBox):
     def treestore_to_xml_recursion(self, itr, xmlpath, allitems = True):
         while itr :
             f = self.treestore.get(itr, 0)[0]
-            if f.__class__ == Feature :
+            if f.__class__ is Feature :
                 xmlpath.append(f.to_xml())
 
             # check for the childrens
@@ -4739,6 +4740,9 @@ class NCam(gtk.VBox):
     def update_features(self, xml_i):
         new_xml = etree.Element(XML_TAG)
 
+        def upd2(parent):
+            exec(parent.attr['init'])
+
         def recursive(xmlpath, dst):
             for xml in xmlpath :
                 if xml.tag == "feature" :
@@ -4777,6 +4781,8 @@ class NCam(gtk.VBox):
                                             q.attr['grayed'] = p.attr['grayed']
                                         break
                             f = f_B
+                            if 'init' in f.attr :
+                                upd2(f)
                         else :
                             f = f_A
 

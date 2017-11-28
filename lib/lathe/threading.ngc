@@ -15,8 +15,8 @@ o<threading> sub
 		#<dia>    = [25.4 * #4]
 		#<pitch>  = [25.4 / #6]
 	o91 elseif [[#<_metric> EQ 0] AND [#3 EQ 1]] (imperial machine units and metric threads)
-		#<dia>    = [#4  / 25.4]
-		#<pitch>  = [#6  / 25.4]
+		#<dia>    = [#4 / 25.4]
+		#<pitch>  = [#6 / 25.4]
 	o91 else (machine and thread units are same)
 		o92 if [[#<_metric> EQ 0] AND [#3 EQ 0]] (imperial machine units and threads)
 			#<pitch>  = [1 / #6]
@@ -47,11 +47,8 @@ o<threading> sub
 		#<t_len>  = [TAN[#<taper_angle>] * #<depth> / 2]
 	o95 endif
 
-	#<pass> = 1
-	#<z_step> = [TAN[30] * #<depth>]
-	o102 if [#<_lathe_diameter_mode>]
-        #<z_step> = [#<z_step> / 2]
-    o102 endif
+	#<pass>   = 1
+	#<z_step> = [TAN[30] * #<depth> / #<_diameter_mode>]
 	
     o113 if [#<begin_z> LT #<end_z>]
 		#<z_step> = -#<z_step>

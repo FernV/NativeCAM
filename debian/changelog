@@ -7,8 +7,9 @@ nativecam (0.1.14) UNRELEASED; urgency=medium
   change units on the fly
   add complementary python code in cfg files
   minor changes
+  bug fixes
 
- -- Fernand Veilleux <fernveilleux@gmail.com>  Fri, 24 Nov 2017 00:13:00 -0500
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Mon, 27 Nov 2017 20:50:00 -0500
 
 nativecam (0.1.13) UNRELEASED; urgency=medium
 

@@ -7,24 +7,15 @@ o<taper_id> sub
 	#<fine_finish> = #5
 	#<path>        = #6 (Follow drive line = 0 : Angular = 1)
 
-	o00 if [#<_lathe_diameter_mode> EQ 1]
-		#<begin_x>   = #1
-		#<end_x>     = #2
-		#<roughcut>  = [#<_rough_cut> * 2]
-		#<finishcut> = [#<_finish_cut> * 2]
-		#<diff_x>    = [[#<begin_x> - #<end_x>] / 2]
-	o00 else
-		#<begin_x>   = [#1 / 2]
-		#<end_x>     = [#2 / 2]
-		#<roughcut>  = #<_rough_cut>
-		#<finishcut> = #<_finish_cut>
-		#<diff_x>    = [#<begin_x> - #<end_x>]
-	o00 endif
+	#<begin_x>     = [#1 / 2 * #<_diameter_mode>]
+	#<end_x>       = [#2 / 2 * #<_diameter_mode>]
+	#<diff_x>      = [[#<begin_x> - #<end_x>] / #<_diameter_mode>]
+	#<roughcut>    = [#<_rough_cut> * #<_diameter_mode>]
+	#<finishcut>   = [#<_finish_cut> * #<_diameter_mode>]
 
 	#<end_z> = [#<begin_z> - [#<diff_x> * TAN[#<angle> - 90]]]
 
 	/ G0 X#<begin_x> Z#<end_z>
-	/ F10
 	/ G1 X#<end_x> Z#<begin_z>
 	/ o<taper_id> return
 
@@ -46,7 +37,7 @@ o<taper_id> sub
 	o131 endif
 
 	#<rough_cut_z_total> = [#<cut_x_total> * SIN[#<angle> - 90] / SIN[#<angle>]]
-	#<z_step> = [#<rough_cut_z_total> / #<rough_passes> / [#<_lathe_diameter_mode> + 1]]
+	#<z_step> = [#<rough_cut_z_total> / #<rough_passes> / #<_diameter_mode>]
 
 	M#<_cooling_mode>
 	

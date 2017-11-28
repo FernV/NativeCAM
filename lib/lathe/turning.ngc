@@ -1,31 +1,21 @@
 (author : Fernand Veilleux)
 o<turning> sub
-(CALL [#begin_x] [#end_x] [#begin_z] [#end_z] [#finishing_passes] [radius] [radius opt])
+(CALL [#begin_x] [#end_x] [#begin_z] [#end_z] [#finishing_passes] [radius] [mode] [with_comp])
 ;(print,#1, #2,#3,#4,#5,#6,#7)
 
-	#<begin_z>             = #3
-	#<end_z>               = #4
-	#<finishing_passes>    = #5
-	#<radius>              = #6
-	#<radius_opt>          = #7 (Do full radius = 0 : Stop at Begin diameter = 1)
+	#<begin_z>          = #3
+	#<end_z>            = #4
+	#<finishing_passes> = #5
+	#<radius>           = #6
+	#<mode>             = [#7 - 1] (None w/ compensation=0:None w/o compensation=1:Full radius=2:Stop at Begin diameter=3)
 	
-	o01 if [#<_lathe_diameter_mode> EQ 1]
-		#<begin_x>         = #1
-		#<end_x>           = #2
-		#<roughcut>        = [#<_rough_cut> * 2]
-		#<finishcut>       = [#<_finish_cut> * 2]
-		#<x_radius>        = [#<radius> * 2]
-		#<b_x>             = [#<begin_x> * 2]
-		#<e_x>             = [#<end_x> * 2]
-	o01 else
-		#<begin_x>         = [#1 / 2]
-		#<end_x>           = [#2 / 2]
-		#<roughcut>        = #<_rough_cut>
-		#<finishcut>       = #<_finish_cut>
-		#<x_radius>        = [#<radius>]
-		#<b_x>             = [#<begin_x>]
-		#<e_x>             = [#<end_x>]
-	o01 endif
+	#<begin_x>          = [#1 * #<_diameter_mode> / 2]
+	#<end_x>            = [#2 * #<_diameter_mode> / 2]
+	#<roughcut>         = [#<_rough_cut> * #<_diameter_mode>]
+	#<finishcut>        = [#<_finish_cut> * #<_diameter_mode>]
+	#<x_radius>         = [#<radius> * #<_diameter_mode>]
+	#<b_x>              = [#<begin_x> * #<_diameter_mode>]
+	#<e_x>              = [#<end_x> * #<_diameter_mode>]
 
 	o10 if [#<finishing_passes> GT 0]
 		#<cut_rough_total> = [#<begin_x> - #<end_x> - #<finishcut>]
@@ -45,31 +35,27 @@ o<turning> sub
 		#<z_factor> = -1
 		#<dir> = 3
 	o30 endif
-	
-	o40 if [#<radius> GT [#5410 / 2]]
-		o46 if [#<begin_x> LE #<end_x>]
-			#<mode> = 0
-		o46 else
-			#<mode> = [1 + #<radius_opt>]
-			o43 if [#<mode> EQ 2] (mode 2 = Stop at Begin diameter)
-				#<rad_x> = [[#1 - #2] / 2]
-				o44 if [[#<rad_x> LE 0] OR [#<rad_x> GE #6]]
-					#<mode> = 1 (mode 1 = Do full radius)
-				o44 else
-					#<t> = [#6 - [#1 - #2]/2]
-					#<radius_center> = [#<end_z> + sqrt[#6 * #6 - #<t> * #<t>] * #<z_factor>]
-				o44 endif
-			o43 endif
-		o46 endif
+
+	o40 if [[#<radius> GT [#5410 / 2]] AND [#<begin_x> GT #<end_x>]]
+		o43 if [#<mode> EQ 2] (mode 2 = Stop at Begin diameter)
+			#<rad_x> = [[#1 - #2] / 2]
+			o44 if [[#<rad_x> LE 0] OR [#<rad_x> GE #6]]
+				#<mode> = 1 (mode 1 = Do full radius)
+			o44 else
+				#<t> = [#6 - [#1 - #2] / 2]
+				#<radius_center> = [#<end_z> + sqrt[#6 * #6 - #<t> * #<t>] * #<z_factor>]
+			o44 endif
+		o43 endif
 	o40 else
-		#<comp> = 40 (cancel compensation)
 		#<mode> = 0
 	o40 endif
-	
-	/ F10
+
 	/ G40
 	/ G0 X#<end_x> Z#<begin_z>
-	o51 if [#<mode> EQ 0]
+	o51 if [#<mode> LE 0]
+		o54 if [#<mode> EQ 0]
+			#<comp> = 40 (cancel compensation)
+		o54 endif
 		/ G1 Z#<end_z>
 	o51 elseif [#<mode> EQ 1]
 		#<radius_center> = [#<end_z> + #<radius> * #<z_factor>]
@@ -85,19 +71,24 @@ o<turning> sub
 	G0 Z#<begin_z>
 	
 	G#<comp>
-
+	
 	M#<_cooling_mode>
 	
 	o121 if [#<_tool_usage> LE 1]
 		F#<_rough_feed>
-		o60 if [#<mode> EQ 0] (no radius, no compensation)
+		o60 if [#<mode> LE 0] (no radius, w or wo compensation)
 			G0 X[#<begin_x> + #<_x_clear>]
 			#<x> = [#<begin_x> - #<each_cut>]
 			o12 repeat [#<rough_passes>]
-				G0 Z#<begin_z>
+				o61 if [#<_ccomp> GT 400]
+					G0 Z[#<begin_z> + #<_z_clear> * #<z_factor>]
+				o61 else
+					G0 Z[#<begin_z>]
+				o61 endif
 				G0 X#<x>
+				G0 Z[#<begin_z>]
 				G1 Z#<end_z>
-				G0 X[#<x> + #<_x_clear>] ;Z[#<end_z> + #<_z_clear> * #<z_factor>]
+				G0 X[#<x> + #<_x_clear>]
 				#<x> = [#<x> - #<each_cut>]
 			o12 endrepeat
 		o60 else (mode 1 = Do full radius, mode 2 = Stop at Begin diameter)
@@ -128,13 +119,17 @@ o<turning> sub
 
 	o20 if [#<finishing_passes> AND [#<_tool_usage> NE 1]]
 		F#<_finish_feed>
-		o70 if [#<mode> EQ 0] (no radius, no compensation)
-			G0 X[#<end_x> + #<_x_clear>]
+		o70 if [#<mode> LE 0] (no radius, no compensation)
 			o21 repeat [#<finishing_passes>]
-				G0 Z#<begin_z>
+				o62 if [#<_ccomp> GT 400]
+					G0 Z[#<begin_z> + #<_z_clear> * #<z_factor>]
+				o62 else
+					G0 Z[#<begin_z>]
+				o62 endif
 				G0 X#<end_x>
+				G0 Z[#<begin_z>]
 				G1 Z#<end_z>
-				G0 X[#<end_x> + #<_x_clear>] ;Z[#<end_z> + #<_z_clear> * #<z_factor>]
+				G0 X[#<end_x> + #<_x_clear>]
 			o21 endrepeat
 		o70 else (mode 1 = Do full radius, mode 2 = Stop at Begin diameter)
 			o22 repeat [#<finishing_passes>]
