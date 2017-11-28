@@ -1,3 +1,9 @@
+nativecam (0.1.14a) UNRELEASED; urgency=medium
+
+  fix bug of rotation multiplied by 25.4
+
+ -- Fernand Veilleux <fernveilleux@gmail.com>  Tue, 28 Nov 2017 08:07:00 -0500
+
 nativecam (0.1.14) UNRELEASED; urgency=medium
 
   add validation of inputs with dialog

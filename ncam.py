@@ -1449,7 +1449,7 @@ class Parameter(object) :
             else :
                 return val
         if self.get_type() == 'float' :
-            if machine_metric :  # and "metric_value" in self.attr :
+            if machine_metric and "metric_value" in self.attr :
                 return get_string(get_float(self.attr["value"]) * 25.4, 6, False)
             else :
                 return get_string(get_float(self.attr["value"]), 6, False)
@@ -1780,6 +1780,9 @@ class Feature(object):
                     s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
                        (re.escape(p.attr["call"])), r"%s\1" %
                        p.get_ngc_value(), s)
+                    if (p.attr['name']) == 'Rotation' :
+                        #print(p.attr['value'])
+                        print(s)
         return s
 
     def process(self, s, line_leader = '') :
