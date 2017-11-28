@@ -1780,9 +1780,6 @@ class Feature(object):
                     s = re.sub(r"%s([^A-Za-z0-9_]|$)" %
                        (re.escape(p.attr["call"])), r"%s\1" %
                        p.get_ngc_value(), s)
-                    if (p.attr['name']) == 'Rotation' :
-                        #print(p.attr['value'])
-                        print(s)
         return s
 
     def process(self, s, line_leader = '') :
