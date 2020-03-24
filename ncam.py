@@ -3351,7 +3351,7 @@ class NCam(gtk.VBox):
         self.actionPreferences = ca("Preferences", gtk.STOCK_PREFERENCES, _("Edit Preferences"), None, _("Edit Preferences"), self.action_preferences)
 
         self.actionAutoRefresh = gtk.ToggleAction("AutoRefresh", _("Auto-refresh"), _('Auto-refresh LinuxCNC'), None)
-        self.actionAutoRefresh.set_active(True)
+        self.actionAutoRefresh.set_active(False)
         self.action_group.add_action(self.actionAutoRefresh)
 
         self.actionChUnits = ca("ChUnits", None, _("Change Units"), None, _(""), self.action_chUnits)
@@ -4231,8 +4231,12 @@ class NCam(gtk.VBox):
                     linuxCNC.reset_interpreter()
                     time.sleep(gmoccapy_time_out)
                     linuxCNC.mode(linuxcnc.MODE_AUTO)
-                    linuxCNC.program_open(fname)
-                    time.sleep(0.05)
+                    time.sleep(0.3)
+                    stat.poll()
+                    if stat.task_mode == linuxcnc.MODE_AUTO:
+                        linuxCNC.program_open(fname)
+                    else:
+                        mess_dlg(_('LinuxCNC could not change to AUTO mode. Generated NC file was not loaded.'))
         except Exception as e:
             self.actionAutoRefresh.set_active(False)
             if self.show_not_connected :
