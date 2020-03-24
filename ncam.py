@@ -2809,10 +2809,7 @@ class NCam(gtk.VBox):
         self.main_box.pack_start(self.menubar, False, False, 0)
 
     def action_build(self, *arg) :
-        if not self.actionAutoRefresh.get_active() :
-            self.actionAutoRefresh.set_active(True)
-        else :
-            self.autorefresh_call()
+        self.autorefresh_call()
 
     def action_cut(self, *arg):
         self.action_copy()
@@ -4219,8 +4216,6 @@ class NCam(gtk.VBox):
         self.import_xml(xml)
 
     def autorefresh_call(self, *arg) :
-        if not self.actionAutoRefresh.get_active() :
-            return False
         fname = os.path.join(NGC_DIR, GENERATED_FILE)
         with open(fname, "wb") as f:
             f.write(self.to_gcode())
