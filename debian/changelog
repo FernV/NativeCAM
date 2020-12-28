@@ -1,8 +1,18 @@
-nativecam (0.1.14a) UNRELEASED; urgency=medium
+nativecam (0.1.15a2) UNRELEASED; urgency=medium
 
-  fix bug of rotation multiplied by 25.4
+  bugfix german translation 
+  even more bugfixes for translation
+  
+ -- Daniel <mydani@gmx.de>  Wed, 11 Oct 2020 16:11:00 +0100
 
- -- Fernand Veilleux <fernveilleux@gmail.com>  Tue, 28 Nov 2017 08:07:00 -0500
+nativecam (0.1.15) UNRELEASED; urgency=medium
+
+  added german translation 
+  homing check removed (did not work)
+  added lathe drilling operation
+
+ -- Daniel <mydani@gmx.de>  Wed, 07 Oct 2020 20:46:00 +0100
+
 
 nativecam (0.1.14) UNRELEASED; urgency=medium
 

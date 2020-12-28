@@ -9,6 +9,7 @@
 			<menuitem action='turning'  name=_("External Turning")_ tool_tip= _("Does straight turning")_ icon="lathe-surface.png" src="lathe/turning.cfg"/>
 			<menuitem action='parting'  name=_("Parting Off")_ tool_tip= _("Cut your part from initial material")_ icon="parting.png" src="lathe/parting.cfg"/>
 			<menuitem action='threading'  name=_("Threading")_ tool_tip= _("External or internal threads, metric or imperial")_ icon="threading.png" src="lathe/threading.cfg"/>
+			<menuitem action='drilling'  name=_("Drilling")_ tool_tip= _("Drilling using canned cycle")_ icon="drill.png" src="lathe/drilling.cfg"/>
 			<menuitem action='boring'  name=_("Internal Boring")_ tool_tip= _("Does straight boring")_ icon="lathe-surface-id.png" src="lathe/boring.cfg"/>
 			<menuitem action='taper_oda'  name=_("Taper ODA")_ tool_tip= _("External taper by angle and diameters")_ icon="taper-oda.png" src="lathe/taper_oda.cfg"/>
 			<menuitem action='taper_odl'  name=_("Taper ODL")_ tool_tip= _("External taper by length and diameters")_ icon="taper-odl.png" src="lathe/taper_odl.cfg"/>

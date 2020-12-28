@@ -1,0 +1,8 @@
+For CFG files add new extractor
+
+*.cfg
+xgettext --language=Python --extract-all --add-comments="TRANSLATORS:" --force-po -o %o %C %K %F
+-k%k
+%f
+‪--from-code=%c
+

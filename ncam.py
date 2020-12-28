@@ -3354,7 +3354,7 @@ class NCam(gtk.VBox):
         self.actionAutoRefresh.set_active(False)
         self.action_group.add_action(self.actionAutoRefresh)
 
-        self.actionChUnits = ca("ChUnits", None, _("Change Units"), None, _(""), self.action_chUnits)
+        self.actionChUnits = ca("ChUnits", None, _("Change Units"), None, None, self.action_chUnits)
 
         # actions related to validations
         self.actionValidationMenu = ca("ValidationMenu", gtk.STOCK_INFO, _("_Validation Messages"), None, None, self.validation_menu_activate)
